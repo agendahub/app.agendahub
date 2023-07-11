@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { faAnchor } from '@fortawesome/free-solid-svg-icons';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,10 @@ import { faAnchor } from '@fortawesome/free-solid-svg-icons';
           <fa-icon [icon]="faCoffee"></fa-icon>
         </h1>
         <p class="mt-4 text-xl text-gray-500">This year, our new summer collection will shelter you from the harsh elements of a world that doesn't care if you live or die.</p>
+        <input type="text" [(ngModel)]="endpoint">
+        <button (click)="fietch()" class="bg-white hover:bg-gray-100 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow">
+  Button
+</button>
       </div>
     </div>
   </div>
@@ -25,4 +30,12 @@ import { faAnchor } from '@fortawesome/free-solid-svg-icons';
 export class AppComponent {
   title = 'app.studio';
   faCoffee = faAnchor;
+  endpoint!: string
+
+  fietch() {
+    fetch(environment.apiUrl + this.endpoint).then(async r => {
+      console.log(await r.json());
+      
+    })
+  }
 }
