@@ -1,5 +1,6 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -14,6 +15,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { ButtonModule } from "primeng/button"
 import { InputTextModule } from "primeng/inputtext";
 import { DropdownModule } from "primeng/dropdown";
+import { DialogModule } from "primeng/dialog";
 /** */
 
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
@@ -32,7 +34,9 @@ import { ServicesComponent } from './pages/services/services.component'
     AppRoutingModule,
     FontAwesomeModule,
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     
+    DialogModule,
     ButtonModule,
     DropdownModule,
     InputTextModule,
