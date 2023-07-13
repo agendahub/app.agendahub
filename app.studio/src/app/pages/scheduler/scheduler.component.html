@@ -1,5 +1,21 @@
-<div class="w-full p-3">
-    <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+<div class="w-full">
+    <div class="calendar-own">
+        <div class="flex">
+            <h1 class="text-4xl pb-3 font-bold tracking-tight text-gray-900 sm:text-6xl">
+                Agenda
+            </h1>
+
+            <div class="w-fit flex flex-1 flex-wrap justify-end px-3 py-4 gap-2">
+
+                <button pButton (click)="previous()" label="Anterior"></button>
+                <button pButton (click)="next()" label="Próximo"></button>
+
+                <p-dropdown [options]="views" [(ngModel)]="view" (onChange)="changeView($event)" ></p-dropdown>
+            </div>
+
+        </div>
+        <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+    </div>
 </div>
 
 <p-dialog header="Header" [(visible)]="visible" [style]="{width: '50vw'}">

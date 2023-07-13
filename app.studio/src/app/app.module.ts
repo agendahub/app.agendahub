@@ -19,13 +19,17 @@ import { DialogModule } from "primeng/dialog";
 /** */
 
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
-import { ServicesComponent } from './pages/services/services.component'
+import { ServicesComponent } from './pages/services/services.component';
+import { LoginComponent } from './pages/login/login.component';
+import { HomeComponent } from './pages/home/home.component'
 
 @NgModule({
   declarations: [
     AppComponent,
     SchedulerComponent,
-    ServicesComponent
+    ServicesComponent,
+    LoginComponent,
+    HomeComponent
   ],
   imports: [
     FormsModule,

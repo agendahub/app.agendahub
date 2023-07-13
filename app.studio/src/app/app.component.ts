@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
   selector: 'app-root',
@@ -14,5 +15,11 @@ import { Component } from '@angular/core';
   styles: []
 })
 export class AppComponent {
+
+  constructor(private primeNG: PrimeNGConfig) {
+    primeNG.overlayOptions = {
+      appendTo: "body"
+    }
+  }
 
 }
