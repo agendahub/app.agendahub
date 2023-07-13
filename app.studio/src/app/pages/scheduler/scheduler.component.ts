@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { CalendarOptions, Calendar, EventClickArg, EventInput } from '@fullcalendar/core';
+import { CalendarOptions, Calendar, EventClickArg, EventInput, EventChangeArg } from '@fullcalendar/core';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -7,6 +7,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { EventDef } from '@fullcalendar/core/internal';
+import { Service, User } from 'src/app/models/entities';
+import { faClock } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-scheduler',
@@ -17,10 +19,24 @@ export class SchedulerComponent {
 
   @ViewChild("calendar")
   calendarComponent!: FullCalendarComponent;
+  header!: string;
+  clockIcon = faClock.iconName;
 
   visible = false;
+  title!: string;
   date!: Date;
-  title!: string
+
+  startDateTime!: Date
+  finishDateTime!: Date
+  service!: Service
+  employee!: User
+  customer!: User
+  price!: number
+
+  services: Service[] = []
+  employees: User[] = []
+  customers: User[] = []
+
 
   calendarOptions: CalendarOptions = {
     locale:"pt-br",
@@ -36,7 +52,6 @@ export class SchedulerComponent {
     },
     headerToolbar: false,
     height: 'auto',
-    // initialView: 'listWeek',
     initialView: 'timeGridFourDay',
     views: {
       timeGridFourDay: {
@@ -53,8 +68,10 @@ export class SchedulerComponent {
     editable: true,
     selectable: true,
     plugins: [interactionPlugin, timeGridPlugin, dayGridPlugin, listPlugin ],
-    eventClick : (a) => this.onDateClick(a),
+    eventChange: this.onEventChange.bind(this),
+    eventClick : this.onEventClick.bind(this),
     dateClick: this.onDateClick.bind(this),
+    
   };
 
   views = [
@@ -89,9 +106,26 @@ export class SchedulerComponent {
 
   //#region Members 'Handling click'
 
-  onDateClick(arg: any) {
+  onEventClick(arg: EventClickArg) {
+    this.header = "Editar horário"
     this.visible = true
-    this.date = arg.date;
+    
+    console.log(arg);
+  }
+
+  onEventChange(arg: EventChangeArg) {
+    console.log(arg);
+  }
+
+  onDateClick(arg: DateClickArg) {
+    this.header = "Marcar horário"
+    this.visible = true
+    let date = arg.date
+    this.startDateTime = date;
+    date.setHours(date.getHours() + 1);
+    
+    this.finishDateTime = date;
+
     console.log(arg);
   }
 
@@ -99,16 +133,20 @@ export class SchedulerComponent {
     const event: EventInput = {
       id: (Math.random() * 100).toString(),
       title: this.title, 
-      date: this.date
+      start: this.startDateTime,
+      end: this.finishDateTime,
+      editable: true,
+      extendedProps: {
+        start: this.startDateTime,
+        end: this.finishDateTime,
+      }
     }
 
     console.log(event);
 
     this.events = event;
     
-    this.Calendar.addEvent({
-      title: this.title, date: this.date
-    });
+    this.Calendar.addEvent(event);
 
     this.visible = false;
   }
