@@ -1,4 +1,4 @@
-import { NgModule, isDevMode } from '@angular/core';
+import { NO_ERRORS_SCHEMA, NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
@@ -22,28 +22,34 @@ import { ButtonModule } from "primeng/button"
 /** */
 
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
-import { ServicesComponent } from './pages/services/services.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component'
 import { ApiService } from './services/api-service.service';
+import { ManagerRoutingModule } from './modules/manager/manager-routing.module';
+import { ManagerModule } from './modules/manager/manager.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     SchedulerComponent,
-    ServicesComponent,
     LoginComponent,
     HomeComponent
+  ],
+  schemas: [
+    NO_ERRORS_SCHEMA
   ],
   imports: [
     FormsModule,
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
+    ManagerRoutingModule,
     FontAwesomeModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
     
+    
+
     DialogModule,
     ButtonModule,
     DropdownModule,
@@ -60,7 +66,8 @@ import { ApiService } from './services/api-service.service';
       registrationStrategy: 'registerWhenStable:30000'
     }),
 
-    ComponentsModule
+    ComponentsModule,
+    ManagerModule
   ],
   providers: [
     HttpClient,

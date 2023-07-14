@@ -1,0 +1,11 @@
+<div class="mx-auto isolate max-w-7xl sm:px-6 lg:px-8 text-ellipsis text-white lg:rounded-lg md:rounded-md rounded-none">
+    <p-dataView #dv [value]="users" [rows]="5" [paginator]="true">
+        <ng-template let-user pTemplate="listItem">
+            <div class="col-span-12">
+                <div class="flex w-full bg-round-md shadow-md md:p-6 sm:p-4 p-2">
+                    {{user.name}} - {{user.lastName}}
+                </div>
+            </div>
+        </ng-template>
+    </p-dataView>
+  </div>
