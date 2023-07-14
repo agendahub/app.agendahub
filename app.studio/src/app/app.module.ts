@@ -25,6 +25,7 @@ import { SchedulerComponent } from './pages/scheduler/scheduler.component';
 import { ServicesComponent } from './pages/services/services.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component'
+import { ApiService } from './services/api-service.service';
 
 @NgModule({
   declarations: [
@@ -62,7 +63,8 @@ import { HomeComponent } from './pages/home/home.component'
     ComponentsModule
   ],
   providers: [
-    HttpClient
+    HttpClient,
+    ApiService
   ],
   bootstrap: [AppComponent]
 })

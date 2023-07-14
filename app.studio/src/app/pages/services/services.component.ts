@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { Service } from 'src/app/models/entities';
-import { ApiService } from 'src/app/services/api-service.service';
+import { Service } from '../../models/entities';
+import { ApiService } from '../../services/api-service.service';
+
 
 @Component({
   selector: 'app-services',
@@ -12,6 +13,6 @@ export class ServicesComponent {
   services: Service[] = []
 
   constructor(private apiService: ApiService) {
-    apiService.requestFromApi<Service[]>("Service").subscribe(r => this.services = r);
+    apiService.requestFromApi<Service[]>("Service")?.subscribe(r => this.services = r);
   }
 }
