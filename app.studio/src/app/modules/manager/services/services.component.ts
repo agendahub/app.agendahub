@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 
 @Component({
   selector: 'app-services',
@@ -6,5 +7,14 @@ import { Component } from '@angular/core';
   styleUrls: ['./services.component.scss']
 })
 export class ServicesComponent {
+
+  visible = false;
+  faConfirm = faCheckCircle;
+  faDelete = faTimesCircle;
+  edit = false;
+
+  confirm() {}
+  tryDelete() {}
+
 
 }

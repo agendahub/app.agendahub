@@ -9,6 +9,7 @@ import { ManagerComponent } from './manager.component';
 import { DataViewModule, DataViewLayoutOptions } from 'primeng/dataview';
 import { TagModule } from "primeng/tag"
 import { TableModule } from "primeng/table"
+import { DialogModule } from "primeng/dialog"
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import { TableModule } from "primeng/table"
     ManagerRoutingModule,
 
     DataViewModule,
+    DialogModule,
     TableModule,
     TagModule
   ],

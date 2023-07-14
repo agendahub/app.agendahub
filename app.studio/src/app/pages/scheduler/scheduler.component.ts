@@ -45,16 +45,8 @@ export class SchedulerComponent {
 
   calendarOptions: CalendarOptions = {
     locale:"pt-br",
-    buttonText: {
-      today: "Hoje",
-      month: "Mês",
-      day: "Dia",
-      next: "Próximo",
-      nextYear: "Próximo ano",
-      prev: "Anterior",
-      prevYear: "Ano anterior",
-      week: "Semana"
-    },
+    dayHeaderClassNames: ["uppercase", "tracking-tight", "text-right" , "font-sans"],
+    
     headerToolbar: false,
     height: 'auto',
     initialView: 'timeGridFourDay',
