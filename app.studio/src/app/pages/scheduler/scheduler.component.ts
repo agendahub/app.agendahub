@@ -6,9 +6,10 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { FullCalendarComponent } from '@fullcalendar/angular';
-import { EventDef } from '@fullcalendar/core/internal';
+import * as moment from 'moment/moment';
 import { Service, User } from 'src/app/models/entities';
-import { faClock } from '@fortawesome/free-regular-svg-icons';
+import { faCalendarCheck, faCheckCircle, faClock, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
+import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-scheduler',
@@ -22,9 +23,14 @@ export class SchedulerComponent {
   header!: string;
   clockIcon = faClock.iconName;
 
+  faPrev = faArrowCircleLeft;
+  faNext = faArrowCircleRight;
+  faOptions = faCalendarCheck;
+  faConfirm = faCheckCircle;
+  faDelete = faTimesCircle;
+
   visible = false;
-  title!: string;
-  date!: Date;
+  edit = false;
 
   startDateTime!: Date
   finishDateTime!: Date
@@ -33,10 +39,9 @@ export class SchedulerComponent {
   customer!: User
   price!: number
 
-  services: Service[] = []
-  employees: User[] = []
-  customers: User[] = []
-
+  services: Service[] = [];
+  employees: User[] = [];
+  customers: User[] = [];
 
   calendarOptions: CalendarOptions = {
     locale:"pt-br",
@@ -57,9 +62,8 @@ export class SchedulerComponent {
       timeGridFourDay: {
         type: 'timeGrid',
         allDaySlot: false,
-        
         duration: { days: 5 },
-        businessHours: true,
+        hiddenDays: [0],
         slotMinTime: "08:00:00",
         slotMaxTime: "22:00:00"
       }
@@ -75,12 +79,19 @@ export class SchedulerComponent {
   };
 
   views = [
-    'listYear', 'listMonth', 'listWeek', 'listDay',
     'timeGridFourDay', 'timeGridWeek', 'timeGridDay',
-    'dayGridYear', 'dayGridMonth', 'dayGridWeek', 'dayGridDay'
+    'dayGridMonth', 'dayGridWeek', 'dayGridDay',
+    'listWeek', 'listDay',
   ]
 
-  view = 'timeGridFourDay';
+  viewTranslate = [
+    "Padrão", "Horas semana", "Horas dia",
+    "Grade mês", "Grade semana", "Grade dia",
+    "Lista semana", "Lista dia",
+  ]
+
+  view = 'Padrão';
+  private _v:any
 
   constructor() {
     setTimeout(() => {
@@ -93,7 +104,8 @@ export class SchedulerComponent {
   }
 
   changeView(event: any) {
-    this.Calendar.changeView(event.value)
+    const indexView = this.viewTranslate.indexOf(event.value);
+    this.Calendar.changeView(this.views[indexView]);
   }
 
   next() {
@@ -107,32 +119,36 @@ export class SchedulerComponent {
   //#region Members 'Handling click'
 
   onEventClick(arg: EventClickArg) {
-    this.header = "Editar horário"
+    this.header = `Editar horário - ${moment(arg.event.extendedProps['date']).format("DD/MM/yy")}`
     this.visible = true
+    this.edit = true;
     
     console.log(arg);
   }
 
   onEventChange(arg: EventChangeArg) {
     console.log(arg);
+    this.edit = true;
   }
 
   onDateClick(arg: DateClickArg) {
-    this.header = "Marcar horário"
-    this.visible = true
-    let date = arg.date
+    this.header = `Marcar horário - ${moment(arg.date).format("DD/MM/yy")}`;
+    let date = arg.date;
     this.startDateTime = date;
     date.setHours(date.getHours() + 1);
-    
     this.finishDateTime = date;
-
+    
+    this.edit = false;
+    
     console.log(arg);
+    this.visible = true;
+
   }
 
   confirm() {
     const event: EventInput = {
       id: (Math.random() * 100).toString(),
-      title: this.title, 
+      title: this.startDateTime.getMinutes().toString(),
       start: this.startDateTime,
       end: this.finishDateTime,
       editable: true,

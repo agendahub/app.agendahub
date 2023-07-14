@@ -12,6 +12,8 @@ import { ComponentsModule } from './components/components.module';
 import { FullCalendarModule } from '@fullcalendar/angular';
 
 /**PrimeNG */
+import { InputTextareaModule } from "primeng/inputtextarea";
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { InputTextModule } from "primeng/inputtext";
 import { DropdownModule } from "primeng/dropdown";
 import { CalendarModule } from "primeng/calendar";
@@ -44,8 +46,10 @@ import { HomeComponent } from './pages/home/home.component'
     DialogModule,
     ButtonModule,
     DropdownModule,
-    InputTextModule,
     CalendarModule,
+    InputTextModule,
+    OverlayPanelModule,
+    InputTextareaModule,
 
     FullCalendarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
