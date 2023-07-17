@@ -40,12 +40,12 @@ import { ManagerModule } from './modules/manager/manager.module';
   ],
   imports: [
     FormsModule,
+    ReactiveFormsModule,
     BrowserModule,
     HttpClientModule,
     AppRoutingModule,
     ManagerRoutingModule,
     FontAwesomeModule,
-    ReactiveFormsModule,
     BrowserAnimationsModule,
     
     

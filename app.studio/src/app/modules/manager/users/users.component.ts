@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
+import { ApiService } from '../../../services/api-service.service';
 
 @Component({
   selector: 'app-users',
@@ -17,5 +18,11 @@ export class UsersComponent {
 
   confirm() {}
   tryDelete() {}
+
+  constructor( private apiService: ApiService ) {
+    apiService.requestFromApi("User")?.subscribe(x => {
+      this.users = x
+    })
+  }
 
 }

@@ -10,3 +10,11 @@
     --base-medium: #5a758c;
     --base-light: #a4b0bf;
 }
+
+.p-paginator-bottom {
+    border-radius: 0px 0px 7px 7px !important;
+}
+
+.p-datatable .p-datatable-header {
+    border-radius: 7px 7px 0px 0px;
+}
