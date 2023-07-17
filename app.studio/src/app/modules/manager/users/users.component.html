@@ -6,18 +6,86 @@
         </span>
     </div>
     <div class="w-full sm:w-75 md:w-50 lg:w-25 my-2 p-3">
-        <p-table [value]="users" [styleClass]="'p-datatable-sm md:p-datable-md'" [paginator]="true" [rows]="10">
+        <p-overlayPanel #op>
+            <span class="text-2xl font-bold tracking-tight sm:text-3xl">
+                Novo tipo
+            </span>
+            <form [formGroup]="formType" class="flex flex-col gap-2">
+                <div>
+                    <input type="text" id="code" formControlName="code" pInputText placeholder="Código" [style]="{width:'100%'}"/>
+                </div>
+    
+                <div>
+                    <input type="text" id="description" formControlName="description" pInputText placeholder="Descrição" [style]="{width:'100%'}"/>
+                </div>
+
+                <div>
+                    <button pButton (click)="confirmType()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="formType.invalid">
+                        <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
+                        <fa-icon [icon]="faConfirm" ></fa-icon>
+                    </button>
+                </div>
+
+            </form>
+        </p-overlayPanel>
+
+        <p-table #dt [value]="users" [styleClass]="'p-datatable-sm md:p-datable-md'" [paginator]="true" [rows]="10"
+        (sortFunction)="customSort($event)" [customSort]="true"
+        >
             <ng-template pTemplate="caption">
-                <div class="flex align-items-center justify-content-between">
-                    Listagem
+                <div class="flex md:flex-row sm:align-items-center justify-between flex-col gap-2 mb-3">
+                    <div class="flex justify-start gap-2 items-center">
+                        <button pButton (click)="visible = true" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
+                            <fa-icon size="lg" [icon]="faNew"></fa-icon>
+                            <span class="tracking-tight text-white text-ellipsis">Novo</span>
+                        </button>
+                        <button pButton [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2" (click)="tp.show($event)">
+                            <fa-icon size="lg" [icon]="faList"></fa-icon>
+                            <span class="tracking-tight text-white text-ellipsis">Tipos</span>   
+                        </button>
+                        <p-overlayPanel #tp>
+                            <span class="text-2xl font-bold tracking-tight sm:text-3xl">
+                                Tipos de usuário
+                            </span>
+                            <p-table [value]="userTypes" [styleClass]="'p-datatable-sm md:p-datable-md'" [paginator]="true" [rows]="10">
+                                <ng-template pTemplate="header">
+                                    <th>Código</th>
+                                    <th>Descrição</th>
+                                    <th></th>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-userType>
+                                    <td>{{userType.code}}</td>
+                                    <td>{{userType.description}}</td>
+                                    <th> <fa-icon class="cursor-pointer" [icon]="faDelete" (click)="null"></fa-icon> </th>
+                                </ng-template>
+                            </p-table>
+                            
+                        </p-overlayPanel>
+                    </div>
+                    <div class="flex flex-row justify-end sm:w-auto w-full">
+                        <span class="p-input-icon-left ml-auto sm:w-auto w-full shadow-sm">
+                            <i><fa-icon [icon]="faSearch"></fa-icon></i>
+                            <input pInputText type="text" (input)="applyFilter(dt, $event, 'contains')" placeholder="Buscar..." class="p-inputtext-sm sm:w-auto w-full" />
+                        </span>
+                    </div>
                 </div>
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
-                    <th>Nome </th>
-                    <th>Email</th>
-                    <th>Telefone</th>
-                    <th>Nascimento</th>
+                    <th pSortableColumn="name">Nome </th>
+                    <th pSortableColumn="email">Email</th>
+                    <th pSortableColumn="phone">Telefone</th>
+                    <th pSortableColumn="dateBirth">Nascimento</th>
+                    <th style="padding: 0px;" colspan="2">
+                        <div class="flex gap-2">
+                            <div class="p-2" pSortableColumn="userType.description">
+                                Tipo
+                            </div>
+                            <div class="py-2">
+                                <fa-icon class="cursor-pointer" (click)="op.show($event)" [icon]="faNew"></fa-icon>
+                            </div>
+                        </div>
+                    </th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-user let-columns="columns">
@@ -31,6 +99,8 @@
                     <td>{{user.email}}</td>
                     <td>{{user.phone}}</td>
                     <td>{{user.dateBirth | date: "dd/MM/yy"}}</td>
+                    <td>{{user.userType.description}}</td>
+                    <td><fa-icon class="cursor-pointer" (click)="change(user)" [icon]="faGear"></fa-icon></td>
                 </tr>
             </ng-template>
         </p-table>
@@ -39,27 +109,45 @@
 
 
 
-<p-dialog [header]="'Usuários'" [(visible)]="visible" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" [modal]="true">
-    <form >
+<p-dialog [header]="'Usuários'"  position="top" [(visible)]="visible" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" [modal]="true">
+    <form [formGroup]="form">
         <div class="grid grid-cols-12 gap-x-6 gap-y-4">
-            <div class="col-span-6">
-                <label for="startDateTime">Início</label>
-                <p-calendar placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
-            </div>
-
-            <div class="col-span-6">
-                <label for="finishDateTime">Fim</label>
-                <p-calendar placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+            
+            <div class="sm:col-span-6 col-span-12">
+                <label for="name">Nome</label>
+                <input type="text" id="name" formControlName="name" pInputText placeholder="Informe o Nome" [style]="{width:'100%'}"/>
             </div>
 
             <div class="sm:col-span-6 col-span-12">
-                <label for="price">Preço</label>
-                <input type="number" id="price" pInputText placeholder="R$ 100,00" [style]="{width:'100%'}"/>
+                <label for="surname">Sobrenome</label>
+                <input type="text" id="surname" formControlName="surname" pInputText placeholder="Informe o Sobrenome" [style]="{width:'100%'}"/>
             </div>
 
-            <div class="col-span-12">
-                <label for="note">Anotação</label>
-                <textarea id="note" cols="10" [style]="{width: '100%'}" placeholder="Informações importantes..." pInputTextarea></textarea>
+            <div class="sm:col-span-6 col-span-12">
+                <label for="userType">Tipo de acesso</label>
+                <p-dropdown dataKey="id" placeholder="Selecione o tipo de acesso" [options]="userTypes" [showClear]="true" [autoDisplayFirst]="false" optionLabel="description" inputId="userType" formControlName="userType" [style]="{width:'100%'}"
+                (onChange)="onChangeUser($event)">
+                </p-dropdown>
+            </div>
+
+            <div class="sm:col-span-6 col-span-12">
+                <label for="dateBirth">Data de nascimento</label>
+                <p-calendar formControlName="dateBirth" appendTo="body" placeholder="Aniversário" inputId="dateBirth" [readonlyInput]="false" [style]="{width:'100%'}" [showOnFocus]="true" dateFormat="dd/mm/yy"></p-calendar>
+            </div>
+
+            <div class="sm:col-span-6 col-span-12">
+                <label for="email">Email</label>
+                <input type="email" id="email" formControlName="email" pInputText placeholder="studio@agenda.com" [style]="{width:'100%'}"/>
+            </div>
+
+            <div class="sm:col-span-6 col-span-12">
+                <label for="phone">Telefone</label>
+                <input type="phone" id="phone" formControlName="phone" pInputText placeholder="(41) 99999-9999" [style]="{width:'100%'}"/>
+            </div>
+
+            <div class="sm:col-span-6 col-span-12" *ngIf="needPassword">
+                <label for="password">Senha</label>
+                <input type="password" id="password" autocomplete="username" formControlName="password" pInputText placeholder="Senha forte" [style]="{width:'100%'}"/>
             </div>
 
         </div>
@@ -71,7 +159,7 @@
                 <span class="tracking-tight text-white text-ellipsis">Excluir</span>
                 <fa-icon [icon]="faDelete" (click)="null"></fa-icon>
             </button>
-            <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2">
+            <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid">
                 <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
                 <fa-icon [icon]="faConfirm" (click)="confirm()"></fa-icon>
             </button>

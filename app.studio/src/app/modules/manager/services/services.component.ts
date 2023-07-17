@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { faCheckCircle, faPenToSquare, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { ApiService } from '../../../services/api-service.service';
 import { SortEvent } from 'primeng/api';
-import { faList, faMagnifyingGlass, faPencil, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
+import { faGear, faList, faMagnifyingGlass, faPencil, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
@@ -18,7 +18,7 @@ export class ServicesComponent {
   faDelete = faTimesCircle;
   faNew = faPlusCircle;
   faSearch = faMagnifyingGlass;
-  faEdit = faPenToSquare
+  faEdit = faGear
   faList = faList
   
   edit = false;
@@ -106,9 +106,9 @@ export class ServicesComponent {
         if (!this.services.some(x => x.id === x)) {
           form.id = x
           this.services.push(form);
-          this.formType.reset({id: 0})
         } 
         this.visible = false
+        this.form.reset({id: 0})
       }
     })
 
