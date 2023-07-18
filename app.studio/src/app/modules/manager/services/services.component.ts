@@ -55,6 +55,16 @@ export class ServicesComponent {
     
   }
 
+  deleteType(id:number) {
+    this.apiService.deleteFromApi("ServiceType/" + id)?.subscribe(x => {
+      console.log(x);
+      if (x) {
+        this.serviceTypes.splice(this.serviceTypes.findIndex(x => x.id === id), 1);
+        this.visible = false
+      }
+    })
+  }
+
   customSort(event: SortEvent) {
     event.data?.sort((data1, data2) => {
         //@ts-ignore
@@ -77,8 +87,6 @@ export class ServicesComponent {
   applyFilter(table: Table, event: any, mode: string) {
     table!.filterGlobal((event.target as HTMLInputElement).value, mode);
   }
-
-  newType() {}
 
   confirmType() { 
     const form = this.formType.value;

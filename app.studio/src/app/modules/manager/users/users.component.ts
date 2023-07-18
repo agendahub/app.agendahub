@@ -60,6 +60,16 @@ export class UsersComponent {
     
   }
 
+  deleteType(id:number) {
+    this.apiService.deleteFromApi("UserType/" + id)?.subscribe(x => {
+      console.log(x);
+      if (x) {
+        this.userTypes.splice(this.userTypes.findIndex(x => x.id === id), 1);
+        this.visible = false
+      }
+    })
+  }
+
   customSort(event: SortEvent) {
     event.data?.sort((data1, data2) => {
         //@ts-ignore

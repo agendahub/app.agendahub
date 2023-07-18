@@ -27,9 +27,40 @@
 
             </form>
         </p-overlayPanel>
+        <p-overlayPanel #tp>
+            <span class="text-2xl font-bold tracking-tight sm:text-3xl">
+                Tipos de usuário
+            </span>
+            <p-table [value]="serviceTypes" [styleClass]="'p-datatable-sm md:p-datable-md'" [paginator]="true" [rows]="10">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Código</th>
+                        <th>Descrição</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-serviceType>
+                    <tr>
+                        <td>{{serviceType.code}}</td>
+                        <td>{{serviceType.description}}</td>
+                        <th> 
+                            <span class="rounded-md bg-red-600 cursor-pointer text-white p-2" (click)="deleteType(serviceType.id)">
+                                <fa-icon [icon]="faDelete"></fa-icon>
+                            </span>
+                        </th>
+                    </tr>
+                </ng-template>
+            </p-table>
+            
+        </p-overlayPanel>
         <p-table #dt [value]="services" [styleClass]="'p-datatable-sm md:p-datable-md'" [paginator]="true" [rows]="10"
-        (sortFunction)="customSort($event)" [customSort]="true"
+        (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['code', 'description', 'serviceType.description','price']"
         >
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <th colspan="7">Nenhum serviço encontrado</th>
+                </tr>
+            </ng-template>
             <ng-template pTemplate="caption">
                 <div class="flex md:flex-row sm:align-items-center justify-between flex-col gap-2 mb-3">
                     <div class="flex justify-start gap-2 items-center">
@@ -54,7 +85,7 @@
                                 <ng-template pTemplate="body" let-serviceType>
                                     <td>{{serviceType.code}}</td>
                                     <td>{{serviceType.description}}</td>
-                                    <th> <fa-icon class="cursor-pointer" [icon]="faDelete" (click)="null"></fa-icon> </th>
+                                    <th> <fa-icon class="cursor-pointer" [icon]="faDelete" (click)="deleteType(serviceType.id)"></fa-icon> </th>
                                 </ng-template>
                             </p-table>
                             
@@ -137,7 +168,7 @@
         <div class="flex gap-2">
             <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()">
                 <span class="tracking-tight text-white text-ellipsis">Excluir</span>
-                <fa-icon [icon]="faDelete" (click)="null"></fa-icon>
+                <fa-icon [icon]="faDelete" (click)="tryDelete()"></fa-icon>
             </button>
             <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid">
                 <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
