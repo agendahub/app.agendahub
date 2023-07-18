@@ -6,7 +6,8 @@
     "host": "ng serve --host 0.0.0.0 --port 3333",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "run": "npm run build && npm i lite-server && lite-server --baseDir='dist/app.studio'"
   },
   "private": true,
   "dependencies": {
