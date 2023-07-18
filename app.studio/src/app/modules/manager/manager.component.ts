@@ -10,8 +10,8 @@ import { Component } from '@angular/core';
         </span>
     </div>
     <div class="flex justify-center gap-3">
-      <a href="/manager/services" class="block rounded-lg p-3 text-sm font-semibold leading-7 text-gray-50 hover:bg-gray-900">Serviços</a>
-      <a href="/manager/users" class="block rounded-lg p-3 text-sm font-semibold leading-7 text-gray-50 hover:bg-gray-900">Usuários</a>
+      <a routerLink="/manager/services" class="block rounded-lg p-3 text-sm font-semibold leading-7 text-gray-50 hover:bg-gray-900">Serviços</a>
+      <a routerLink="/manager/users" class="block rounded-lg p-3 text-sm font-semibold leading-7 text-gray-50 hover:bg-gray-900">Usuários</a>
     </div>
 </div>`,
   styles: []
