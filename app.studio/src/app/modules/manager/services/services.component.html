@@ -29,9 +29,9 @@
         </p-overlayPanel>
         <p-overlayPanel #tp>
             <span class="text-2xl font-bold tracking-tight sm:text-3xl">
-                Tipos de usuário
+                Tipos de serviço
             </span>
-            <p-table [value]="serviceTypes" [styleClass]="'p-datatable-sm md:p-datable-md'" [paginator]="true" [rows]="10">
+            <p-table [value]="serviceTypes" [styleClass]="'p-datatable-sm md:p-datable-md'" [paginator]="true" [rows]="5">
                 <ng-template pTemplate="header">
                     <tr>
                         <th>Código</th>
@@ -72,25 +72,6 @@
                             <fa-icon size="lg" [icon]="faList"></fa-icon>
                             <span class="tracking-tight text-white text-ellipsis">Tipos</span>   
                         </button>
-                        <p-overlayPanel #tp>
-                            <span class="text-2xl font-bold tracking-tight sm:text-3xl">
-                                Tipos de usuário
-                            </span>
-                            <p-table [value]="serviceTypes" [styleClass]="'p-datatable-sm md:p-datable-md'" [paginator]="true" [rows]="10">
-                                <ng-template pTemplate="header">
-                                    <th>Código</th>
-                                    <th>Descrição</th>
-                                    <th></th>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-serviceType>
-                                    <td>{{serviceType.code}}</td>
-                                    <td>{{serviceType.description}}</td>
-                                    <th> <fa-icon class="cursor-pointer" [icon]="faDelete" (click)="deleteType(serviceType.id)"></fa-icon> </th>
-                                </ng-template>
-                            </p-table>
-                            
-                        </p-overlayPanel>
-                        
                     </div>
                     <div class="flex flex-row justify-end sm:w-auto w-full">
                         <span class="p-input-icon-left ml-auto sm:w-auto w-full shadow-sm">
