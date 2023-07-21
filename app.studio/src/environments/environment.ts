@@ -1,3 +1,3 @@
 export const environment = {
-    apiUrl: "https://localhost:7001/"
+    apiUrl: "https://apistudioagenda-development.up.railway.app/"
 };
