@@ -5,6 +5,7 @@ import { SortEvent } from 'primeng/api';
 import { faGear, faList, faMagnifyingGlass, faPencil, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ScreenHelperService } from '../../../services/screen-helper.service';
 
 @Component({
   selector: 'app-services',
@@ -28,7 +29,9 @@ export class ServicesComponent {
   serviceTypes = new Array();
   services = new Array();
 
-  constructor( private apiService: ApiService, private formBuilder: FormBuilder ) {
+  constructor( private apiService: ApiService, private formBuilder: FormBuilder, public sc: ScreenHelperService ) {
+    console.log(sc.specs);
+    
     apiService.requestFromApi("Service")?.subscribe(x => {
       this.services = x
     })

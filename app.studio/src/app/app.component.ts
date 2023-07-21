@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 
     <app-nav *ngIf="!isLogin"></app-nav>
 
-    <div class="relative my-2">
+    <div class="relative">
       <router-outlet></router-outlet>
     </div>
 

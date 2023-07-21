@@ -18,3 +18,44 @@
 .p-datatable .p-datatable-header {
     border-radius: 7px 7px 0px 0px;
 }
+
+::-webkit-scrollbar {
+    height: 0.5rem;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 0.5rem;
+    background-blend-mode: darken;
+}
+
+
+::-webkit-scrollbar-track {
+    background:  white;
+}
+
+::-webkit-scrollbar-track:vertical {
+    background:  linear-gradient(180deg,
+     whitesmoke,
+     #020617,
+     #020617,
+     #020617,
+     #020617
+     );
+}
+
+::-webkit-scrollbar-thumb {
+    background: #1d162d;
+    border-radius: 2rem;
+}
+
+@media screen and (max-width: 1300px) {
+    ::-webkit-scrollbar-track:vertical {
+        background:  linear-gradient(180deg,
+         white,
+         #090f21,
+         #090f21,
+         #090f21,
+         #090f21
+         );
+    }
+}

@@ -5,6 +5,7 @@ import { Table } from 'primeng/table';
 import { SortEvent } from 'primeng/api';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faPlusCircle, faMagnifyingGlass, faList, faGear, faUserGear } from '@fortawesome/free-solid-svg-icons';
+import { ScreenHelperService } from '../../../services/screen-helper.service';
 
 @Component({
   selector: 'app-users',
@@ -30,7 +31,7 @@ export class UsersComponent {
   userTypes = new Array();
   users = new Array();
 
-  constructor( private apiService: ApiService, private formBuilder: FormBuilder ) {
+  constructor( private apiService: ApiService, private formBuilder: FormBuilder, public sc: ScreenHelperService ) {
     apiService.requestFromApi("User")?.subscribe(x => {
       this.users = x
     })

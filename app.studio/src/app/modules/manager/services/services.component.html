@@ -1,66 +1,13 @@
-<div class="bg-blend-hue bg-opacity-40 bg-slate-900 text-white text-5xl mx-auto max-w-7xl sm:px-6 lg:px-8 lg:rounded-lg md:rounded-md rounded-none" style="max-height: 90vh;">
+<div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(90vh)] max-h-screen">
     <div class="w-50 p-2">
         <span class="text-4xl font-bold tracking-tight sm:text-6xl">
             Serviços
         </span>
     </div>
     <div class="w-full sm:w-75 md:w-50 lg:w-25 my-2 p-3">
-        <p-overlayPanel #op>
-            <span class="text-2xl font-bold tracking-tight sm:text-3xl">
-                Novo tipo
-            </span>
-            <form [formGroup]="formType" class="flex flex-col gap-2">
-                <div>
-                    <input type="text" id="code" formControlName="code" pInputText placeholder="Código" [style]="{width:'100%'}"/>
-                </div>
-    
-                <div>
-                    <input type="text" id="description" formControlName="description" pInputText placeholder="Descrição" [style]="{width:'100%'}"/>
-                </div>
-
-                <div>
-                    <button pButton (click)="confirmType()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="formType.invalid">
-                        <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-                        <fa-icon [icon]="faConfirm" ></fa-icon>
-                    </button>
-                </div>
-
-            </form>
-        </p-overlayPanel>
-        <p-overlayPanel #tp>
-            <span class="text-2xl font-bold tracking-tight sm:text-3xl">
-                Tipos de serviço
-            </span>
-            <p-table [value]="serviceTypes" [styleClass]="'p-datatable-sm md:p-datable-md'" [paginator]="true" [rows]="5">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Código</th>
-                        <th>Descrição</th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-serviceType>
-                    <tr>
-                        <td>{{serviceType.code}}</td>
-                        <td>{{serviceType.description}}</td>
-                        <th> 
-                            <span class="rounded-md bg-red-600 cursor-pointer text-white p-2" (click)="deleteType(serviceType.id)">
-                                <fa-icon [icon]="faDelete"></fa-icon>
-                            </span>
-                        </th>
-                    </tr>
-                </ng-template>
-            </p-table>
-            
-        </p-overlayPanel>
-        <p-table #dt [value]="services" [styleClass]="'p-datatable-sm md:p-datable-md'" [paginator]="true" [rows]="10"
+        <p-table #dt [value]="services" [styleClass]="sc.getTableSize()" [paginator]="true" [rows]="10"
         (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['code', 'description', 'serviceType.description','price']"
         >
-            <ng-template pTemplate="emptymessage">
-                <tr>
-                    <th colspan="7">Nenhum serviço encontrado</th>
-                </tr>
-            </ng-template>
             <ng-template pTemplate="caption">
                 <div class="flex md:flex-row sm:align-items-center justify-between flex-col gap-2 mb-3">
                     <div class="flex justify-start gap-2 items-center">
@@ -68,7 +15,8 @@
                             <fa-icon size="lg" [icon]="faNew"></fa-icon>
                             <span class="tracking-tight text-white text-ellipsis">Novo</span>
                         </button>
-                        <button pButton [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2" (click)="tp.show($event)">
+                        <button pButton  [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2" (click)="tp.show($event)">
+                            <div #typeTarget></div>
                             <fa-icon size="lg" [icon]="faList"></fa-icon>
                             <span class="tracking-tight text-white text-ellipsis">Tipos</span>   
                         </button>
@@ -80,23 +28,71 @@
                         </span>
                     </div>
                 </div>
+
+                <p-overlayPanel [showCloseIcon]="true" #op>
+                    <span class="text-2xl font-bold tracking-tight sm:text-3xl">
+                        Novo tipo
+                    </span>
+                    <form [formGroup]="formType" class="flex flex-col gap-2">
+                        <div>
+                            <input type="text" id="code" formControlName="code" pInputText placeholder="Código" [style]="{width:'100%'}"/>
+                        </div>
+            
+                        <div>
+                            <input type="text" id="description" formControlName="description" pInputText placeholder="Descrição" [style]="{width:'100%'}"/>
+                        </div>
+        
+                        <div>
+                            <button pButton (click)="confirmType();tp.show($event, typeTarget)" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="formType.invalid">
+                                <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
+                                <fa-icon [icon]="faConfirm" ></fa-icon>
+                            </button>
+                        </div>
+        
+                    </form>
+                </p-overlayPanel>
+                <p-overlayPanel [showCloseIcon]="true" #tp>
+                    <span class="text-2xl font-bold tracking-tight sm:text-3xl">
+                        Tipos de serviço
+                    </span>
+                    <p-table [value]="serviceTypes" [styleClass]="sc.getTableSize()" [paginator]="true" [rows]="5">
+                        
+                        <ng-template pTemplate="caption">
+                            <button pButton (click)="op.show($event)" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
+                                <fa-icon size="lg" [icon]="faNew"></fa-icon>
+                                <span class="tracking-tight text-white text-ellipsis">Novo</span>
+                            </button>
+                            <!-- <fa-icon class="cursor-pointer"  [icon]="faNew"></fa-icon> -->
+                        </ng-template>
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Código</th>
+                                <th>Descrição</th>
+                                <th></th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-serviceType>
+                            <tr>
+                                <td>{{serviceType.code}}</td>
+                                <td>{{serviceType.description}}</td>
+                                <th> 
+                                    <span class="rounded-md bg-red-600 cursor-pointer text-white p-2" (click)="deleteType(serviceType.id)">
+                                        <fa-icon [icon]="faDelete"></fa-icon>
+                                    </span>
+                                </th>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    
+                </p-overlayPanel>
+
             </ng-template>
             <ng-template pTemplate="header" let-columns>
                 <tr>
                     <th pSortableColumn="code">Código  </th>
                     <th pSortableColumn="description">Descrição </th>
                     <th pSortableColumn="price">Preço </th>
-                    <th style="padding: 0px;" colspan="2">
-                        <div class="flex gap-2">
-                            <div class="p-2" pSortableColumn="serviceType.description">
-                                Tipo
-                            </div>
-                            <div class="py-2">
-                                <fa-icon class="cursor-pointer" (click)="op.show($event)" [icon]="faNew"></fa-icon>
-                            </div>
-                        </div>
-                    </th>
-                    
+                    <th pSortableColumn="serviceType.description" colspan="2">Tipo</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-service>

@@ -19,6 +19,9 @@ import { DropdownModule } from "primeng/dropdown";
 import { CalendarModule } from "primeng/calendar";
 import { DialogModule } from "primeng/dialog";
 import { ButtonModule } from "primeng/button"
+import { CheckboxModule } from "primeng/checkbox"
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { SplitButtonModule } from 'primeng/splitbutton';
 /** */
 
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
@@ -54,7 +57,10 @@ import { ManagerModule } from './modules/manager/manager.module';
     ButtonModule,
     DropdownModule,
     CalendarModule,
+    CheckboxModule,
     InputTextModule,
+    SplitButtonModule,
+    AutoCompleteModule,
     OverlayPanelModule,
     InputTextareaModule,
 

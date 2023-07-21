@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { CalendarOptions, Calendar, EventClickArg, EventInput, EventChangeArg } from '@fullcalendar/core';
 import scrollGridPlugin from '@fullcalendar/scrollgrid';
 import listPlugin from '@fullcalendar/list';
@@ -10,9 +10,10 @@ import * as moment from 'moment/moment';
 
 import { faCalendarCheck, faCheckCircle, faClock, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
-import { Service, User, UserSchedule } from '../../models/entities';
+import { Schedule, Service, User, UserSchedule } from '../../models/entities';
 import { ApiService } from '../../services/api-service.service';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LocalStorageService } from '../../services/local-storage.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
   templateUrl: './scheduler.component.html',
   styleUrls: ['./scheduler.component.scss']
 })
-export class SchedulerComponent {
+export class SchedulerComponent implements OnInit {
 
   @ViewChild("calendar")
   calendarComponent!: FullCalendarComponent;
@@ -42,47 +43,22 @@ export class SchedulerComponent {
   employees: User[] = [];
   customers: User[] = [];
   schedules: UserSchedule[] = []
+  events = new Array();
 
-  calendarOptions: CalendarOptions = {
-    locale:"pt-br",
-    dayHeaderClassNames: ["uppercase", "tracking-tight", "text-right" , "font-sans"],
-    
-    headerToolbar: false,
-    height: 'auto',
-    initialView: 'timeGridFourDay',
-    views: {
-      timeGridFourDay: {
-        type: 'timeGrid',
-        allDaySlot: false,
-        duration: { days: 5 },
-        hiddenDays: [0],
-        slotMinTime: "08:00:00",
-        slotMaxTime: "22:00:00"
-      }
-    },
-    events: [],
-    editable: true,
-    selectable: true,
-    plugins: [interactionPlugin, timeGridPlugin, dayGridPlugin, listPlugin ],
-    eventChange: this.onEventChange.bind(this),
-    eventClick : this.onEventClick.bind(this),
-    dateClick: this.onDateClick.bind(this),
-    
-  };
+  selectedEmployes = new Array();
+  filteredEmployes = new Array();
 
-
-
-  constructor(private api: ApiService, private formBuilder: FormBuilder) {
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private localStorageService: LocalStorageService) {
     setTimeout(() => {
       this.Calendar.addEventSource(this.events);
-      api.offline.subscribe(x => {
-        console.log(x);
-        
-      })
+      
     }, 0)
 
     this.loadResources();
     this.createForm();
+  }
+
+  ngOnInit(): void {
   }
 
   private async loadResources() {
@@ -113,6 +89,7 @@ export class SchedulerComponent {
       customer: ["", Validators.required],
       price: [this.services[0]?.price, Validators.required],
       note: [""],
+      day: [],
       id: [null]
     });
 
@@ -133,27 +110,50 @@ export class SchedulerComponent {
     this.Calendar.prev();
   }
 
-  //#endregion
+  views = ['timeGridFourDay', 'dayGridMonth', 'dayGridWeek', 'dayGridDay']
+  viewTranslate = ["Padrão", "Grade mês", "Grade semana", "Grade dia"]
 
-  //#region Members "View"
-
-  views = [
-    'timeGridFourDay', 'timeGridWeek', 'timeGridDay',
-    'dayGridMonth', 'dayGridWeek', 'dayGridDay',
-    'listWeek', 'listDay',
-  ]
-
-  viewTranslate = [
-    "Padrão", "Horas semana", "Horas dia",
-    "Grade mês", "Grade semana", "Grade dia",
-    "Lista semana", "Lista dia",
-  ]
+  calendarOptions: CalendarOptions = {
+    locale:"pt-br",
+    dayHeaderClassNames: ["uppercase", "tracking-tight", "text-right" , "font-sans"],
+    
+    headerToolbar: false,
+    height: 'auto',
+    initialView: (() => {
+      let savedView = this.localStorageService.get("view");
+      this.view = this.viewTranslate[savedView]
+      return savedView ? this.views[savedView] : this.views[0]
+    })(),
+    views: {
+      timeGridFourDay: {
+        type: 'timeGrid',
+        allDaySlot: false,
+        duration: { days: 5 },
+        hiddenDays: [0],
+        slotMinTime: "08:00:00",
+        slotMaxTime: "22:00:00"
+      }
+    },
+    events: [],
+    editable: true,
+    selectable: true,
+    plugins: [interactionPlugin, timeGridPlugin, dayGridPlugin, listPlugin ],
+    eventChange: this.onEventChange.bind(this),
+    eventClick : this.onEventClick.bind(this),
+    dateClick: this.onDateClick.bind(this),
+  };
 
   view = 'Padrão';
   private _v:any
 
   changeView(event: any) {
+
     const indexView = this.viewTranslate.indexOf(event.value);
+    if (indexView != -1) {
+      this.localStorageService.set("view", indexView)
+      this.localStorageService.set("viewName", this.views[indexView])
+    }
+    
     this.Calendar.changeView(this.views[indexView]);
   }
 
@@ -162,37 +162,70 @@ export class SchedulerComponent {
   //#region Members 'Handling click'
 
   onEventClick(arg: EventClickArg) {
-    this.header = `Editar horário - ${moment(arg.event.extendedProps['date']).format("DD/MM/yy")}`
+    this.header = `Editar horário - ${moment(arg.event.extendedProps['schedule']['startDateTime']).format("DD/MM/yy")}`
     
+    let id = + arg.event._def.publicId;
+    let schedule = this.schedules.find(x => x.id === id);
+
+    console.log(schedule);
+
+    if (schedule) {
+      this.form.get("id")?.setValue(id);
+      this.form.get("day")?.setValue(new Date(arg.event.extendedProps['schedule']['startDateTime']).getDate());
+      this.form.get("startDateTime")?.setValue(new Date(arg.event.extendedProps['schedule']['startDateTime']));
+      this.form.get("finishDateTime")?.setValue(new Date(arg.event.extendedProps['schedule']['finishDateTime']));
+      this.form.get("service")?.setValue(schedule["schedule"]["service"])
+      this.form.get("customer")?.setValue(schedule["customer"])
+      this.form.get("schedule")?.setValue(schedule["schedule"])
+      this.form.get("employee")?.setValue(schedule["employee"])
+      
+      this.visible = true
+      this.edit = true;
+
+      console.log(new Date(arg.event.extendedProps['schedule']['startDateTime']),
+      new Date(arg.event.extendedProps['schedule']['finishDateTime']));
+      
+      
+      console.log(this.form.value);
+      
+    }
     
-    this.form.get("startDateTime")?.setValue(arg.event.start);
-    this.form.get("finishDateTime")?.setValue(arg.event.end ?? arg.event.start);
-    this.form.get("customer")?.setValue(arg.event.extendedProps["customer"])
-    this.form.get("service")?.setValue(arg.event.extendedProps["schedule"]["service"])
-    this.form.get("schedule")?.setValue(arg.event.extendedProps["schedule"])
-    this.form.get("employee")?.setValue(arg.event.extendedProps["employee"])
-    this.form.get("id")?.setValue(arg.event.extendedProps["id"])
-    
-    this.visible = true
-    this.edit = true;
-    
+
     console.log(arg);
   }
 
   onEventChange(arg: EventChangeArg) {
     console.log(arg);
+    console.log(arg.event.start);
+    console.log(arg.event.end);
+    
     this.edit = true;
+
+    let id = + arg.event._def.publicId;
+    let schedule = this.schedules.find(x => x.id === id);
+
+    if (schedule) {
+      schedule.schedule.startDateTime = arg.event.start?.toISOString() as any;
+      schedule.schedule.finishDateTime = arg.event.end?.toISOString() as any;
+
+      this.save(schedule);
+      
+    }
   }
 
   onDateClick(arg: DateClickArg) {
     this.header = `Marcar horário - ${moment(arg.date).format("DD/MM/yy")}`;
     this.edit = false;
     this.visible = true;
+
+    let date = structuredClone(arg.date)
     
-    this.form.get("startDateTime")?.setValue(arg.date);
-    this.form.get("finishDateTime")?.setValue(arg.date);
-        
+    this.form.get("startDateTime")?.setValue(date);
+    this.form.get("finishDateTime")?.setValue(date);
+    this.form.get("day")?.setValue(arg.date.getDate());
+
     console.log(arg);
+    console.log(this.form.value);
   }
 
   confirm() {
@@ -205,20 +238,6 @@ export class SchedulerComponent {
   //#endregion
 
   //#region Members "Events"
-
-  get events() : any[] {    
-    return this.loadStorage()
-  }
-
-  set events(event:any) {
-    let ev = this.events;
-    ev.push(...event);
-    localStorage.setItem("events", JSON.stringify(ev));
-  }
-  
-  loadStorage() {
-    return Array.from(JSON.parse(localStorage.getItem("events")?? "[]"))
-  }
 
   changeService(event: any) {
     if (event.value) {
@@ -245,40 +264,47 @@ export class SchedulerComponent {
   }
 
   trySave() {
-    const form = this.form.value;
 
-    
+    const form = structuredClone(this.form.value);   
     const schedule = new UserSchedule()
+
+    console.log(form);
+
+    form.startDateTime = new Date(form.startDateTime);
+    form.finishDateTime = new Date(form.finishDateTime);
     
+    if (form.day) {
+      form.startDateTime.setDate(form.day);
+      form.finishDateTime.setDate(form.day);
+    }
+
     schedule.id = form.id && form.id != "" ? form.id : 0;
     schedule.customer= Object.assign({}, form.customer);
     schedule.employee = Object.assign({}, form.employee);
     
-    delete form.customer;
-    delete form.employee;
-    delete form.schedule;
+    const scheduleSaved = this.schedules.find(x => x.id === form.id);
 
-    schedule.schedule = {...form, id: form.schedule?.id && form.schedule?.id != "" ? form.schedule?.id : 0}
-    schedule.schedule.finishDateTime = schedule.schedule.finishDateTime.toISOString() as unknown as Date;
-    schedule.schedule.startDateTime = schedule.schedule.startDateTime.toISOString() as unknown as Date;
-    
+    schedule.schedule = scheduleSaved?.schedule ?? new Schedule();
+    schedule.schedule.service = Object.assign({}, form.service);
+    schedule.schedule.finishDateTime = form.finishDateTime.toISOString() as any
+    schedule.schedule.startDateTime = form.startDateTime.toISOString() as any
+    schedule.schedule.note = form.note;
+
     console.log(schedule);
+    this.save(schedule)
+  }
 
-    this.api.sendToApi("Schedule/Setup", schedule)?.subscribe(x => {
+  private save(body: any) {
+    this.api.sendToApi("Schedule/Setup", body)?.subscribe(x => {
       console.log(x);
       
       if (x) {
         this.Calendar.removeAllEvents();
         this.loadResources()
-
-        
       }
 
-      this.form.reset();
+      this.form.reset({note: ""});
     })
-
-
-    
   }
 
   tryDelete() {
@@ -298,6 +324,20 @@ export class SchedulerComponent {
 
       this.visible = false;
     })
+  }
+
+  filterEmployee(event: any) {
+    let filtered: any[] = [];
+    let query = event.query;
+
+    for (let i = 0; i < (this.employees as any[]).length; i++) {
+        let country = (this.employees as any[])[i];
+        if (country.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
+            filtered.push(country);
+        }
+    }
+
+    this.filteredEmployes = filtered;
   }
 
 }

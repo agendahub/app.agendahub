@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-manager',
   template: `
-  <div class="bg-blend-hue bg-opacity-40 bg-slate-900   text-white text-5xl mx-auto max-w-7xl sm:px-6 lg:px-8 lg:rounded-lg md:rounded-md rounded-none p-2" >
+  <div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(90vh)] max-h-screen" >
     <div class="w-50">
         <span class="text-4xl font-bold tracking-tight sm:text-6xl">
             Gestão
