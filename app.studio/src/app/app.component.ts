@@ -4,6 +4,7 @@ import * as moment from 'moment';
 import { PrimeNGConfig } from 'primeng/api';
 import { ApiService } from './services/api-service.service';
 import { Router } from '@angular/router';
+import { PushNotificatorService } from './services/push-notificator.service';
 
 @Component({
   selector: 'app-root',
@@ -31,14 +32,18 @@ import { Router } from '@angular/router';
 })
 export class AppComponent {
 
-  constructor(private primeNG: PrimeNGConfig, private router: Router) {
+  constructor(private primeNG: PrimeNGConfig, private router: Router, private pushNot: PushNotificatorService) {
     // moment.updateLocale("pt-br", null)
+
     moment.locale("pt-br")
     
     
     primeNG.overlayOptions = {
       appendTo: "body"
     }
+
+
+    pushNot.subscribeToNotifications()
   }
 
   get isLogin() {
