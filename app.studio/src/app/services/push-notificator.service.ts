@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SwPush } from '@angular/service-worker';
 import { Observable } from 'rxjs';
@@ -10,6 +11,7 @@ export class PushNotificatorService {
   readonly VAPID_PUBLIC_KEY = "BNm2RvdTrp3OMyU-MrrwCRKi8LPpjLQqSrxEHG20lceWndqPDnDOI4rxu9OrQJOu62A4mueB93God48gu2hjzqA";
 
   constructor(
+      private httpClient: HttpClient,
       private swPush: SwPush) {}
 
   subscribeToNotifications() {
@@ -22,8 +24,6 @@ export class PushNotificatorService {
   }
 
   addSubscriber(sub: PushSubscription) {
-    console.log(sub);
-    
-    return new Observable();
+    return this.httpClient.post("https://notifierstudioagenda-development.up.railway.app", sub)
   }
 }
