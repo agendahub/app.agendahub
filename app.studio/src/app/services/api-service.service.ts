@@ -8,8 +8,10 @@ import { environment } from '../../environments/environment.development';
 export class ApiService {
 
   baseUrl = environment.apiUrl;
-  cache!: Map<string, any>
-  offline = new Subject();
+  baseUrlNotifier = environment.notifierUrl;
+  
+  private cache!: Map<string, any>
+  private offline = new Subject();
 
   constructor(private httpClient: HttpClient) {
     console.log(this.isConnect);
@@ -21,7 +23,7 @@ export class ApiService {
 
   private connected!: boolean;
 
-  get isConnect() {
+  private get isConnect() {
     if (!this.connected && navigator.onLine) {
       this.offline.next(false);
     }
@@ -67,6 +69,10 @@ export class ApiService {
       return null;
     } else
     return this.httpClient.delete(apiUrl).pipe(take(1));
+  }
+
+  public addSubscriber(sub: PushSubscription) {
+    return this.httpClient.post(this.baseUrlNotifier + "subscribe", sub);
   }
   
 }

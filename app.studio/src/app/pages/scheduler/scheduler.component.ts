@@ -167,7 +167,8 @@ export class SchedulerComponent implements OnInit {
     let id = + arg.event._def.publicId;
     let schedule = this.schedules.find(x => x.id === id);
 
-    console.log(schedule);
+    console.log(schedule?.schedule.price);
+    
 
     if (schedule) {
       this.form.get("id")?.setValue(id);
@@ -175,6 +176,7 @@ export class SchedulerComponent implements OnInit {
       this.form.get("startDateTime")?.setValue(new Date(arg.event.extendedProps['schedule']['startDateTime']));
       this.form.get("finishDateTime")?.setValue(new Date(arg.event.extendedProps['schedule']['finishDateTime']));
       this.form.get("service")?.setValue(schedule["schedule"]["service"])
+      this.form.get("price")?.setValue(schedule["schedule"]["price"])
       this.form.get("customer")?.setValue(schedule["customer"])
       this.form.get("schedule")?.setValue(schedule["schedule"])
       this.form.get("employee")?.setValue(schedule["employee"])
@@ -184,21 +186,10 @@ export class SchedulerComponent implements OnInit {
 
       console.log(new Date(arg.event.extendedProps['schedule']['startDateTime']),
       new Date(arg.event.extendedProps['schedule']['finishDateTime']));
-      
-      
-      console.log(this.form.value);
-      
     }
-    
-
-    console.log(arg);
   }
 
   onEventChange(arg: EventChangeArg) {
-    console.log(arg);
-    console.log(arg.event.start);
-    console.log(arg.event.end);
-    
     this.edit = true;
 
     let id = + arg.event._def.publicId;
@@ -219,18 +210,16 @@ export class SchedulerComponent implements OnInit {
     this.visible = true;
 
     let date = structuredClone(arg.date)
-    
     this.form.get("startDateTime")?.setValue(date);
     this.form.get("finishDateTime")?.setValue(date);
     this.form.get("day")?.setValue(arg.date.getDate());
 
-    console.log(arg);
     console.log(this.form.value);
+    
+
   }
 
   confirm() {
-
-    
     this.trySave()
     this.visible = false;
   }
@@ -268,7 +257,7 @@ export class SchedulerComponent implements OnInit {
     const form = structuredClone(this.form.value);   
     const schedule = new UserSchedule()
 
-    console.log(form);
+    // console.log(form);
 
     form.startDateTime = new Date(form.startDateTime);
     form.finishDateTime = new Date(form.finishDateTime);
@@ -285,12 +274,13 @@ export class SchedulerComponent implements OnInit {
     const scheduleSaved = this.schedules.find(x => x.id === form.id);
 
     schedule.schedule = scheduleSaved?.schedule ?? new Schedule();
+    schedule.schedule.price = form.price;
     schedule.schedule.service = Object.assign({}, form.service);
     schedule.schedule.finishDateTime = form.finishDateTime.toISOString() as any
     schedule.schedule.startDateTime = form.startDateTime.toISOString() as any
     schedule.schedule.note = form.note;
 
-    console.log(schedule);
+    // console.log(schedule);
     this.save(schedule)
   }
 
@@ -311,7 +301,7 @@ export class SchedulerComponent implements OnInit {
     let id = this.form.value.id;
     const schedule = this.schedules.find(x => x.id = id);
     
-    console.log(schedule);
+    // console.log(schedule);
 
     schedule && this.api.sendToApi("Schedule/Cancel", schedule)?.subscribe(x => {
       console.log(x);
