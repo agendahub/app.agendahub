@@ -16,12 +16,16 @@ export class PushNotificatorService {
       private swPush: SwPush) {}
 
   subscribeToNotifications() {
-
+      !this.swPush.isEnabled &&
       this.swPush.requestSubscription({
           serverPublicKey: this.VAPID_PUBLIC_KEY
       })
-      .then(sub => this.apiService.addSubscriber(sub).subscribe())
+      .then(sub => this.apiService.addSubscriber(sub).subscribe(x => console.log(x)))
       .catch(err => console.error("Could not subscribe to notifications ", err));
+
+      this.swPush.messages.forEach(x => {
+        console.log(x);
+      })
   }
 
 
