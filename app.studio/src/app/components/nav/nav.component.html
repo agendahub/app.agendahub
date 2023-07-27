@@ -70,4 +70,7 @@
 <ng-template #links>
   <a (click)="sidebarOpen = false" routerLink="/manager" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Gestão</a>
   <a (click)="sidebarOpen = false" routerLink="/scheduler" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Agenda</a>
+  
+  <button pButton pRipple (click)="pushOn()">Ativar push notification</button>
+
 </ng-template>

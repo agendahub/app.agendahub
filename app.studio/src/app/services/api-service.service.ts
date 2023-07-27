@@ -7,10 +7,9 @@ import { environment } from '../../environments/environment.development';
 @Injectable({providedIn: 'root'})
 export class ApiService {
 
-  baseUrl = environment.apiUrl;
-  baseUrlNotifier = environment.notifierUrl;
   
-  private cache!: Map<string, any>
+  private baseUrl = environment.apiUrl;
+  private cache!: Map<string, any>;
   private offline = new Subject();
 
   constructor(private httpClient: HttpClient) {
@@ -72,7 +71,28 @@ export class ApiService {
   }
 
   public addSubscriber(sub: PushSubscription) {
-    return this.httpClient.post(this.baseUrlNotifier + "subscribe", sub);
+    const subscription = {
+      id: 0,
+      subscriptionObject: JSON.stringify(sub),
+      user :  {
+        "id": 2,
+        "name": "Felipe",
+        "surname": "Eumermo",
+        "email": "felipe@eumermo.com",
+        "phone": "123456",
+        "dateBirth": "2003-01-18T01:54:37.767",
+        "userType": {
+          "id": 1,
+          "code": "dev",
+          "description": "Desenvolvedor"
+        }
+      }
+    }
+
+    console.log(subscription);
+    
+
+    return this.httpClient.post(this.baseUrl + "User/Subscribe", subscription);
   }
   
 }

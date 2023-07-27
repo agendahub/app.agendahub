@@ -32,7 +32,7 @@ import { PushNotificatorService } from './services/push-notificator.service';
 })
 export class AppComponent {
 
-  constructor(private primeNG: PrimeNGConfig, private router: Router, private pushNot: PushNotificatorService) {
+  constructor(private primeNG: PrimeNGConfig, private router: Router) {
     // moment.updateLocale("pt-br", null)
 
     moment.locale("pt-br")
@@ -41,9 +41,6 @@ export class AppComponent {
     primeNG.overlayOptions = {
       appendTo: "body"
     }
-
-
-    pushNot.subscribeToNotifications()
   }
 
   get isLogin() {

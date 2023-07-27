@@ -6,7 +6,8 @@
     "host": "ng serve --host 0.0.0.0 --port 3333",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development"
+    "watch": "ng build --watch --configuration development",
+    "test-prod": "node test.production.js"
   },
   "private": true,
   "dependencies": {
@@ -46,6 +47,7 @@
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.25",
     "postcss-scss": "^4.0.6",
+    "shelljs": "^0.8.5",
     "tailwindcss": "^3.3.2",
     "typescript": "~5.1.3"
   }
