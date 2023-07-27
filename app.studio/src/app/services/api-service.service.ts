@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import { Observable, Subject, map, of, take } from 'rxjs';
 import { environment } from '../../environments/environment.development';
+import { LoaderService } from './loader.service';
 
 @Injectable({providedIn: 'root'})
 export class ApiService {
@@ -12,7 +13,7 @@ export class ApiService {
   private cache!: Map<string, any>;
   private offline = new Subject();
 
-  constructor(private httpClient: HttpClient) {
+  constructor(private httpClient: HttpClient, private loader: LoaderService) {
     console.log(this.isConnect);
 
     setInterval(() => {
@@ -45,7 +46,10 @@ export class ApiService {
     if (!this.isConnect) {
       return null;
     } else
-    return this.httpClient.get<T>(apiUrl).pipe(take(1))
+    return this.httpClient.get<T>(apiUrl).pipe(take(1)).pipe(map(x => {
+      
+      return x
+    }))
   }
 
   public sendToApi(endpoint: string, body: any) {
