@@ -116,7 +116,7 @@ export class UsersComponent {
     
     this.apiService.sendToApi("User", form)?.subscribe(x => {
       console.log(x);
-      if (x) {
+      if (x && x != 0) {
         if (!this.users.some(x => x.id === x)) {
           form.id = x
           this.users.push(form);

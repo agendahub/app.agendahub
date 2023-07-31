@@ -1,8 +1,8 @@
 {
-  "name": "app.studio",
-  "short_name": "app.studio",
-  "theme_color": "#1976d2",
-  "background_color": "#fafafa",
+  "name": "HB Studio",
+  "short_name": "HB Studio",
+  "theme_color": "#fdfdfd",
+  "background_color": "#433656",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",

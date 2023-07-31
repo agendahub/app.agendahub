@@ -11,13 +11,14 @@
         (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['name', 'surname', 'userType.description']"
         >
             <ng-template pTemplate="caption">
-                <div class="flex md:flex-row sm:align-items-center justify-between flex-col gap-2 mb-3">
+                <div class="flex md:flex-row sm:align-items-center justify-between flex-col gap-2">
                     <div class="flex justify-start gap-2 items-center">
                         <button pButton (click)="visible = true" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
                             <fa-icon size="lg" [icon]="faNew"></fa-icon>
                             <span class="tracking-tight text-white text-ellipsis">Novo</span>
                         </button>
                         <button pButton [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2" (click)="tp.show($event)">
+                            <div #typeTarget></div>
                             <fa-icon size="lg" [icon]="faList"></fa-icon>
                             <span class="tracking-tight text-white text-ellipsis">Tipos</span>   
                         </button>
@@ -25,8 +26,9 @@
                     </div>
                     <div class="flex flex-row justify-end sm:w-auto w-full">
                         <span class="p-input-icon-left ml-auto sm:w-auto w-full shadow-sm">
-                            <div #typeTarget></div>
-                            <i><fa-icon [icon]="faSearch"></fa-icon></i>
+                            <i style="margin-top: -0.69rem;">
+                                <fa-icon [icon]="faSearch"></fa-icon>
+                            </i>
                             <input pInputText type="text" (input)="applyFilter(dt, $event, 'contains')" placeholder="Buscar..." class="p-inputtext-sm sm:w-auto w-full" />
                         </span>
                     </div>
@@ -84,6 +86,11 @@
                                 </th>
                             </tr>
                         </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="3">Nenhum tipo de usuário encontrado.</td>
+                            </tr>
+                        </ng-template>
                     </p-table>
                     
                 </p-overlayPanel>
@@ -113,6 +120,11 @@
                     <td>{{user.dateBirth | date: "dd/MM/yy"}}</td>
                     <td>{{user.userType.description}}</td>
                     <td><fa-icon class="cursor-pointer" (click)="change(user)" [icon]="faGear"></fa-icon></td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+                <tr>
+                    <td colspan="7">Nenhum usuário encontrado.</td>
                 </tr>
             </ng-template>
         </p-table>

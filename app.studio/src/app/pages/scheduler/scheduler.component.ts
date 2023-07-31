@@ -56,6 +56,8 @@ export class SchedulerComponent implements OnInit {
 
     this.loadResources();
     this.createForm();
+
+    this.view = this.viewTranslate[this.localStorageService.get("view") ?? 0]
   }
 
   ngOnInit(): void {
@@ -119,11 +121,7 @@ export class SchedulerComponent implements OnInit {
     
     headerToolbar: false,
     height: 'auto',
-    initialView: (() => {
-      let savedView = this.localStorageService.get("view");
-      this.view = this.viewTranslate[savedView]
-      return savedView ? this.views[savedView] : this.views[0]
-    })(),
+    initialView: this.views[this.localStorageService.get("view") ?? 0],
     views: {
       timeGridFourDay: {
         type: 'timeGrid',
@@ -166,9 +164,6 @@ export class SchedulerComponent implements OnInit {
     
     let id = + arg.event._def.publicId;
     let schedule = this.schedules.find(x => x.id === id);
-
-    console.log(schedule?.schedule.price);
-    
 
     if (schedule) {
       this.form.get("id")?.setValue(id);
@@ -242,8 +237,8 @@ export class SchedulerComponent implements OnInit {
       events.push({
         id: x.id.toString(),
         title: `${x.employee.name} - ${x.customer.name}`,
-        start: x.schedule.startDateTime,
-        end: x.schedule.finishDateTime,
+        start: new String(x.schedule.startDateTime).replace("Z", ""),
+        end: new String(x.schedule.finishDateTime).replace("Z", ""),
         extendedProps: {...x}
       })
     })
@@ -276,8 +271,8 @@ export class SchedulerComponent implements OnInit {
     schedule.schedule = scheduleSaved?.schedule ?? new Schedule();
     schedule.schedule.price = form.price;
     schedule.schedule.service = Object.assign({}, form.service);
-    schedule.schedule.finishDateTime = form.finishDateTime.toISOString() as any
-    schedule.schedule.startDateTime = form.startDateTime.toISOString() as any
+    schedule.schedule.finishDateTime = form.finishDateTime as any
+    schedule.schedule.startDateTime = form.startDateTime as any
     schedule.schedule.note = form.note;
 
     // console.log(schedule);
