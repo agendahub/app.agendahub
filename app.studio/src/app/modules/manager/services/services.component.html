@@ -5,7 +5,7 @@
         </span>
     </div>
     <div class="w-full sm:w-75 md:w-50 lg:w-25 my-2 p-3">
-        <p-table #dt [value]="services" [styleClass]="sc.getTableSize()" [paginator]="true" [rows]="10"
+        <p-table #dt [value]="services"   [paginator]="true" [rows]="10"
         (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['code', 'description', 'serviceType.description','price']"
         >
             <ng-template pTemplate="caption">
@@ -57,7 +57,7 @@
                     <span class="text-2xl font-bold tracking-tight sm:text-3xl">
                         Tipos de serviço
                     </span>
-                    <p-table [value]="serviceTypes" [styleClass]="sc.getTableSize()" [paginator]="true" [rows]="5">
+                    <p-table [value]="serviceTypes"   [paginator]="true" [rows]="5">
                         
                         <ng-template pTemplate="caption">
                             <button pButton (click)="op.show($event)" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">

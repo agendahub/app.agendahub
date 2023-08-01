@@ -17,6 +17,7 @@ import { PushNotificatorService } from './services/push-notificator.service';
     </div>  
     
     <loader></loader>
+    <p-toast></p-toast>
     <app-nav *ngIf="!isLogin"></app-nav>
 
     <div class="relative">

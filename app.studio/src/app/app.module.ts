@@ -22,6 +22,8 @@ import { ButtonModule } from "primeng/button"
 import { CheckboxModule } from "primeng/checkbox"
 import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SplitButtonModule } from 'primeng/splitbutton';
+import { MessageModule } from "primeng/message"
+import { ToastModule } from "primeng/toast"
 /** */
 
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
@@ -30,6 +32,7 @@ import { HomeComponent } from './pages/home/home.component'
 import { ApiService } from './services/api-service.service';
 import { ManagerRoutingModule } from './modules/manager/manager-routing.module';
 import { ManagerModule } from './modules/manager/manager.module';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
   declarations: [
@@ -53,8 +56,10 @@ import { ManagerModule } from './modules/manager/manager.module';
     
     
 
+    ToastModule,
     DialogModule,
     ButtonModule,
+    MessageModule,
     DropdownModule,
     CalendarModule,
     CheckboxModule,
@@ -77,7 +82,8 @@ import { ManagerModule } from './modules/manager/manager.module';
   ],
   providers: [
     HttpClient,
-    ApiService
+    ApiService,
+    MessageService
   ],
   bootstrap: [AppComponent]
 })

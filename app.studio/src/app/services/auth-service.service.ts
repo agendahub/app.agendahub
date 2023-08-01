@@ -8,7 +8,7 @@ import { map } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthServiceService {
+export class AuthService {
 
   private logged = false;
   private baseUrl = environment.apiUrl;
@@ -38,6 +38,7 @@ export class AuthServiceService {
     return this.httpClient.post(this.baseUrl + "Auth/Login", loginModel).pipe(map(r => {
       this.Token = r;
       this.loader.hide();
+      return r
     }))
   }
 
