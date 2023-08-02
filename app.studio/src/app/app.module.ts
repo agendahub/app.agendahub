@@ -26,6 +26,8 @@ import { MessageModule } from "primeng/message"
 import { ToastModule } from "primeng/toast"
 /** */
 
+import { JwtModule } from "@auth0/angular-jwt"
+
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
 import { LoginComponent } from './pages/login/login.component';
 import { HomeComponent } from './pages/home/home.component'
@@ -33,6 +35,16 @@ import { ApiService } from './services/api-service.service';
 import { ManagerRoutingModule } from './modules/manager/manager-routing.module';
 import { ManagerModule } from './modules/manager/manager.module';
 import { MessageService } from 'primeng/api';
+import { AuthService } from './auth/auth-service.service';
+import { AuthGuardService } from './auth/auth.guard.service';
+
+export function tokenGetter() {
+  let token = localStorage.getItem("token");
+  token = !token && token != "undefined" ? JSON.parse(token!) : token;
+  
+  return token
+}
+
 
 @NgModule({
   declarations: [
@@ -77,13 +89,23 @@ import { MessageService } from 'primeng/api';
       registrationStrategy: 'registerWhenStable:30000'
     }),
 
+    JwtModule.forRoot({
+      config: {
+        tokenGetter: tokenGetter,
+        allowedDomains: ["localhost:5001"],
+        // disallowedRoutes: ["http://example.com/examplebadroute/"],
+      },
+    }),
+
     ComponentsModule,
     ManagerModule
   ],
   providers: [
     HttpClient,
     ApiService,
-    MessageService
+    AuthService,
+    MessageService,
+    AuthGuardService,
   ],
   bootstrap: [AppComponent]
 })

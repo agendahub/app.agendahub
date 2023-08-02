@@ -10,8 +10,11 @@
         <div>
           <label for="login" class="block text-sm font-medium leading-6">Login</label>
           <div class="mt-2">
-            <input formControlName="login" type="text" id="login" pInputText [style]="{width: '100%'}" class="md:p-inputtext p-inputtext-sm"  placeholder="Email ou telefone">
+            <!-- <input formControlName="login" type="text" id="login"  placeholder="Email ou telefone"> -->
+            <input formControlName="login" type="text" id="login"  placeholder="Email ou telefone"class="input w-full">
           </div>
+
+
         </div>
   
         <div>
@@ -22,7 +25,7 @@
             </div>
           </div>
           <div class="mt-2">
-            <input id="password" formControlName="password" type="password" autocomplete="current-password" class="md:p-inputtext p-inputtext-sm" pInputText [style]="{width: '100%'}" placeholder="Sua senha">
+            <input id="password" formControlName="password" type="password" autocomplete="current-password" class="input w-full" placeholder="Sua senha">
           </div>
         </div>
   

@@ -9,7 +9,7 @@ export class LocalStorageService {
 
   public get(key: string) {
     let object = localStorage.getItem(key);
-    return object ? JSON.parse(object) : null;
+    return object && typeof object == "object" ? JSON.parse(object) : object;
   }
 
   public set(key: string, value: any) {
