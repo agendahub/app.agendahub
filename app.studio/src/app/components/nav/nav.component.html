@@ -20,6 +20,7 @@
 
     <div class="hidden lg:flex lg:gap-x-12">
       <ng-container [ngTemplateOutlet]="links"></ng-container>
+      <a *ngIf="userRole !== 'employee'" (click)="sidebarOpen = false" (mouseenter)="!sidebarOpen && menu.toggle($event)" routerLink="/manager" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Gestão</a>
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end">
       <a *ngIf="!isLogged" routerLink="/login" class="text-sm cursor-pointer font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
@@ -34,7 +35,7 @@
     <div class="fixed inset-0 z-10 bg-slate-400 opacity-50"></div>
     <div class="fixed shadow-lg isolate inset-y-0 right-0 z-10 w-full overflow-y-auto bg-slate-50 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
       
-      <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem] max-h-screen" aria-hidden="true">
+      <div class="absolute inset-x-0 top-[-10rem] -z-10 transform-gpu overflow-hidden blur-3xl sm:top-[-20rem] h-full overflow-h-scroll" aria-hidden="true">
         <div class="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
         <div class="relative left-1/2 -z-10 aspect-[1155/678] w-[36.125rem] max-w-none -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-40rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
         <div class="relative left-[calc(50%+3rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%+36rem)] sm:w-[72.1875rem]" style="clip-path: polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.9%, 17.9% 100%, 27.6% 76.8%, 76.1% 97.7%, 74.1% 44.1%)"></div>
@@ -58,11 +59,34 @@
             <div class="mt-2 space-y-2" id="disclosure-1">
               <ng-container [ngTemplateOutlet]="links"></ng-container>
 
+              <div class="w-full flex items-center justify-between">
+                <a *ngIf="userRole !== 'employee'" (click)="sidebarOpen = false" routerLink="/manager" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-purple-hb hover:bg-gray-50 w-10/12">Gestão</a>
+                <div class="flex justify-center cursor-pointer w-10 text-purple-hb hover:bg-gray-50 rounded-lg p-3" [ngClass]="{'rotate-180': showCrudLink}" (click)="showCrudLink = !showCrudLink" >
+                  <fa-icon [icon]="faArrowDown" size="lg"></fa-icon>
+                </div>
+              </div>
+
+              <div class="w-full p-2 bg-slate-100 rounded-md shadow-md mt-0" *ngIf="showCrudLink">
+                <a (click)="sidebarOpen = false" routerLink="/manager/services" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Serviços</a>
+                <a (click)="sidebarOpen = false" routerLink="/manager/users" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Usuários</a>
+              </div>
+
             </div>
           </div>
           <div class="py-6">
-            <a *ngIf="!isLogged" routerLink="/login" class="-mx-3 block cursor-pointer rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
-            <a *ngIf="isLogged" (click)="logout()" class="-mx-3 block cursor-pointer rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log out</a>
+            <a *ngIf="!isLogged" routerLink="/login" class="-mx-3 block cursor-pointer rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-purple-hb hover:bg-gray-50">Log in</a>
+            <a *ngIf="isLogged" (click)="showUserOptions = !showUserOptions" class="-mx-3 block cursor-pointer rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-purple-hb hover:bg-gray-50">
+              <div class="flex justify-between">
+                <span>{{userData.name}}</span>
+                <div class="flex justify-center" [ngClass]="{'rotate-180': showUserOptions}" >
+                  <fa-icon [icon]="faArrowDown" size="lg"></fa-icon>
+                </div>
+              </div>
+            </a>
+            <div class="w-full p-2 bg-slate-100 rounded-md shadow-md mt-0" *ngIf="showUserOptions">
+              <a (click)="sidebarOpen = false" routerLink="/settings" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Configurações</a>
+              <a (click)="logout()" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Sair</a>
+            </div>
           </div>
         </div>
       </div>
@@ -71,9 +95,6 @@
 </header>
 
 <ng-template #links>
-  <a *ngIf="userRole !== 'employee'" (click)="sidebarOpen = false" (mouseenter)="menu.toggle($event)" routerLink="/manager" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Gestão</a>
-  <a (click)="sidebarOpen = false" routerLink="/scheduler" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Agenda</a>
-  
-  <p-menu #menu [model]="managerItems" [popup]="true" (mouseleave)="menu.hide()"></p-menu>
-
+  <a (click)="sidebarOpen = false" routerLink="/scheduler" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-purple-hb hover:bg-gray-50">Agenda</a>
 </ng-template>
+<p-menu #menu [model]="managerItems" [popup]="true" (mouseleave)="menu.hide()"></p-menu>

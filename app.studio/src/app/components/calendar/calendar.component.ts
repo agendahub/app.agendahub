@@ -10,6 +10,8 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
 import { LoaderService } from '../../services/loader.service';
 import { Subject } from 'rxjs';
+import { Moment } from 'moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-calendar',
@@ -38,6 +40,10 @@ export class CalendarComponent {
   @Input() addEvent!: Subject<any>
   private isEditable!: boolean;
 
+  public get month(): string {
+    return moment(this.Calendar?.getDate()).format("MMMM").toUpperCapital();
+  };
+
   constructor(private localStorageService: LocalStorageService, private loaderService: LoaderService) {
     this.view = this.viewTranslate[this.localStorageService.get("view") ?? 0]
 
@@ -49,11 +55,12 @@ export class CalendarComponent {
         this.Calendar.setOption("editable", x);
         this.Calendar.setOption("selectable", x);
       })
-    })    
+    })
+
   }
 
   private get Calendar(): Calendar {
-    return this.calendarComponent.getApi();
+    return this.calendarComponent?.getApi();
   }
 
   next() {
@@ -92,7 +99,6 @@ export class CalendarComponent {
   };
 
   view = 'Padrão';
-  private _v:any
 
   changeView(event: any) {
     const indexView = this.viewTranslate.indexOf(event.value);

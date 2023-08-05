@@ -1,4 +1,4 @@
-<div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(80vh)] max-h-screen">
+<div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(80vh)] h-full overflow-h-scroll">
     <app-calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)"></app-calendar>
 </div>
 

@@ -21,11 +21,13 @@
 
 ::-webkit-scrollbar {
     height: 0.5rem;
+    padding: 0 1rem;
 }
 
 ::-webkit-scrollbar:vertical {
     width: 0.5rem;
     background-blend-mode: darken;
+    padding: 1rem 0;
 }
 
 
@@ -44,7 +46,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-    background: #1d162d;
+    background: rgba(63, 51, 81, 0.5);
     border-radius: 2rem;
 }
 

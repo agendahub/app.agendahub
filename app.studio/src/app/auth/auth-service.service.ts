@@ -63,7 +63,10 @@ export class AuthService {
   }
 
   private get ExpiresIn() {
-    return this.jwt.getTokenExpirationDate()
+    if (this.Token) {
+      return this.jwt.getTokenExpirationDate()
+    }
+    return null
   }
 
   public get IsValid() {
@@ -147,15 +150,18 @@ export class AuthService {
     this.intervalRunning = true;
 
     this.interval = setInterval(async () => {
-      const timeRemaining = await this.ExpiresIn
-      const now = Date.now()
-      
-      const isNeedRefresh = Math.abs(timeRemaining?.getTime()! - now) / 1000 < 220
-      
-      console.log(Math.abs(timeRemaining?.getTime()! - now) / 1000, now, timeRemaining?.getTime());
+      const now = Date.now();
+      const timeRemaining = await this.ExpiresIn;
+
+      if (!timeRemaining) {
+        clearInterval(this.interval);
+        this.intervalRunning = false;
+      }
+
+      const isNeedRefresh = Math.abs(timeRemaining?.getTime()! - now) / 1000 < 100;
 
       if (this.isLogged && isNeedRefresh) {
-        clearInterval(this.interval)
+        clearInterval(this.interval);
         this.intervalRunning = false;
         this.tryRefreshToken()
       }
@@ -164,7 +170,7 @@ export class AuthService {
         clearInterval(this.interval)
         this.intervalRunning = false;
       }
-    })
+    }, 1000);
   }
 
   private tryRefreshToken() {

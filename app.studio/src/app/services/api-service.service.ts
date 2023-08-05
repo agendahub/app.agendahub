@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable, Subject, catchError, map, of, take } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { LoaderService } from './loader.service';
 import { LocalStorageService } from './local-storage.service';
 import { MessageService } from 'primeng/api';
+import { AuthService } from '../auth/auth-service.service';
 
 @Injectable({providedIn: 'root'})
 export class ApiService {
@@ -15,7 +16,7 @@ export class ApiService {
   private cache!: Map<string, any>;
   private offline = new Subject();
 
-  constructor(private httpClient: HttpClient, private loader: LoaderService, private localStorage: LocalStorageService, private messageService: MessageService) {
+  constructor(private httpClient: HttpClient, private loader: LoaderService, private localStorage: LocalStorageService, private messageService: MessageService, private auth: AuthService) {
     console.log(this.isConnect);
 
     setInterval(() => {

@@ -1,34 +1,37 @@
 <div class="h-full w-full sm:w-75 md:w-50 lg:w-25">
-    <div class="flex flex-wrap justify-between w-full p-2">
-        <div class="flex-auto">
-            <span class="text-4xl pb-3 font-bold tracking-tight sm:text-6xl">
-                Agenda
-            </span>
+    <div class="grid py-2 md:px-2 lg:px-4 px-0">
+        
+        <div class="col-span-12 md:col-span-6 flex items-center">
+            <div class="w-full">
+                <p-dropdown [options]="viewTranslate" [(ngModel)]="view" (onChange)="changeView($event)" [style]="{width: '100%'}">
+                    <ng-template pTemplate="selectedItem">
+                        <div class="flex justify-between gap-2 text-ellipsis text-base">
+                            <div>{{ view }}</div>
+                            <fa-icon [icon]="faOptions"></fa-icon>
+                        </div>
+                    </ng-template>
+                    <ng-template let-view pTemplate="item">
+                        <div class="flex justify-between gap-2 text-ellipsis text-base">
+                            <div>{{ view }}</div>
+                            <fa-icon [icon]="faOptions"></fa-icon>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+            </div>
         </div>
-        <div class="flex flex-auto justify-end items-center gap-2">
-          
-            <fa-icon size="2x" [icon]="faPrev" class="text-white cursor-pointer shadow-md" (click)="previous()"></fa-icon>
-            <fa-icon size="2x" [icon]="faNext" class="text-white cursor-pointer shadow-md" (click)="next()"></fa-icon>
-            <p-dropdown [options]="viewTranslate" [(ngModel)]="view" (onChange)="changeView($event)" >
-                <ng-template pTemplate="selectedItem">
-                    <div class="flex justify-between gap-2 text-ellipsis text-base">
-                        <div>{{ view }}</div>
-                        <fa-icon [icon]="faOptions"></fa-icon>
-                    </div>
-                </ng-template>
-                <ng-template let-view pTemplate="item">
-                    <div class="flex justify-between gap-2 text-ellipsis text-base">
-                        <div>{{ view }}</div>
-                        <fa-icon [icon]="faOptions"></fa-icon>
-                    </div>
-                </ng-template>
-            </p-dropdown>
-
-        </div>
-
     </div>
     
-    <div class="flex w-full h-full max-h-full md:p-2 lg:p-4 p-0">
+    
+    <div class="w-full h-full max-h-full md:p-2 lg:p-4 p-0">
+        <div class="flex justify-between items-center p-2 bg-white rounded-t-lg">
+            <div class="text-4xl text-purple-hb font-bold tracking-tight sm:text-6xl" style="z-index: 2;">{{month}}</div>
+            
+            <span class="flex gap-1">
+                <fa-icon size="2x" [icon]="faPrev" class="text-purple-hb cursor-pointer" (click)="previous()"></fa-icon>
+                <fa-icon size="2x" [icon]="faNext" class="text-purple-hb cursor-pointer" (click)="next()"></fa-icon>
+            </span>
+        </div>
         <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+        <div class="h-3 bg-white rounded-b-lg"></div>
     </div>        
 </div>

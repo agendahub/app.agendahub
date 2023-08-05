@@ -14,6 +14,9 @@ export class NavComponent {
   sidebarOpen = false;
   faArrowDown = faArrowCircleDown
 
+  showCrudLink = false
+  showUserOptions = false;
+
   userItems: MenuItem[] = [
     {
         label: 'Ações',

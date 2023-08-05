@@ -96,8 +96,8 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ["localhost:5001", "192.168.0.67:7777", "https://apistudioagenda-development.up.railway.app/"],
-        disallowedRoutes: ["https://apistudioagenda-development.up.railway.app/Auth/Login"],
+        allowedDomains: ["localhost:5001", "192.168.0.67:7777", "apistudioagenda-development.up.railway.app"],
+        // disallowedRoutes: ["apistudioagenda-development.up.railway.app/Auth/Login"],
       },
     }),
 
@@ -114,4 +114,12 @@ export function tokenGetter() {
   bootstrap: [AppComponent]
 })
 export class AppModule {
- }
+}
+
+String.prototype.toLowerCapital = function(this: string) {
+  return this[0].toLowerCase() + this.slice(1);
+}
+
+String.prototype.toUpperCapital = function(this: string) {
+  return this[0].toUpperCase() + this.slice(1);
+}

@@ -11,6 +11,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CalendarComponent } from './calendar/calendar.component';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { DropdownModule } from 'primeng/dropdown';
+import { AccordionModule } from 'primeng/accordion';
 import { FormsModule } from '@angular/forms';
 
 @NgModule({
@@ -34,6 +35,7 @@ import { FormsModule } from '@angular/forms';
     FontAwesomeModule,
     FullCalendarModule,
     
+    AccordionModule,
     DropdownModule,
     ButtonModule,
     MenuModule

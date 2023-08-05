@@ -10,6 +10,7 @@ module.exports = {
       "base-dark": '#2c2f40',
       "base-medium": '#5a758c',
       "base-light": '#a4b0bf',
+      "purple-hb": "#362b45",
       ...colors
     },
     extend: {},
