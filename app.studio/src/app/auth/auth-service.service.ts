@@ -3,8 +3,11 @@ import { Injectable } from '@angular/core';
 import { LocalStorageService } from '../services/local-storage.service';
 import { LoaderService } from '../services/loader.service';
 import { environment } from '../../environments/environment.development';
-import { map } from 'rxjs';
+import { Subject, map } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { Router } from '@angular/router';
+import { MessageService } from 'primeng/api';
+import { Platform } from '@angular/cdk/platform';
 
 @Injectable({
   providedIn: 'root'
@@ -13,16 +16,27 @@ export class AuthService {
 
   private logged = false;
   private baseUrl = environment.apiUrl;
+  
+  private intervalCheck: any;
+  public tokenIsValid = new Subject<boolean>();
 
   constructor(
+    private router: Router,
     private loader: LoaderService,
-    private httpClient: HttpClient,
     private jwt: JwtHelperService,
+    private httpClient: HttpClient,
+    private platform: Platform,
+    private messageService: MessageService,
     private localStorage: LocalStorageService,
-    ) { }
+    ) 
+    {
+      if (localStorage.get("interval")) {
+        this.checkToken();
+      }
+    }
 
   public get isLogged () {
-    this.logged = this.Token != null && this.Token != undefined && this.Token != "undefined";
+    this.logged = this.TokenData != null;
     return this.logged;
   }
 
@@ -42,16 +56,20 @@ export class AuthService {
   }
 
   public get TokenData() {
-    
-    return this.jwt.decodeToken();
+    if (this.Token) {
+      return this.jwt.decodeToken();
+    }
+    return null;
   }
 
   private get ExpiresIn() {
     return this.jwt.getTokenExpirationDate()
   }
 
-  private get IsValid() {
-    return this.jwt.isTokenExpired(this.Token)
+  public get IsValid() {
+    const isValid = this.jwt.isTokenExpired(this.Token)
+    
+    return isValid
   }
   
   public login(login: string, password: string) {
@@ -67,20 +85,114 @@ export class AuthService {
       this.Token = r.token;
       this.loader.hide();
 
+      if (r.token) {
+        this.checkToken();
+      }
+
       return r
     }))
   }
 
   public logout() {
     this.Token = null;
+
+    this.back({
+      beforeNavigate: () => this.messageService.add({severity: "info", summary: "Até breve..."}),
+      timeout: 1000
+    })
   }
 
-  private check () {
-    try {
-      this.httpClient.get(this.baseUrl + "Auth/Check").subscribe()
-    } catch (error) {
-      this.Token = null;
+  public back (navigate?: NavigateOptions) {
+    if (navigate && navigate.beforeNavigate) {
+      navigate.beforeNavigate()
+    }
+
+    setTimeout(() => {
+      this.router.navigate(['login']);
+      if (navigate && navigate.afterNavigate) {
+        navigate.afterNavigate();
+      }
+    }, navigate ? navigate.timeout : 456);
+
+    return false;
+  }
+
+  public goFourth(navigate: NavigateOptions) {
+    if (navigate.beforeNavigate) {
+      navigate.beforeNavigate()
+    }
+    setTimeout(() => {
+      if (navigate.target) {
+        this.router.navigate([navigate.target]);
+      }
+
+      if (navigate.afterNavigate) {
+        navigate.afterNavigate();
+      }
+    }, navigate.timeout);
+  }
+
+  interval: any
+  
+  private get intervalRunning() {
+    return this.localStorage.get("interval")
+  }
+
+  private set intervalRunning(value: boolean) {
+    this.localStorage.set("interval", value);
+  }
+
+  private checkToken() {
+    clearInterval(this.interval)
+    this.intervalRunning = true;
+
+    this.interval = setInterval(async () => {
+      const timeRemaining = await this.ExpiresIn
+      const now = Date.now()
+      
+      const isNeedRefresh = Math.abs(timeRemaining?.getTime()! - now) / 1000 < 220
+      
+      console.log(Math.abs(timeRemaining?.getTime()! - now) / 1000, now, timeRemaining?.getTime());
+
+      if (this.isLogged && isNeedRefresh) {
+        clearInterval(this.interval)
+        this.intervalRunning = false;
+        this.tryRefreshToken()
+      }
+
+      if (!this.isLogged) {
+        clearInterval(this.interval)
+        this.intervalRunning = false;
+      }
+    })
+  }
+
+  private tryRefreshToken() {
+    console.log("Token its auto-refresh only on mobile");
+    if (!this.platform.isBrowser || this.platform.ANDROID || this.platform.IOS) {
+
+      console.log("Trying to refresh token");
+      this.httpClient.get(this.baseUrl + "Auth/Refresh").subscribe((x: any) => {
+        console.log(x);
+        
+        if (x && x.token) {
+          console.log("Token refreshed");
+          this.Token = x.token;
+          
+          this.checkToken()
+        }
+      }, err => {
+        this.back({beforeNavigate: () => this.messageService.add({severity: "warning", summary: "Erro ao atualizar token", detail: err})})
+      })
     }
   }
 
+}
+
+export class NavigateOptions {
+  timeout? = 456;
+  target?: string
+  beforeNavigate?: () => void;
+  afterNavigate?: () => void;
+  prompt?: Promise<boolean>
 }

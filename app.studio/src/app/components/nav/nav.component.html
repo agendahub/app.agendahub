@@ -22,7 +22,9 @@
       <ng-container [ngTemplateOutlet]="links"></ng-container>
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-      <a routerLink="/login" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+      <a *ngIf="!isLogged" routerLink="/login" class="text-sm cursor-pointer font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+      <a *ngIf="isLogged" (click)="opt.toggle($event)" class="text-sm cursor-pointer font-semibold leading-6 text-gray-900">{{userData.name}} <fa-icon [icon]="faArrowDown"></fa-icon> </a>     
+      <p-menu #opt [model]="userItems" [popup]="true"></p-menu>
     </div>
 
   </nav>
@@ -59,7 +61,8 @@
             </div>
           </div>
           <div class="py-6">
-            <a routerLink="/login" class="-mx-3 block cursor-pointer rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
+            <a *ngIf="!isLogged" routerLink="/login" class="-mx-3 block cursor-pointer rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log in</a>
+            <a *ngIf="isLogged" (click)="logout()" class="-mx-3 block cursor-pointer rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50">Log out</a>
           </div>
         </div>
       </div>
@@ -68,9 +71,9 @@
 </header>
 
 <ng-template #links>
-  <a (click)="sidebarOpen = false" routerLink="/manager" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Gestão</a>
+  <a *ngIf="userRole !== 'employee'" (click)="sidebarOpen = false" (mouseenter)="menu.toggle($event)" routerLink="/manager" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Gestão</a>
   <a (click)="sidebarOpen = false" routerLink="/scheduler" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Agenda</a>
   
-  <!-- <button pButton pRipple (click)="pushOn()">Ativar push notification</button> -->
+  <p-menu #menu [model]="managerItems" [popup]="true" (mouseleave)="menu.hide()"></p-menu>
 
 </ng-template>

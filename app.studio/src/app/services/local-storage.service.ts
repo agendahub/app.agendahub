@@ -5,15 +5,34 @@ import { Injectable } from '@angular/core';
 })
 export class LocalStorageService {
 
-  constructor() { }
+  private commomStrings = ["false", "true", "undefined", "null", "NaN"];
+
+  constructor() {}
 
   public get(key: string) {
     let object = localStorage.getItem(key);
-    return object && typeof object == "object" ? JSON.parse(object) : object;
+
+    if (object) {
+      switch (typeof object) {
+        case "object" : return object != null ? JSON.parse(object) : object
+        case "string" : 
+          if (this.commomStrings.includes(object)) {
+            return eval(object);
+          }
+
+          return object.toString();
+          
+        default: return object
+      }
+    } 
+
+    return null;
+
+    // return object && typeof object == "object" ? JSON.parse(object) : eval(object ?? "null");
   }
 
   public set(key: string, value: any) {
-    let object = JSON.stringify(value);
+    let object = value && typeof value == "object" ? JSON.stringify(value) : value;
     localStorage.setItem(key, object);
     return this.get(key);
   }

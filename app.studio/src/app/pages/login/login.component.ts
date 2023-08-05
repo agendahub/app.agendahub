@@ -26,8 +26,12 @@ export class LoginComponent {
       console.log(result);
       
       if (result.success) {
-        this.messageService.add({severity: "success", summary: "Logado com sucesso!", detail: result.message})
-        location.assign("/home");
+        this.authService.goFourth({
+          target: "home",
+          beforeNavigate: () => this.messageService.add({severity: "success", summary: "Logado com sucesso!", detail: result.message}), 
+          afterNavigate: () => this.messageService.add({severity: "success", summary: "Visualize suas tarefas para hoje!"})
+        })
+
       } else {
         this.messageService.add({severity: "error", summary: "Erro ao logar!", detail: result.message})
       }
