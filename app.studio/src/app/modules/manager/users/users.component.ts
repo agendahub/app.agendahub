@@ -102,9 +102,9 @@ export class UsersComponent {
         if (!this.userTypes.some(x => x.id === x)) {
           form.id = x
           this.userTypes.push(form);
-          this.formType.reset({id: 0})
         } 
         this.visible = false
+        this.formType.reset({id: 0})
       }
     })
   }
@@ -122,7 +122,7 @@ export class UsersComponent {
           this.users.push(form);
         } 
         this.visible = false
-        this.form.reset()
+        this.form.reset({id: 0, password: ""})
       }
     })
 

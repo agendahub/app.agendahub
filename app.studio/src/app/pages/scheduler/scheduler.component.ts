@@ -14,6 +14,8 @@ import { Schedule, Service, User, UserSchedule } from '../../models/entities';
 import { ApiService } from '../../services/api-service.service';
 import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { LocalStorageService } from '../../services/local-storage.service';
+import { AuthService } from '../../auth/auth-service.service';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -23,47 +25,40 @@ import { LocalStorageService } from '../../services/local-storage.service';
 })
 export class SchedulerComponent implements OnInit {
 
-  @ViewChild("calendar")
-  calendarComponent!: FullCalendarComponent;
-  header!: string;
-  clockIcon = faClock.iconName;
-
-  faPrev = faArrowCircleLeft;
-  faNext = faArrowCircleRight;
-  faOptions = faCalendarCheck;
   faConfirm = faCheckCircle;
   faDelete = faTimesCircle;
+  header!: string
 
   visible = false;
   edit = false;
+  enableEdit = new Subject<boolean>()
+  isEditEnable = this.authService.TokenData?.role != "employee"
 
   form!: FormGroup;
-
+  
+  events!: any[];
   services: Service[] = [];
   employees: User[] = [];
   customers: User[] = [];
   schedules: UserSchedule[] = []
-  events = new Array();
+
+  clearEvents = new Subject()
+  addEvent = new Subject()
 
   selectedEmployes = new Array();
   filteredEmployes = new Array();
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private localStorageService: LocalStorageService) {
-    setTimeout(() => {
-      this.Calendar.addEventSource(this.events);
-      
-    }, 0)
-
-    this.loadResources();
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService) {
     this.createForm();
-
-    this.view = this.viewTranslate[this.localStorageService.get("view") ?? 0]
+    this.loadEvents();
+    this.loadCrudResources();
+    setTimeout(() => this.enableEdit.next(this.authService.TokenData?.role != "employee"), 100)
   }
 
   ngOnInit(): void {
   }
 
-  private async loadResources() {
+  private loadCrudResources() {
     this.api.requestFromApi<Service[]>("Service")?.subscribe(
       x => this.services = x
     );
@@ -73,6 +68,9 @@ export class SchedulerComponent implements OnInit {
     this.api.requestFromApi<User[]>("User/Employees")?.subscribe(
       x => this.employees = x
     );
+  }
+
+  private async loadEvents() {
     this.api.requestFromApi<UserSchedule[]>("Schedule/Schedules")?.subscribe(
       x => {
         this.schedules = x;
@@ -95,67 +93,12 @@ export class SchedulerComponent implements OnInit {
       id: [null]
     });
 
-  }
-
-
-  //#region Members "Calendar ItSelf"
-
-  private get Calendar(): Calendar {
-    return this.calendarComponent.getApi();
-  }
-
-  next() {
-    this.Calendar.next();
-  }
-
-  previous() {
-    this.Calendar.prev();
-  }
-
-  views = ['timeGridFourDay', 'dayGridMonth', 'dayGridWeek', 'dayGridDay']
-  viewTranslate = ["Padrão", "Grade mês", "Grade semana", "Grade dia"]
-
-  calendarOptions: CalendarOptions = {
-    locale:"pt-br",
-    dayHeaderClassNames: ["uppercase", "tracking-tight", "text-right" , "font-sans"],
-    
-    headerToolbar: false,
-    height: 'auto',
-    initialView: this.views[this.localStorageService.get("view") ?? 0],
-    views: {
-      timeGridFourDay: {
-        type: 'timeGrid',
-        allDaySlot: false,
-        duration: { days: 5 },
-        hiddenDays: [0],
-        slotMinTime: "08:00:00",
-        slotMaxTime: "22:00:00"
-      }
-    },
-    events: [],
-    editable: true,
-    selectable: true,
-    plugins: [interactionPlugin, timeGridPlugin, dayGridPlugin, listPlugin ],
-    eventChange: this.onEventChange.bind(this),
-    eventClick : this.onEventClick.bind(this),
-    dateClick: this.onDateClick.bind(this),
-  };
-
-  view = 'Padrão';
-  private _v:any
-
-  changeView(event: any) {
-
-    const indexView = this.viewTranslate.indexOf(event.value);
-    if (indexView != -1) {
-      this.localStorageService.set("view", indexView)
-      this.localStorageService.set("viewName", this.views[indexView])
+     if (!this.isEditEnable) for( let [key, value] of Object.entries(this.form.controls)) {
+      value.disable();
     }
     
-    this.Calendar.changeView(this.views[indexView]);
-  }
 
-  //#endregion
+  }
 
   //#region Members 'Handling click'
 
@@ -174,6 +117,7 @@ export class SchedulerComponent implements OnInit {
       this.form.get("price")?.setValue(schedule["schedule"]["price"])
       this.form.get("customer")?.setValue(schedule["customer"])
       this.form.get("schedule")?.setValue(schedule["schedule"])
+      this.form.get("note")?.setValue(schedule["schedule"]["note"])
       this.form.get("employee")?.setValue(schedule["employee"])
       
       this.visible = true
@@ -237,14 +181,17 @@ export class SchedulerComponent implements OnInit {
       events.push({
         id: x.id.toString(),
         title: `${x.employee.name} - ${x.customer.name}`,
-        start: new String(x.schedule.startDateTime).replace("Z", ""),
-        end: new String(x.schedule.finishDateTime).replace("Z", ""),
+        start: x.schedule.startDateTime,
+        end: x.schedule.finishDateTime,
         extendedProps: {...x}
       })
     })
-    events.forEach(x => this.Calendar.addEvent(x));
-    console.log(events);
+
+    events.forEach(x => this.addEvent.next(x))
+
+    this.events = events;
     
+    console.log(events);
   }
 
   trySave() {
@@ -262,6 +209,10 @@ export class SchedulerComponent implements OnInit {
       form.finishDateTime.setDate(form.day);
     }
 
+    form.startDateTime.setHours(form.startDateTime.getHours() + 3)
+    form.finishDateTime.setHours(form.finishDateTime.getHours() + 3)
+
+
     schedule.id = form.id && form.id != "" ? form.id : 0;
     schedule.customer= Object.assign({}, form.customer);
     schedule.employee = Object.assign({}, form.employee);
@@ -271,8 +222,8 @@ export class SchedulerComponent implements OnInit {
     schedule.schedule = scheduleSaved?.schedule ?? new Schedule();
     schedule.schedule.price = form.price;
     schedule.schedule.service = Object.assign({}, form.service);
-    schedule.schedule.finishDateTime = form.finishDateTime as any
-    schedule.schedule.startDateTime = form.startDateTime as any
+    schedule.schedule.finishDateTime = form.finishDateTime.toISOString()
+    schedule.schedule.startDateTime = form.startDateTime.toISOString()
     schedule.schedule.note = form.note;
 
     // console.log(schedule);
@@ -280,15 +231,15 @@ export class SchedulerComponent implements OnInit {
   }
 
   private save(body: any) {
-    this.api.sendToApi("Schedule/Setup", body)?.subscribe(x => {
+    this.isEditEnable && this.api.sendToApi("Schedule/Setup", body)?.subscribe(x => {
       console.log(x);
       
       if (x) {
-        this.Calendar.removeAllEvents();
-        this.loadResources()
+        this.clearEvents.next(null);
+        this.loadEvents()
       }
 
-      this.form.reset({note: ""});
+      this.form.reset({note: "", id: 0});
     })
   }
 
@@ -298,12 +249,13 @@ export class SchedulerComponent implements OnInit {
     
     // console.log(schedule);
 
-    schedule && this.api.sendToApi("Schedule/Cancel", schedule)?.subscribe(x => {
+    schedule && this.isEditEnable && this.api.sendToApi("Schedule/Cancel", schedule)?.subscribe(x => {
       console.log(x);
       
       if (x) {
-        this.Calendar.removeAllEvents();
-        this.loadResources();
+        // this.Calendar.removeAllEvents();
+        this.loadEvents();
+        this.clearEvents.next(null)
         
       }
 

@@ -33,9 +33,9 @@
     background:  white;
 }
 
+
 ::-webkit-scrollbar-track:vertical {
     background:  linear-gradient(180deg,
-     whitesmoke,
      #020617,
      #020617,
      #020617,
@@ -51,7 +51,6 @@
 @media screen and (max-width: 1300px) {
     ::-webkit-scrollbar-track:vertical {
         background:  linear-gradient(180deg,
-         white,
          #090f21,
          #090f21,
          #090f21,

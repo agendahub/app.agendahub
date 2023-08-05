@@ -99,8 +99,8 @@ export class ServicesComponent {
         if (!this.serviceTypes.some(x => x.id === x)) {
           form.id = x
           this.serviceTypes.push(form);
-          this.formType.reset({id: 0})
         } 
+        this.formType.reset({id: 0})
         this.visible = false
       }
     })
@@ -118,8 +118,8 @@ export class ServicesComponent {
           form.id = x
           this.services.push(form);
         } 
-        this.visible = false
         this.form.reset({id: 0})
+        this.visible = false
       }
     })
 

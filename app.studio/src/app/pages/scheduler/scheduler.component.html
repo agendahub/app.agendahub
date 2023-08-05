@@ -1,50 +1,5 @@
-<div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none h-[calc(90vh)]">
-    <div class="h-full w-full sm:w-75 md:w-50 lg:w-25">
-        <div class="flex flex-wrap justify-between w-full p-2">
-            <div class="flex-auto">
-                <span class="text-4xl pb-3 font-bold tracking-tight sm:text-6xl">
-                    Agenda
-                </span>
-            </div>
-            <div class="flex flex-auto justify-end items-center gap-2">
-              
-                <fa-icon size="2x" [icon]="faPrev" class="text-white cursor-pointer shadow-md" (click)="previous()"></fa-icon>
-                <fa-icon size="2x" [icon]="faNext" class="text-white cursor-pointer shadow-md" (click)="next()"></fa-icon>
-                <!-- <fa-icon size="2x" [icon]="faOptions" class="text-white cursor-pointer shadow-md" (click)="op.show($event)"></fa-icon> -->
-                <p-dropdown [options]="viewTranslate" [(ngModel)]="view" (onChange)="changeView($event)" >
-                    <ng-template pTemplate="selectedItem">
-                        <div class="flex justify-between gap-2 text-ellipsis text-base">
-                            <div>{{ view }}</div>
-                            <fa-icon [icon]="faOptions"></fa-icon>
-                        </div>
-                    </ng-template>
-                    <ng-template let-view pTemplate="item">
-                        <div class="flex justify-between gap-2 text-ellipsis text-base">
-                            <div>{{ view }}</div>
-                            <fa-icon [icon]="faOptions"></fa-icon>
-                        </div>
-                    </ng-template>
-                </p-dropdown>
-
-                <p-overlayPanel #op>
-                </p-overlayPanel>
-    
-            </div>
-    
-        </div>
-
-        <!-- <div class="gap-2 w-full p-2">
-            <label for="employees">Funcionárias</label>
-            <span class="p-fluid">
-                <p-autoComplete inputId="employees" [(ngModel)]="selectedEmployes" [suggestions]="filteredEmployes" (completeMethod)="filterEmployee($event)" field="name" [multiple]="true" [style]="{ width: '100%' }">
-                </p-autoComplete>
-            </span>
-        </div> -->
-        
-        <div class="flex w-full h-full max-h-full md:p-2 lg:p-4 p-0">
-            <full-calendar #calendar [options]="calendarOptions"></full-calendar>
-        </div>        
-    </div>
+<div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(80vh)] max-h-screen">
+    <app-calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)"></app-calendar>
 </div>
 
 <p-dialog [header]="header" [(visible)]="visible" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" (onHide)="form.reset({note: ''})" [modal]="true">
@@ -52,7 +7,7 @@
         <div class="grid grid-cols-12 gap-x-6 gap-y-4">
             <div class="col-span-6">
                 <label for="startDateTime">Início</label>
-                <p-calendar formControlName="startDateTime" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                <p-calendar formControlName="startDateTime" [readonly]="isEditEnable" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
             </div>
 
             <div class="col-span-6">
@@ -90,11 +45,11 @@
 
     <ng-template pTemplate="footer">
         <div class="flex gap-2">
-            <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()">
+            <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()" [disabled]="!isEditEnable">
                 <span class="tracking-tight text-white text-ellipsis">Excluir</span>
                 <fa-icon [icon]="faDelete" (click)="null"></fa-icon>
             </button>
-            <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid">
+            <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid || !isEditEnable">
                 <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
                 <fa-icon [icon]="faConfirm" (click)="confirm()"></fa-icon>
             </button>

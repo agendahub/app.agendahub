@@ -4,6 +4,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {PlatformModule} from '@angular/cdk/platform';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -37,6 +38,7 @@ import { ManagerModule } from './modules/manager/manager.module';
 import { MessageService } from 'primeng/api';
 import { AuthService } from './auth/auth-service.service';
 import { AuthGuardService } from './auth/auth.guard.service';
+import { SettingsComponent } from './pages/settings/settings.component';
 
 export function tokenGetter() {
   let token = localStorage.getItem("token");
@@ -51,7 +53,8 @@ export function tokenGetter() {
     AppComponent,
     SchedulerComponent,
     LoginComponent,
-    HomeComponent
+    HomeComponent,
+    SettingsComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA
@@ -65,6 +68,7 @@ export function tokenGetter() {
     ManagerRoutingModule,
     FontAwesomeModule,
     BrowserAnimationsModule,
+    PlatformModule,
     
     
 
@@ -92,8 +96,8 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ["localhost:5001"],
-        // disallowedRoutes: ["http://example.com/examplebadroute/"],
+        allowedDomains: ["localhost:5001", "192.168.0.67:7777", "https://apistudioagenda-development.up.railway.app/"],
+        disallowedRoutes: ["https://apistudioagenda-development.up.railway.app/Auth/Login"],
       },
     }),
 
