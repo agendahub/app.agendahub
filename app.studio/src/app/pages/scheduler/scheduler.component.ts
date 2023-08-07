@@ -209,9 +209,9 @@ export class SchedulerComponent implements OnInit {
       form.finishDateTime.setDate(form.day);
     }
 
-    form.startDateTime.setHours(form.startDateTime.getHours() + 3)
-    form.finishDateTime.setHours(form.finishDateTime.getHours() + 3)
-
+    // offset
+    //form.startDateTime.setHours(form.startDateTime.getHours() + 3)
+    //form.finishDateTime.setHours(form.finishDateTime.getHours() + 3)
 
     schedule.id = form.id && form.id != "" ? form.id : 0;
     schedule.customer= Object.assign({}, form.customer);
