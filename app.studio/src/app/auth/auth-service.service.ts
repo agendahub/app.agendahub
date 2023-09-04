@@ -16,8 +16,6 @@ export class AuthService {
 
   private logged = false;
   private baseUrl = environment.apiUrl;
-  
-  private intervalCheck: any;
   public tokenIsValid = new Subject<boolean>();
 
   constructor(
@@ -60,6 +58,10 @@ export class AuthService {
       return this.jwt.decodeToken();
     }
     return null;
+  }
+
+  public getUserData() {
+    return this.TokenData;
   }
 
   private get ExpiresIn() {

@@ -20,7 +20,7 @@
 
     <div class="hidden lg:flex lg:gap-x-12">
       <ng-container [ngTemplateOutlet]="links"></ng-container>
-      <a *ngIf="userRole !== 'employee'" (click)="sidebarOpen = false" (mouseenter)="!sidebarOpen && menu.toggle($event)" routerLink="/manager" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Gestão</a>
+      <a *ngIf="userRole !== 'employee'" (mouseenter)="!sidebarOpen && menu.toggle($event)" routerLink="/manager" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-gray-900 hover:bg-gray-50">Gestão</a>
     </div>
     <div class="hidden lg:flex lg:flex-1 lg:justify-end">
       <a *ngIf="!isLogged" routerLink="/login" class="text-sm cursor-pointer font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
@@ -59,16 +59,16 @@
             <div class="mt-2 space-y-2" id="disclosure-1">
               <ng-container [ngTemplateOutlet]="links"></ng-container>
 
-              <div class="w-full flex items-center justify-between">
-                <a *ngIf="userRole !== 'employee'" (click)="sidebarOpen = false" routerLink="/manager" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-purple-hb hover:bg-gray-50 w-10/12">Gestão</a>
-                <div class="flex justify-center cursor-pointer w-10 text-purple-hb hover:bg-gray-50 rounded-lg p-3" [ngClass]="{'rotate-180': showCrudLink}" (click)="showCrudLink = !showCrudLink" >
+              <div class="w-full flex items-center justify-between " *ngIf="userRole !== 'employee'">
+                <a  routerLink="/manager" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-purple-hb w-10/12">Gestão</a>
+                <div class="flex justify-center cursor-pointer w-10 text-purple-hb rounded-lg p-3" [ngClass]="{'rotate-180': showCrudLink}" (click)="showCrudLink = !showCrudLink" >
                   <fa-icon [icon]="faArrowDown" size="lg"></fa-icon>
                 </div>
               </div>
 
               <div class="w-full p-2 bg-slate-100 rounded-md shadow-md mt-0" *ngIf="showCrudLink">
-                <a (click)="sidebarOpen = false" routerLink="/manager/services" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Serviços</a>
-                <a (click)="sidebarOpen = false" routerLink="/manager/users" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Usuários</a>
+                <a routerLink="/manager/services" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Serviços</a>
+                <a routerLink="/manager/users" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Usuários</a>
               </div>
 
             </div>
@@ -84,7 +84,7 @@
               </div>
             </a>
             <div class="w-full p-2 bg-slate-100 rounded-md shadow-md mt-0" *ngIf="showUserOptions">
-              <a (click)="sidebarOpen = false" routerLink="/settings" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Configurações</a>
+              <a routerLink="/settings" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Configurações</a>
               <a (click)="logout()" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb">Sair</a>
             </div>
           </div>
@@ -95,6 +95,6 @@
 </header>
 
 <ng-template #links>
-  <a (click)="sidebarOpen = false" routerLink="/scheduler" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-purple-hb hover:bg-gray-50">Agenda</a>
+  <a routerLink="/scheduler" class="block cursor-pointer rounded-lg p-3 text-sm font-semibold leading-7 text-purple-hb hover:bg-gray-50">Agenda</a>
 </ng-template>
 <p-menu #menu [model]="managerItems" [popup]="true" (mouseleave)="menu.hide()"></p-menu>

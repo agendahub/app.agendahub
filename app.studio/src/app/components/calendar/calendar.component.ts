@@ -33,12 +33,14 @@ export class CalendarComponent {
   @Output() OnChange = new EventEmitter<EventChangeArg>()
   @Output() OnClick = new EventEmitter<EventClickArg>()
   @Output() OnDateClick = new EventEmitter<DateClickArg>()
-  
   @Input() events!: Array<any>
   @Input() editable!: Subject<boolean>
   @Input() clearAll!: Subject<any>
   @Input() addEvent!: Subject<any>
+  
   private isEditable!: boolean;
+
+  private today = new Date();
 
   public get month(): string {
     return moment(this.Calendar?.getDate()).format("MMMM").toUpperCapital();
@@ -80,6 +82,7 @@ export class CalendarComponent {
     headerToolbar: false,
     height: 'auto',
     initialView: this.views[this.localStorageService.get("view") ?? 0],
+
     views: {
       timeGridFourDay: {
         type: 'timeGrid',

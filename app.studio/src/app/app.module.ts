@@ -61,17 +61,15 @@ export function tokenGetter() {
   ],
   imports: [
     FormsModule,
-    ReactiveFormsModule,
     BrowserModule,
+    PlatformModule,
     HttpClientModule,
     AppRoutingModule,
-    ManagerRoutingModule,
     FontAwesomeModule,
+    ReactiveFormsModule,
+    ManagerRoutingModule,
     BrowserAnimationsModule,
-    PlatformModule,
     
-    
-
     ToastModule,
     DialogModule,
     ButtonModule,

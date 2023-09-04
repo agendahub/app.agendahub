@@ -43,8 +43,8 @@ export class UsersComponent {
       id: [0],
       name: ["", Validators.required],
       surname: ["", Validators.required],
-      userType: ["", Validators.required],
-      
+      userType: [null, Validators.required],
+      color: ["", Validators.required],
       email: ["", Validators.required],
       phone: ["", Validators.required],
       dateBirth: ["", Validators.required],
@@ -59,6 +59,16 @@ export class UsersComponent {
 
     
     
+  }
+
+  colorIsSelectable() {
+    const userType = this.form.get("userType")?.value;
+
+    if (userType != null) {
+      return userType?.code.includes("admin") || userType?.code.includes("employee");
+    }
+    
+    return false;
   }
 
   deleteType(id:number) {

@@ -12,6 +12,7 @@ export class User implements IIdentifiable<number> {
     id!: number;
     name!: string;
     lastName!: string;
+    color!: string;
     email!: string;
     phone!: string;
     password!: string;

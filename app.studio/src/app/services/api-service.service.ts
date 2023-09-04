@@ -17,7 +17,7 @@ export class ApiService {
   private offline = new Subject();
 
   constructor(private httpClient: HttpClient, private loader: LoaderService, private localStorage: LocalStorageService, private messageService: MessageService, private auth: AuthService) {
-    console.log(this.isConnect);
+    // console.log(this.isConnect);
 
     setInterval(() => {
       this.isConnect
@@ -52,7 +52,7 @@ export class ApiService {
     } else
     return this.httpClient.get<T>(apiUrl).pipe(map(result => {
       this.loader.hide();
-      console.log(result);
+      // console.log(result);
       
       return result;
     }), catchError(err => {
@@ -106,7 +106,7 @@ export class ApiService {
       user : this.localStorage.get("user")
     }
 
-    console.log(subscription);
+    // console.log(subscription);
     
     return this.httpClient.post(this.baseUrl + "User/Subscribe", subscription).pipe(take(1)).pipe(map(result => {
       this.loader.hide();
@@ -121,7 +121,7 @@ export class ApiService {
     
     this.loader.hide();
 
-    console.log(error.status);
+    // console.log(error.status);
 
     if (error.status) {
       if (error.status >= 400 && error.status < 500) {

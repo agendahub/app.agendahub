@@ -16,6 +16,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { LocalStorageService } from '../../services/local-storage.service';
 import { AuthService } from '../../auth/auth-service.service';
 import { Subject } from 'rxjs';
+import { rules } from '../../models/rules';
 
 
 @Component({
@@ -29,21 +30,21 @@ export class SchedulerComponent implements OnInit {
   faDelete = faTimesCircle;
   header!: string
 
-  visible = false;
   edit = false;
-  enableEdit = new Subject<boolean>()
-  isEditEnable = this.authService.TokenData?.role != "employee"
+  visible = false;
+  enableEdit = new Subject<boolean>();
+  isEditEnable = this.authService.TokenData?.role != "employee";
 
   form!: FormGroup;
   
   events!: any[];
-  services: Service[] = [];
   employees: User[] = [];
   customers: User[] = [];
+  services: Service[] = [];
   schedules: UserSchedule[] = []
 
-  clearEvents = new Subject()
-  addEvent = new Subject()
+  addEvent = new Subject();
+  clearEvents = new Subject();
 
   selectedEmployes = new Array();
   filteredEmployes = new Array();
@@ -52,7 +53,7 @@ export class SchedulerComponent implements OnInit {
     this.createForm();
     this.loadEvents();
     this.loadCrudResources();
-    setTimeout(() => this.enableEdit.next(this.authService.TokenData?.role != "employee"), 100)
+    setTimeout(() => this.enableEdit.next(this.authService.TokenData?.role != "employee"), 100);
   }
 
   ngOnInit(): void {
@@ -81,22 +82,23 @@ export class SchedulerComponent implements OnInit {
 
   private createForm() {
     this.form = this.formBuilder.group({
-      startDateTime: ["", Validators.required],
-      finishDateTime: ["", Validators.required],
-      service: ["", Validators.required],
-      schedule: [null],
+      startDateTime: ["", [Validators.required, this.validateDates()]],
+      finishDateTime: ["", [Validators.required, this.validateDates()]],
+      price: [this.services[0]?.price, Validators.required],
       employee: ["", Validators.required],
       customer: ["", Validators.required],
-      price: [this.services[0]?.price, Validators.required],
+      service: ["", Validators.required],
+      schedule: [null],
       note: [""],
+      id: [null],
       day: [],
-      id: [null]
     });
 
-     if (!this.isEditEnable) for( let [key, value] of Object.entries(this.form.controls)) {
+    if (!this.isEditEnable) for( let value of Object.values(this.form.controls)) {
       value.disable();
     }
-    
+
+    this.form.value;
 
   }
 
@@ -148,9 +150,13 @@ export class SchedulerComponent implements OnInit {
     this.edit = false;
     this.visible = true;
 
-    let date = structuredClone(arg.date)
-    this.form.get("startDateTime")?.setValue(date);
-    this.form.get("finishDateTime")?.setValue(date);
+    let startDate = structuredClone(arg.date)
+    let finishDate = structuredClone(arg.date)
+    startDate.setHours(rules.minHour);
+    finishDate.setHours(rules.minHour + 1);
+
+    this.form.get("startDateTime")?.setValue(startDate);
+    this.form.get("finishDateTime")?.setValue(finishDate);
     this.form.get("day")?.setValue(arg.date.getDate());
 
     console.log(this.form.value);
@@ -174,7 +180,44 @@ export class SchedulerComponent implements OnInit {
   }
 
   //#endregion
+  
+  validateDates() {
+    return () => {
+      if (this && this.form) {
 
+        const dates = {
+          start: this.form.get("startDateTime"),
+          finish: this.form.get("finishDateTime"),
+        }
+
+        const base = {
+          startBase: new Date(dates.start?.value),
+          finishBase: new Date(dates.finish?.value)
+        }
+
+        base.startBase.setHours(rules.minHour);
+        base.finishBase.setHours(rules.maxHour);
+    
+        if (moment(dates.start?.value).isBefore(base.startBase)) {
+          return {error: "O início precisa ser após as 08:00"}
+          
+        } else if (moment(dates.finish?.value).isAfter(base.finishBase)) {
+          return {error: "O fim precisa ser antes das 21:00"}
+        }
+
+        if (moment(dates.finish?.value).isBefore(dates.start?.value) || new Date(dates.finish?.value).getTime() === new Date(dates.start?.value).getTime()) {
+          return {error: "O fim não pode ser antes ou igual o início"};
+        } else {
+          dates.start?.setErrors(null);
+          dates.finish?.setErrors(null); 
+        }
+
+      }
+  
+      return null;
+    }
+  }
+  
   mapSchedulesToEvent(schedules: UserSchedule[]) {
     let events: EventInput[] = []
     schedules.forEach(x => {

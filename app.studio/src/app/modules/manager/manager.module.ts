@@ -17,6 +17,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ColorPickerModule } from 'primeng/colorpicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
@@ -38,6 +39,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     DropdownModule,
     CalendarModule,
     InputTextModule,
+    ColorPickerModule,
     OverlayPanelModule,
     InputTextareaModule,
     DataViewModule,

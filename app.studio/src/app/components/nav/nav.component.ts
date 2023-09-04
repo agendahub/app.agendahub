@@ -3,6 +3,7 @@ import { PushNotificatorService } from '../../services/push-notificator.service'
 import { AuthService } from '../../auth/auth-service.service';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { MenuItem } from 'primeng/api';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-nav',
@@ -57,7 +58,13 @@ export class NavComponent {
     }
   ]
 
-  constructor(private pushService: PushNotificatorService, private authService: AuthService) {}
+  constructor(private pushService: PushNotificatorService, private authService: AuthService, private router: Router) {
+    router.events.subscribe(x => {
+      this.sidebarOpen = false;
+      this.showCrudLink = false;
+      this.showUserOptions = false;
+    })
+  }
 
   pushOn() {
     this.pushService.subscribeToNotifications()

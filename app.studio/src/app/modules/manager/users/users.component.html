@@ -149,9 +149,9 @@
 
             <div class="sm:col-span-6 col-span-12">
                 <label for="userType">Tipo de acesso</label>
-                <p-dropdown dataKey="id" placeholder="Selecione o tipo de acesso" [options]="userTypes" [showClear]="true" [autoDisplayFirst]="false" optionLabel="description" inputId="userType" formControlName="userType" [style]="{width:'100%'}"
-                (onChange)="onChangeUser($event)">
-                </p-dropdown>
+                <p-dropdown dataKey="id" placeholder="Selecione o tipo de acesso" [options]="userTypes" [showClear]="true" [autoDisplayFirst]="false" optionLabel="description" inputId="userType" formControlName="userType" [style]="{width: colorIsSelectable() ? '90%':'100%'}" (onChange)="onChangeUser($event)"></p-dropdown>
+                
+                <p-colorPicker appendTo="body" formControlName="color" *ngIf="colorIsSelectable()"></p-colorPicker>
             </div>
 
             <div class="sm:col-span-6 col-span-12">
