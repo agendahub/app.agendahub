@@ -22,16 +22,16 @@ export class NavComponent {
     {
         label: 'Ações',
         items: [
-            {
-                label: 'Perfil',
-                command: () => {
+            // {
+            //     label: 'Perfil',
+            //     command: () => {
                     
-                }
-            },
-            {
-                label: 'Configurações',
-                routerLink: "/settings"
-            },
+            //     }
+            // },
+            // {
+            //     label: 'Configurações',
+            //     routerLink: "/settings"
+            // },
             {
                 label: 'Sair',
                 command: () => {

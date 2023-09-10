@@ -1,26 +1,26 @@
 import { DOCUMENT } from '@angular/common';
-import { Inject, Injectable, OnInit } from '@angular/core';
+import { HostListener, Inject, Injectable, OnInit } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScreenHelperService {
 
-  public specs: {isMobile: any, isDesktop: any, isMid: any} = {
+  public specs: DeviceSpec = {
     isMobile: null,
     isDesktop: null,
     isMid: null
   }
 
-  private get isMobile() {
+  private get isMobile() : boolean | null {
     return this.specs.isMobile
   }
 
-  private get isDesktop() {
+  private get isDesktop() : boolean | null {
     return this.specs.isDesktop
   }
   
-  private get isMid() {
+  private get isMid() : boolean | null {
     return this.specs.isMid;
   }
 
@@ -41,30 +41,27 @@ export class ScreenHelperService {
     this.checkChanges();
   }
 
-  checkChanges() {
-    window.onresize = (ev) => this.checkSize()
+  @HostListener("window:resize") checkChanges() {
+    this.checkSize()
   }
 
   checkSize() {
     this.isMobile = this.document.body.clientWidth <= 600;
     this.isMid = this.document.body.clientWidth > 600 && this.document.body.clientWidth <= 1033;
     this.isDesktop = this.document.body.clientWidth > 1033;
-
     console.log(this.specs);
     
   }
 
-  public getTableSize() {
-    if (this.isMobile) {
-      return "p-datatable-sm"
-    }
-    if (this.isDesktop) {
-      return "p-datatable-lg"
-    } 
-    
-    return ""
-    
+  currentDevice() {
+    if (this.specs.isDesktop) {
+      return 0
+    } else if (this.specs.isMid) {
+      return 1
+    } else return 2
   }
 
-
 }
+
+export type DeviceSpec = {isMobile: boolean | null, isDesktop: boolean | null, isMid: boolean | null}
+export enum DeviceEnum { Desktop, Mid, Mobile }

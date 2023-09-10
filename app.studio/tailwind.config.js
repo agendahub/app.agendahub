@@ -13,7 +13,11 @@ module.exports = {
       "purple-hb": "#362b45",
       ...colors
     },
-    extend: {},
+    extend: {
+      width: {
+        "90%": "90%"
+      }
+    },
   },
   plugins: [],
 }

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { faClock, faCalendarCheck, faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
@@ -18,7 +18,7 @@ import * as moment from 'moment';
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit, AfterViewInit {
 
   @ViewChild("calendar")
   calendarComponent!: FullCalendarComponent;
@@ -33,12 +33,13 @@ export class CalendarComponent {
   @Output() OnChange = new EventEmitter<EventChangeArg>()
   @Output() OnClick = new EventEmitter<EventClickArg>()
   @Output() OnDateClick = new EventEmitter<DateClickArg>()
+  @Input() header: boolean = true
   @Input() events!: Array<any>
   @Input() editable!: Subject<boolean>
   @Input() clearAll!: Subject<any>
   @Input() addEvent!: Subject<any>
   
-  private isEditable!: boolean;
+  @Input() isEditable!: boolean;
 
   private today = new Date();
 
@@ -47,18 +48,36 @@ export class CalendarComponent {
   };
 
   constructor(private localStorageService: LocalStorageService, private loaderService: LoaderService) {
-    this.view = this.viewTranslate[this.localStorageService.get("view") ?? 0]
+    
+  }
 
-    setTimeout(() => {
-      this.clearAll.subscribe(x => this.Calendar.removeAllEvents())
-      this.addEvent.subscribe(x => this.Calendar.addEvent(x))
-      this.editable.subscribe(x => {
-        this.isEditable = x;
-        this.Calendar.setOption("editable", x);
-        this.Calendar.setOption("selectable", x);
-      })
-    })
+  private get initView() {
+    if (this.editable) {
+      return this.viewTranslate[this.localStorageService.get("view") ?? 0]
+    } else {
+      this.Calendar.changeView(this.views[0]);
+      return this.views[0]
+    }
+  }
 
+  ngAfterViewInit(): void {
+    this.view = this.initView;
+
+    if (!this.addEvent) {
+      this.Calendar.addEventSource(this.events);
+    }
+  }
+
+  ngOnInit(): void {
+    this.clearAll?.subscribe(x => this.Calendar.removeAllEvents())
+        this.addEvent?.subscribe(x => this.Calendar.addEvent(x))
+        this.editable?.subscribe(x => {
+          this.isEditable = x;
+          this.Calendar.setOption("editable", x);
+          this.Calendar.setOption("selectable", x);
+        })
+
+    console.log(this.events);
   }
 
   private get Calendar(): Calendar {
@@ -114,18 +133,18 @@ export class CalendarComponent {
   }
 
   onEventClick(arg: EventClickArg) {
-    this.OnClick.emit(arg);
+    this.OnClick?.emit(arg);
   }
 
   onEventChange(arg: EventChangeArg) {
     if (this.isEditable) {
-      this.OnChange.emit(arg);
+      this.OnChange?.emit(arg);
     }
   }
 
   onDateClick(arg: DateClickArg) {
     if (this.isEditable) {
-      this.OnDateClick.emit(arg);
+      this.OnDateClick?.emit(arg);
     }
   }
 

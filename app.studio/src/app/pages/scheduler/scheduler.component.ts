@@ -17,6 +17,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
 import { AuthService } from '../../auth/auth-service.service';
 import { Subject } from 'rxjs';
 import { rules } from '../../models/rules';
+import { mapScheduleToEvent } from '../../utils/util';
 
 
 @Component({
@@ -75,7 +76,10 @@ export class SchedulerComponent implements OnInit {
     this.api.requestFromApi<UserSchedule[]>("Schedule/Schedules")?.subscribe(
       x => {
         this.schedules = x;
-        this.mapSchedulesToEvent(x)
+        this.events = mapScheduleToEvent(x);
+        
+        this.events.forEach(x => this.addEvent.next(x))
+
       }
     )
   }
@@ -216,25 +220,6 @@ export class SchedulerComponent implements OnInit {
   
       return null;
     }
-  }
-  
-  mapSchedulesToEvent(schedules: UserSchedule[]) {
-    let events: EventInput[] = []
-    schedules.forEach(x => {
-      events.push({
-        id: x.id.toString(),
-        title: `${x.employee.name} - ${x.customer.name}`,
-        start: x.schedule.startDateTime,
-        end: x.schedule.finishDateTime,
-        extendedProps: {...x}
-      })
-    })
-
-    events.forEach(x => this.addEvent.next(x))
-
-    this.events = events;
-    
-    console.log(events);
   }
 
   trySave() {

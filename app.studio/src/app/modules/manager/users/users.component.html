@@ -34,7 +34,7 @@
                     </div>
                 </div>
 
-                <p-overlayPanel [showCloseIcon]="true" #op>
+                <!-- <p-overlayPanel [showCloseIcon]="true" #op>
                     <span class="text-2xl font-bold tracking-tight sm:text-3xl">
                         Novo tipo
                     </span>
@@ -55,19 +55,19 @@
                         </div>
         
                     </form>
-                </p-overlayPanel>
+                </p-overlayPanel> -->
                 <p-overlayPanel [showCloseIcon]="true" styleClass="shadow-xl" #tp>
                     <span class="text-2xl font-bold tracking-tight sm:text-3xl">
                         Tipos de usuários
                     </span>
-                    <p-table [value]="userTypes"   [paginator]="true" [rows]="5">
+                    <p-table [value]="userTypes" [paginator]="true" [rows]="3">
                         
-                        <ng-template pTemplate="caption">
+                        <!-- <ng-template pTemplate="caption">
                             <button pButton (click)="op.show($event)" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
                                 <fa-icon size="lg" [icon]="faNew"></fa-icon>
                                 <span class="tracking-tight text-white text-ellipsis">Novo</span>
                             </button>
-                        </ng-template>
+                        </ng-template> -->
                         <ng-template pTemplate="header">
                             <tr class="sm:tracking-normal tracking-tighter">
                                 <th>Código</th>
@@ -151,7 +151,7 @@
                 <label for="userType">Tipo de acesso</label>
                 <p-dropdown dataKey="id" placeholder="Selecione o tipo de acesso" [options]="userTypes" [showClear]="true" [autoDisplayFirst]="false" optionLabel="description" inputId="userType" formControlName="userType" [style]="{width: colorIsSelectable() ? '90%':'100%'}" (onChange)="onChangeUser($event)"></p-dropdown>
                 
-                <p-colorPicker appendTo="body" formControlName="color" *ngIf="colorIsSelectable()"></p-colorPicker>
+                <p-colorPicker appendTo="body" formControlName="color" *ngIf="colorIsSelectable()" [style]="{width: '10%', height: '100%'}"></p-colorPicker>
             </div>
 
             <div class="sm:col-span-6 col-span-12">

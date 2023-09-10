@@ -25,6 +25,7 @@ import { AutoCompleteModule } from 'primeng/autocomplete';
 import { SplitButtonModule } from 'primeng/splitbutton';
 import { MessageModule } from "primeng/message"
 import { ToastModule } from "primeng/toast"
+import { ListboxModule } from 'primeng/listbox';
 /** */
 
 import { JwtModule } from "@auth0/angular-jwt"
@@ -70,6 +71,7 @@ export function tokenGetter() {
     ManagerRoutingModule,
     BrowserAnimationsModule,
     
+    ListboxModule,
     ToastModule,
     DialogModule,
     ButtonModule,
@@ -82,6 +84,7 @@ export function tokenGetter() {
     AutoCompleteModule,
     OverlayPanelModule,
     InputTextareaModule,
+    
 
     FullCalendarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {

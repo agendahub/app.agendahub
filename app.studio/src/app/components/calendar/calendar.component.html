@@ -1,6 +1,5 @@
 <div class="h-full w-full sm:w-75 md:w-50 lg:w-25">
-    <div class="grid py-2 md:px-2 lg:px-4 px-0">
-        
+    <div class="grid py-2 md:px-2 lg:px-4 px-0" *ngIf="header">
         <div class="col-span-12 md:col-span-6 flex items-center">
             <div class="w-full">
                 <p-dropdown [options]="viewTranslate" [(ngModel)]="view" (onChange)="changeView($event)" [style]="{width: '100%'}">

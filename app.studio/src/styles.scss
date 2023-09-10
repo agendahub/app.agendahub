@@ -50,7 +50,7 @@
     border-radius: 2rem;
 }
 
-@media screen and (max-width: 1300px) {
+@media screen and (max-width: 1300px) and (min-width: 600px) {
     ::-webkit-scrollbar-track:vertical {
         background:  linear-gradient(180deg,
          #090f21,
@@ -58,5 +58,11 @@
          #090f21,
          #090f21
          );
+    }
+}
+
+.p-overlaypanel.responsive-overlay {
+    .p-overlaypanel-content {
+        padding: 0 !important;
     }
 }

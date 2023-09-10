@@ -6,6 +6,7 @@ import { faGear, faList, faMagnifyingGlass, faPencil, faPlusCircle } from '@fort
 import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ScreenHelperService } from '../../../services/screen-helper.service';
+import { customSort } from '../../../utils/util';
 
 @Component({
   selector: 'app-services',
@@ -21,6 +22,8 @@ export class ServicesComponent {
   faSearch = faMagnifyingGlass;
   faEdit = faGear
   faList = faList
+
+  customSort = customSort
   
   edit = false;
   form!: FormGroup;
@@ -66,25 +69,6 @@ export class ServicesComponent {
         this.visible = false
       }
     })
-  }
-
-  customSort(event: SortEvent) {
-    event.data?.sort((data1, data2) => {
-        //@ts-ignore
-        let value1 = data1[event.field];
-        //@ts-ignore
-        let value2 = data2[event.field];
-        let result = null;
-
-        if (value1 == null && value2 != null) result = -1;
-        else if (value1 != null && value2 == null) result = 1;
-        else if (value1 == null && value2 == null) result = 0;
-        else if (typeof value1 === 'string' && typeof value2 === 'string') result = value1.localeCompare(value2);
-        else result = value1 < value2 ? -1 : value1 > value2 ? 1 : 0;
-
-        //@ts-ignore
-        return event.order * result;
-    });
   }
 
   applyFilter(table: Table, event: any, mode: string) {
