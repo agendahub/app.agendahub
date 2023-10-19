@@ -45,6 +45,7 @@ export class ServicesComponent {
     this.form = formBuilder.group({
       id: [0],
       code: [""],
+      timespan: [""],
       description: [""],
       serviceType: [""],
       price: [""],

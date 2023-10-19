@@ -32,6 +32,7 @@ export class Service implements IIdentifiable<number> {
     description!: string;
     note!: string;
     price!: number;
+    timespan!: number;
     serviceType!: ServiceType
 }
 

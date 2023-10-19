@@ -177,9 +177,22 @@ export class SchedulerComponent implements OnInit {
 
   //#region Members "Events"
 
-  changeService(event: any) {
-    if (event.value) {
-      this.form.get("price")?.setValue(event.value.price)
+  changeService(service: any) {
+    if (service.value) {
+      this.form.get("price")?.setValue(service.value.price)
+
+
+      if (service.timespan) {
+        let start = this.form.value.startDateTime;
+
+        if (start) {
+          let endTime = moment(start).add(service.timespan, "minute");
+
+          this.form.get("finishDateTime")?.setValue(endTime);
+        }
+
+      }
+
     }
   }
 

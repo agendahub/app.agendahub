@@ -145,6 +145,12 @@
                 <input type="number" id="price" formControlName="price" pInputText placeholder="R$ 100,00" [style]="{width:'100%'}"/>
             </div>
 
+            <div class="sm:col-span-6 col-span-12">
+                <label for="timespan">Tempo padrão</label>
+                <p-inputNumber inputId="timespan" formControlName="timespan" [step]="1" [min]="0" placeholder="1" [style]="{width:'100%'}"></p-inputNumber>
+                <!-- <input type="number" id="timespan" formControlName="timespan" pInputText placeholder="R$ 100,00" /> -->
+            </div>
+
             <div class="col-span-12">
                 <label for="note">Anotação</label>
                 <textarea id="note" formControlName="note" cols="10" [style]="{width: '100%'}" placeholder="Informações importantes..." pInputTextarea></textarea>

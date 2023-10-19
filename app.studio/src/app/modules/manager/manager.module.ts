@@ -19,6 +19,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ColorPickerModule } from 'primeng/colorpicker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputNumberModule } from 'primeng/inputnumber';
 
 
 @NgModule({
@@ -42,12 +43,11 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ColorPickerModule,
     OverlayPanelModule,
     InputTextareaModule,
+    InputNumberModule,
     DataViewModule,
     DialogModule,
     TableModule,
     TagModule
-  ],
- 
-  schemas : [NO_ERRORS_SCHEMA]
+  ]
 })
 export class ManagerModule { }
