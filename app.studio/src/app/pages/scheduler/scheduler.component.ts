@@ -179,7 +179,8 @@ export class SchedulerComponent implements OnInit {
 
   changeService(service: any) {
     if (service.value) {
-      this.form.get("price")?.setValue(service.value.price)
+      service = service.value;
+      this.form.get("price")?.setValue(service.price)
 
 
       if (service.timespan) {
