@@ -96,11 +96,11 @@ export class ServicesComponent {
     
     console.log(form);
     
-    this.apiService.sendToApi("Service", form)?.subscribe(x => {
-      console.log(x);
-      if (x) {
-        if (!this.services.some(x => x.id === x)) {
-          form.id = x
+    this.apiService.sendToApi("Service", form)?.subscribe(result => {
+      console.log(result);
+      if (result) {
+        if (!this.services.some(service => service.id === result)) {
+          form.id = result;
           this.services.push(form);
         } 
         this.form.reset({id: 0})

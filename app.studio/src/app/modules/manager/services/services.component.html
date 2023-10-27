@@ -146,9 +146,10 @@
             </div>
 
             <div class="sm:col-span-6 col-span-12">
-                <label for="timespan">Tempo padrão</label>
-                <p-inputNumber inputId="timespan" formControlName="timespan" [step]="1" [min]="0" placeholder="1" [style]="{width:'100%'}"></p-inputNumber>
-                <!-- <input type="number" id="timespan" formControlName="timespan" pInputText placeholder="R$ 100,00" /> -->
+                <label for="timespan">Tempo padrão <em class="italic text-gray-500">(minutos)</em></label>
+                <div class="w-100">
+                    <p-inputNumber inputId="timespan" formControlName="timespan" [step]="1" [min]="0" [showButtons]="true" placeholder="1" [style]="{width:'100%'}"></p-inputNumber>
+                </div>
             </div>
 
             <div class="col-span-12">

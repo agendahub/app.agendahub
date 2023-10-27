@@ -1,4 +1,8 @@
 <div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(80vh)] h-full overflow-h-scroll">
+    <div *ngIf="enableEdit" class="w-100 px-4">
+        <p-multiSelect [options]="employees" [(ngModel)]="selectedEmployes" (onChange)="changeEmployees($event)" defaultLabel="Filtre por usuários" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
+    </div>
+    
     <app-calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)"></app-calendar>
 </div>
 

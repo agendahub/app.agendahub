@@ -168,6 +168,15 @@ export class SchedulerComponent implements OnInit {
 
   }
 
+  changeEmployees(event: any) {
+    let ids = event.value.map((x: any) => x.id);
+    let schedulesfiltered = this.schedules.filter(x => ids.includes(x.employee.id));
+    this.clearEvents.next(0);
+    //this.addEvent.next(mapScheduleToEvent(schedulesfiltered));
+    mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
+    
+  }
+
   confirm() {
     this.trySave()
     this.visible = false;
@@ -177,23 +186,19 @@ export class SchedulerComponent implements OnInit {
 
   //#region Members "Events"
 
-  changeService(service: any) {
-    if (service.value) {
-      service = service.value;
+  changeService(form: any) {
+    if (form.value) {
+      let service = form.value;
       this.form.get("price")?.setValue(service.price)
-
-
-      if (service.timespan) {
+      
+      if (service.timespan) {        
         let start = this.form.value.startDateTime;
 
         if (start) {
-          let endTime = moment(start).add(service.timespan, "minute");
-
+          let endTime = moment(start).add(service.timespan, "minute").toDate();
           this.form.get("finishDateTime")?.setValue(endTime);
         }
-
       }
-
     }
   }
 
@@ -251,10 +256,6 @@ export class SchedulerComponent implements OnInit {
       form.finishDateTime.setDate(form.day);
     }
 
-    // offset
-    //form.startDateTime.setHours(form.startDateTime.getHours() + 3)
-    //form.finishDateTime.setHours(form.finishDateTime.getHours() + 3)
-
     schedule.id = form.id && form.id != "" ? form.id : 0;
     schedule.customer= Object.assign({}, form.customer);
     schedule.employee = Object.assign({}, form.employee);
@@ -268,7 +269,6 @@ export class SchedulerComponent implements OnInit {
     schedule.schedule.startDateTime = form.startDateTime.toISOString()
     schedule.schedule.note = form.note;
 
-    // console.log(schedule);
     this.save(schedule)
   }
 
@@ -288,17 +288,13 @@ export class SchedulerComponent implements OnInit {
   tryDelete() {
     let id = this.form.value.id;
     const schedule = this.schedules.find(x => x.id = id);
-    
-    // console.log(schedule);
 
     schedule && this.isEditEnable && this.api.sendToApi("Schedule/Cancel", schedule)?.subscribe(x => {
       console.log(x);
       
       if (x) {
-        // this.Calendar.removeAllEvents();
         this.loadEvents();
-        this.clearEvents.next(null)
-        
+        this.clearEvents.next(null)        
       }
 
       this.visible = false;

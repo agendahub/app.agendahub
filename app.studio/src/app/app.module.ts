@@ -26,6 +26,7 @@ import { SplitButtonModule } from 'primeng/splitbutton';
 import { MessageModule } from "primeng/message"
 import { ToastModule } from "primeng/toast"
 import { ListboxModule } from 'primeng/listbox';
+import { MultiSelectModule } from 'primeng/multiselect';
 /** */
 
 import { JwtModule } from "@auth0/angular-jwt"
@@ -84,6 +85,7 @@ export function tokenGetter() {
     AutoCompleteModule,
     OverlayPanelModule,
     InputTextareaModule,
+    MultiSelectModule,
     
 
     FullCalendarModule,
