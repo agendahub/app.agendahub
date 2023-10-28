@@ -2,10 +2,10 @@ import { EventInput } from "@fullcalendar/core"
 import { UserSchedule } from "../models/entities"
 import { SortEvent } from "primeng/api"
 
-export function mapScheduleToEvent(schedules: UserSchedule[]) {
+export function mapScheduleToEvent(schedules: UserSchedule[], filter: (x: UserSchedule) => boolean = () => true) {
     let events: EventInput[] = []
     schedules.forEach(x => {
-      events.push({
+      filter(x) && events.push({
         id: x.id.toString(),
         title: `${x.employee.name} - ${x.customer.name}`,
         start: x.schedule.startDateTime,

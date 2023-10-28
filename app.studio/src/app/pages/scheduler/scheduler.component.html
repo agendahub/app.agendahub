@@ -1,25 +1,33 @@
 <div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(80vh)] h-full overflow-h-scroll">
 
-    
+
     <app-calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" (OnViewChange)="onViewChange($event)"
         (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
-        <ng-container>
-            <ng-template calendarItem [enableForAll]="isEditEnable">
-                <div class="w-full">
-                    <p-multiSelect dropdownIcon="fa-solid fa-clipboard-user" [options]="employees" [(ngModel)]="selectedEmployes" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeEmployees($event)" defaultLabel="Funcionária" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
+        <ng-template calendarItem [enableForAll]="isEditEnable">
+            <div class="w-full">
+                <p-multiSelect dropdownIcon="fa-solid fa-clipboard-user" [options]="employees" [(ngModel)]="selectedEmployes" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeEmployees($event)" defaultLabel="Funcionária" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
+            </div>
+        </ng-template>
+        <ng-template calendarItem [enableForAll]="true">
+            <div class="w-full">
+                <p-multiSelect dropdownIcon="fa-solid fa-user-clock" [options]="customers" [(ngModel)]="selectedCustomers" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeCustomers($event)" defaultLabel="Clientes" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
+            </div>
+        </ng-template>
+        <ng-template calendarItem [enableForAll]="true">
+            <div class="w-full">
+                <p-multiSelect dropdownIcon="fa-solid fa-bell-concierge" [options]="services" [(ngModel)]="selectedServices" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeServices($event)" defaultLabel="Serviço" optionLabel="description" display="chip" [style]="{width:'100%'}"></p-multiSelect>
+            </div>
+        </ng-template>
+        <ng-template calendarItem [enableForAll]="true">
+            <div class="w-full h-full flex justify-end">
+                <div class="h-full md:w-max w-full">
+                    <button pButton (click)="visible = true" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
+                        <span>Limpar filtros</span>
+                        <i class="fa-solid fa-filter"></i>
+                    </button>
                 </div>
-            </ng-template>
-            <ng-template calendarItem [enableForAll]="true">
-                <div class="w-full">
-                    <p-multiSelect dropdownIcon="fa-solid fa-user-clock" [options]="customers" [(ngModel)]="selectedEmployes" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeEmployees($event)" defaultLabel="Clientes" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-                </div>
-            </ng-template>
-            <ng-template calendarItem [enableForAll]="true">
-                <div class="w-full">
-                    <p-multiSelect dropdownIcon="fa-solid fa-bell-concierge" [options]="services" [(ngModel)]="selectedEmployes" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeEmployees($event)" defaultLabel="Serviço" optionLabel="description" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-                </div>
-            </ng-template>
-        </ng-container>
+            </div>
+        </ng-template>
     </app-calendar>
 </div>
 
@@ -79,3 +87,7 @@
         </div>
     </ng-template>
 </p-dialog>
+
+<ng-template #filters>
+
+</ng-template>

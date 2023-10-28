@@ -49,10 +49,10 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     return moment(this.Calendar?.getDate()).format("MMMM").toUpperCapital();
   };
 
+  settings = false;
+
   @ContentChildren(CalendarItemDirective) calendarItems!: QueryList<CalendarItemDirective>;
   calendarItemsArray!: Array<CalendarItemDirective>;
-
-  threify = false;
 
   constructor(private localStorageService: LocalStorageService, private loaderService: LoaderService) {
     
@@ -71,6 +71,8 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     this.calendarItemsArray = this.isEditable 
       ? this.calendarItems.toArray()
       : this.calendarItems.toArray().filter(x => x.enableForAll);
+
+      //this.calendarItemsArray = this.calendarItemsArray.sort((a, b) => a.template.elementRef.nativeElement instanceof HTMLButtonElement ? -1 : 1);
   }
 
   ngAfterViewInit(): void {
@@ -138,6 +140,10 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   };
 
   view = 'Padrão';
+
+  public openSettings() {
+
+  }
 
   public changeView(event: any) {
     const indexView = this.viewTranslate.indexOf(event.value);

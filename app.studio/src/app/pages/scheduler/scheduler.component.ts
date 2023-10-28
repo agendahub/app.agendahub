@@ -41,7 +41,14 @@ export class SchedulerComponent implements OnInit {
   clearEvents = new Subject();
 
   selectedEmployes = new Array();
-  filteredEmployes = new Array();
+  selectedCustomers = new Array();
+  selectedServices = new Array();
+  
+  filter! : {
+    employee: number[],
+    customer: number[],
+    service: number[]
+  }
 
   currentDateRange! : {
     start: Date,
@@ -50,9 +57,13 @@ export class SchedulerComponent implements OnInit {
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService) {
     this.createForm();
-    //this.loadEvents();
     this.loadCrudResources();
     setTimeout(() => this.enableEdit.next(this.authService.TokenData?.role != "employee"), 100);
+    this.filter = {
+      employee: [],
+      customer: [],
+      service: []
+    }
   }
 
   ngOnInit(): void {
@@ -78,7 +89,10 @@ export class SchedulerComponent implements OnInit {
         : undefined)?.subscribe(
       x => {
         this.schedules = x;
-        this.events = mapScheduleToEvent(x);
+
+        let hasFilter = this.filter.customer.length || this.filter.employee.length || this.filter.service.length;
+
+        this.events = mapScheduleToEvent(hasFilter ? this.doFilter(x) : x);
         
         this.events.forEach(x => this.addEvent.next(x))
 
@@ -162,38 +176,11 @@ export class SchedulerComponent implements OnInit {
     finishDate.setHours(rules.minHour + 1);
 
     this.form.get("startDateTime")?.setValue(startDate);
-    // this.form.get("finishDateTime")?.setValue(finishDate);
     this.form.get("day")?.setValue(arg.date.getDate());
 
     console.log(this.form.value);
     
 
-  }
-
-  onViewChange(arg: {event:any, offset: {start: Date, end: Date}} | undefined) {
-    console.log(arg);
-    if (arg) {
-      this.clearEvents.next(0);
-      this.currentDateRange = arg.offset;
-      this.loadEvents(this.currentDateRange);
-    }
-
-  }
-
-  changeEmployees(event: any) {
-    this.clearEvents.next(0);
-    if (event && event.value.length) {
-      let ids = event.value.map((x: any) => x.id);
-      let schedulesfiltered = this.schedules.filter(x => ids.includes(x.employee.id));
-      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
-    } else {
-      this.loadEvents(this.currentDateRange);      
-    }
-  }
-
-  confirm() {
-    this.trySave()
-    this.visible = false;
   }
 
   //#endregion
@@ -216,7 +203,75 @@ export class SchedulerComponent implements OnInit {
     }
   }
 
+  onViewChange(arg: {event:any, offset: {start: Date, end: Date}} | undefined) {
+    console.log(arg);
+    if (arg) {
+      this.clearEvents.next(0);
+      this.currentDateRange = arg.offset;
+      this.loadEvents(this.currentDateRange);
+    }
+
+  }
+
+  changeEmployees(event: any) {
+    this.clearEvents.next(0);
+    if (event && event.value.length) {
+      this.filter.employee = event.value.map((x: any) => x.id);
+      let schedulesfiltered = this.schedules.filter(x => this.filter.employee.includes(x.employee.id));
+      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
+    } else {
+      this.loadEvents(this.currentDateRange);      
+      this.filter.employee = [];
+    }
+  }
+
+  changeCustomers(event: any) {
+    this.clearEvents.next(0);
+    if (event && event.value.length) {
+      this.filter.customer = event.value.map((x: any) => x.id);
+      let schedulesfiltered = this.schedules.filter(x => this.filter.customer.includes(x.customer.id));
+      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
+    } else {
+      this.loadEvents(this.currentDateRange);      
+      this.filter.customer = [];
+    }
+  }
+
+  changeServices(event: any) {
+    this.clearEvents.next(0);
+    if (event && event.value.length) {
+      this.filter.service = event.value.map((x: any) => x.id);
+      let schedulesfiltered = this.schedules.filter(x => this.filter.service.includes(x.schedule.service.id));
+      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
+    } else {
+      this.loadEvents(this.currentDateRange);      
+      this.filter.service = [];
+    }
+  }
+
   //#endregion
+
+  doFilter(schedules: UserSchedule[]) {
+    return schedules.filter(x => {
+      let match = true;
+      if (this.filter.customer.length && !this.filter.customer.includes(x.customer.id)) {
+        match = false;
+      }
+      if (this.filter.employee.length && !this.filter.employee.includes(x.employee.id)) {
+        match = false;
+      }
+      if (this.filter.service.length && !this.filter.service.includes(x.schedule.service.id)) {
+        match = false;
+      }
+
+      return match;
+    })
+  }
+
+  confirm() {
+    this.trySave()
+    this.visible = false;
+  }
   
   validateDates() {
     return () => {
