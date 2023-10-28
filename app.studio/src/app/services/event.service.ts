@@ -12,22 +12,31 @@ export class EventService {
   constructor(private apiService: ApiService) { }
 
   public getCurrentEvents(DateRangeType: SchedulesDateRangeEnum = 0) {
-    let query = "Schedule/ScheduleDay?date=" + this.today.toISOString();
-    let endDate = this.today.clone();
+    let query = "Schedule/ScheduleDay";
+    let today = this.today.clone();
+    let endDate = today.clone();
+
 
     switch (DateRangeType) {
       case 2:
-         query += `&endDate=${endDate.add(1, "month").toISOString()}` 
+        // query += `&endDate=${endDate.add(1, "month").toISOString()}` 
+        endDate = endDate.add(1, "month");
         break;
       case 1:
-        query += `&endDate=${endDate.add(1, "week").toISOString()}`
+        // query += `&endDate=${endDate.add(1, "week").toISOString()}`
+        endDate = endDate.add(1, "week");
         break;
     }
 
-    console.log(query);
+    let params = {
+      startDate: today.toISOString(),
+      endDate: endDate.toISOString()
+    }
+
+    console.log(params);
     
 
-    return this.apiService.requestFromApi(query)
+    return this.apiService.requestFromApi(query, params)
   }
 
 }

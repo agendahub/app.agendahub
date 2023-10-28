@@ -1,19 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { CalendarOptions, Calendar, EventClickArg, EventInput, EventChangeArg } from '@fullcalendar/core';
-import scrollGridPlugin from '@fullcalendar/scrollgrid';
-import listPlugin from '@fullcalendar/list';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import timeGridPlugin from '@fullcalendar/timegrid';
-import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import { FullCalendarComponent } from '@fullcalendar/angular';
+import { Component, OnInit } from '@angular/core';
+import { EventClickArg, EventChangeArg } from '@fullcalendar/core';
+import { DateClickArg } from '@fullcalendar/interaction';
 import * as moment from 'moment/moment';
 
-import { faCalendarCheck, faCheckCircle, faClock, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
-import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
+import { faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { Schedule, Service, User, UserSchedule } from '../../models/entities';
 import { ApiService } from '../../services/api-service.service';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { LocalStorageService } from '../../services/local-storage.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../auth/auth-service.service';
 import { Subject } from 'rxjs';
 import { rules } from '../../models/rules';
@@ -50,9 +43,14 @@ export class SchedulerComponent implements OnInit {
   selectedEmployes = new Array();
   filteredEmployes = new Array();
 
+  currentDateRange! : {
+    start: Date,
+    end: Date
+  }
+
   constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService) {
     this.createForm();
-    this.loadEvents();
+    //this.loadEvents();
     this.loadCrudResources();
     setTimeout(() => this.enableEdit.next(this.authService.TokenData?.role != "employee"), 100);
   }
@@ -72,8 +70,12 @@ export class SchedulerComponent implements OnInit {
     );
   }
 
-  private async loadEvents() {
-    this.api.requestFromApi<UserSchedule[]>("Schedule/Schedules")?.subscribe(
+  private async loadEvents(range: { start: Date, end: Date } | null = null) {
+    let endpoint = range ? "Schedule/ScheduleDay" : "Schedule/Schedules";
+    
+    this.api.requestFromApi<UserSchedule[]>(endpoint, range 
+        ? {startDate:range.start.toISOString(), endDate:range.end.toISOString()} 
+        : undefined)?.subscribe(
       x => {
         this.schedules = x;
         this.events = mapScheduleToEvent(x);
@@ -160,7 +162,7 @@ export class SchedulerComponent implements OnInit {
     finishDate.setHours(rules.minHour + 1);
 
     this.form.get("startDateTime")?.setValue(startDate);
-    this.form.get("finishDateTime")?.setValue(finishDate);
+    // this.form.get("finishDateTime")?.setValue(finishDate);
     this.form.get("day")?.setValue(arg.date.getDate());
 
     console.log(this.form.value);
@@ -168,13 +170,25 @@ export class SchedulerComponent implements OnInit {
 
   }
 
+  onViewChange(arg: {event:any, offset: {start: Date, end: Date}} | undefined) {
+    console.log(arg);
+    if (arg) {
+      this.clearEvents.next(0);
+      this.currentDateRange = arg.offset;
+      this.loadEvents(this.currentDateRange);
+    }
+
+  }
+
   changeEmployees(event: any) {
-    let ids = event.value.map((x: any) => x.id);
-    let schedulesfiltered = this.schedules.filter(x => ids.includes(x.employee.id));
     this.clearEvents.next(0);
-    //this.addEvent.next(mapScheduleToEvent(schedulesfiltered));
-    mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
-    
+    if (event && event.value.length) {
+      let ids = event.value.map((x: any) => x.id);
+      let schedulesfiltered = this.schedules.filter(x => ids.includes(x.employee.id));
+      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
+    } else {
+      this.loadEvents(this.currentDateRange);      
+    }
   }
 
   confirm() {
@@ -186,16 +200,16 @@ export class SchedulerComponent implements OnInit {
 
   //#region Members "Events"
 
-  changeService(form: any) {
-    if (form.value) {
-      let service = form.value;
-      this.form.get("price")?.setValue(service.price)
+  changeService(formService: any) {
+    if (formService.value) {
+      let service = formService.value;
+      let form = this.form.value;
+      this.form.get("price")?.setValue(form.price ?? service.price)
       
       if (service.timespan) {        
-        let start = this.form.value.startDateTime;
 
-        if (start) {
-          let endTime = moment(start).add(service.timespan, "minute").toDate();
+        if (form.startDateTime) {
+          let endTime = moment(form.startDateTime).add(service.timespan, "minute").toDate();
           this.form.get("finishDateTime")?.setValue(endTime);
         }
       }
@@ -278,7 +292,7 @@ export class SchedulerComponent implements OnInit {
       
       if (x) {
         this.clearEvents.next(null);
-        this.loadEvents()
+        this.loadEvents(this.currentDateRange);
       }
 
       this.form.reset({note: "", id: 0});
@@ -293,26 +307,12 @@ export class SchedulerComponent implements OnInit {
       console.log(x);
       
       if (x) {
-        this.loadEvents();
+        this.loadEvents(this.currentDateRange);
         this.clearEvents.next(null)        
       }
 
       this.visible = false;
     })
-  }
-
-  filterEmployee(event: any) {
-    let filtered: any[] = [];
-    let query = event.query;
-
-    for (let i = 0; i < (this.employees as any[]).length; i++) {
-        let country = (this.employees as any[])[i];
-        if (country.name.toLowerCase().indexOf(query.toLowerCase()) == 0) {
-            filtered.push(country);
-        }
-    }
-
-    this.filteredEmployes = filtered;
   }
 
 }

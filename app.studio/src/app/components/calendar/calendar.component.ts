@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { faClock, faCalendarCheck, faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
@@ -12,13 +12,14 @@ import { LoaderService } from '../../services/loader.service';
 import { Subject } from 'rxjs';
 import { Moment } from 'moment';
 import * as moment from 'moment';
+import { CalendarItemDirective } from '../calendar-item.directive';
 
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.scss']
 })
-export class CalendarComponent implements OnInit, AfterViewInit {
+export class CalendarComponent implements OnInit, AfterViewInit, AfterContentInit {
 
   @ViewChild("calendar")
   calendarComponent!: FullCalendarComponent;
@@ -33,6 +34,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
   @Output() OnChange = new EventEmitter<EventChangeArg>()
   @Output() OnClick = new EventEmitter<EventClickArg>()
   @Output() OnDateClick = new EventEmitter<DateClickArg>()
+  @Output() OnViewChange = new EventEmitter<{event: any, offset: {start: Date, end: Date}}>()
   @Input() header: boolean = true
   @Input() events!: Array<any>
   @Input() editable!: Subject<boolean>
@@ -47,6 +49,11 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     return moment(this.Calendar?.getDate()).format("MMMM").toUpperCapital();
   };
 
+  @ContentChildren(CalendarItemDirective) calendarItems!: QueryList<CalendarItemDirective>;
+  calendarItemsArray!: Array<CalendarItemDirective>;
+
+  threify = false;
+
   constructor(private localStorageService: LocalStorageService, private loaderService: LoaderService) {
     
   }
@@ -55,29 +62,39 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     if (this.editable) {
       return this.viewTranslate[this.localStorageService.get("view") ?? 0]
     } else {
-      this.Calendar.changeView(this.views[0]);
+      this.Calendar.changeView(this.views[0]); 
       return this.views[0]
     }
+  }
+
+  ngAfterContentInit() {
+    this.calendarItemsArray = this.isEditable 
+      ? this.calendarItems.toArray()
+      : this.calendarItems.toArray().filter(x => x.enableForAll);
   }
 
   ngAfterViewInit(): void {
     this.view = this.initView;
 
+    this.dispatchViewChange();
+
     if (!this.addEvent) {
       this.Calendar.addEventSource(this.events);
-    }
+    }    
+
   }
 
   ngOnInit(): void {
     this.clearAll?.subscribe(x => this.Calendar.removeAllEvents())
-        this.addEvent?.subscribe(x => this.Calendar.addEvent(x))
-        this.editable?.subscribe(x => {
-          this.isEditable = x;
-          this.Calendar.setOption("editable", x);
-          this.Calendar.setOption("selectable", x);
-        })
+    this.addEvent?.subscribe(x => this.Calendar.addEvent(x))
+    this.editable?.subscribe(x => {
+      this.isEditable = x;
+      this.Calendar.setOption("editable", x);
+      this.Calendar.setOption("selectable", x);
+    })
 
     console.log(this.events);
+    
   }
 
   private get Calendar(): Calendar {
@@ -86,10 +103,12 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   next() {
     this.Calendar.next();
+    this.dispatchViewChange();
   }
 
   previous() {
     this.Calendar.prev();
+    this.dispatchViewChange();
   }
 
   views = ['dayGridMonth', 'timeGridFourDay', 'dayGridWeek', 'dayGridDay']
@@ -101,7 +120,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     headerToolbar: false,
     height: 'auto',
     initialView: this.views[this.localStorageService.get("view") ?? 0],
-
     views: {
       timeGridFourDay: {
         type: 'timeGrid',
@@ -113,7 +131,6 @@ export class CalendarComponent implements OnInit, AfterViewInit {
       }
     },
     events: [],
-    // selectable: true,
     plugins: [interactionPlugin, timeGridPlugin, dayGridPlugin, listPlugin ],
     eventChange: this.onEventChange.bind(this),
     eventClick : this.onEventClick.bind(this),
@@ -122,7 +139,7 @@ export class CalendarComponent implements OnInit, AfterViewInit {
 
   view = 'Padrão';
 
-  changeView(event: any) {
+  public changeView(event: any) {
     const indexView = this.viewTranslate.indexOf(event.value);
     if (indexView != -1) {
       this.localStorageService.set("view", indexView)
@@ -130,6 +147,16 @@ export class CalendarComponent implements OnInit, AfterViewInit {
     }
     
     this.Calendar.changeView(this.views[indexView]);
+    this.dispatchViewChange();
+  }
+
+  private dispatchViewChange() {
+    const offset = {
+      start: this.Calendar.getCurrentData().dateProfile.renderRange.start,
+      end: this.Calendar.getCurrentData().dateProfile.renderRange.end
+    }
+    
+    this.OnViewChange.emit({event: event, offset: offset});
   }
 
   onEventClick(arg: EventClickArg) {

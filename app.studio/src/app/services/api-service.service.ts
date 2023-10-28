@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import { Observable, Subject, catchError, map, of, take } from 'rxjs';
 import { environment } from '../../environments/environment.development';
@@ -39,21 +39,15 @@ export class ApiService {
     return this.connected;
   }
 
-  public requestFromApi<T = any>(endpoint: string, query?: string) {
+  public requestFromApi<T = any>(endpoint: string, params: Record<string, string | number | boolean | ReadonlyArray<string | number | boolean>> | null = null) {
     let apiUrl = this.baseUrl + `${endpoint}`;
     this.loader.show()
-
-    if (query) {
-      apiUrl += query;
-    }
 
     if (!this.isConnect) {
       return null;
     } else
-    return this.httpClient.get<T>(apiUrl).pipe(map(result => {
+    return this.httpClient.get<T>(apiUrl, params ? {params: params} : undefined).pipe(map(result => {
       this.loader.hide();
-      // console.log(result);
-      
       return result;
     }), catchError(err => {
       this.templateError(err);

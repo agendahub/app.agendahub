@@ -13,20 +13,20 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { DropdownModule } from 'primeng/dropdown';
 import { AccordionModule } from 'primeng/accordion';
 import { FormsModule } from '@angular/forms';
-import { WhcDeviceDirective } from './whc-device.directive';
+import { CalendarItemDirective } from './calendar-item.directive';
 
 @NgModule({
   declarations: [
     NavComponent,
     LoaderComponent,
     CalendarComponent,
-    WhcDeviceDirective
+    CalendarItemDirective,
   ],
   exports: [
     NavComponent,
     LoaderComponent,
     CalendarComponent,
-    WhcDeviceDirective
+    CalendarItemDirective,
   ],
   imports: [
     ProgressSpinnerModule,

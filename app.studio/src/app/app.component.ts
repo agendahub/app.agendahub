@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
     </div>  
     
     <loader></loader>
-    <p-toast></p-toast>
+    <p-toast [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"></p-toast>
     <app-nav *ngIf="!isLogin"></app-nav>
 
     <div class="relative">

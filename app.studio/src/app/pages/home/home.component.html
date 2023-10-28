@@ -22,7 +22,7 @@
                             {{event.schedule.service.description}}
                         </p> -->
                         <p class="text-gray-700 mb-6" *ngIf="event.schedule.note || event.schedule.service.note">
-                            {{event.schedule.note}} / {{event.schedule.service.note}}
+                            {{event.schedule.note}}
                         </p>
                         <div class="flex justify-end">
                             <button pButton class="p-button-sm" (click)="showCalendar($event, op)">Abrir agenda</button>
