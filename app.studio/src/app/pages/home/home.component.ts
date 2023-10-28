@@ -60,7 +60,7 @@ export class HomeComponent implements OnInit {
     this.getEvents();
   }
 
-  showCalendar(event: any, op: OverlayPanel) {
+  showCalendar(event: any, op: OverlayPanel, schedule: UserSchedule) {
     op.toggle(event);
     this.eventsCalendar = [];
     
@@ -68,7 +68,7 @@ export class HomeComponent implements OnInit {
       this.calendarOpen = false;
     } else setTimeout(() => {
             this.calendarOpen = true;
-            this.eventsCalendar = mapScheduleToEvent(this.events);
+            this.eventsCalendar = mapScheduleToEvent([schedule]);
     });
   }
 
