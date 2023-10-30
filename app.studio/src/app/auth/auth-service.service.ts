@@ -77,15 +77,17 @@ export class AuthService {
     return isValid
   }
   
-  public login(login: string, password: string) {
+  public login(login: string, password: string, extras?: Record<string, any>) {
     const loginModel = {
       login: login,
       password: password
     }
 
     this.loader.show()
+    console.log(extras);
+    
 
-    return this.httpClient.post(this.baseUrl + "Auth/Login", loginModel).pipe(map((r: any) => {
+    return this.httpClient.post(this.baseUrl + "Auth/Login", loginModel, extras ? {params: extras} : undefined).pipe(map((r: any) => {
       console.log(r);
       this.Token = r.token;
       this.loader.hide();

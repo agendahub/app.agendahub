@@ -253,19 +253,19 @@ export class SchedulerComponent implements OnInit {
 
   doFilter(schedules: UserSchedule[]) {
     return schedules.filter(x => {
-      let match = true;
       if (this.filter.customer.length && !this.filter.customer.includes(x.customer.id)) {
-        match = false;
-      }
-      if (this.filter.employee.length && !this.filter.employee.includes(x.employee.id)) {
-        match = false;
-      }
-      if (this.filter.service.length && !this.filter.service.includes(x.schedule.service.id)) {
-        match = false;
-      }
-
-      return match;
-    })
+        return false;
+      } return true;})
+      .filter(x => {
+        if (this.filter.employee.length && !this.filter.employee.includes(x.employee.id)) {
+          return false;
+        } return true;
+      })
+      .filter(x => {
+        if (this.filter.service.length && !this.filter.service.includes(x.schedule.service.id)) {
+          return false;
+        } return true;
+      })
   }
 
   confirm() {

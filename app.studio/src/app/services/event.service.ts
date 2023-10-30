@@ -19,18 +19,17 @@ export class EventService {
 
     switch (DateRangeType) {
       case 2:
-        // query += `&endDate=${endDate.add(1, "month").toISOString()}` 
         endDate = endDate.add(1, "month");
         break;
       case 1:
-        // query += `&endDate=${endDate.add(1, "week").toISOString()}`
         endDate = endDate.add(1, "week");
         break;
     }
 
     let params = {
       startDate: today.toISOString(),
-      endDate: endDate.toISOString()
+      endDate: endDate.toISOString(),
+      onlyMine: true
     }
 
     console.log(params);
