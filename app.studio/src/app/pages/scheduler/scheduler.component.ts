@@ -176,6 +176,7 @@ export class SchedulerComponent implements OnInit {
     finishDate.setHours(rules.minHour + 1);
 
     this.form.get("startDateTime")?.setValue(startDate);
+    this.form.get("finishDateTime")?.setValue(finishDate);
     this.form.get("day")?.setValue(arg.date.getDate());
 
     console.log(this.form.value);
