@@ -129,7 +129,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
         duration: { days: 5 },
         hiddenDays: [0],
         slotMinTime: "08:00:00",
-        slotMaxTime: "00:00:00"
+        slotMaxTime: "23:00:00"
       }
     },
     events: [],
