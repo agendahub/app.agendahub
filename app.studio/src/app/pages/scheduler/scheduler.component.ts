@@ -269,6 +269,24 @@ export class SchedulerComponent implements OnInit {
       })
   }
 
+  get hasFilter() {
+    return this.filter.customer.length || this.filter.employee.length || this.filter.service.length;
+  }
+
+  clearFilter() {
+    this.filter = {
+      employee: [],
+      customer: [],
+      service: []
+    }
+
+    this.selectedCustomers = [];
+    this.selectedEmployes = [];
+    this.selectedServices = [];
+
+    this.loadEvents(this.currentDateRange);
+  }
+
   confirm() {
     this.trySave()
     this.visible = false;

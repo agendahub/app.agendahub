@@ -21,7 +21,7 @@
         <ng-template calendarItem [enableForAll]="true">
             <div class="w-full h-full flex justify-end">
                 <div class="h-full md:w-max w-full">
-                    <button pButton (click)="visible = true" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
+                    <button pButton style="z-index: 100;" (click)="clearFilter()" [disabled]="!hasFilter" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
                         <span>Limpar filtros</span>
                         <i class="fa-solid fa-filter"></i>
                     </button>
