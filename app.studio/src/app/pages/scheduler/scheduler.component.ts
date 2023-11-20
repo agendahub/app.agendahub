@@ -165,6 +165,14 @@ export class SchedulerComponent implements OnInit {
     }
   }
 
+  getValidHour(date: Date) {
+    let hour = date.getHours();
+    if  (hour >= rules.minHour && hour <= rules.maxHour) {
+      return date.getHours();
+    }
+    return rules.minHour;
+  }
+
   onDateClick(arg: DateClickArg) {
     this.header = `Marcar horário - ${moment(arg.date).format("DD/MM/yy")}`;
     this.edit = false;
@@ -172,16 +180,15 @@ export class SchedulerComponent implements OnInit {
 
     let startDate = structuredClone(arg.date)
     let finishDate = structuredClone(arg.date)
-    startDate.setHours(rules.minHour);
-    finishDate.setHours(rules.minHour + 1);
+
+    startDate.setHours(this.getValidHour(arg.date));
+    finishDate.setHours(this.getValidHour(arg.date) + 1);
 
     this.form.get("startDateTime")?.setValue(startDate);
     this.form.get("finishDateTime")?.setValue(finishDate);
     this.form.get("day")?.setValue(arg.date.getDate());
 
     console.log(this.form.value);
-    
-
   }
 
   //#endregion
