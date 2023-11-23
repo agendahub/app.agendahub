@@ -18,7 +18,10 @@
                                     <span class="font-semibold text-xl text-slate-900"> {{event.customer.name}} </span><br>
                                     <span class="font-light text-lg italic text-slate-700">{{event.schedule.service.description}}</span>
                                 </p>
-                                <span class="font-medium md:text-xl text-base text-slate-900">{{event.schedule.startDateTime | date: "dd/MM/yy HH:mm"}}</span>
+                                <p>
+                                    <span class="font-medium md:text-xl text-base text-slate-900">{{event.schedule.startDateTime | date: "dd/MM/yy HH:mm"}}</span><br>
+                                    <span class="font-light md:text-base text-sm italic text-slate-700 float-right"> {{getDayName(event.schedule.startDateTime)}}</span>
+                                </p>
                             </div>
                             <p class="text-gray-700 mb-6" *ngIf="event.schedule.note || event.schedule.service.note"> {{event.schedule.note}} </p>
     
