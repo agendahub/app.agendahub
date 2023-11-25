@@ -100,11 +100,11 @@ export class AuthService {
     }))
   }
 
-  public logout() {
+  public logout(fnLogout = () => this.messageService.add({severity: "info", summary: "Até breve..."})) {
     this.Token = null;
 
     this.back({
-      beforeNavigate: () => this.messageService.add({severity: "info", summary: "Até breve..."}),
+      beforeNavigate: fnLogout,
       timeout: 1000
     })
   }

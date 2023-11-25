@@ -1,0 +1,75 @@
+<div class="bg-blend-hue text-white mx-auto max-w-6xl sm:px-8 lg:px-12 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(80vh)] h-full overflow-h-scroll">
+
+    <div class="flex flex-col justify-center items-center">
+        <div class="flex flex-col justify-center items-center mb-6">
+            <h1 class="text-4xl font-bold">Links de visualização da agenda</h1>
+            <p class="text-xl">Visualize os links já criados <span class="p-2"> <i class="fa-solid fa-eye cursor-pointer" (click)="dialog = true"></i> </span></p>
+            
+        </div>
+        <!-- form test schedule view -->
+        <div [formGroup]="form" class="grid grid-cols-12 gap-x-6 gap-y-4">
+    
+            <div class="sm:col-span-6 col-span-12">
+                <label for="timePeriod">Intervalo de tempo</label>
+                <p-calendar formControlName="timePeriod" [minDate]="today" placeholder="Selecione as datas" selectionMode="range" dateFormat="dd/mm/yy" inputId="timePeriod" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true"></p-calendar>
+            </div>
+            
+            <div class="sm:col-span-6 col-span-12">
+                <label for="service">Serviço (?)</label>
+                <p-dropdown dataKey="id" placeholder="Selecione o serviço" [options]="services" formControlName="service" [showClear]="true" [autoDisplayFirst]="false" 
+                optionLabel="description" inputId="service" [style]="{width:'100%'}"></p-dropdown>
+            </div>
+    
+            <div class="sm:col-span-6 col-span-12">
+                <label for="expirationDate">Data de Expiração Acesso</label>
+                <p-calendar formControlName="expirationDate" [placeholder]="today.toLocaleDateString('pt-br')" inputId="expirationDate" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true"></p-calendar>
+            </div>
+    
+            <div class="sm:col-span-6 col-span-12">
+                <label for="employee">Funcionária</label>
+                <p-dropdown dataKey="id" placeholder="Selecione a funcionária" [options]="employees" formControlName="employee" [showClear]="true" 
+                [autoDisplayFirst]="false" optionLabel="name" inputId="employee" [style]="{width:'100%'}"></p-dropdown>
+            </div>
+
+            <div class="col-span-12 flex justify-end">
+                <button pButton (click)="createLink()" [disabled]="form.invalid"> Criar link </button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<p-dialog header="Links criados" [(visible)]="dialog" position="topright" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '77vw' }" [draggable]="false" [resizable]="false" [closable]="true">
+    <p-table [value]="viewLinks" [paginator]="true" styleClass="p-datatable-sm" [rows]="10" [globalFilterFields]="['code', 'description', 'serviceType.description','price']">
+        <ng-template pTemplate="header" let-columns>
+            <tr>
+                <th style="width: 10%">Funcionária</th>
+                <th style="width: 10%">Servico</th>
+                <th style="width: 15%">Expira </th>
+                <th style="width: 15%">Intervalo </th>
+                <th style="width: auto"colspan="2">Link </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-link>
+            <tr>
+                <td>{{link.employee.name}}</td>
+                <td>{{link.service?.description ?? "-"}}</td>
+                <td>{{link.expirationDate | date: "dd/MM/yy HH:mm"}}</td>
+                <td>{{link.fromDateTime | date: "dd/MM/yy HH:mm"}} <br> {{link.toDateTime | date: "dd/MM/yy HH:mm"}}</td>
+                <td> {{linkEnvironment + link.id}} </td>
+                <td class="flex justify-center items-center gap-2">
+                    <p-inputSwitch [(ngModel)]="link.isActive" (onChange)="toggle(link)"></p-inputSwitch>
+                    <i class="fa-solid fa-times-circle text-red-600 fa-xl mb-1 cursor-pointer" (click)="remove(link)"></i>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage">
+            <tr>
+                <td colspan="4" class="w-full">
+                    <div class="flex justify-center">Nenhum link criado.</div>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-dialog>

@@ -6,8 +6,8 @@ export function mapScheduleToEvent(schedules: UserSchedule[], filter: (x: UserSc
     let events: EventInput[] = []
     schedules.forEach(x => {
       filter(x) && events.push({
-        id: x.id.toString(),
-        title: `${x.employee.name} - ${x.customer.name}`,
+        id: x.id?.toString(),
+        title: `${x.employee.name} - ${x.customer?.name ?? "-"}`,
         start: x.schedule.startDateTime,
         end: x.schedule.finishDateTime,
         color: x.employee.color,
@@ -34,4 +34,8 @@ export function customSort(event: SortEvent) {
       
       return (event.order as number) * result;
   });
+}
+
+export function notNull(value: unknown) {
+  return value != null && value != undefined;
 }
