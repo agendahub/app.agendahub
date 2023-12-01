@@ -12,7 +12,7 @@ const routes: Routes = [
   {path: "login", component: LoginComponent},
   {path: "scheduler", component: SchedulerComponent, canActivate: [AuthGuardService]},
   {path: "home", component: HomeComponent, canActivate: [AuthGuardService]},
-  {path: "settings", component: SettingsComponent, canActivate: [AuthGuardService]},
+  // {path: "settings", component: SettingsComponent, canActivate: [AuthGuardService]},
   {path: "manager", canActivateChild: [AuthGuardService], loadChildren: () => import("./modules/manager/manager-routing.module").then(r => r.ManagerRoutingModule)},
 
   {path: "**", redirectTo: "home"}
