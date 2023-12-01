@@ -1,0 +1,36 @@
+<div class="fixed w-screen h-screen flex items-center justify-center bg-blend-darken bg-opacity-10">
+
+  <div class="flex flex-col sm:w-10/12 lg:w-1/3 w-11/12 justify-center min-h-1/2 text-white items-center rounded-md bg-blend-hue bg-opacity-50 bg-slate-900 px-4 py-12">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+      <h2 class="mb-6 text-center text-2xl font-bold leading-9 tracking-tight">Acessar agenda</h2>
+    </div>
+  
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+      <form [formGroup]="loginForm" class="space-y-6">
+        <div>
+          <label for="login" class="block text-sm font-medium leading-6">Login</label>
+          <div class="mt-2">
+            <input formControlName="login" type="text" id="login"  placeholder="Email ou telefone"class="input w-full">
+          </div>
+        </div>
+  
+        <div>
+          <div class="flex items-center justify-between">
+            <label for="password" class="block text-sm font-medium leading-6">Senha</label>
+          </div>
+          <div class="mt-2">
+            <input id="password" formControlName="password" type="password" autocomplete="current-password" class="input w-full" placeholder="Sua senha">
+          </div>
+        </div>
+  
+        <div>
+          <button (click)="login()" type="submit" pButton pRipple class="w-full ">
+            <span class="flex w-full justify-center">
+              Logar
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+
+</div>

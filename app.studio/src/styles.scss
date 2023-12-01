@@ -1,0 +1,70 @@
+/* You can add global styles to this file, and also import other style files */
+@import url(../node_modules/@fortawesome/fontawesome-free/css/all.min.css);
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+    --base-pink-light: #A61C76;
+    --base-pink-extralight: #bf048d;
+    --base-dark: #2c2f40;
+    --base-medium: #5a758c;
+    --base-light: #a4b0bf;
+}
+
+.p-paginator-bottom {
+    border-radius: 0px 0px 7px 7px !important;
+}
+
+.p-datatable .p-datatable-header {
+    border-radius: 7px 7px 0px 0px;
+}
+
+::-webkit-scrollbar {
+    height: 0.5rem;
+    padding: 0 1rem;
+}
+
+::-webkit-scrollbar:vertical {
+    width: 0.5rem;
+    background-blend-mode: darken;
+    padding: 1rem 0;
+}
+
+
+::-webkit-scrollbar-track {
+    background:  white;
+}
+
+
+::-webkit-scrollbar-track:vertical {
+    background:  linear-gradient(180deg,
+     #020617,
+     #020617,
+     #020617,
+     #020617
+     );
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(63, 51, 81, 0.5);
+    border-radius: 2rem;
+}
+
+@media screen and (max-width: 1300px) and (min-width: 600px) {
+    ::-webkit-scrollbar-track:vertical {
+        background:  linear-gradient(180deg,
+         #090f21,
+         #090f21,
+         #090f21,
+         #090f21
+         );
+    }
+}
+
+.p-overlaypanel.responsive-overlay {
+    .p-overlaypanel-content {
+        padding: 0 !important;
+    }
+}

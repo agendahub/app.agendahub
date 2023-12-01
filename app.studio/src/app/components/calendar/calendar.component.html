@@ -1,0 +1,48 @@
+<div class="h-full w-full sm:w-75 md:w-50 lg:w-25">
+    
+    <div class="w-full md:block hidden" *ngIf="header">
+        <ng-container [ngTemplateOutlet]="headerView"></ng-container>
+    </div>
+
+    <div class="w-full h-full max-h-full md:p-2 lg:p-4 px-0">
+        <div class="flex justify-between items-center p-2 bg-white sm:rounded-t-lg" [ngClass]="{'rounded-t-lg': !header}">
+            <div class="text-4xl text-purple-hb font-bold tracking-tight sm:text-6xl" style="z-index: 2;">
+                {{month}}
+            </div>
+            
+            <div class="flex gap-4 items-center justify-between">
+                <div class="md:hidden block bg-purple-hb rounded-full" (click)="op.toggle($event)" *ngIf="header">
+                    <i class="fa-solid fa-sliders p-2"></i>
+                </div>
+                
+                <div class="flex gap-1">
+                    <fa-icon size="2x" [icon]="faPrev" class="text-purple-hb cursor-pointer" (click)="previous()"></fa-icon>
+                    <fa-icon size="2x" [icon]="faNext" class="text-purple-hb cursor-pointer" (click)="next()"></fa-icon>
+                </div>
+            </div>
+        </div>
+        <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+        <div class="h-3 bg-white rounded-b-lg"></div>
+    </div>        
+</div>
+
+<p-overlayPanel #op [style]="{background: '#ddd'}">
+    <ng-container [ngTemplateOutlet]="headerView"></ng-container>
+</p-overlayPanel>
+
+<ng-template #headerView>
+
+    <div class="grid grid-cols-12 gap-1 py-2 md:px-2 lg:px-4 px-0" *ngIf="header">
+        <ng-container *ngFor="let item of calendarItemsArray">
+            <div class="md:col-span-6 col-span-6 flex items-center">
+                <ng-container [ngTemplateOutlet]="item.template"></ng-container>
+            </div>
+        </ng-container>
+        <div class="md:col-span-6 col-span-6 flex items-center" [ngClass]="{'col-span-12': calendarItemsArray.length === 0}">
+            <div class="w-full" >
+                <p-dropdown dropdownIcon="fa-solid fa-calendar-check" [options]="viewTranslate" [(ngModel)]="view" (onChange)="changeView($event)" [style]="{width: '100%'}"></p-dropdown>
+            </div>
+        </div>
+    </div>
+
+</ng-template>
