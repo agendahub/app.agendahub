@@ -7,13 +7,22 @@ import { Subject } from "rxjs";
 export class LoaderService {
 
     isLoading: Subject<boolean> = new Subject();
+    private countCommands = 0;
 
     show() {
-      this.isLoading.next(true);
+      if (this.countCommands == 0) {
+        this.isLoading.next(true);
+        this.countCommands++;
+      }
     }
 
     hide() {
-      this.isLoading.next(false);
+      if (this.countCommands > 0) {
+        this.countCommands--;
+        if (this.countCommands == 0) {
+          this.isLoading.next(false);
+        }
+      }
     }
 
 }

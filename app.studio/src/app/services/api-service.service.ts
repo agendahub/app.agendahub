@@ -7,6 +7,9 @@ import { LoaderService } from './loader.service';
 import { LocalStorageService } from './local-storage.service';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../auth/auth-service.service';
+import { ErrorDto } from '../models/dtos';
+
+export type QueryParams = Record<string, string | number | boolean | ReadonlyArray<string | number | boolean>>;
 
 @Injectable({providedIn: 'root'})
 export class ApiService {
@@ -39,41 +42,41 @@ export class ApiService {
     return this.connected;
   }
 
-  public requestFromApi<T = any>(endpoint: string, params: Record<string, string | number | boolean | ReadonlyArray<string | number | boolean>> | null = null) {
+  public requestFromApi<T = any>(endpoint: string, params: QueryParams | null = null, load = true) {
     let apiUrl = this.baseUrl + `${endpoint}`;
-    this.loader.show()
+    load && this.loader.show()
 
     if (!this.isConnect) {
       return null;
     } else
     return this.httpClient.get<T>(apiUrl, params ? {params: params} : undefined).pipe(map(result => {
-      this.loader.hide();
+      load && this.loader.hide();
       return result;
     }), catchError(err => {
-      this.templateError(err);
+      this.templateError(err.error ?? err);
       throw err;
     }));
   }
 
-  public sendToApi(endpoint: string, body: any) {
+  public sendToApi(endpoint: string, body: any, load = true) {
     let apiUrl = this.baseUrl + `${endpoint}`;
-    this.loader.show()
+    load && this.loader.show()
 
     if (!this.isConnect) {
       return null;
     } else 
     return this.httpClient.post(apiUrl, body).pipe(take(1)).pipe(map(result => {
-      this.loader.hide();
+      load && this.loader.hide();
       return result;
     }), catchError(err => {
-      this.templateError(err);
+      this.templateError(err.error ?? err);
       throw err;
     }));
   }
 
-  public deleteFromApi(endpoint: string, query?: any) {
+  public deleteFromApi(endpoint: string, query?: any, load = true) {
     let apiUrl = this.baseUrl + `${endpoint}`;
-    this.loader.show()
+    load && this.loader.show()
 
     if (query) {
       apiUrl += query;
@@ -83,10 +86,10 @@ export class ApiService {
       return null;
     } else
     return this.httpClient.delete(apiUrl).pipe(take(1)).pipe(map(result => {
-      this.loader.hide();
+      load && this.loader.hide();
       return result;
     }), catchError(err => {
-      this.templateError(err);
+      this.templateError(err.error ?? err);
       throw err;
     }));
   }
@@ -106,16 +109,21 @@ export class ApiService {
       this.loader.hide();
       return result;
     }), catchError(err => {
-      this.templateError(err);
+      this.templateError(err.error ?? err);
       throw err;
     }));;
   }
 
-  private templateError(error: any, summary?: string, detail?: string, summaryInternal?: string, detailInternal?: string) {
+  private templateError(error: ErrorDto, summary?: string, detail?: string, summaryInternal?: string, detailInternal?: string) {
     
     this.loader.hide();
 
-    // console.log(error.status);
+    console.log(error);
+
+    if (error.message) {
+      this.messageService.add({severity: "error", summary: "Erro ao salvar!", detail: error.message});
+      return void 0;
+    }
 
     if (error.status) {
       if (error.status >= 400 && error.status < 500) {

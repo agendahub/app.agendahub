@@ -11,6 +11,7 @@ import { AuthService } from '../../auth/auth-service.service';
 import { Subject } from 'rxjs';
 import { rules } from '../../models/rules';
 import { mapScheduleToEvent } from '../../utils/util';
+import { CustomValidators, ValidatorsHelper } from '../../utils/validators';
 
 
 @Component({
@@ -55,6 +56,9 @@ export class SchedulerComponent implements OnInit {
     end: Date
   }
 
+  oldScheduleDisabled = false;
+  validHelper = ValidatorsHelper;
+
   constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService) {
     this.createForm();
     this.loadCrudResources();
@@ -70,13 +74,13 @@ export class SchedulerComponent implements OnInit {
   }
 
   private loadCrudResources() {
-    this.api.requestFromApi<Service[]>("Service")?.subscribe(
+    this.api.requestFromApi<Service[]>("Service", null, false)?.subscribe(
       x => this.services = x
     );
-    this.api.requestFromApi<User[]>("User/Customers")?.subscribe(
+    this.api.requestFromApi<User[]>("User/Customers", null, false)?.subscribe(
       x => this.customers = x
     );
-    this.api.requestFromApi<User[]>("User/Employees")?.subscribe(
+    this.api.requestFromApi<User[]>("User/Employees", null, false)?.subscribe(
       x => this.employees = x
     );
   }
@@ -106,7 +110,11 @@ export class SchedulerComponent implements OnInit {
       finishDateTime: ["", [Validators.required, this.validateDates()]],
       price: [this.services[0]?.price, Validators.required],
       employee: ["", Validators.required],
-      customer: ["", Validators.required],
+      customer: ["", [
+                      Validators.required, 
+                      CustomValidators.notEqualsTo("employee", (o: User, c: User) => o.id !== c.id, 
+                                                "O cliente não pode ser o mesmo que o funcionário")
+                    ]],
       service: ["", Validators.required],
       schedule: [null],
       note: [""],
@@ -114,12 +122,26 @@ export class SchedulerComponent implements OnInit {
       day: [],
     });
 
-    if (!this.isEditEnable) for( let value of Object.values(this.form.controls)) {
+    this.checkFormValidation();
+  }
+
+  checkFormValidation() {
+    if (!this.isEditEnable || this.disableFormByOldDate()) for( let value of Object.values(this.form.controls)) {
       value.disable();
     }
 
-    this.form.value;
+    if (!this.disableFormByOldDate()) for( let value of Object.values(this.form.controls)) {
+      value.enable();
+    }
+  }
 
+  disableFormByOldDate() {
+    if (!this.form.get("startDateTime")?.value) {
+      this.oldScheduleDisabled = false;
+    }
+
+    this.oldScheduleDisabled = moment(this.form.get("startDateTime")?.value).isBefore(new Date());
+    return this.oldScheduleDisabled;
   }
 
   //#region Members 'Handling click'
@@ -145,8 +167,10 @@ export class SchedulerComponent implements OnInit {
       this.visible = true
       this.edit = true;
 
-      console.log(new Date(arg.event.extendedProps['schedule']['startDateTime']),
-      new Date(arg.event.extendedProps['schedule']['finishDateTime']));
+      this.checkFormValidation();
+
+      // console.log(new Date(arg.event.extendedProps['schedule']['startDateTime']),
+      // new Date(arg.event.extendedProps['schedule']['finishDateTime']));
     }
   }
 
@@ -165,14 +189,6 @@ export class SchedulerComponent implements OnInit {
     }
   }
 
-  getValidHour(date: Date) {
-    let hour = date.getHours();
-    if  (hour >= rules.minHour && hour <= rules.maxHour) {
-      return date.getHours();
-    }
-    return rules.minHour;
-  }
-
   onDateClick(arg: DateClickArg) {
     this.header = `Marcar horário - ${moment(arg.date).format("DD/MM/yy")}`;
     this.edit = false;
@@ -189,6 +205,16 @@ export class SchedulerComponent implements OnInit {
     this.form.get("day")?.setValue(arg.date.getDate());
 
     console.log(this.form.value);
+
+    this.checkFormValidation();
+  }
+
+  getValidHour(date: Date) {
+    let hour = date.getHours();
+    if  (hour >= rules.minHour && hour <= rules.maxHour) {
+      return date.getHours();
+    }
+    return rules.minHour;
   }
 
   //#endregion
@@ -368,15 +394,19 @@ export class SchedulerComponent implements OnInit {
   }
 
   private save(body: any) {
-    this.isEditEnable && this.api.sendToApi("Schedule/Setup", body)?.subscribe(x => {
-      console.log(x);
-      
-      if (x) {
-        this.clearEvents.next(null);
-        this.loadEvents(this.currentDateRange);
+    this.isEditEnable && this.api.sendToApi("Schedule/Setup", body)?.subscribe({
+      next: x => {
+        console.log(x);
+        
+        if (x) {
+          this.clearEvents.next(null);
+          this.loadEvents(this.currentDateRange);
+        }
+  
+        this.form.reset({note: "", id: 0});
+      }, error: x => {
+        console.log(x);
       }
-
-      this.form.reset({note: "", id: 0});
     })
   }
 

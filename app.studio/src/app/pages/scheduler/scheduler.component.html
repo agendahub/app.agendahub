@@ -32,23 +32,29 @@
 </div>
 
 <p-dialog [header]="header" [(visible)]="visible" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" (onHide)="form.reset({note: ''})" [modal]="true">
+    <div *ngIf="oldScheduleDisabled" class="p-2 flex justify-center">
+        <span class="text-center text-base leading-tight bg-blue-400 text-neutral-100 rounded-lg p-2">
+            Não é possível alterar/marcar numa data passada!
+        </span> 
+    </div>
     <form [formGroup]="form">
         <div class="grid grid-cols-12 gap-x-6 gap-y-4">
-            <div class="col-span-6">
+
+            <div class="sm:col-span-6 col-span-12">
                 <label for="startDateTime">Início</label>
                 <p-calendar formControlName="startDateTime" [readonly]="isEditEnable" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
                 <small class="text-red-600 ng-dirty" *ngIf="form.get('startDateTime')?.errors"> {{form.get('startDateTime')?.errors?.['error']}} </small>
             </div>
-
-            <div class="col-span-6">
-                <label for="finishDateTime">Fim</label>
-                <p-calendar formControlName="finishDateTime" placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
-                <small class="text-red-600 ng-dirty" *ngIf="form.get('finishDateTime')?.errors"> {{form.get('finishDateTime')?.errors?.['error']}} </small>
-            </div>
-
+            
             <div class="sm:col-span-6 col-span-12">
                 <label for="service">Serviço</label>
                 <p-dropdown dataKey="id" placeholder="Selecione o serviço" [options]="services" formControlName="service" [showClear]="true" [autoDisplayFirst]="false" optionLabel="description" inputId="service" (onChange)="changeService($event)"  [style]="{width:'100%'}"></p-dropdown>
+            </div>
+
+            <div class="sm:col-span-6 col-span-12">
+                <label for="finishDateTime">Fim</label>
+                <p-calendar formControlName="finishDateTime" placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                <small class="text-red-600 ng-dirty" *ngIf="form.get('finishDateTime')?.errors"> {{form.get('finishDateTime')?.errors?.['error']}} </small>
             </div>
 
             <div class="sm:col-span-6 col-span-12">
@@ -64,6 +70,7 @@
             <div class="sm:col-span-6 col-span-12">
                 <label for="customer">Cliente</label>
                 <p-dropdown dataKey="id" placeholder="Selecione a cliente" [options]="customers" formControlName="customer" [showClear]="true" [autoDisplayFirst]="false" optionLabel="name" inputId="customer" [style]="{width:'100%'}"></p-dropdown>
+                <span class="text-red-500 leading-4"> {{validHelper.getErrorMessage(form, 'customer', "notEqualsTo")}} </span>
             </div>
 
             <div class="col-span-12">

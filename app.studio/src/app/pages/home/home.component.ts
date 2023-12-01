@@ -10,6 +10,7 @@ import { OverlayPanel } from 'primeng/overlaypanel';
 import { mapScheduleToEvent } from '../../utils/util';
 import { EventInput } from '@fullcalendar/core';
 import { ScreenHelperService } from '../../services/screen-helper.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-home',
@@ -42,6 +43,10 @@ export class HomeComponent implements OnInit {
       console.log(x);
       
     });
+  }
+
+  getDayName(date: Date) {
+    return moment(date).format("dddd").toUpperCapital();
   }
 
   getWidth() {
