@@ -1,18 +1,17 @@
-import { AfterContentInit, AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, ViewChildren } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, ViewChild } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
-import { faClock, faCalendarCheck, faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
+import { faCalendarCheck, faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 import { FullCalendarComponent } from '@fullcalendar/angular';
-import { CalendarOptions, Calendar, EventClickArg, EventInput, EventChangeArg } from '@fullcalendar/core';
+import { CalendarOptions, Calendar, EventClickArg, EventChangeArg } from '@fullcalendar/core';
 import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { DateClickArg } from '@fullcalendar/interaction';
-import { LoaderService } from '../../services/loader.service';
 import { Subject } from 'rxjs';
-import { Moment } from 'moment';
 import * as moment from 'moment';
 import { CalendarItemDirective } from '../calendar-item.directive';
+import { CalendarNavigator } from './calendar-navigator';
 
 @Component({
   selector: 'app-calendar',
@@ -23,49 +22,37 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
 
   @ViewChild("calendar")
   calendarComponent!: FullCalendarComponent;
-  clockIcon = faClock.iconName;
-
-  faPrev = faArrowCircleLeft;
-  faNext = faArrowCircleRight;
-  faOptions = faCalendarCheck;
-  faConfirm = faCheckCircle;
-  faDelete = faTimesCircle;
-
-  @Output() OnChange = new EventEmitter<EventChangeArg>()
-  @Output() OnClick = new EventEmitter<EventClickArg>()
-  @Output() OnDateClick = new EventEmitter<DateClickArg>()
-  @Output() OnViewChange = new EventEmitter<{event: any, offset: {start: Date, end: Date}}>()
-  @Input() header: boolean = true
-  @Input() events!: Array<any>
-  @Input() editable!: Subject<boolean>
-  @Input() clearAll!: Subject<any>
-  @Input() addEvent!: Subject<any>
-  
-  @Input() isEditable!: boolean;
-
-  private today = new Date();
-
-  public get month(): string {
-    return moment(this.Calendar?.getDate()).format("MMMM").toUpperCapital();
-  };
-
-  settings = false;
 
   @ContentChildren(CalendarItemDirective) calendarItems!: QueryList<CalendarItemDirective>;
   calendarItemsArray!: Array<CalendarItemDirective>;
+  
+  @Output() OnViewChange = new EventEmitter<{event: any, offset: {start: Date, end: Date}}>()
+  @Output() OnDateClick = new EventEmitter<DateClickArg>()
+  @Output() OnChange = new EventEmitter<EventChangeArg>()
+  @Output() OnClick = new EventEmitter<EventClickArg>()
+  @Input() viewDateRange!: Array<Date>
+  @Input() editable!: Subject<boolean>
+  @Input() clearAll!: Subject<any>
+  @Input() addEvent!: Subject<any>
+  @Input() header: boolean = true
+  @Input() isEditable!: boolean;
+  @Input() events!: Array<any>
 
-  constructor(private localStorageService: LocalStorageService, private loaderService: LoaderService) {
-    
-  }
+  public views = ['dayGridMonth', 'timeGridFourDay', 'dayGridWeek', 'dayGridDay'];
+  public viewTranslate = ["Mês", "Hora semana", "Semana", "Dia"];
+  public view = 'Padrão';
 
-  private get initView() {
-    if (this.editable) {
-      return this.viewTranslate[this.localStorageService.get("view") ?? 0]
-    } else {
-      this.Calendar.changeView(this.views[0]); 
-      return this.views[0]
-    }
-  }
+  public faNext = faArrowCircleRight;
+  public faOptions = faCalendarCheck;
+  public faPrev = faArrowCircleLeft;
+  public faConfirm = faCheckCircle;
+  public faDelete = faTimesCircle;
+
+  public nav!: CalendarNavigator
+ 
+  constructor(private localStorageService: LocalStorageService) {
+    this.nav = new CalendarNavigator(this.Calendar, [this.checkPrevNext.bind(this), this.dispatchViewChange.bind(this)]);
+   }
 
   ngAfterContentInit() {
     this.calendarItemsArray = this.isEditable 
@@ -84,6 +71,11 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
       this.Calendar.addEventSource(this.events);
     }    
 
+    if (this.viewDateRange) {
+      console.log(this.viewDateRange);
+      this.checkPrevNext();
+    }
+
   }
 
   ngOnInit(): void {
@@ -99,26 +91,84 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     
   }
 
+  public get month(): string {
+    return moment(this.Calendar?.getDate()).format("MMMM").toUpperCapital();
+  };
+
+  private get initView() {
+    if (this.editable) {
+      return this.viewTranslate[this.localStorageService.get("view") ?? 0]
+    } else {
+      this.Calendar.changeView(this.views[0]); 
+      return this.views[0]
+    }
+  }
+
   private get Calendar(): Calendar {
     return this.calendarComponent?.getApi();
   }
 
-  next() {
+  public next() {
     this.Calendar.next();
     this.dispatchViewChange();
+    this.checkPrevNext();
   }
 
-  previous() {
+  public previous() {
     this.Calendar.prev();
     this.dispatchViewChange();
+    this.checkPrevNext();
   }
 
-  views = ['dayGridMonth', 'timeGridFourDay', 'dayGridWeek', 'dayGridDay']
-  viewTranslate = ["Mês", "Hora semana", "Semana", "Dia"]
+  private checkPrevNext() {
+    if (this.viewDateRange) {
+      let duration = this.Calendar.view.getOption("duration");
+      
+      if (duration) {
+        
+        let start = this.Calendar.view.currentStart;
+        let end = this.Calendar.view.currentEnd;
+        
+        if (start && this.viewDateRange[0]) {
+          
+          let startDiff = moment(start).subtract(duration, "days");
+            //.subtract(moment(this.viewDateRange[0]).days(), "days");
 
-  calendarOptions: CalendarOptions = {
+          console.log(startDiff, this.viewDateRange[0]);
+
+          if (startDiff.isBefore(this.viewDateRange[0])) {
+            console.log("isBefore");
+            this.nav.previousEnable = false;
+            
+          } else {
+            this.nav.previousEnable = true;
+          }
+          
+        }        
+        
+        if (end && this.viewDateRange[1]) {
+
+          let endDiff = moment(end).add(duration, "days");
+            //.add(moment(this.viewDateRange[1]).days(), "days");
+
+          console.log(endDiff, this.viewDateRange[1]);
+          
+          if (endDiff.isAfter(this.viewDateRange[1])) {
+            console.log("isAfter");
+            this.nav.nextEnable = false;
+            
+          } else {
+            this.nav.nextEnable = true;
+          }
+
+        }
+      }
+    }
+  }
+
+  public calendarOptions: CalendarOptions = {
     locale:"pt-br",
-    dayHeaderClassNames: ["uppercase", "tracking-tight", "text-right" , "font-sans"],
+    dayHeaderClassNames: ["uppercase", "tracking-tight", "text-right" , "Roboto"],
     headerToolbar: false,
     height: 'auto',
     initialView: this.views[this.localStorageService.get("view") ?? 0],
@@ -132,26 +182,18 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
         slotMaxTime: "23:00:00"
       }
     },
-    events: [],
     plugins: [interactionPlugin, timeGridPlugin, dayGridPlugin, listPlugin ],
     eventChange: this.onEventChange.bind(this),
     eventClick : this.onEventClick.bind(this),
     dateClick: this.onDateClick.bind(this),
   };
 
-  view = 'Padrão';
-
-  public openSettings() {
-
-  }
-
   public changeView(event: any) {
     const indexView = this.viewTranslate.indexOf(event.value);
     if (indexView != -1) {
       this.localStorageService.set("view", indexView)
       this.localStorageService.set("viewName", this.views[indexView])
-    }
-    
+    }    
     this.Calendar.changeView(this.views[indexView]);
     this.dispatchViewChange();
   }
@@ -180,6 +222,5 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
       this.OnDateClick?.emit(arg);
     }
   }
-
 
 }

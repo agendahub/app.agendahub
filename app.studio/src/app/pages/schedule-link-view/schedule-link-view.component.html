@@ -1,7 +1,7 @@
 <div class="w-screen h-screen flex justify-center p-2">
     <div class="bg-blend-hue bg-opacity-50 bg-warmGray-500 text-white md:w-1/2 w-full h-full lg:rounded-lg md:rounded-md rounded-none overflow-h-scroll flex items-center">
         
-        <app-calendar *ngIf="response" [header]="false" [events]="schedules" [isEditable]="false"></app-calendar>  
+        <app-calendar [viewDateRange]="[tokenData.fromDateTime, tokenData.toDateTime]" [header]="false" [events]="schedules" [isEditable]="false"></app-calendar>  
     
     </div>
 </div>

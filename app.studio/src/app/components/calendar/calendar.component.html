@@ -16,8 +16,8 @@
                 </div>
                 
                 <div class="flex gap-1">
-                    <fa-icon size="2x" [icon]="faPrev" class="text-purple-hb cursor-pointer" (click)="previous()"></fa-icon>
-                    <fa-icon size="2x" [icon]="faNext" class="text-purple-hb cursor-pointer" (click)="next()"></fa-icon>
+                    <fa-icon size="2x" [icon]="faPrev" class="text-purple-hb cursor-pointer" [ngClass]="{'opacity-60': nav.previousEnable}" (click)="nav.previous()"></fa-icon>
+                    <fa-icon size="2x" [icon]="faNext" class="text-purple-hb cursor-pointer" [ngClass]="{'opacity-60': nav.nextEnable}" (click)="nav.next()"></fa-icon>
                 </div>
             </div>
         </div>
