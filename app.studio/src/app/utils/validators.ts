@@ -8,6 +8,10 @@ export class CustomValidators {
             }
             const originValue = control.value;
             const compareValue = control.root.get(compare)?.value;
+
+            if (!notNull(originValue) && !notNull(compareValue)) {
+                return null
+            }
             
             if (comparator(originValue, compareValue)) {
                 return null;
@@ -30,4 +34,8 @@ export class ValidatorsHelper {
         }
         return null;
     }
+}
+
+function notNull(value: any) {
+    return value != null && value != undefined;
 }
