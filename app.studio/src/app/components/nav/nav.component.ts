@@ -28,12 +28,14 @@ export class NavComponent {
                     
             //     }
             // },
-            // {
-            //     label: 'Configurações',
-            //     routerLink: "/settings"
-            // },
+            {
+                label: 'Configurações',
+                routerLink: "/settings",
+                icon: "fa-solid fa-gear"
+            },
             {
                 label: 'Sair',
+                icon: "fa-solid fa-sign-out",
                 command: () => {
                     this.logout()
                 }

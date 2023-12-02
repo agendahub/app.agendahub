@@ -13,7 +13,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
 import { DropdownModule } from 'primeng/dropdown';
 import { AccordionModule } from 'primeng/accordion';
 import { FormsModule } from '@angular/forms';
-import { CalendarItemDirective } from './calendar-item.directive';
+import { CalendarItemDirective } from './calendar/calendar-item.directive';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @NgModule({

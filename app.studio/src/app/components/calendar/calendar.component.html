@@ -15,9 +15,9 @@
                     <i class="fa-solid fa-sliders p-2"></i>
                 </div>
                 
-                <div class="flex gap-1">
-                    <fa-icon size="2x" [icon]="faPrev" class="text-purple-hb cursor-pointer" [ngClass]="{'opacity-60': nav.previousEnable}" (click)="nav.previous()"></fa-icon>
-                    <fa-icon size="2x" [icon]="faNext" class="text-purple-hb cursor-pointer" [ngClass]="{'opacity-60': nav.nextEnable}" (click)="nav.next()"></fa-icon>
+                <div class="flex gap-1" *ngIf="nav">
+                    <fa-icon size="2x" [icon]="faPrev" class="text-purple-hb cursor-pointer" [ngClass]="{'opacity-60': !nav.previousEnable}" (click)="nav.previousEnable && nav.previous()"></fa-icon>
+                    <fa-icon size="2x" [icon]="faNext" class="text-purple-hb cursor-pointer" [ngClass]="{'opacity-60': !nav.nextEnable}" (click)="nav.nextEnable && nav.next()"></fa-icon>
                 </div>
             </div>
         </div>

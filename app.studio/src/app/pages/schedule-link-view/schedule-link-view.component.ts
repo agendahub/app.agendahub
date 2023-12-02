@@ -48,8 +48,8 @@ export class ScheduleLinkViewComponent implements OnInit {
 
     this.tokenData = {
       expirationDate: new Date(),
-      fromDateTime: moment(new Date()).subtract(7, "days").toDate(),
-      toDateTime: moment(new Date()).add(7, "days").toDate(),
+      fromDateTime: moment(new Date()).subtract(1, "month").toDate(),
+      toDateTime: moment(new Date()).add(7, "month").toDate(),
       employee: null as unknown as User,
       hasWhatsappButton: false,
       employeeId: 0,

@@ -27,8 +27,8 @@ export class SettingsComponent {
     this.form = this.formB.group({
       timePeriod: [[], Validators.required],
       expirationDate: ['', [Validators.required, CustomValidators.dateRange]],
-      service: ['', Validators.required],
       employee: ['', Validators.required],
+      service: ['']
     });
    }
   
