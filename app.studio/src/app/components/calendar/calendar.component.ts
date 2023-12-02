@@ -30,13 +30,13 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   @Output() OnDateClick = new EventEmitter<DateClickArg>()
   @Output() OnChange = new EventEmitter<EventChangeArg>()
   @Output() OnClick = new EventEmitter<EventClickArg>()
-  @Input() viewDateRange!: Array<Date>
+  @Input() viewDateRange?: Array<Date>
   @Input() editable!: Subject<boolean>
   @Input() clearAll!: Subject<any>
   @Input() addEvent!: Subject<any>
-  @Input() header: boolean = true
   @Input() isEditable!: boolean;
   @Input() events!: Array<any>
+  @Input() header!: boolean;
 
   public views = ['dayGridMonth', 'timeGridFourDay', 'dayGridWeek', 'dayGridDay'];
   public viewTranslate = ["Mês", "Hora semana", "Semana", "Dia"];
@@ -48,7 +48,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   public faConfirm = faCheckCircle;
   public faDelete = faTimesCircle;
 
-  public nav!: CalendarNavigator;
+  public nav: CalendarNavigator = new CalendarNavigator(this.Calendar, [this.checkPrevNext.bind(this), this.dispatchViewChange.bind(this)]);;
 
   public calendarOptions: CalendarOptions = {
     locale:"pt-br",
@@ -83,7 +83,6 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   public ngAfterViewInit(): void {
     this.view = this.initView;
     this.dispatchViewChange();
-    this.nav = new CalendarNavigator(this.Calendar, [this.checkPrevNext.bind(this), this.dispatchViewChange.bind(this)]);
 
     if (!this.addEvent) {
       this.Calendar.addEventSource(this.events);
@@ -104,6 +103,10 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
       this.Calendar.setOption("selectable", x);
     })
 
+    setTimeout(() => {
+      this.nav.calendar = this.Calendar;
+    }, 33);
+    this.header = this.header ?? true;
   }
 
   public get month(): string {

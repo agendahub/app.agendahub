@@ -55,11 +55,11 @@ export class ApiService {
     }));
   }
 
-  public sendToApi(endpoint: string, body: any, load = true) {
+  public sendToApi<T = any, R = any>(endpoint: string, body: T, load = true) {
     let apiUrl = this.baseUrl + `${endpoint}`;
     load && this.loader.show()
 
-    return this.httpClient.post(apiUrl, body).pipe(take(1)).pipe(finalize(() => this.loader.hide())).pipe(map(result => {
+    return this.httpClient.post<R>(apiUrl, body).pipe(take(1)).pipe(finalize(() => this.loader.hide())).pipe(map(result => {
       load && this.loader.hide();
       return result;
     }), catchError(err => {

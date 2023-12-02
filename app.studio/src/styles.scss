@@ -1,5 +1,6 @@
 /* You can add global styles to this file, and also import other style files */
 @import url(../node_modules/@fortawesome/fontawesome-free/css/all.min.css);
+@import url(../node_modules/@fortawesome/fontawesome-free/css/brands.min.css);
 
 @tailwind base;
 @tailwind components;
@@ -45,4 +46,23 @@ background: rgba(0, 0, 0, 0.2);
     .p-overlaypanel-content {
         padding: 0 !important;
     }
+}
+
+.float{
+    position:fixed;
+    width:60px;
+    height:60px;
+    bottom:40px;
+    right: 40px;
+    background-color:#25d366;
+    color:#FFF;
+    border-radius:50px;
+    text-align:center;
+    font-size:30px;
+    box-shadow: 2px 2px 3px #999;
+    z-index:100;
+}
+
+.my-float{
+	margin-top:16px;
 }
