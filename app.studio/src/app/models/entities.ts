@@ -11,7 +11,7 @@ export class UserType implements IIdentifiable<number> {
 export class User implements IIdentifiable<number> {
     id!: number;
     name!: string;
-    lastName!: string;
+    surname!: string;
     color?: string | undefined;
     email!: string;
     phone!: string;

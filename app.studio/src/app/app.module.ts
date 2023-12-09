@@ -5,6 +5,7 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {PlatformModule} from '@angular/cdk/platform';
+import { ClipboardModule } from '@angular/cdk/clipboard';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +28,7 @@ import { MessageModule } from "primeng/message"
 import { ToastModule } from "primeng/toast"
 import { ListboxModule } from 'primeng/listbox';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { InputSwitchModule } from 'primeng/inputswitch';
 /** */
 
 import { JwtModule } from "@auth0/angular-jwt"
@@ -41,6 +43,9 @@ import { MessageService } from 'primeng/api';
 import { AuthService } from './auth/auth-service.service';
 import { AuthGuardService } from './auth/auth.guard.service';
 import { SettingsComponent } from './pages/settings/settings.component';
+import { ScheduleLinkViewComponent } from './pages/schedule-link-view/schedule-link-view.component';
+import { TableModule } from 'primeng/table';
+import { MegaMenuModule } from 'primeng/megamenu';
 
 export function tokenGetter() {
   let token = localStorage.getItem("token");
@@ -56,7 +61,8 @@ export function tokenGetter() {
     SchedulerComponent,
     LoginComponent,
     HomeComponent,
-    SettingsComponent
+    SettingsComponent,
+    ScheduleLinkViewComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA
@@ -85,6 +91,10 @@ export function tokenGetter() {
     AutoCompleteModule,
     OverlayPanelModule,
     InputTextareaModule,
+    ClipboardModule,
+    MegaMenuModule,
+    TableModule,
+    InputSwitchModule,
     MultiSelectModule,
     
 

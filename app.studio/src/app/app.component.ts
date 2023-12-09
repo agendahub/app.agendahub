@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import * as moment from 'moment';
 import { PrimeNGConfig } from 'primeng/api';
 import { Router } from '@angular/router';
+import { skipRoutes } from './models/rules';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +16,7 @@ import { Router } from '@angular/router';
     
     <loader></loader>
     <p-toast [breakpoints]="{'920px': {width: '100%', right: '0', left: '0'}}"></p-toast>
-    <app-nav *ngIf="!isLogin"></app-nav>
+    <app-nav *ngIf="!isLogin && !hideNav"></app-nav>
 
     <div class="relative">
       <router-outlet></router-outlet>
@@ -42,8 +43,12 @@ export class AppComponent {
     }
   }
 
+  get hideNav() {
+    return skipRoutes.includes(location.pathname.replaceAll("/", ""))
+  }
+
   get isLogin() {
-    return this.router.url.includes("login");
+    return this.router.url.includes("login")
   }
 
 }

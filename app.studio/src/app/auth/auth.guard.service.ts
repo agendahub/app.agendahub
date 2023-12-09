@@ -1,13 +1,17 @@
 import { Injectable } from '@angular/core';
-import { Router, CanActivate, CanActivateChild } from '@angular/router';
-import { AuthService } from './auth-service.service';
 import { MessageService } from 'primeng/api';
+import { AuthService } from './auth-service.service';
+import { Router, CanActivate, CanActivateChild, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot, UrlTree } from '@angular/router';
+import { Observable } from 'rxjs';
 
 
 @Injectable()
-export class AuthGuardService implements CanActivate, CanActivateChild {
+
+@Injectable()
+export class AuthGuardService implements CanActivate, CanActivateChild, CanDeactivate<any> {
   
   tokenValid!: boolean
+  skipLinks = ["schedule-link"]
   
   constructor(private auth: AuthService, private router: Router, private message: MessageService) {
   }
@@ -16,6 +20,10 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
   
   canActivate(): boolean {
     console.log("[canActivate]" ,!this.auth.isLogged , !this.auth.Token);
+
+    if (this.skipLinks.includes(location.pathname.replaceAll("/", ""))) {
+      return true; 
+    }
     
     if (!this.auth.isLogged || !this.auth.Token || this.auth.IsValid) {
       return this.auth.back({
@@ -41,6 +49,16 @@ export class AuthGuardService implements CanActivate, CanActivateChild {
       }
     }
 
+    return true;
+  }
+
+  canDeactivate(component: any, currentRoute: ActivatedRouteSnapshot, currentState: RouterStateSnapshot, nextState: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+    
+    if (this.auth.isLogged) {
+      return false;
+    }
+
+    
     return true;
   }
 }

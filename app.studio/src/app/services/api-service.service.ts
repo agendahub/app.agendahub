@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
-import { Observable, Subject, catchError, map, of, take } from 'rxjs';
+import { Observable, Subject, catchError, map, of, take, finalize } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { LoaderService } from './loader.service';
 import { LocalStorageService } from './local-storage.service';
@@ -46,10 +46,7 @@ export class ApiService {
     let apiUrl = this.baseUrl + `${endpoint}`;
     load && this.loader.show()
 
-    if (!this.isConnect) {
-      return null;
-    } else
-    return this.httpClient.get<T>(apiUrl, params ? {params: params} : undefined).pipe(map(result => {
+    return this.httpClient.get<T>(apiUrl, params ? {params: params} : undefined).pipe(finalize(() => this.loader.hide())).pipe(map(result => {
       load && this.loader.hide();
       return result;
     }), catchError(err => {
@@ -58,14 +55,11 @@ export class ApiService {
     }));
   }
 
-  public sendToApi(endpoint: string, body: any, load = true) {
+  public sendToApi<T = any, R = any>(endpoint: string, body: T, load = true) {
     let apiUrl = this.baseUrl + `${endpoint}`;
     load && this.loader.show()
 
-    if (!this.isConnect) {
-      return null;
-    } else 
-    return this.httpClient.post(apiUrl, body).pipe(take(1)).pipe(map(result => {
+    return this.httpClient.post<R>(apiUrl, body).pipe(take(1)).pipe(finalize(() => this.loader.hide())).pipe(map(result => {
       load && this.loader.hide();
       return result;
     }), catchError(err => {
@@ -74,18 +68,24 @@ export class ApiService {
     }));
   }
 
-  public deleteFromApi(endpoint: string, query?: any, load = true) {
+  public updateToApi(endpoint: string, body?: any, params: QueryParams|null = null, load = true) {
     let apiUrl = this.baseUrl + `${endpoint}`;
     load && this.loader.show()
 
-    if (query) {
-      apiUrl += query;
-    }
+    return this.httpClient.put(apiUrl, body, params ? {params: params}: undefined).pipe(take(1)).pipe(finalize(() => this.loader.hide())).pipe(map(result => {
+      load && this.loader.hide();
+      return result;
+    }), catchError(err => {
+      this.templateError(err.error ?? err);
+      throw err;
+    }));
+  }
 
-    if (!this.isConnect) {
-      return null;
-    } else
-    return this.httpClient.delete(apiUrl).pipe(take(1)).pipe(map(result => {
+  public deleteFromApi(endpoint: string, params?: any, load = true) {
+    let apiUrl = this.baseUrl + `${endpoint}`;
+    load && this.loader.show()
+
+    return this.httpClient.delete(apiUrl, params ? {params: params} : undefined).pipe(take(1)).pipe(finalize(() => this.loader.hide())).pipe(map(result => {
       load && this.loader.hide();
       return result;
     }), catchError(err => {
@@ -111,22 +111,29 @@ export class ApiService {
     }), catchError(err => {
       this.templateError(err.error ?? err);
       throw err;
-    }));;
+    }));
   }
 
-  private templateError(error: ErrorDto, summary?: string, detail?: string, summaryInternal?: string, detailInternal?: string) {
+  private templateError(error: any, summary?: string, detail?: string, summaryInternal?: string, detailInternal?: string) {
     
     this.loader.hide();
 
     console.log(error);
 
-    if (error.message) {
-      this.messageService.add({severity: "error", summary: "Erro ao salvar!", detail: error.message});
-      return void 0;
-    }
-
     if (error.status) {
+
+      if (error.error?.message) {
+        this.messageService.add({severity: "error", summary: "Erro ao salvar!", detail: error.message});
+        return void 0;
+      }
+
       if (error.status >= 400 && error.status < 500) {
+
+        if (error.status === 401) {
+          this.auth.logout(() => this.messageService.add({severity: "error", summary: "Erro ao validar identidade!", detail: "É necessário realizar o login."}));
+          return void 0;
+        }
+
         this.messageService.add({severity: "error", summary: summary ?? "Dados incorretos!", detail: detail ?? "A requisição possui campos inválidos ou repetidos"})
       } else if (error.status >= 500) {
         this.messageService.add({severity: "error", summary: summaryInternal ?? "Algo deu errado!", detail: detailInternal ?? "O servidor não respondeu como esperado"})

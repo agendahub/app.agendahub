@@ -1,4 +1,5 @@
 import { AbstractControl } from "@angular/forms";
+import { notNull } from "./util";
 
 export class CustomValidators {
     static notEqualsTo<T, S>(compare: string, comparator: (o: T, c: S) => boolean = (o: unknown, c: unknown) => o !== c, message?: string) {
@@ -13,11 +14,27 @@ export class CustomValidators {
                 return null
             }
             
-            if (comparator(originValue, compareValue)) {
+            if (notNull(originValue) && notNull(compareValue) && comparator(originValue, compareValue)) {
                 return null;
             }
 
             return { notEqualsTo: message ?? true };
+        };
+    }
+
+    static dateRange() {
+        return (control: AbstractControl) => {
+            const value = control.value;
+
+            if (value === null || value.length === 0) {
+                return null;
+            }
+
+            if (value[0] && value[1]) {
+                return null;
+            }
+
+            return { dateRange: true };
         };
     }
 }
@@ -36,6 +53,3 @@ export class ValidatorsHelper {
     }
 }
 
-function notNull(value: any) {
-    return value != null && value != undefined;
-}

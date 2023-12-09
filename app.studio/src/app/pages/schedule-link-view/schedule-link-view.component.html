@@ -1,0 +1,41 @@
+<div class="w-screen h-screen flex justify-center md:p-2 p-0">
+    <div class="md:w-1/2 w-full h-full overflow-h-scroll bg-blend-hue bg-opacity-50 bg-warmGray-500 text-white lg:rounded-lg md:rounded-md rounded-none">
+        
+        <div *ngIf="!response">
+            <div class="text-2xl font-bold text-center p-4">Carregando agenda...</div>
+        </div>
+
+        <div *ngIf="response">
+            <div *ngIf="response.hasError" class="text-2xl font-bold text-center p-4">Erro ao carregar agenda</div>
+
+            <div *ngIf="!response.hasError" class="flex flex-col px-4 pt-4">
+                <!-- <p class="italic text-base">Você está visualizando a agenda de:</p> -->
+                <div class="md:text-4xl text-lg font-bold flex justify-between py-2">
+                    <span>{{tokenData.employee.name}} {{tokenData.employee.surname}}</span>
+                    <span> <i class="fa-solid" [ngClass]="{'fa-circle-check text-green-400': tokenData.isActive, 'fa-circle-times text-red-400': !tokenData.isActive}"></i> </span>
+                </div>
+                
+                <div class="flex gap-3">
+                    <!-- <p class="italic text-base">No período de:</p> -->
+                    <div class="flex flex-col">
+                        <p class="text-sm">Data de início</p>
+                        <p class="text-lg font-bold">{{tokenData.fromDateTime | date: 'dd/MM/yyyy'}}</p>
+                    </div>
+                    <div class="flex flex-col">
+                        <p class="text-sm">Data de término</p>
+                        <p class="text-lg font-bold">{{tokenData.toDateTime | date: 'dd/MM/yyyy'}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="w-full flex items-center">
+            <app-calendar *ngIf="schedules" [viewDateRange]="tokenData ? [tokenData.fromDateTime, tokenData.toDateTime] : undefined" [header]="false" [events]="schedules" [isEditable]="false"></app-calendar>  
+        </div>
+    
+    </div>
+</div>
+
+<a *ngIf="tokenData && tokenData.hasWhatsappButton" [href]="'' + tokenData.whatsAppLink" class="float" target="_blank">
+    <i class="fa-brands fa-whatsapp my-float"></i>
+</a>
