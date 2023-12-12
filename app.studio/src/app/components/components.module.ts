@@ -15,6 +15,7 @@ import { AccordionModule } from 'primeng/accordion';
 import { FormsModule } from '@angular/forms';
 import { CalendarItemDirective } from './calendar/calendar-item.directive';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { NgxUiLoaderModule } from 'ngx-ui-loader';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
     AnimateModule,
     CommonModule,
     FormsModule,
+    NgxUiLoaderModule,
 
     FontAwesomeModule,
     FullCalendarModule,

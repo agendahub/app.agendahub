@@ -20,12 +20,10 @@
         </ng-template>
         <ng-template calendarItem [enableForAll]="true">
             <div class="w-full h-full flex justify-end">
-                <div class="h-full md:w-max w-full">
-                    <button pButton style="z-index: 100;" (click)="clearFilter()" [disabled]="!hasFilter" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
-                        <span>Limpar filtros</span>
-                        <i class="fa-solid fa-filter"></i>
-                    </button>
-                </div>
+                <button pButton (click)="clearFilter()" [disabled]="!hasFilter" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
+                    <span>Limpar filtros</span>
+                    <i class="fa-solid fa-filter"></i>
+                </button>
             </div>
         </ng-template>
     </app-calendar>
@@ -34,7 +32,7 @@
 <p-dialog [header]="header" [(visible)]="visible" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" (onHide)="form.reset({note: ''})" [modal]="true">
     <div *ngIf="oldScheduleDisabled" class="p-2 flex justify-center">
         <span class="text-center text-base leading-tight bg-blue-400 text-neutral-100 rounded-lg p-2">
-            Não é possível alterar/marcar numa data passada!
+            Datas/Agendamentos anteriores não podem ser alteradas
         </span> 
     </div>
     <form [formGroup]="form">
@@ -83,11 +81,11 @@
 
     <ng-template pTemplate="footer">
         <div class="flex gap-2">
-            <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()" [disabled]="!isEditEnable">
+            <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()" [disabled]="!isEditEnable || oldScheduleDisabled">
                 <span class="tracking-tight text-white text-ellipsis">Excluir</span>
                 <fa-icon [icon]="faDelete" (click)="null"></fa-icon>
             </button>
-            <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid || !isEditEnable">
+            <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid || !isEditEnable || oldScheduleDisabled">
                 <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
                 <fa-icon [icon]="faConfirm" (click)="confirm()"></fa-icon>
             </button>

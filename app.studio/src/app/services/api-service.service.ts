@@ -50,7 +50,7 @@ export class ApiService {
       load && this.loader.hide();
       return result;
     }), catchError(err => {
-      this.templateError(err.error ?? err);
+      this.templateError(err);
       throw err;
     }));
   }
@@ -63,7 +63,7 @@ export class ApiService {
       load && this.loader.hide();
       return result;
     }), catchError(err => {
-      this.templateError(err.error ?? err);
+      this.templateError(err);
       throw err;
     }));
   }
@@ -76,7 +76,7 @@ export class ApiService {
       load && this.loader.hide();
       return result;
     }), catchError(err => {
-      this.templateError(err.error ?? err);
+      this.templateError(err);
       throw err;
     }));
   }
@@ -89,7 +89,7 @@ export class ApiService {
       load && this.loader.hide();
       return result;
     }), catchError(err => {
-      this.templateError(err.error ?? err);
+      this.templateError(err);
       throw err;
     }));
   }
@@ -109,16 +109,15 @@ export class ApiService {
       this.loader.hide();
       return result;
     }), catchError(err => {
-      this.templateError(err.error ?? err);
+      this.templateError(err);
       throw err;
     }));
   }
 
-  private templateError(error: any, summary?: string, detail?: string, summaryInternal?: string, detailInternal?: string) {
+  private templateError(error: any) {
     
     this.loader.hide();
-
-    console.log(error);
+    console.log(error);    
 
     if (error.status) {
 
@@ -134,14 +133,11 @@ export class ApiService {
           return void 0;
         }
 
-        this.messageService.add({severity: "error", summary: summary ?? "Dados incorretos!", detail: detail ?? "A requisição possui campos inválidos ou repetidos"})
-      } else if (error.status >= 500) {
-        this.messageService.add({severity: "error", summary: summaryInternal ?? "Algo deu errado!", detail: detailInternal ?? "O servidor não respondeu como esperado"})
+      } else {
+        this.messageService.add({severity: "error", summary: "Erro desconhecido!", detail: "O servidor falhou catastroficamente"})
       }
-    } else {
-      this.messageService.add({severity: "error", summary: "Erro desconhecido!", detail: "O servidor falhou catastroficamente"})
-    }
 
-  }
+    }
   
+  }
 }
