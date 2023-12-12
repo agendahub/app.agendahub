@@ -3,7 +3,7 @@ import { LocalStorageService } from '../../services/local-storage.service';
 import { faCalendarCheck, faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 import { FullCalendarComponent } from '@fullcalendar/angular';
-import { CalendarOptions, Calendar, EventClickArg, EventChangeArg } from '@fullcalendar/core';
+import { CalendarOptions, Calendar, EventClickArg, EventChangeArg, EventInput } from '@fullcalendar/core';
 import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -95,8 +95,8 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   }
 
   public ngOnInit(): void {
-    this.clearAll?.subscribe(x => this.Calendar.removeAllEvents())
-    this.addEvent?.subscribe(x => this.Calendar.addEvent(x))
+    this.clearAll?.subscribe(x => this.handleRemoveEvent(x))
+    this.addEvent?.subscribe(x => this.handleAddEvent(x))
     this.editable?.subscribe(x => {
       this.isEditable = x;
       this.Calendar.setOption("editable", x);
@@ -124,6 +124,39 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
 
   private get Calendar(): Calendar {
     return this.calendarComponent?.getApi();
+  }
+
+  private handleAddEvent(event: EventInput | EventInput[]) {
+
+    const checkEvent = (e: EventInput) => {
+      var enable = this.isEditable && moment(e.end).isAfter(moment());
+      e.durationEditable = enable;
+      e.startEditable = enable;
+      e.interactive = enable;
+      e.editable = enable;
+    }
+
+    if (event instanceof Array) {
+      event.forEach(e => checkEvent(e))
+      this.Calendar.addEventSource(event)
+    } else {
+      checkEvent(event)
+      this.Calendar.addEvent(event)
+    }
+
+  }
+
+  private handleRemoveEvent(event: EventInput | EventInput[] | undefined) {
+    console.log(event);
+    
+    if (event) {
+      if (event instanceof Array) {
+        event.forEach(e => this.Calendar.getEventById(e.id!)?.remove())
+      } else {
+        this.Calendar.getEventById(event.id!)?.remove()
+      }
+    }
+
   }
 
   private checkPrevNext() {
@@ -185,7 +218,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   public onEventChange(arg: EventChangeArg) {
     if (this.isEditable) {
       this.OnChange?.emit(arg);
-    }
+    } else arg.revert();
   }
 
   public onDateClick(arg: DateClickArg) {

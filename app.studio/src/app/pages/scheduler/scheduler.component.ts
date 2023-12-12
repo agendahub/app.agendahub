@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { EventClickArg, EventChangeArg } from '@fullcalendar/core';
+import { EventClickArg, EventChangeArg, EventInput } from '@fullcalendar/core';
 import { DateClickArg } from '@fullcalendar/interaction';
 import * as moment from 'moment/moment';
 
@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 import { rules } from '../../models/rules';
 import { mapScheduleToEvent } from '../../utils/util';
 import { CustomValidators, ValidatorsHelper } from '../../utils/validators';
+import { LoaderService } from '../../services/loader.service';
 
 
 @Component({
@@ -32,7 +33,7 @@ export class SchedulerComponent implements OnInit {
 
   form!: FormGroup;
   
-  events!: any[];
+  events!: EventInput[];
   employees: User[] = [];
   customers: User[] = [];
   services: Service[] = [];
@@ -59,7 +60,7 @@ export class SchedulerComponent implements OnInit {
   oldScheduleDisabled = false;
   validHelper = ValidatorsHelper;
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService) {
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService, private loader: LoaderService) {
     this.createForm();
     this.loadCrudResources();
     setTimeout(() => this.enableEdit.next(this.authService.TokenData?.role != "employee"), 100);
@@ -87,18 +88,22 @@ export class SchedulerComponent implements OnInit {
 
   private async loadEvents(range: { start: Date, end: Date } | null = null) {
     let endpoint = range ? "Schedule/ScheduleDay" : "Schedule/Schedules";
+    console.log(endpoint, ' loading...');
+    
     
     this.api.requestFromApi<UserSchedule[]>(endpoint, range 
         ? {startDate:range.start.toISOString(), endDate:range.end.toISOString()} 
         : undefined)?.subscribe(
       x => {
         this.schedules = x;
+        console.log(x);
+        
 
         let hasFilter = this.filter.customer.length || this.filter.employee.length || this.filter.service.length;
 
         this.events = mapScheduleToEvent(hasFilter ? this.doFilter(x) : x);
         
-        this.events.forEach(x => this.addEvent.next(x))
+        this.addEvent.next(this.events)
 
       }
     )
@@ -184,7 +189,12 @@ export class SchedulerComponent implements OnInit {
       schedule.schedule.startDateTime = arg.event.start?.toISOString() as any;
       schedule.schedule.finishDateTime = arg.event.end?.toISOString() as any;
 
-      this.save(schedule);
+      if (this.isEditEnable && moment(schedule.schedule.finishDateTime).isBefore(moment())) {
+        arg.revert();
+        return
+      }
+
+      this.save(schedule, arg);
       
     }
   }
@@ -346,7 +356,7 @@ export class SchedulerComponent implements OnInit {
           return {error: "O início precisa ser após as 08:00"}
           
         } else if (moment(dates.finish?.value).isAfter(base.finishBase)) {
-          return {error: "O fim precisa ser antes das 21:00"}
+          return {error: "O fim precisa ser antes das 23:00"}
         }
 
         if (moment(dates.finish?.value).isBefore(dates.start?.value) || new Date(dates.finish?.value).getTime() === new Date(dates.start?.value).getTime()) {
@@ -366,8 +376,6 @@ export class SchedulerComponent implements OnInit {
 
     const form = structuredClone(this.form.value);   
     const schedule = new UserSchedule()
-
-    // console.log(form);
 
     form.startDateTime = new Date(form.startDateTime);
     form.finishDateTime = new Date(form.finishDateTime);
@@ -393,36 +401,42 @@ export class SchedulerComponent implements OnInit {
     this.save(schedule)
   }
 
-  private save(body: any) {
-    this.isEditEnable && this.api.sendToApi("Schedule/Setup", body)?.subscribe({
+  private save(body: any, arg?: EventChangeArg) {
+    this.loader.showBackground();
+    this.isEditEnable && this.api.sendToApi("Schedule/Setup", body, false)?.subscribe({
       next: x => {
         console.log(x);
         
-        if (x) {
-          this.clearEvents.next(null);
-          this.loadEvents(this.currentDateRange);
+        if (x && !body.schedule.id) {
+          this.addEvent.next(mapScheduleToEvent([{...body, id: x}]));
         }
   
         this.form.reset({note: "", id: 0});
       }, error: x => {
-        console.log(x);
-      }
+        if (arg) {
+          arg.revert();
+        }
+      }, complete: () => this.loader.hideBackground()
     })
   }
 
   tryDelete() {
-    let id = this.form.value.id;
+    const id = this.form.value.id;
     const schedule = this.schedules.find(x => x.id = id);
-
-    schedule && this.isEditEnable && this.api.sendToApi("Schedule/Cancel", schedule)?.subscribe(x => {
-      console.log(x);
-      
-      if (x) {
-        this.loadEvents(this.currentDateRange);
-        this.clearEvents.next(null)        
-      }
-
-      this.visible = false;
+    this.loader.showBackground();
+    
+    schedule && this.isEditEnable && this.api.sendToApi("Schedule/Cancel", schedule, false)?.subscribe({
+      next: x => {
+        console.log(x);
+        
+        if (x) {
+          this.schedules = this.schedules.filter(x => x.id != id);
+          this.clearEvents.next(this.events.filter(x => x.id == id));
+        }
+        
+        this.form.reset({note: "", id: 0});
+        this.visible = false;
+      }, complete: () => this.loader.hideBackground()
     })
   }
 

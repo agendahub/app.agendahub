@@ -37,6 +37,7 @@
     "@fullcalendar/scrollgrid": "^6.1.8",
     "@fullcalendar/timegrid": "^6.1.8",
     "moment": "^2.29.4",
+    "ngx-ui-loader": "^13.0.0",
     "primeng": "^16.0.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
