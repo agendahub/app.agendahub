@@ -117,7 +117,7 @@ export class SchedulerComponent implements OnInit {
       employee: ["", Validators.required],
       customer: ["", [
                       Validators.required, 
-                      CustomValidators.notEqualsTo("employee", (o: User, c: User) => o.id !== c.id, 
+                      CustomValidators.notEqualsTo("employee", (o: User, c: User) => o && c && o.id !== c.id, 
                                                 "O cliente não pode ser o mesmo que o funcionário")
                     ]],
       service: ["", Validators.required],
