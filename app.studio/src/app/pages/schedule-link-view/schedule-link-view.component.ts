@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { RetornoDto, ScheduleViewLinkDto } from '../../models/dtos';
+import { RetornoDto, ScheduleViewLinkDto } from '../../models/dtos/dtos';
 import { ApiService } from '../../services/api-service.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { ActivatedRoute, Router } from '@angular/router';
 import { mapScheduleToEvent } from '../../utils/util';
 import { MessageService } from 'primeng/api';
-import { User } from '../../models/entities';
+import { User } from '../../models/core/entities';
 import * as moment from 'moment';
 
 type Response = {schedules: any[], scheduleViewAccess: ScheduleViewLinkDto}

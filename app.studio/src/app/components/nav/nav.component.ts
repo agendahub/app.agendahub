@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { PushNotificatorService } from '../../services/push-notificator.service';
 import { AuthService } from '../../auth/auth-service.service';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { MenuItem } from 'primeng/api';
@@ -60,16 +59,12 @@ export class NavComponent {
     }
   ]
 
-  constructor(private pushService: PushNotificatorService, private authService: AuthService, private router: Router) {
+  constructor(private authService: AuthService, private router: Router) {
     router.events.subscribe(x => {
       this.sidebarOpen = false;
       this.showCrudLink = false;
       this.showUserOptions = false;
     })
-  }
-
-  pushOn() {
-    this.pushService.subscribeToNotifications()
   }
 
   get userRole() {

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import * as moment from 'moment';
 import { PrimeNGConfig } from 'primeng/api';
 import { Router } from '@angular/router';
-import { skipRoutes } from './models/rules';
+import { skipRoutes } from './models/core/rules';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-root',
@@ -32,15 +33,18 @@ import { skipRoutes } from './models/rules';
 })
 export class AppComponent {
 
-  constructor(private primeNG: PrimeNGConfig, private router: Router) {
+  constructor(private primeNG: PrimeNGConfig, private router: Router, private title: Title) {
     // moment.updateLocale("pt-br", null)
 
     moment.locale("pt-br")
-    
+  
     
     primeNG.overlayOptions = {
       appendTo: "body"
     }
+
+    title.setTitle("AgendaHub | Sistema de Gestão de Atividades")
+
   }
 
   get hideNav() {

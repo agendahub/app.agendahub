@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { ApiService } from './api-service.service';
+import { ApiService } from '../../services/api-service.service';
 import * as moment from 'moment';
-import { SchedulesDateRangeEnum } from '../models/enums';
+import { SchedulesDateRangeEnum } from '../core/enums';
 
 @Injectable({
   providedIn: 'root'
