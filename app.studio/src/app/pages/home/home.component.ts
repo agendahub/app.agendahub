@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { LoaderService } from '../../services/loader.service';
-import { EventService } from '../../services/event.service';
-import { User, UserSchedule } from '../../models/entities';
-import { SchedulesDateRangeEnum } from '../../models/enums';
+import { EventService } from '../../models/services/event.service';
+import { User, UserSchedule } from '../../models/core/entities';
+import { SchedulesDateRangeEnum } from '../../models/core/enums';
 import { FormControl } from '@angular/forms';
 import { AuthService } from '../../auth/auth-service.service';
 import { faCalendar } from '@fortawesome/free-solid-svg-icons';

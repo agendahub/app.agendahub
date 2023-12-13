@@ -7,7 +7,7 @@ import { LoaderService } from './loader.service';
 import { LocalStorageService } from './local-storage.service';
 import { MessageService } from 'primeng/api';
 import { AuthService } from '../auth/auth-service.service';
-import { ErrorDto } from '../models/dtos';
+import { ErrorDto } from '../models/dtos/dtos';
 
 export type QueryParams = Record<string, string | number | boolean | ReadonlyArray<string | number | boolean>>;
 

@@ -1,6 +1,6 @@
 {
-  "name": "HB Studio",
-  "short_name": "HB Studio",
+  "name": "AgendaHub",
+  "short_name": "AgendaHub",
   "theme_color": "#fdfdfd",
   "background_color": "#433656",
   "display": "standalone",

@@ -4,12 +4,12 @@ import { DateClickArg } from '@fullcalendar/interaction';
 import * as moment from 'moment/moment';
 
 import { faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
-import { Schedule, Service, User, UserSchedule } from '../../models/entities';
+import { Schedule, Service, User, UserSchedule } from '../../models/core/entities';
 import { ApiService } from '../../services/api-service.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../../auth/auth-service.service';
 import { Subject } from 'rxjs';
-import { rules } from '../../models/rules';
+import { rules } from '../../models/core/rules';
 import { mapScheduleToEvent } from '../../utils/util';
 import { CustomValidators, ValidatorsHelper } from '../../utils/validators';
 import { LoaderService } from '../../services/loader.service';

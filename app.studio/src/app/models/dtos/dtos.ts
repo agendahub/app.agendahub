@@ -1,4 +1,4 @@
-import { User, Service } from "./entities";
+import { User, Service } from "../core/entities";
 
 export class ErrorDto {
     public code!: number;

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api-service.service';
-import { ScheduleViewLinkDto } from '../../models/dtos';
+import { ScheduleViewLinkDto } from '../../models/dtos/dtos';
 import { CustomValidators } from '../../utils/validators';
 import { customSort } from '../../utils/util';
 import { environment } from '../../../environments/environment.development';
