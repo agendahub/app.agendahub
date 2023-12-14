@@ -40,3 +40,32 @@ export function customSort(event: SortEvent) {
 export function notNull(value: unknown) {
   return value != null && value != undefined;
 }
+
+
+function hashObject(object: any) : any {
+  
+  const flatify = (object_: any): string => {
+    return !object_ ? "" 
+                 : (Object
+                            .keys(object_)
+                              .sort().
+                                map((key) => isComplex(object_[key]) 
+                                                ? flatify(object_[key]) 
+                                                : object_[key].toString())
+                                                .join('|')
+                                                )
+  }
+
+  const flatified = flatify(object);
+  let hash = 0
+
+  for (let i = 0; i < flatified.length; i++) {
+    hash += flatified.charCodeAt(i);
+  }
+
+  return hash;
+}
+
+function isComplex(value: any) {
+  return !(value instanceof Date) && (typeof value === 'object' || value instanceof Array);
+}

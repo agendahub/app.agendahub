@@ -155,6 +155,8 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
       } else {
         this.Calendar.getEventById(event.id!)?.remove()
       }
+    } else {
+      this.Calendar.removeAllEvents();
     }
 
   }

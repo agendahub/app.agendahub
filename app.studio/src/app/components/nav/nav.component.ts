@@ -59,6 +59,9 @@ export class NavComponent {
     }
   ]
 
+  largeImage = "assets/logo/logo_texto.png"
+  icon = "assets/logo/logo_imagem.png"
+
   constructor(private authService: AuthService, private router: Router) {
     router.events.subscribe(x => {
       this.sidebarOpen = false;
