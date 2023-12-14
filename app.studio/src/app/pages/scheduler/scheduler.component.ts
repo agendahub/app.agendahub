@@ -33,7 +33,7 @@ export class SchedulerComponent implements OnInit {
 
   form!: FormGroup;
   
-  events!: EventInput[];
+  events: EventInput[] = [];
   employees: User[] = [];
   customers: User[] = [];
   services: Service[] = [];
@@ -91,18 +91,21 @@ export class SchedulerComponent implements OnInit {
     console.log(endpoint, ' loading...');
     
     
-    this.api.requestFromApi<UserSchedule[]>(endpoint, range 
-        ? {startDate:range.start.toISOString(), endDate:range.end.toISOString()} 
-        : undefined)?.subscribe(
+    const params = range ? {
+        startDate:range.start.toISOString(), 
+        endDate:range.end.toISOString(), 
+        ignore: this.schedules.length ? this.schedules.map(x => + x.id!) : []
+      } : undefined;
+
+      console.log(params);
+      
+    this.api.requestFromApi<UserSchedule[]>(endpoint, params)?.subscribe(
       x => {
-        this.schedules = x;
+        this.schedules.push(...x);
         console.log(x);
-        
 
         let hasFilter = this.filter.customer.length || this.filter.employee.length || this.filter.service.length;
-
         this.events = mapScheduleToEvent(hasFilter ? this.doFilter(x) : x);
-        
         this.addEvent.next(this.events)
 
       }
@@ -250,7 +253,6 @@ export class SchedulerComponent implements OnInit {
   onViewChange(arg: {event:any, offset: {start: Date, end: Date}} | undefined) {
     console.log(arg);
     if (arg) {
-      this.clearEvents.next(0);
       this.currentDateRange = arg.offset;
       this.loadEvents(this.currentDateRange);
     }
