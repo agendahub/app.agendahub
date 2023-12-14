@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { LocalStorageService } from '../services/local-storage.service';
 import { LoaderService } from '../services/loader.service';
 import { environment } from '../../environments/environment.development';
-import { Subject, map } from 'rxjs';
+import { Subject, finalize, map } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -87,11 +87,9 @@ export class AuthService {
     console.log(extras);
     
 
-    return this.httpClient.post(this.baseUrl + "Auth/Login", loginModel, extras ? {params: extras} : undefined).pipe(map((r: any) => {
-      console.log(r);
+    return this.httpClient.post(this.baseUrl + "Auth/Login", loginModel, extras ? {params: extras} : undefined).pipe(finalize(() => this.loader.hide())).pipe(map((r: any) => {
       this.Token = r.token;
-      this.loader.hide();
-
+      
       if (r.token) {
         this.checkToken();
       }

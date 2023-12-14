@@ -1,14 +1,15 @@
 
 .input {
     width: 100%;
-    height: 2.66rem;
+    height: 3rem;
     line-height: 28px;
     padding: 0 0.5rem;
-    border: 2px solid transparent;
-    border-radius: 5px;
+    font-size: large;
+    border-bottom: 0.1rem solid #71798a;
+    // border-radius: 5px;
     outline: none;
-    background-color: rgb(66, 76, 89) !important;
-    color: #b1adad;
+    background-color: transparent !important;
+    color: #f0ece5;
     transition: .3s ease;
 }
 
@@ -16,14 +17,22 @@
     color: #b1adad;
 }
 
-// .input:focus, input:hover {
-//     outline: none;
-//     border-color: #382645;
-//     box-shadow: 0 0 0 4px rgb(234 76 137 / 10%);
-// }
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover,
+textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  border-bottom: 0.1rem solid #71798a;
+  font-size: large;
+  -webkit-text-fill-color: #f0ece5;
+  -webkit-box-shadow: 0 0 0px 1000px rgba(0, 0, 0, 0) inset;
+  transition: background-color 5000s ease-in-out 0s;
+}
 
-   
-   
-   
-   
-   
+input:focus,input:hover {
+    border-bottom: 0.1rem solid #380e76;
+}
