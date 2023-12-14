@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
+import { AuthService } from '../auth/auth-service.service';
+import { ApiService } from './api-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ImageService {
 
-  constructor() { }
+  constructor(private auth: AuthService, private api: ApiService) { }
 
-  setFavicon(image: string | ArrayBuffer | Blob) {
+  public setFavicon(image: string | ArrayBuffer | Blob) {
     
     if (image instanceof ArrayBuffer) {
       image = URL.createObjectURL(new Blob([image]))
@@ -15,6 +17,11 @@ export class ImageService {
       image = URL.createObjectURL(image)
     }
 
+  }
+
+  public getLogoImage() {
+    
+    return this.auth.getUserData().companyImage;
   }
 
   private setFavicon_(image: string) {
