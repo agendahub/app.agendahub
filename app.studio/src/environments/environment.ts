@@ -1,5 +1,5 @@
 export const environment = {
-    uiUrl: "https://hb-studio.vercel.app/",
-    apiUrl: "https://apistudioagenda-development.up.railway.app/",
+    uiUrl: window.location.host,
+    apiUrl: "https://api-dev.agendahub.app/",
     notifierUrl: "https://notifierstudioagenda-development.up.railway.app/" 
 };
