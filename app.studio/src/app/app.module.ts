@@ -109,7 +109,7 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ["localhost:5001", "192.168.0.67:7777", "apistudioagenda-development.up.railway.app"],
+        allowedDomains: ["localhost:5001", "192.168.0.67:7777", "apistudioagenda-development.up.railway.app", "api-dev.agendahub.app"],
         // disallowedRoutes: ["apistudioagenda-development.up.railway.app/Auth/Login"],
       },
     }),
