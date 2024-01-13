@@ -33,10 +33,10 @@ export class SchedulerComponent implements OnInit {
 
   form!: FormGroup;
   
-  events: EventInput[] = [];
   employees: User[] = [];
   customers: User[] = [];
   services: Service[] = [];
+  events: EventInput[] = [];
   schedules: UserSchedule[] = []
 
   addEvent = new Subject();
@@ -73,44 +73,8 @@ export class SchedulerComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
-  private loadCrudResources() {
-    this.api.requestFromApi<Service[]>("Service", null, false)?.subscribe(
-      x => this.services = x
-    );
-    this.api.requestFromApi<User[]>("User/Customers", null, false)?.subscribe(
-      x => this.customers = x
-    );
-    this.api.requestFromApi<User[]>("User/Employees", null, false)?.subscribe(
-      x => this.employees = x
-    );
-  }
-
-  private async loadEvents(range: { start: Date, end: Date } | null = null) {
-    let endpoint = range ? "Schedule/ScheduleDay" : "Schedule/Schedules";
-    console.log(endpoint, ' loading...');
-    
-    
-    const params = range ? {
-        startDate:range.start.toISOString(), 
-        endDate:range.end.toISOString(), 
-        ignore: this.schedules.length ? this.schedules.map(x => + x.id!) : []
-      } : undefined;
-
-      console.log(params);
-      
-    this.api.requestFromApi<UserSchedule[]>(endpoint, params)?.subscribe(
-      x => {
-        this.schedules.push(...x);
-        console.log(x);
-
-        let hasFilter = this.filter.customer.length || this.filter.employee.length || this.filter.service.length;
-        this.events = mapScheduleToEvent(hasFilter ? this.doFilter(x) : x);
-        this.addEvent.next(this.events)
-
-      }
-    )
-  }
+  
+  // #region Form
 
   private createForm() {
     this.form = this.formBuilder.group({
@@ -152,9 +116,58 @@ export class SchedulerComponent implements OnInit {
     return this.oldScheduleDisabled;
   }
 
+  validateDates() {
+    return () => {
+      if (this && this.form) {
+
+        const dates = {
+          start: this.form.get("startDateTime"),
+          finish: this.form.get("finishDateTime"),
+        }
+
+        const base = {
+          startBase: new Date(dates.start?.value),
+          finishBase: new Date(dates.finish?.value)
+        }
+
+        base.startBase.setHours(rules.minHour);
+        base.finishBase.setHours(rules.maxHour);
+    
+        if (moment(dates.start?.value).isBefore(base.startBase)) {
+          return {error: "O início precisa ser após as 08:00"}
+          
+        } else if (moment(dates.finish?.value).isAfter(base.finishBase)) {
+          return {error: "O fim precisa ser antes das 23:00"}
+        }
+
+        if (moment(dates.finish?.value).isBefore(dates.start?.value) || new Date(dates.finish?.value).getTime() === new Date(dates.start?.value).getTime()) {
+          return {error: "O fim não pode ser antes ou igual o início"};
+        } else {
+          dates.start?.setErrors(null);
+          dates.finish?.setErrors(null); 
+        }
+
+      }
+  
+      return null;
+    }
+  }
+
+  getValidHour(date: Date) {
+    let hour = date.getHours();
+    if  (hour >= rules.minHour && hour <= rules.maxHour) {
+      return date.getHours();
+    }
+    return rules.minHour;
+  }
+
+  //#endregion
+
   //#region Members 'Handling click'
 
   onEventClick(arg: EventClickArg) {
+    console.log(arg);
+    
     this.header = `Editar horário - ${moment(arg.event.extendedProps['schedule']['startDateTime']).format("DD/MM/yy")}`
     
     let id = + arg.event._def.publicId;
@@ -220,14 +233,6 @@ export class SchedulerComponent implements OnInit {
     console.log(this.form.value);
 
     this.checkFormValidation();
-  }
-
-  getValidHour(date: Date) {
-    let hour = date.getHours();
-    if  (hour >= rules.minHour && hour <= rules.maxHour) {
-      return date.getHours();
-    }
-    return rules.minHour;
   }
 
   //#endregion
@@ -297,6 +302,8 @@ export class SchedulerComponent implements OnInit {
 
   //#endregion
 
+  //#region Filter
+
   doFilter(schedules: UserSchedule[]) {
     return schedules.filter(x => {
       if (this.filter.customer.length && !this.filter.customer.includes(x.customer.id)) {
@@ -332,52 +339,16 @@ export class SchedulerComponent implements OnInit {
     this.loadEvents(this.currentDateRange);
   }
 
+  //#endregion
+
   confirm() {
     this.trySave()
     this.visible = false;
   }
   
-  validateDates() {
-    return () => {
-      if (this && this.form) {
-
-        const dates = {
-          start: this.form.get("startDateTime"),
-          finish: this.form.get("finishDateTime"),
-        }
-
-        const base = {
-          startBase: new Date(dates.start?.value),
-          finishBase: new Date(dates.finish?.value)
-        }
-
-        base.startBase.setHours(rules.minHour);
-        base.finishBase.setHours(rules.maxHour);
-    
-        if (moment(dates.start?.value).isBefore(base.startBase)) {
-          return {error: "O início precisa ser após as 08:00"}
-          
-        } else if (moment(dates.finish?.value).isAfter(base.finishBase)) {
-          return {error: "O fim precisa ser antes das 23:00"}
-        }
-
-        if (moment(dates.finish?.value).isBefore(dates.start?.value) || new Date(dates.finish?.value).getTime() === new Date(dates.start?.value).getTime()) {
-          return {error: "O fim não pode ser antes ou igual o início"};
-        } else {
-          dates.start?.setErrors(null);
-          dates.finish?.setErrors(null); 
-        }
-
-      }
-  
-      return null;
-    }
-  }
-
   trySave() {
-
+    const schedule = new UserSchedule();
     const form = structuredClone(this.form.value);   
-    const schedule = new UserSchedule()
 
     form.startDateTime = new Date(form.startDateTime);
     form.finishDateTime = new Date(form.finishDateTime);
@@ -387,58 +358,81 @@ export class SchedulerComponent implements OnInit {
       form.finishDateTime.setDate(form.day);
     }
 
-    schedule.id = form.id && form.id != "" ? form.id : 0;
     schedule.customer= Object.assign({}, form.customer);
     schedule.employee = Object.assign({}, form.employee);
+    schedule.id = form.id && form.id != "" ? form.id : 0;
     
     const scheduleSaved = this.schedules.find(x => x.id === form.id);
 
-    schedule.schedule = scheduleSaved?.schedule ?? new Schedule();
+    schedule.schedule.note = form.note;
     schedule.schedule.price = form.price;
     schedule.schedule.service = Object.assign({}, form.service);
-    schedule.schedule.finishDateTime = form.finishDateTime.toISOString()
-    schedule.schedule.startDateTime = form.startDateTime.toISOString()
-    schedule.schedule.note = form.note;
+    schedule.schedule = scheduleSaved?.schedule ?? new Schedule();
+    schedule.schedule.startDateTime = form.startDateTime.toISOString();
+    schedule.schedule.finishDateTime = form.finishDateTime.toISOString();
 
-    this.save(schedule)
+    this.save(schedule);
+  }
+
+  tryDelete() {
+    this.loader.showBackground();
+    const id = this.form.value.id;
+    const schedule = this.schedules.find(x => x.id = id);
+    
+    schedule && this.isEditEnable && this.api.sendToApi("Schedule/Cancel", schedule, false)?.subscribe({
+      next: x => {
+        if (x) {
+          this.schedules = this.schedules.filter(x => x.id != id);
+          this.clearEvents.next(this.events.filter(x => x.id == id));
+        }
+        
+        this.visible = false;
+        this.form.reset({note: "", id: 0});
+      }, complete: () => this.loader.hideBackground()
+    })
+  }
+
+  private loadCrudResources() {
+    this.api.requestFromApi<Service[]>("Service", null, false)?.subscribe(x => this.services = x);
+    this.api.requestFromApi<User[]>("User/Customers", null, false)?.subscribe(x => this.customers = x);
+    this.api.requestFromApi<User[]>("User/Employees", null, false)?.subscribe(x => this.employees = x);
+  }
+
+  private async loadEvents(range: { start: Date, end: Date } | null = null) {
+    let endpoint = range ? "Schedule/ScheduleDay" : "Schedule/Schedules";
+
+    const params = range ? {
+        startDate:range.start.toISOString(), endDate:range.end.toISOString(), 
+        ignore: this.schedules.length ? this.schedules.map(x => + x.id!) : [] } : undefined;
+      
+    this.api.requestFromApi<UserSchedule[]>(endpoint, params)?.subscribe(
+      x => {
+        this.schedules.push(...x);
+        this.events = mapScheduleToEvent(this.hasFilter ? this.doFilter(x) : x);
+        this.addEvent.next(this.events)
+      }
+    )
   }
 
   private save(body: any, arg?: EventChangeArg) {
     this.loader.showBackground();
     this.isEditEnable && this.api.sendToApi("Schedule/Setup", body, false)?.subscribe({
       next: x => {
-        console.log(x);
-        
-        if (x && !body.schedule.id) {
-          this.addEvent.next(mapScheduleToEvent([{...body, id: x}]));
+        if (x) {
+          if (this.schedules.some(y => y.id == x)) {
+            let index = this.schedules.findIndex(y => y.id == x);
+            this.schedules[index] = body;
+          } else {
+            let schedule = {...body, id: x};
+            this.schedules.push(schedule);
+            this.addEvent.next(mapScheduleToEvent([schedule]));
+          }
         }
   
         this.form.reset({note: "", id: 0});
-      }, error: x => {
-        if (arg) {
-          arg.revert();
-        }
-      }, complete: () => this.loader.hideBackground()
-    })
-  }
-
-  tryDelete() {
-    const id = this.form.value.id;
-    const schedule = this.schedules.find(x => x.id = id);
-    this.loader.showBackground();
-    
-    schedule && this.isEditEnable && this.api.sendToApi("Schedule/Cancel", schedule, false)?.subscribe({
-      next: x => {
-        console.log(x);
-        
-        if (x) {
-          this.schedules = this.schedules.filter(x => x.id != id);
-          this.clearEvents.next(this.events.filter(x => x.id == id));
-        }
-        
-        this.form.reset({note: "", id: 0});
-        this.visible = false;
-      }, complete: () => this.loader.hideBackground()
+      },
+      error: x => arg ? arg.revert(): void 0,
+      complete: () => this.loader.hideBackground()
     })
   }
 
