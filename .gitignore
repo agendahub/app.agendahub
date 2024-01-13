@@ -1,14 +1,14 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # Compiled output
-app.studio/dist
-app.studio/tmp
-app.studio/out-tsc
-app.studio/bazel-out
-app.studio/.angular
+app.agendahub/dist
+app.agendahub/tmp
+app.agendahub/out-tsc
+app.agendahub/bazel-out
+app.agendahub/.angular
 
 # Node
-app.studio/node_modules
+app.agendahub/node_modules
 npm-debug.log
 yarn-error.log
 
@@ -21,8 +21,8 @@ yarn-error.log
 .settings/
 *.sublime-workspace
 
-# Visual Studio Code
-app.studio/.vscode/*
+# Visual agendahub Code
+app.agendahub/.vscode/*
 
 .history/*
 
