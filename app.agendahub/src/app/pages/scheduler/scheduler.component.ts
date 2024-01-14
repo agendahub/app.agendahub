@@ -345,11 +345,23 @@ export class SchedulerComponent implements OnInit {
     this.trySave()
     this.visible = false;
   }
+
+  removeOrReplaceEvent(eventId : any, replace : EventInput[] | null = null) {
+    this.schedules = this.schedules.filter(x => x.id != eventId);
+    this.events = this.events.filter(x => x.id !== eventId);
+    this.clearEvents.next(this.events.filter(x => x.id == eventId));
+
+    if (replace) {
+      this.addEvent.next(replace);
+    }
+  }
   
   trySave() {
     const schedule = new UserSchedule();
     const form = structuredClone(this.form.value);   
 
+    console.log(this.form.value);
+    
     form.startDateTime = new Date(form.startDateTime);
     form.finishDateTime = new Date(form.finishDateTime);
     
@@ -358,16 +370,16 @@ export class SchedulerComponent implements OnInit {
       form.finishDateTime.setDate(form.day);
     }
 
-    schedule.customer= Object.assign({}, form.customer);
+    schedule.customer = Object.assign({}, form.customer);
     schedule.employee = Object.assign({}, form.employee);
     schedule.id = form.id && form.id != "" ? form.id : 0;
     
     const scheduleSaved = this.schedules.find(x => x.id === form.id);
 
+    schedule.schedule = scheduleSaved?.schedule ?? new Schedule();
     schedule.schedule.note = form.note;
     schedule.schedule.price = form.price;
     schedule.schedule.service = Object.assign({}, form.service);
-    schedule.schedule = scheduleSaved?.schedule ?? new Schedule();
     schedule.schedule.startDateTime = form.startDateTime.toISOString();
     schedule.schedule.finishDateTime = form.finishDateTime.toISOString();
 
@@ -382,8 +394,7 @@ export class SchedulerComponent implements OnInit {
     schedule && this.isEditEnable && this.api.sendToApi("Schedule/Cancel", schedule, false)?.subscribe({
       next: x => {
         if (x) {
-          this.schedules = this.schedules.filter(x => x.id != id);
-          this.clearEvents.next(this.events.filter(x => x.id == id));
+          this.removeOrReplaceEvent(id);
         }
         
         this.visible = false;
@@ -420,8 +431,10 @@ export class SchedulerComponent implements OnInit {
       next: x => {
         if (x) {
           if (this.schedules.some(y => y.id == x)) {
-            let index = this.schedules.findIndex(y => y.id == x);
-            this.schedules[index] = body;
+            
+            this.removeOrReplaceEvent(x, mapScheduleToEvent([body]));
+
+            
           } else {
             let schedule = {...body, id: x};
             this.schedules.push(schedule);

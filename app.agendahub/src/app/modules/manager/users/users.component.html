@@ -34,7 +34,7 @@
                     </div>
                 </div>
 
-                <!-- <p-overlayPanel [showCloseIcon]="true" #op>
+                <p-overlayPanel [showCloseIcon]="true" #op>
                     <span class="text-2xl font-bold tracking-tight sm:text-3xl">
                         Novo tipo
                     </span>
@@ -55,19 +55,19 @@
                         </div>
         
                     </form>
-                </p-overlayPanel> -->
+                </p-overlayPanel>
                 <p-overlayPanel [showCloseIcon]="true" styleClass="shadow-xl" #tp>
                     <span class="text-2xl font-bold tracking-tight sm:text-3xl">
                         Tipos de usuários
                     </span>
                     <p-table [value]="userTypes" [paginator]="true" [rows]="3">
                         
-                        <!-- <ng-template pTemplate="caption">
+                        <ng-template pTemplate="caption">
                             <button pButton (click)="op.show($event)" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
                                 <fa-icon size="lg" [icon]="faNew"></fa-icon>
                                 <span class="tracking-tight text-white text-ellipsis">Novo</span>
                             </button>
-                        </ng-template> -->
+                        </ng-template>
                         <ng-template pTemplate="header">
                             <tr class="sm:tracking-normal tracking-tighter">
                                 <th>Código</th>
@@ -80,8 +80,9 @@
                                 <td>{{userType.code}}</td>
                                 <td>{{userType.description}}</td>
                                 <th> 
-                                    <span class="rounded-md bg-red-600 cursor-pointer text-white p-2" (click)="deleteType(userType.id)">
+                                    <span class="rounded-md bg-red-600 cursor-pointer text-white p-2" (click)="isDeletable(userType) ? deleteType(userType.id) : null" [ngClass]="{'opacity-60': !isDeletable(userType)}">
                                         <fa-icon [icon]="faDelete"></fa-icon>
+                                        <i class="fa-solid fa-lock ml-2" *ngIf="!isDeletable(userType)"></i>
                                     </span>
                                 </th>
                             </tr>

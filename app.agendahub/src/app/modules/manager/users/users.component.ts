@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { faPlusCircle, faMagnifyingGlass, faList, faGear, faUserGear } from '@fortawesome/free-solid-svg-icons';
 import { ScreenHelperService } from '../../../services/screen-helper.service';
 import { customSort } from '../../../utils/util';
+import { UserType } from '../../../models/core/entities';
 
 @Component({
   selector: 'app-users',
@@ -163,6 +164,10 @@ export class UsersComponent {
     this.visible = false;
     this.formType.reset({id: 0});
     this.form.reset({id:0, password: ""});
+  }
+
+  isDeletable(type: UserType) {
+    return !["admin", "employee", "customer"].includes(type.code)
   }
 
 }

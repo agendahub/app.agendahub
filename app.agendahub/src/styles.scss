@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import url(../node_modules/@fortawesome/fontawesome-free/css/all.min.css);
 @import url(../node_modules/@fortawesome/fontawesome-free/css/brands.min.css);
-
+    
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -65,4 +65,9 @@ background: rgba(0, 0, 0, 0.2);
 
 .my-float{
 	margin-top:16px;
+}
+
+.fc-more-popover {
+    overflow: auto;
+    max-height: 35%;
 }
