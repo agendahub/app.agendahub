@@ -125,7 +125,10 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
       const icon = this.doc.createElement("i");
   
       icon.setAttribute("class", "fas fa-times cursor-pointer");
-      icon.onclick = () => (close as any).click();
+      this.doc.body.onclick = () => {
+        (close as any).click();
+        this.doc.body.onclick = null;
+      };
       
       close?.setAttribute("style", "display: none");
       close?.before(icon);
