@@ -346,13 +346,16 @@ export class SchedulerComponent implements OnInit {
     this.visible = false;
   }
 
-  removeOrReplaceEvent(eventId : any, replace : EventInput[] | null = null) {
-    this.schedules = this.schedules.filter(x => x.id != eventId);
+  removeOrReplaceEvent(eventId : any, replace : UserSchedule | null = null) {
     this.events = this.events.filter(x => x.id !== eventId);
+    this.schedules = this.schedules.filter(x => x.id != eventId);
     this.clearEvents.next(this.events.filter(x => x.id == eventId));
 
     if (replace) {
-      this.addEvent.next(replace);
+      let event = mapScheduleToEvent([replace]);
+      this.events.push(event);
+      this.addEvent.next(event);
+      this.schedules.push(replace);
     }
   }
   
@@ -432,7 +435,7 @@ export class SchedulerComponent implements OnInit {
         if (x) {
           if (this.schedules.some(y => y.id == x)) {
             
-            this.removeOrReplaceEvent(x, mapScheduleToEvent([body]));
+            this.removeOrReplaceEvent(x, body);
 
             
           } else {
