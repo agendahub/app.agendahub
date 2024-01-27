@@ -46,6 +46,7 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { ScheduleLinkViewComponent } from './pages/schedule-link-view/schedule-link-view.component';
 import { TableModule } from 'primeng/table';
 import { MegaMenuModule } from 'primeng/megamenu';
+import { TesteComponent } from './pages/teste/teste.component';
 
 export function tokenGetter() {
   let token = localStorage.getItem("token");
@@ -62,7 +63,8 @@ export function tokenGetter() {
     LoginComponent,
     HomeComponent,
     SettingsComponent,
-    ScheduleLinkViewComponent
+    ScheduleLinkViewComponent,
+    TesteComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA

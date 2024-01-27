@@ -16,17 +16,20 @@ import { FormsModule } from '@angular/forms';
 import { CalendarItemDirective } from './calendar/calendar-item.directive';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
     NavComponent,
     LoaderComponent,
+    SidebarComponent,
     CalendarComponent,
     CalendarItemDirective,
   ],
   exports: [
     NavComponent,
     LoaderComponent,
+    SidebarComponent,
     CalendarComponent,
     CalendarItemDirective,
   ],
