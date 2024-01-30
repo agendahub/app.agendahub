@@ -3,6 +3,7 @@ import { AuthService } from '../../auth/auth-service.service';
 import { faArrowCircleDown } from '@fortawesome/free-solid-svg-icons';
 import { MenuItem } from 'primeng/api';
 import { Router } from '@angular/router';
+import { getTheme } from '../../utils/util';
 
 @Component({
   selector: 'app-nav',
@@ -59,8 +60,17 @@ export class NavComponent {
     }
   ]
 
-  largeImage = "assets/logo/logo_texto.png"
-  icon = "assets/logo/logo_imagem.png"
+  get largeImage() {
+    return getTheme().light 
+        ? "assets/logo/logo_texto.png"
+        : "assets/logo/logo_texto_dark_mode.png";
+  }
+
+  get icon() {
+    return getTheme().light 
+        ? "assets/logo/logo_imagem.png"
+        : "assets/logo/logo_imagem_dark_mode.png";
+  }
 
   constructor(private authService: AuthService, private router: Router) {
     router.events.subscribe(x => {
@@ -91,7 +101,7 @@ export class NavComponent {
     var themeToggleLightIcon = document.getElementById('theme-toggle-light-icon')!;
 
     // Change the icons inside the button based on previous settings
-    if (sessionStorage.getItem('color-theme') === 'dark' || (!('color-theme' in sessionStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         themeToggleLightIcon.classList.remove('hidden');
     } else {
         themeToggleDarkIcon.classList.remove('hidden');
@@ -106,23 +116,23 @@ export class NavComponent {
         themeToggleLightIcon.classList.toggle('hidden');
 
         // if set via local storage previously
-        if (sessionStorage.getItem('color-theme')) {
-            if (sessionStorage.getItem('color-theme') === 'light') {
+        if (localStorage.getItem('color-theme')) {
+            if (localStorage.getItem('color-theme') === 'light') {
                 document.documentElement.classList.add('dark');
-                sessionStorage.setItem('color-theme', 'dark');
+                localStorage.setItem('color-theme', 'dark');
             } else {
                 document.documentElement.classList.remove('dark');
-                sessionStorage.setItem('color-theme', 'light');
+                localStorage.setItem('color-theme', 'light');
             }
 
         // if NOT set via local storage previously
         } else {
             if (document.documentElement.classList.contains('dark')) {
                 document.documentElement.classList.remove('dark');
-                sessionStorage.setItem('color-theme', 'light');
+                localStorage.setItem('color-theme', 'light');
             } else {
                 document.documentElement.classList.add('dark');
-                sessionStorage.setItem('color-theme', 'dark');
+                localStorage.setItem('color-theme', 'dark');
             }
         }
         

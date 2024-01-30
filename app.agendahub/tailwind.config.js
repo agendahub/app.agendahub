@@ -12,6 +12,12 @@ module.exports = {
       "base-medium": '#5a758c',
       "base-light": '#a4b0bf',
       "purple-hb": "#362b45",
+      
+      "primary": "#14052a",
+      "secondary": "#23224a",
+      "tertiary": "#71798a",
+      "clean": "#f0ece5",
+      "very-clean": "#ffffff",
       ...colors
     },
     extend: {

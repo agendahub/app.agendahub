@@ -2,7 +2,7 @@
   "name": "AgendaHub",
   "short_name": "AgendaHub",
   "theme_color": "#fdfdfd",
-  "background_color": "#433656",
+  "background_color": "#14052a",
   "display": "standalone",
   "scope": "./",
   "start_url": "./",
