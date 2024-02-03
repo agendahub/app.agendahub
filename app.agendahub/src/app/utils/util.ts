@@ -50,6 +50,16 @@ export function notNull(value: unknown) {
   return value != null && value != undefined;
 }
 
+export function getTheme() {
+  return {
+    dark: localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
+    light: localStorage.getItem("color-theme") === "light" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: light)").matches),
+  };
+}
+
+export function setTheme(theme: "dark" | "light") {
+  localStorage.setItem("color-theme", theme);
+}
 
 function hashObject(object: any) : any {
   
