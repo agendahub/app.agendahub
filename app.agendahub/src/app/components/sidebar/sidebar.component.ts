@@ -86,6 +86,18 @@ import { MenuItem } from "primeng/api";
           <ul class="space-y-3 font-medium">
             <li>
               <a
+                [routerLink]="['/home']"
+                class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                [ngClass]="{ 'justify-center': !open }"
+              >
+                <i
+                  class="fa-solid fa-home w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
+                ></i>
+                <span class="ms-3" *ngIf="open">Inicio</span>
+              </a>
+            </li>
+            <li>
+              <a
                 [routerLink]="['/scheduler']"
                 class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 [ngClass]="{ 'justify-center': !open }"
