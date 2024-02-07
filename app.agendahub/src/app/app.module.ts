@@ -29,6 +29,7 @@ import { ToastModule } from "primeng/toast"
 import { ListboxModule } from 'primeng/listbox';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputSwitchModule } from 'primeng/inputswitch';
+
 /** */
 
 import { JwtModule } from "@auth0/angular-jwt"
@@ -47,6 +48,7 @@ import { ScheduleLinkViewComponent } from './pages/schedule-link-view/schedule-l
 import { TableModule } from 'primeng/table';
 import { MegaMenuModule } from 'primeng/megamenu';
 import { TesteComponent } from './pages/teste/teste.component';
+import { GeneralModule } from './modules/general/general.module';
 
 export function tokenGetter() {
   let token = localStorage.getItem("token");
@@ -79,6 +81,7 @@ export function tokenGetter() {
     ReactiveFormsModule,
     ManagerRoutingModule,
     BrowserAnimationsModule,
+    GeneralModule,
     
     ListboxModule,
     ToastModule,
