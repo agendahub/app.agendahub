@@ -7,10 +7,8 @@ import { CommonModule } from '@angular/common';
 import { AuthGuardService } from './auth/auth.guard.service';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ScheduleLinkViewComponent } from './pages/schedule-link-view/schedule-link-view.component';
-import { TesteComponent } from './pages/teste/teste.component';
 
 const routes: Routes = [
-  {path: "teste", component: TesteComponent},
   {path: "login", component: LoginComponent},
   {path: "home", component: HomeComponent, canActivate: [AuthGuardService]},
   {path: "scheduler", component: SchedulerComponent, canActivate: [AuthGuardService]},

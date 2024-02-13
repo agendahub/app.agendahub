@@ -1,5 +1,5 @@
-<div class="bg-blend-hue text-white mx-auto max-w-6xl sm:px-8 lg:px-12 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(80vh)] h-full overflow-h-scroll">
-    <div class="flex flex-col w-full h-full justify-center gap-4 p-2">
+<div class="bg-blend-hue text-white mx-auto max-w-6xl sm:px-8 lg:px-12 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none h-full flex flex-col justify-between">
+    <div class="flex flex-col w-full gap-4 p-2">
         <div class="flex items-center justify-between">
             <h3 class="text-2xl text-slate-200 font-bold ml-3 md:w-max w-8">Próximos agendamentos</h3>
             <p-dropdown placeholder="Tempo" [options]="dateRanges" [formControl]="dateRange" (onChange)="onChangeDateRange($event)"></p-dropdown>
@@ -47,6 +47,6 @@
         </ng-template>
     </div>
     <p class="text-base leading-1 font-medium text-center px-4">
-        Deseja visualizar agendamentos passados ou mais distantes? Veja direto na <span class="text-purple-400 cursor-pointer" routerLink="/scheduler">Agenda</span>
+        Deseja visualizar agendamentos passados ou mais distantes? Veja direto na <a class="text-purple-400 cursor-pointer no-underline appearance-none select-none" routerLink="/scheduler">Agenda</a>
     </p>
 </div>

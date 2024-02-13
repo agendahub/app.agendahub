@@ -6,13 +6,6 @@ import { DOCUMENT } from "@angular/common";
 @Component({
     selector: "loader",
     template: ` 
-    <!-- <div class="absolute" style="z-index: 99999;" *ngIf="isLoading">
-        <div pAnimate enterClass="flip" leaveClass="fadeoutleft" class="fixed w-screen h-screen flex justify-center items-center bg-opacity-30 bg-slate-600">
-            
-            
-            <p-progressSpinner></p-progressSpinner>
-        </div>
-    </div> -->
     <ngx-ui-loader 
 	[fgsType]="option"
 	[bgsType]="option"

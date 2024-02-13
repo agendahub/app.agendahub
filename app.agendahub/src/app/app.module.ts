@@ -46,15 +46,9 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { ScheduleLinkViewComponent } from './pages/schedule-link-view/schedule-link-view.component';
 import { TableModule } from 'primeng/table';
 import { MegaMenuModule } from 'primeng/megamenu';
-import { TesteComponent } from './pages/teste/teste.component';
-
-export function tokenGetter() {
-  let token = localStorage.getItem("token");
-  token = !token && token != "undefined" ? JSON.parse(token!) : token;
-  
-  return token
-}
-
+import { tokenGetter } from './auth/auth-utils';
+import { loadTypes } from './types/typing';
+import { environment } from '../environments/environment.development';
 
 @NgModule({
   declarations: [
@@ -63,8 +57,7 @@ export function tokenGetter() {
     LoginComponent,
     HomeComponent,
     SettingsComponent,
-    ScheduleLinkViewComponent,
-    TesteComponent
+    ScheduleLinkViewComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA
@@ -111,8 +104,8 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ["localhost:5001", "192.168.0.67:7777", "apistudioagenda-development.up.railway.app", "api-dev.agendahub.app"],
-        // disallowedRoutes: ["apistudioagenda-development.up.railway.app/Auth/Login"],
+        allowedDomains: [environment.getApiDomain()],
+        disallowedRoutes: [environment.getApiDomain() + "/auth/login"]
       },
     }),
 
@@ -129,12 +122,7 @@ export function tokenGetter() {
   bootstrap: [AppComponent]
 })
 export class AppModule {
-}
-
-String.prototype.toLowerCapital = function(this: string) {
-  return this[0].toLowerCase() + this.slice(1);
-}
-
-String.prototype.toUpperCapital = function(this: string) {
-  return this[0].toUpperCase() + this.slice(1);
+  constructor() {
+    loadTypes(); 
+  }
 }
