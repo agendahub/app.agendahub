@@ -135,12 +135,12 @@ import { MenuItem } from "primeng/api";
               >
                 <a
                   routerLink="/manager/services"
-                  class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb"
+                  class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
                   >Serviços</a
                 >
                 <a
                   routerLink="/manager/users"
-                  class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb"
+                  class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
                   >Usuários</a
                 >
               </div>
@@ -157,12 +157,12 @@ import { MenuItem } from "primeng/api";
           >
             <a
               routerLink="/settings"
-              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb"
+              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
               >Configurações</a
             >
             <a
               (click)="logout()"
-              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb"
+              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
               >Sair</a
             >
           </div>

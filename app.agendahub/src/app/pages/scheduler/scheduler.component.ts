@@ -447,7 +447,10 @@ export class SchedulerComponent implements OnInit {
   
         this.form.reset({note: "", id: 0});
       },
-      error: x => arg ? arg.revert(): void 0,
+      error: x => {
+        arg ? arg.revert(): void 0;
+        this.loader.hideBackground()
+      },
       complete: () => this.loader.hideBackground()
     })
   }
