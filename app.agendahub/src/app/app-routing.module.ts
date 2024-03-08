@@ -10,6 +10,8 @@ import { ScheduleLinkViewComponent } from './pages/schedule-link-view/schedule-l
 import { TesteComponent } from './pages/teste/teste.component';
 import { SchedulingComponent } from './modules/general/scheduling/scheduling.component';
 
+
+
 const routes: Routes = [
   {path: "teste", component: TesteComponent},
   {path: "login", component: LoginComponent},

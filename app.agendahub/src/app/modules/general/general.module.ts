@@ -6,7 +6,7 @@ import { SchedulingComponent } from './scheduling/scheduling.component';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
-
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
   declarations: [
@@ -17,7 +17,8 @@ import { FormsModule } from '@angular/forms';
     GeneralRoutingModule,
     TableModule,
     InputTextModule,
-    FormsModule
+    FormsModule,
+    CalendarModule
   ]
 })
 export class GeneralModule { }
