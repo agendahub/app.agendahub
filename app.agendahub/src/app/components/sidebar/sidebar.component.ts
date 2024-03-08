@@ -145,6 +145,18 @@ import { MenuItem } from "primeng/api";
                 >
               </div>
             </li>
+            <li>
+              <a
+                [routerLink]="['/general/scheduling']"
+                class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                [ngClass]="{ 'justify-center': !open }"
+              >
+                <i
+                  class="fa-solid fa-calendar-days w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
+                ></i>
+                <span class="ms-3" *ngIf="open">Atendimentos</span>
+              </a>
+            </li>
           </ul>
         </div>
         <div
