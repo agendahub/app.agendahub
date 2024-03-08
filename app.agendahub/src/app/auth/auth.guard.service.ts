@@ -16,7 +16,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild, CanDeact
   constructor(private auth: AuthService, private router: Router, private message: MessageService) {
   }
 
-  private ManagerTypes = ["admin", "developer"];
+  private ManagerTypes = ["admin", "developer", "master"];
   
   canActivate(): boolean {
     console.log("[canActivate]" ,!this.auth.isLogged , !this.auth.Token);
