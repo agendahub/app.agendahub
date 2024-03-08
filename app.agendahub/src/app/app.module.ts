@@ -48,6 +48,10 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { ScheduleLinkViewComponent } from './pages/schedule-link-view/schedule-link-view.component';
 import { TableModule } from 'primeng/table';
 import { MegaMenuModule } from 'primeng/megamenu';
+import { GeneralModule } from './modules/general/general.module';
+import { tokenGetter } from './auth/auth-utils';
+import { environment } from '../environments/environment.development';
+import { loadTypes } from './types/typing';
 
 @NgModule({
   declarations: [
