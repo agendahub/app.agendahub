@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, inject } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { faCalendarCheck, faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
@@ -12,6 +12,7 @@ import { Subject } from 'rxjs';
 import * as moment from 'moment';
 import { CalendarItemDirective } from './calendar-item.directive';
 import { CalendarNavigator } from './calendar-navigator';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-calendar',
@@ -52,9 +53,13 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
 
   public calendarOptions: CalendarOptions = {
     locale:"pt-br",
-    dayHeaderClassNames: ["uppercase", "tracking-tight", "text-right" , "Roboto"],
-    headerToolbar: false,
     height: 'auto',
+    dayMaxEvents: 3,
+    headerToolbar: false,
+    themeSystem: 'bootstrap',
+    moreLinkContent : x => `+${x.num} mais`,
+    moreLinkClick: this.onMoreLinkClick.bind(this),
+    dayHeaderClassNames: ["uppercase", "tracking-tight", "text-right" , "Roboto"],
     initialView: this.views[this.localStorageService.get("view") ?? 0],
     views: {
       timeGridFourDay: {
@@ -112,6 +117,23 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   public get month(): string {
     return moment(this.Calendar?.getDate()).format("MMMM").toUpperCapital();
   };
+
+  private doc = inject(DOCUMENT);
+  private onMoreLinkClick(arg: any) {
+    setTimeout(() => {
+      const close = this.doc.querySelector(".fc-popover-close")
+      const icon = this.doc.createElement("i");
+  
+      icon.setAttribute("class", "fas fa-times cursor-pointer");
+      this.doc.body.onclick = () => {
+        (close as any).click();
+        this.doc.body.onclick = null;
+      };
+      
+      close?.setAttribute("style", "display: none");
+      close?.before(icon);
+    }, 50);      
+  }
 
   private get initView() {
     if (this.editable) {

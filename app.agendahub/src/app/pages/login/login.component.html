@@ -9,66 +9,88 @@
 
 </div> -->
 
-<body id="login_page" class="w-screen h-screen">
-
+<body id="login_page" class="w-screen h-screen z-[100] bg-transparent">
   <div class="grid md:grid-cols-2 grid-cols-1 text-white h-full">
-  
-    <div class="opacity-60 mix-blend-darken h-full overflow-hidden md:block hidden">
-      <img [src]="image" class="opacity-60 mix-blend-darken" style="zoom: -50%;" alt="landscape">
+    <img
+      src="../../../assets/icons/icon-96x96.png"
+      class="fixed w-12 m-6"
+      alt="Icone AgendaHub"
+    />
+    <div class="opacity-60 h-full overflow-hidden md:block hidden">
+      <img
+        loading="eager"
+        [src]="image"
+        class="opacity-60 w-full object-cover object-center h-full"
+        style="zoom: -50%"
+        alt="landscape"
+      />
     </div>
-    
-    <div class="flex justify-center items-center h-full bg-opacity-60 bg-slate-950">
 
-      <div class="sm:mx-auto sm:w-full sm:max-w-sm">
-
-        <div class="">
-          <span class="text-6xl font-bold tracking-wide">
-            agenda
-          </span>
-          <span class="text-6xl font-light tracking-wide rounded-2xl px-1 hover:border-purple-800 border-2 border-[#380e76]" >
-            hub
-          </span>
+    <div
+      class="flex justify-center items-center h-full bg-opacity-60 bg-slate-950"
+    >
+      <div class="sm:mx-auto sm:w-80 w-90% sm:max-w-sm">
+        <div class="justify-center flex mb-10">
+          <img
+            class="w-60 sm:w-90% self-center"
+            src="../../../assets/logo/logo_texto.png"
+            alt="Logo AgendaHub"
+          />
         </div>
 
-        <h2 class="my-6 text-left text-2xl font-bold leading-9 tracking-normal">Acessar conta</h2>
-    
-        <form [formGroup]="loginForm" id="form-login-page" class="flex flex-col gap-4">
+        <!-- <h2 class="my-6 text-left text-2xl font-bold leading-9 tracking-normal">Acessar conta</h2> -->
+
+        <form
+          [formGroup]="loginForm"
+          id="form-login-page"
+          class="flex flex-col gap-4 my-6"
+        >
           <div>
-            <label for="login" class="text-left text-lg font-medium leading-9 tracking-normal">Email ou Telefone</label>
-            <input formControlName="login" type="text" id="login" placeholder="dev@agendahub.app"class="input w-full">
+            <label
+              for="login"
+              class="text-left text-base sm:text-sm font-normal leading-9 tracking-normal text-gray-400"
+              >Email ou Telefone</label
+            >
+            <input
+              formControlName="login"
+              type="text"
+              id="login"
+              class="input w-full"
+            />
           </div>
-    
+
           <div>
-            <label for="password" class="text-left text-lg font-medium leading-9 tracking-normal">Senha</label>
-            <input id="password" formControlName="password" type="password" autocomplete="current-password" class="input w-full" placeholder="******">
+            <label
+              for="password"
+              class="text-left text-base sm:text-sm font-normal leading-9 tracking-normal text-gray-400"
+              >Senha</label
+            >
+            <input
+              id="password"
+              formControlName="password"
+              type="password"
+              autocomplete="current-password"
+              class="input w-full"
+            />
           </div>
-    
-          <div class="mt-2">
-            <button (click)="login()" form="form-login-page" type="submit" class="w-full text-white bg-[#380e76] hover:bg-[#2e2d63] focus:ring-4 focus:ring-[#f0ece5] font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-[#380e76] dark:hover:bg-[blue-700] focus:outline-none dark:focus:ring-[#2e2d63]">
-              <span class="flex w-full justify-center items-center">
+
+          <div class="mt-5">
+            <button
+              (click)="login()"
+              form="form-login-page"
+              type="submit"
+              class="w-full text-white bg-[#380e76] hover:bg-[#2e2d63] focus:ring-4 focus:ring-[#f0ece5] font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-[#380e76] dark:hover:bg-[blue-700] focus:outline-none dark:focus:ring-[#2e2d63]"
+            >
+              <span class="flex w-full justify-center items-center text-sm">
                 Continuar <i class="fas fa-arrow-right ml-2"></i>
               </span>
-            
             </button>
-            
           </div>
         </form>
-
       </div>
-
     </div>
-
   </div>
-
 </body>
-
-
-
-
-
-
-
-
 
 <!-- form login
 

@@ -7,14 +7,18 @@ import { CommonModule } from '@angular/common';
 import { AuthGuardService } from './auth/auth.guard.service';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { ScheduleLinkViewComponent } from './pages/schedule-link-view/schedule-link-view.component';
+import { TesteComponent } from './pages/teste/teste.component';
+import { SchedulingComponent } from './modules/general/scheduling/scheduling.component';
 
 const routes: Routes = [
   {path: "login", component: LoginComponent},
   {path: "home", component: HomeComponent, canActivate: [AuthGuardService]},
   {path: "scheduler", component: SchedulerComponent, canActivate: [AuthGuardService]},
   
-   {path: "settings", component: SettingsComponent, canActivate: [AuthGuardService]},
+  
+  {path: "settings", component: SettingsComponent, canActivate: [AuthGuardService]},
   {path: "manager", canActivateChild: [AuthGuardService], loadChildren: () => import("./modules/manager/manager-routing.module").then(r => r.ManagerRoutingModule)},
+  {path: "general", canActivateChild: [AuthGuardService], loadChildren: () => import("./modules/general/general-routing.module").then(r => r.GeneralRoutingModule)},
 
   {path: "schedule-link", component: ScheduleLinkViewComponent, canActivate: [AuthGuardService]},
   {path: "**", redirectTo: "home"}

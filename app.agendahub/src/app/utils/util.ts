@@ -1,10 +1,19 @@
 import { EventInput } from "@fullcalendar/core"
 import { UserSchedule } from "../models/core/entities"
 import { SortEvent } from "primeng/api"
+import { environment } from "../../environments/environment.development";
+
+export function getRandomImage(el: string = "#login_page") {
+  const thisPage = document.querySelector(el) as HTMLElement;
+  const [width, height] = [thisPage.clientWidth - 200, thisPage.clientHeight];
+  
+  return `https://source.unsplash.com/random/${height}x${width}/?landscape?grayscale`;
+}
 
 export function mapScheduleToEvent(schedules: UserSchedule[], filter: (x: UserSchedule) => boolean = () => true) {
   var self = window.globalThis as any;  
   let events: EventInput[] = [];
+  
     schedules.forEach(x => {
       filter.bind(self).call(self, x) && events.push({
         id: x.id?.toString(),
@@ -12,7 +21,7 @@ export function mapScheduleToEvent(schedules: UserSchedule[], filter: (x: UserSc
         start: x.schedule.startDateTime,
         end: x.schedule.finishDateTime,
         color: x.employee.color,
-        extendedProps: {...x}
+        extendedProps: {...x},
       })
     })
 
@@ -41,6 +50,16 @@ export function notNull(value: unknown) {
   return value != null && value != undefined;
 }
 
+export function getTheme() {
+  return {
+    dark: localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches),
+    light: localStorage.getItem("color-theme") === "light" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: light)").matches),
+  };
+}
+
+export function setTheme(theme: "dark" | "light") {
+  localStorage.setItem("color-theme", theme);
+}
 
 function hashObject(object: any) : any {
   

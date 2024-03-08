@@ -8,6 +8,19 @@
   <link rel="icon" type="image/x-icon" href="assets/logo/logo_imagem.png">
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#433656">
+  <script>
+    // It's best to inline this in `head` to avoid FOUC (flash of unstyled content) when changing pages or themes
+    if (
+      localStorage.getItem('color-theme') === 'dark' ||
+      (!('color-theme' in localStorage) &&
+        window.matchMedia('(prefers-color-scheme: dark)').matches)
+    ) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    </script>
 </head>
 <body class="bg-slate-950">
   <app-root></app-root>
