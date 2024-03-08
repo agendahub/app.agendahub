@@ -50,11 +50,10 @@ import { MenuItem } from "primeng/api";
       </button>
     </div>
 
+    <div aria-hidden="true" class="fixed inset-0 w-full h-full bg-black/50" *ngIf="blockScroll"></div>
+
     <aside
-      [class]="
-        'top-0 left-0 sm:top-2 sm:left-2 sm:z-20 z-[60] w-screen h-screen transition-transform translate-x-0 absolute ' +
-        (fixed ? 'relative' : 'sm:fixed')
-      "
+      class="inset-0 sm:inset-2 sm:z-20 z-[60] w-screen sm:h-[98vh] h-screen transition-transform translate-x-0 absolute sm:fixed"
       aria-label="Sidebar"
       id="default-sidebar"
       [ngClass]="{ 'sm:w-16 max-w-screen-xl': !open, 'absolute sm:w-72': open }"
@@ -64,7 +63,7 @@ import { MenuItem } from "primeng/api";
       (dblclick)="setFixed()"
     >
       <div
-        class="sm:h-[98vh] h-screen overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl"
+        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl"
         [ngClass]="{ 'p-2': open, 'py-2': !open }"
       >
         <div class="flex flex-col gap-5">
@@ -136,12 +135,12 @@ import { MenuItem } from "primeng/api";
               >
                 <a
                   routerLink="/manager/services"
-                  class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb"
+                  class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
                   >Serviços</a
                 >
                 <a
                   routerLink="/manager/users"
-                  class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb"
+                  class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
                   >Usuários</a
                 >
               </div>
@@ -170,12 +169,12 @@ import { MenuItem } from "primeng/api";
           >
             <a
               routerLink="/settings"
-              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb"
+              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
               >Configurações</a
             >
             <a
               (click)="logout()"
-              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-purple-hb"
+              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
               >Sair</a
             >
           </div>
@@ -267,8 +266,10 @@ import { MenuItem } from "primeng/api";
   ],
 })
 export class SidebarComponent implements OnInit {
-  @Input() open = false;
-  fixed = false;
+  @Input()
+  public open = false || this.fixedSidebar;
+  private sidebar!: HTMLElement
+  public fixed = false;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -286,32 +287,48 @@ export class SidebarComponent implements OnInit {
         this.open = false;
       }
     });
-  }
 
+  }
+  
   @HostListener("document:click", ["$event"])
-  clickout(event: Event) {
-    // if (!this.document.getElementById('user-options')?.contains(event.target as Node)) {
-    //     this.showUserOptions = false;
-    // }
-    // if (!this.document.getElementById('crud-link')?.contains(event.target as Node)) {
-    //     this.showCrudLink = false;
-    // }
-    // if (this.document.getElementById('crud-link')?.contains(event.target as Node)) {
-    //     console.log('click crud link');
-    // }
-  }
-
+  clickout(event: Event) { }
+  
   ngOnInit(): void {
     this.toggleHandler();
+    this.sidebar = this.document.getElementById("default-sidebar")!;
+
+    if (this.ANDROID || this.IOS) {
+      this.open = false;
+      this.setFixed(false);
+    }
   }
 
   isCurrent(path: string) {
     return location.pathname.includes(path);
   }
 
-  setFixed() {
-    this.fixed = !this.fixed;
+  setFixed(value?: boolean) {
+    this.fixed = value ?? !this.fixed;
     localStorage.setItem("sidebarFixed", this.fixed.toString());
+
+    if (this.fixed) {
+      this.sidebar.classList.remove("sm:fixed");
+      this.sidebar.classList.add("relative");
+    } else {
+      this.sidebar.classList.remove("relative");
+      this.sidebar.classList.add("sm:fixed");
+    }	
+  }
+
+  get blockScroll() {
+    const block = this.open && (this.ANDROID || this.IOS);
+    const container = this.document.querySelector("#app-container")! as HTMLElement;
+    container.style.overflow = block ? "hidden" : "auto";
+    return block;
+  }
+
+  get fixedSidebar() {
+    return localStorage.getItem("sidebarFixed") === "true";
   }
 
   get theme() {
@@ -339,6 +356,7 @@ export class SidebarComponent implements OnInit {
       /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window)
     );
   }
+
   get ANDROID() {
     return /android/i.test(navigator.userAgent);
   }

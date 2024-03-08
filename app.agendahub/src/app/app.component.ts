@@ -14,14 +14,14 @@ import { Title } from "@angular/platform-browser";
     ></p-toast>
     <!-- <app-nav *ngIf="!isLogin && !hideNav"></app-nav> -->
 
-    <div
+    <div id="app-container"
       class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-clean"
       [ngClass]="{ flex: sidebarFixed }"
     >
       <sidebar *ngIf="!isLogin && !hideNav"></sidebar>
 
       <div
-        class="relative w-full overflow-auto"
+        class="relative w-full md:h-full h-max overflow-auto"
         [ngClass]="{ 'sm:pl-14 pl-0 ': !isLogin && !hideNav }"
       >
         <router-outlet></router-outlet>
@@ -49,8 +49,6 @@ export class AppComponent {
     private router: Router,
     private title: Title
   ) {
-    // moment.updateLocale("pt-br", null)
-
     moment.locale("pt-br");
 
     primeNG.overlayOptions = {
