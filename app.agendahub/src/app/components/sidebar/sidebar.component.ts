@@ -50,7 +50,11 @@ import { MenuItem } from "primeng/api";
       </button>
     </div>
 
-    <div aria-hidden="true" class="fixed inset-0 w-full h-full bg-black/50" *ngIf="blockScroll"></div>
+    <div
+      aria-hidden="true"
+      class="fixed inset-0 w-full h-full bg-black/50"
+      *ngIf="blockScroll"
+    ></div>
 
     <aside
       class="inset-0 sm:inset-2 sm:z-20 z-[60] w-screen sm:h-[98vh] h-screen transition-transform translate-x-0 absolute sm:fixed"
@@ -107,12 +111,15 @@ import { MenuItem } from "primeng/api";
                 <span class="ms-3" *ngIf="open">Agenda</span>
               </a>
             </li>
-            <li *ngIf="userRole !== 'employee'">
+            <li
+              *ngIf="userRole !== 'employee'"
+              (click)="showCrudLink = !showCrudLink"
+            >
               <div
                 class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group w-full"
                 [ngClass]="{ 'justify-between': open, 'justify-center': !open }"
               >
-                <a [routerLink]="['/manager']">
+                <a>
                   <i
                     class="fa-solid fa-briefcase w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
                   ></i>
@@ -122,7 +129,6 @@ import { MenuItem } from "primeng/api";
                   *ngIf="open"
                   class="flex items-center justify-center cursor-pointer"
                   [ngClass]="{ 'rotate-180': showCrudLink }"
-                  (click)="showCrudLink = !showCrudLink"
                 >
                   <i class="fa-solid fa-arrow-circle-down w-5"></i>
                 </span>
@@ -268,7 +274,7 @@ import { MenuItem } from "primeng/api";
 export class SidebarComponent implements OnInit {
   @Input()
   public open = false || this.fixedSidebar;
-  private sidebar!: HTMLElement
+  private sidebar!: HTMLElement;
   public fixed = false;
 
   constructor(
@@ -287,12 +293,11 @@ export class SidebarComponent implements OnInit {
         this.open = false;
       }
     });
-
   }
-  
+
   @HostListener("document:click", ["$event"])
-  clickout(event: Event) { }
-  
+  clickout(event: Event) {}
+
   ngOnInit(): void {
     this.toggleHandler();
     this.sidebar = this.document.getElementById("default-sidebar")!;
@@ -317,12 +322,14 @@ export class SidebarComponent implements OnInit {
     } else {
       this.sidebar.classList.remove("relative");
       this.sidebar.classList.add("sm:fixed");
-    }	
+    }
   }
 
   get blockScroll() {
     const block = this.open && (this.ANDROID || this.IOS);
-    const container = this.document.querySelector("#app-container")! as HTMLElement;
+    const container = this.document.querySelector(
+      "#app-container"
+    )! as HTMLElement;
     container.style.overflow = block ? "hidden" : "auto";
     return block;
   }
