@@ -64,7 +64,6 @@ import { MenuItem } from "primeng/api";
       [hidden]="!open && (IOS || ANDROID)"
       (mouseenter)="open = true"
       (mouseleave)="open = fixed ? true : false"
-      (dblclick)="setFixed()"
     >
       <div
         class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl"
@@ -74,7 +73,7 @@ import { MenuItem } from "primeng/api";
           <div class="flex justify-center items-center w-full sm:px-0 px-4">
             <img
               class="w-auto"
-              [ngClass]="{ 'h-12': open, 'h-10': !open }"
+              [ngClass]="{ 'h-10, p-2': !open }"
               [src]="icon"
               alt="logotipo agendahub"
             />
@@ -90,24 +89,20 @@ import { MenuItem } from "primeng/api";
             <li>
               <a
                 [routerLink]="['/home']"
-                class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{ 'justify-center': !open }"
               >
-                <i
-                  class="fa-solid fa-home w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
-                ></i>
+                <i class="fa-solid fa-home w-5 transition duration-75"></i>
                 <span class="ms-3" *ngIf="open">Inicio</span>
               </a>
             </li>
             <li>
               <a
                 [routerLink]="['/scheduler']"
-                class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{ 'justify-center': !open }"
               >
-                <i
-                  class="fa-solid fa-calendar-days w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
-                ></i>
+                <i class="fa-solid fa-calendar-days w-5"></i>
                 <span class="ms-3" *ngIf="open">Agenda</span>
               </a>
             </li>
@@ -116,27 +111,34 @@ import { MenuItem } from "primeng/api";
               (click)="showCrudLink = !showCrudLink"
             >
               <div
-                class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group w-full"
-                [ngClass]="{ 'justify-between': open, 'justify-center': !open }"
+                class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group w-full"
+                [ngClass]="{
+                  'justify-between': open,
+                  'justify-center': !open,
+                  'rounded-none': showCrudLink,
+                  'rounded-t-lg': showCrudLink,
+                  'bg-primary': showCrudLink && open,
+                  'text-white': showCrudLink && open,
+                  'dark:bg-white': showCrudLink && open,
+                  'dark:text-primary': showCrudLink && open,
+                }"
               >
                 <a>
-                  <i
-                    class="fa-solid fa-briefcase w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
-                  ></i>
+                  <i class="fa-solid fa-briefcase w-5 duration-75"></i>
                   <span class="ms-3" *ngIf="open">Gestão</span>
                 </a>
                 <span
                   *ngIf="open"
-                  class="flex items-center justify-center cursor-pointer"
+                  class="flex items-center justify-center cursor-pointer duration-300"
                   [ngClass]="{ 'rotate-180': showCrudLink }"
                 >
-                  <i class="fa-solid fa-arrow-circle-down w-5"></i>
+                  <i class="fa-solid fa-arrow-circle-down"></i>
                 </span>
               </div>
 
               <div
                 id="crud-link"
-                class="w-full p-2 bg-slate-100 rounded-md shadow-md mt-0"
+                class="w-full p-2 bg-slate-100 rounded-b-md shadow-md mt-0"
                 *ngIf="showCrudLink && open"
               >
                 <a
@@ -154,12 +156,10 @@ import { MenuItem } from "primeng/api";
             <li>
               <a
                 [routerLink]="['/general/scheduling']"
-                class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{ 'justify-center': !open }"
               >
-                <i
-                  class="fa-solid fa-calendar-days w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
-                ></i>
+                <i class="fa-solid fa-calendar-days w-5"></i>
                 <span class="ms-3" *ngIf="open">Atendimentos</span>
               </a>
             </li>
@@ -170,8 +170,8 @@ import { MenuItem } from "primeng/api";
         >
           <div
             id="user-options"
-            class="w-full p-2 bg-slate-100 rounded-md shadow-md mt-0"
-            *ngIf="showUserOptions"
+            class="w-full p-2 bg-slate-100 rounded-t-md shadow-md mt-0"
+            *ngIf="showUserOptions && open"
           >
             <a
               routerLink="/settings"
@@ -186,16 +186,22 @@ import { MenuItem } from "primeng/api";
           </div>
           <div class="flex flex-col gap-3 w-full">
             <div
-              class="rounded-md border-[1px] border-slate-500 dark:border-slate-600 p-2 flex justify-between border-none hover:border-solid "
+              class=" text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group p-2 flex justify-between  "
               (click)="showUserOptions = !showUserOptions"
+              [ngClass]="{
+                'rounded-none': showUserOptions,
+                'rounded-b-lg': showUserOptions,
+                'bg-primary': showUserOptions && open,
+                'text-white': showUserOptions && open,
+                'dark:bg-white': showUserOptions && open,
+                'dark:text-primary': showUserOptions && open,
+              }"
             >
               <span
-                class="cursor-pointer flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                class="cursor-pointer flex items-center p-2"
                 [ngClass]="{ 'justify-center': !open }"
               >
-                <i
-                  class="fa-solid fa-user w-5 h-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
-                ></i>
+                <i class="fa-solid fa-user w-5 h-5"></i>
                 <span *ngIf="!open" class="relative -left-1 -top-2 ">
                   <svg
                     *ngIf="theme.light"
@@ -226,7 +232,7 @@ import { MenuItem } from "primeng/api";
                 <span *ngIf="open" class="ms-3">{{ userData.name }}</span>
               </span>
               <button
-                class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
+                class="text-primary dark:text-white hover:bg-secondary dark:hover-text-white group-hover:text-white dark:group-hover:text-primary dark:hover:bg-gray-200 focus:outline-none dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
                 id="theme-toggle"
                 type="button"
               >
@@ -351,10 +357,10 @@ export class SidebarComponent implements OnInit {
   get icon() {
     return getTheme().light
       ? this.open
-        ? "assets/logo/logo_texto_dark_mode.png"
+        ? "assets/logo/logo_texto_imagem_dark_mode.png"
         : "assets/logo/logo_imagem_dark_mode.png"
       : this.open
-      ? "assets/logo/logo_texto.png"
+      ? "assets/logo/logo_texto_imagem.png"
       : "assets/logo/logo_imagem.png";
   }
 
