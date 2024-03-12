@@ -17,12 +17,12 @@ import { MenuItem } from "primeng/api";
   selector: "sidebar",
   template: `
     <div class="flex justify-between py-2 sm:hidden">
-      <div class="flex justify-center items-center sm:px-0 px-4">
+      <div class="flex justify-center items-center sm:px-0 px-2">
         <img
           class="w-auto"
-          [ngClass]="{ 'h-12': open, 'h-10': !open }"
-          [src]="largeImage"
-          alt="logotipo agendahub"
+          [ngClass]="{ 'h-8': open, 'h-12': !open }"
+          [src]="iconMobile"
+          alt="logotipo AgendaHub"
         />
       </div>
       <button
@@ -67,22 +67,22 @@ import { MenuItem } from "primeng/api";
     >
       <div
         class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl"
-        [ngClass]="{ 'p-2': open, 'py-2': !open }"
+        [ngClass]="{ 'p-2': open }"
       >
         <div class="flex flex-col gap-5">
-          <div class="flex justify-center items-center w-full sm:px-0 px-4">
+          <div class="flex justify-between items-center w-full sm:px-0">
             <img
-              class="w-auto"
-              [ngClass]="{ 'h-10, p-2': !open }"
+              class="w-auto, h-16"
+              [ngClass]="{ 'p-2': !open }"
               [src]="icon"
-              alt="logotipo agendahub"
+              alt="logotipo AgendaHub"
             />
-          </div>
-          <div
-            class="sm:hidden cursor-pointer float-right absolute right-0 p-3 dark:text-very-clean text-secondary"
-            (click)="open = false"
-          >
-            <i class="fa-solid fa-times fa-lg"></i>
+            <div
+              class="sm:hidden cursor-pointer p-2 dark:text-very-clean text-secondary"
+              (click)="open = false"
+            >
+              <i class="fa-solid fa-times fa-lg"></i>
+            </div>
           </div>
 
           <ul class="space-y-3 font-medium">
@@ -186,14 +186,16 @@ import { MenuItem } from "primeng/api";
           </div>
           <div class="flex flex-col gap-3 w-full">
             <div
-              class=" text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group p-2 flex justify-between  "
+              class=" text-primary rounded-lg hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group p-2 flex justify-between  "
               (click)="showUserOptions = !showUserOptions"
-              [ngClass]="{
+              [ngClass]="
+              {
                 'rounded-none': showUserOptions,
                 'rounded-b-lg': showUserOptions,
                 'bg-primary': showUserOptions && open,
                 'text-white': showUserOptions && open,
                 'dark:bg-white': showUserOptions && open,
+                'dark:text-white': !showUserOptions || !open,
                 'dark:text-primary': showUserOptions && open,
               }"
             >
@@ -362,6 +364,12 @@ export class SidebarComponent implements OnInit {
       : this.open
       ? "assets/logo/logo_texto_imagem.png"
       : "assets/logo/logo_imagem.png";
+  }
+
+  get iconMobile() {
+    return getTheme().light
+      ? "assets/logo/logo_imagem_dark_mode.png"
+      : "assets/icons/icon-144x144.png";
   }
 
   get IOS() {
