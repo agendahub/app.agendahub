@@ -60,159 +60,153 @@ import { MenuItem } from "primeng/api";
       class="inset-0 sm:inset-2 sm:z-20 z-[60] w-screen sm:h-[98vh] h-screen ease-in-out duration-300 absolute sm:fixed"
       aria-label="Sidebar"
       id="default-sidebar"
-      [ngClass]="{ 'sm:w-16 max-w-screen-xl translate-x-0': !open, 'absolute sm:w-72 sm:translate-x-1': open }"
+      [ngClass]="{
+        'sm:w-16 max-w-screen-xl translate-x-0': !open,
+        'absolute sm:w-72 sm:translate-x-1': open
+      }"
       [hidden]="!open && (IOS || ANDROID)"
       (mouseenter)="open = true"
       (mouseleave)="open = fixed ? true : false"
       (dblclick)="setFixed()"
     >
-<<<<<<< HEAD
-      <div class="h-full overflow-y-auto scroll-smooth overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl p-2">
-=======
+      <<<<<<< HEAD
       <div
-        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl"
-        [ngClass]="{ 'p-2': open }"
+        class="h-full overflow-y-auto scroll-smooth overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl p-2"
       >
->>>>>>> bb0b76d (update siderbar style)
-        <div class="flex flex-col gap-5">
-          <div class="flex justify-between items-center w-full sm:px-0">
-            <img
-<<<<<<< HEAD
-              class="w-auto object-contain h-10"
-=======
-              class="w-auto, h-16"
-              [ngClass]="{ 'p-2': !open }"
->>>>>>> bb0b76d (update siderbar style)
-              [src]="icon"
-              alt="logotipo AgendaHub"
-            />
-            <div
-              class="sm:hidden cursor-pointer p-2 dark:text-very-clean text-secondary"
-              (click)="open = false"
-            >
-              <i class="fa-solid fa-times fa-lg"></i>
-            </div>
-          </div>
-
-          <ul class="space-y-3 font-medium">
-            <li>
-              <a
-                [routerLink]="['/home']"
-                class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                [ngClass]="{ 'justify-center': !open }"
-              >
-                <i
-                  class="fa-solid fa-home w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
-                ></i>
-                <span class="ms-3" *ngIf="open">Inicio</span>
-              </a>
-            </li>
-            <li>
-              <a
-                [routerLink]="['/scheduler']"
-                class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                [ngClass]="{ 'justify-center': !open }"
-              >
-                <i
-                  class="fa-solid fa-calendar-days w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
-                ></i>
-                <span class="ms-3" *ngIf="open">Agenda</span>
-              </a>
-            </li>
-            <li
-              *ngIf="userRole !== 'employee'"
-              (click)="showCrudLink = !showCrudLink"
-            >
-              <div
-                class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group w-full"
-                [ngClass]="{ 'justify-between': open, 'justify-center': !open }"
-              >
-                <a class="flex items-center">
-                  <i
-                    class="fa-solid fa-briefcase w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
-                  ></i>
-                  <span class="ms-3" *ngIf="open">Gestão</span>
-                </a>
-                <span
-                  *ngIf="open"
-                  class="flex items-center justify-center cursor-pointer"
-                  [ngClass]="{ 'rotate-180': showCrudLink }"
-                >
-                  <i class="fa-solid fa-arrow-circle-down w-5"></i>
-                </span>
-              </div>
-
-              <div
-                id="crud-link"
-                class="w-full p-2 bg-slate-100 rounded-md shadow-md mt-0"
-                *ngIf="showCrudLink && open"
-              >
-                <a
-                  routerLink="/manager/services"
-                  class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
-                  >Serviços</a
-                >
-                <a
-                  routerLink="/manager/users"
-                  class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
-                  >Usuários</a
-                >
-              </div>
-            </li>
-            <li>
-              <a
-                [routerLink]="['/general/scheduling']"
-                class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-                [ngClass]="{ 'justify-center': !open }"
-              >
-                <i
-                  class="fa-solid fa-calendar-days w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
-                ></i>
-                <span class="ms-3" *ngIf="open">Atendimentos</span>
-              </a>
-            </li>
-          </ul>
-        </div>
-
+        =======
         <div
-          class="sticky bottom-0 left-0 right-0 z-30 backdrop-blur-md w-full rounded-md"
+          class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl"
+          [ngClass]="{ 'p-2': open }"
         >
-          <div
-            id="user-options"
-            class="w-full p-2 bg-slate-100 rounded-md shadow-md mt-0"
-            *ngIf="showUserOptions"
-          >
-            <a
-              routerLink="/settings"
-              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
-              >Configurações</a
-            >
-            <a
-              (click)="logout()"
-              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
-              >Sair</a
-            >
+          >>>>>>> bb0b76d (update siderbar style)
+          <div class="flex flex-col gap-5">
+            <div class="flex justify-between items-center w-full sm:px-0">
+              <img <<<<<<< HEAD class="w-auto object-contain h-10" =======
+              class="w-auto, h-16" [ngClass]="{ 'p-2': !open }" >>>>>>> bb0b76d
+              (update siderbar style) [src]="icon" alt="logotipo AgendaHub" />
+              <div
+                class="sm:hidden cursor-pointer p-2 dark:text-very-clean text-secondary"
+                (click)="open = false"
+              >
+                <i class="fa-solid fa-times fa-lg"></i>
+              </div>
+            </div>
+
+            <ul class="space-y-3 font-medium">
+              <li>
+                <a
+                  [routerLink]="['/home']"
+                  class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  [ngClass]="{ 'justify-center': !open }"
+                >
+                  <i
+                    class="fa-solid fa-home w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
+                  ></i>
+                  <span class="ms-3" *ngIf="open">Inicio</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  [routerLink]="['/scheduler']"
+                  class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  [ngClass]="{ 'justify-center': !open }"
+                >
+                  <i
+                    class="fa-solid fa-calendar-days w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
+                  ></i>
+                  <span class="ms-3" *ngIf="open">Agenda</span>
+                </a>
+              </li>
+              <li
+                *ngIf="userRole !== 'employee'"
+                (click)="showCrudLink = !showCrudLink"
+              >
+                <div
+                  class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group w-full"
+                  [ngClass]="{
+                    'justify-between': open,
+                    'justify-center': !open
+                  }"
+                >
+                  <a class="flex items-center">
+                    <i
+                      class="fa-solid fa-briefcase w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
+                    ></i>
+                    <span class="ms-3" *ngIf="open">Gestão</span>
+                  </a>
+                  <span
+                    *ngIf="open"
+                    class="flex items-center justify-center cursor-pointer"
+                    [ngClass]="{ 'rotate-180': showCrudLink }"
+                  >
+                    <i class="fa-solid fa-arrow-circle-down w-5"></i>
+                  </span>
+                </div>
+
+                <div
+                  id="crud-link"
+                  class="w-full p-2 bg-slate-100 rounded-md shadow-md mt-0"
+                  *ngIf="showCrudLink && open"
+                >
+                  <a
+                    routerLink="/manager/services"
+                    class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
+                    >Serviços</a
+                  >
+                  <a
+                    routerLink="/manager/users"
+                    class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
+                    >Usuários</a
+                  >
+                </div>
+              </li>
+              <li>
+                <a
+                  [routerLink]="['/general/scheduling']"
+                  class="cursor-pointer flex items-center p-4 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+                  [ngClass]="{ 'justify-center': !open }"
+                >
+                  <i
+                    class="fa-solid fa-calendar-days w-5 text-gray-800 dark:text-white transition duration-75 group-hover:text-gray-900 dark:group-hover:text-white"
+                  ></i>
+                  <span class="ms-3" *ngIf="open">Atendimentos</span>
+                </a>
+              </li>
+            </ul>
           </div>
-          <div class="flex flex-col gap-3 w-full">
+
+          <div
+            class="sticky bottom-0 left-0 right-0 z-30 backdrop-blur-md w-full rounded-md"
+          >
             <div
-<<<<<<< HEAD
-              class="rounded-md border-[1px] border-slate-500 dark:border-slate-600 p-2 flex justify-between border-none hover:border-solid "
-              (click)="showUserOptions = !showUserOptions"
-=======
-              class=" text-primary rounded-lg hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group p-2 flex justify-between  "
-              (click)="showUserOptions = !showUserOptions"
-              [ngClass]="
-              {
-                'rounded-none': showUserOptions,
-                'rounded-b-lg': showUserOptions,
-                'bg-primary': showUserOptions && open,
-                'text-white': showUserOptions && open,
-                'dark:bg-white': showUserOptions && open,
-                'dark:text-white': !showUserOptions || !open,
-                'dark:text-primary': showUserOptions && open,
-              }"
->>>>>>> bb0b76d (update siderbar style)
+              id="user-options"
+              class="w-full p-2 bg-slate-100 rounded-md shadow-md mt-0"
+              *ngIf="showUserOptions"
             >
+              <a
+                routerLink="/settings"
+                class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
+                >Configurações</a
+              >
+              <a
+                (click)="logout()"
+                class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
+                >Sair</a
+              >
+            </div>
+            <div class="flex flex-col gap-3 w-full">
+              <div <<<<<<< HEAD class="rounded-md border-[1px] border-slate-500
+              dark:border-slate-600 p-2 flex justify-between border-none
+              hover:border-solid " (click)="showUserOptions = !showUserOptions"
+              ======= class=" text-primary rounded-lg hover:bg-primary
+              hover:text-white dark:hover:bg-white dark:hover:text-primary group
+              p-2 flex justify-between " (click)="showUserOptions =
+              !showUserOptions" [ngClass]=" { 'rounded-none': showUserOptions,
+              'rounded-b-lg': showUserOptions, 'bg-primary': showUserOptions &&
+              open, 'text-white': showUserOptions && open, 'dark:bg-white':
+              showUserOptions && open, 'dark:text-white': !showUserOptions ||
+              !open, 'dark:text-primary': showUserOptions && open, }" >>>>>>>
+              bb0b76d (update siderbar style) >
               <span
                 class="cursor-pointer flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
                 [ngClass]="{ 'justify-center': !open }"
