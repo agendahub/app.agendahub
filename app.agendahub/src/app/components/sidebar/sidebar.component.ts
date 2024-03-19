@@ -57,13 +57,17 @@ import { MenuItem } from "primeng/api";
     ></div>
 
     <aside
-      class="inset-0 sm:inset-2 sm:z-20 z-[60] w-screen sm:h-[98vh] h-screen transition-transform translate-x-0 absolute sm:fixed"
+      class="inset-0 sm:inset-2 sm:z-20 z-[60] w-screen sm:h-[98vh] h-screen ease-in-out duration-300 absolute sm:fixed"
       aria-label="Sidebar"
       id="default-sidebar"
-      [ngClass]="{ 'sm:w-16 max-w-screen-xl': !open, 'absolute sm:w-72': open }"
+      [ngClass]="{
+        'sm:w-16 max-w-screen-xl translate-x-0': !open,
+        'absolute sm:w-72 sm:translate-x-1': open
+      }"
       [hidden]="!open && (IOS || ANDROID)"
       (mouseenter)="open = true"
       (mouseleave)="open = fixed ? true : false"
+      (dblclick)="setFixed()"
     >
       <div
         class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl"
