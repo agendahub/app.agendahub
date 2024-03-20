@@ -1,6 +1,6 @@
 <div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mt-20 mx-auto max-w-6xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(80vh)] h-full overflow-h-scroll">
     <div>
-        <p-table #dt1  [value]="schedulingList" [paginator]="true" [rows]="10" [responsive]="true" [autoLayout]="true"
+        <p-table #dt1  [value]="filteredSchedulingList" [paginator]="true" [rows]="10" [responsive]="true" [autoLayout]="true"
                  [resizableColumns]="true" [tableStyle]="{ 'min-width': '50rem' }">
             <ng-template pTemplate="caption">    
                 <div class="flex justify-between flex-col sm:flex-row">
@@ -12,7 +12,7 @@
                     <span class="p-input-icon-left">
                         <p-calendar placeholder="Filtrar data" (onSelect)="getSchedulingList()" class="p-inputtext-sm mx-2" [(ngModel)]="rangeDates" selectionMode="range"></p-calendar>
                         <!-- <i class="pi pi-search"></i> -->
-                        <input class="p-inputtext-sm mx-2" pInputText type="text" placeholder="Pesquise o cliente" [(ngModel)]="searchClient" />
+                        <input class="p-inputtext-sm mx-2" pInputText type="text" placeholder="Pesquise o cliente" [(ngModel)]="searchClient" (ngModelChange)="onSearchChange()" />
                     </span>
                 </div>
             </ng-template>
