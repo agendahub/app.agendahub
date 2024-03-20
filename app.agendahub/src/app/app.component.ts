@@ -50,6 +50,7 @@ export class AppComponent {
     private title: Title
   ) {
     moment.locale("pt-br");
+    this.configureTranslation();
 
     primeNG.overlayOptions = {
       appendTo: "body",
@@ -68,5 +69,64 @@ export class AppComponent {
 
   get sidebarFixed() {
     return localStorage.getItem("sidebarFixed") === "true";
+  }
+
+  configureTranslation() {
+    this.primeNG.setTranslation({
+      accept: "Aceitar",
+      reject: "Cancelar",
+      choose: "Escolher",
+      upload: "Enviar",
+      cancel: "Cancelar",
+      dayNames: [
+        "Domingo",
+        "Segunda",
+        "Terça",
+        "Quarta",
+        "Quinta",
+        "Sexta",
+        "Sábado",
+      ],
+      addRule: "Adicionar Regra",
+      removeRule: "Remover Regra",
+      weekHeader: "Semana",
+      today: "Hoje",
+      clear: "Limpar",
+      dateFormat: "dd/mm/yy",
+      firstDayOfWeek: 1,
+      after: "Depois",
+      before: "Antes",
+      startsWith: "Começa com",
+      contains: "Contém", 
+      notContains: "Não contém",
+      endsWith: "Termina com",
+      equals: "Igual",
+      notEquals: "Diferente",
+      noFilter: "Sem filtro",
+      lt: "Menor que",
+      lte: "Menor ou igual a",
+      gt: "Maior que",
+      gte: "Maior ou igual a",
+      is: "É",
+      isNot: "Não é",
+      dateIs: "Data é",
+      dateIsNot: "Data não é",
+      dateBefore: "Data antes",
+      dateAfter: "Data depois",
+      apply: "Aplicar",
+      matchAll: "Corresponder todos",
+      matchAny: "Corresponder qualquer",
+      dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+      dayNamesMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
+      monthNames: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+      monthNamesShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+      weak: "Fraca",
+      medium: "Média",
+      strong: "Forte",
+      passwordPrompt: "Informe uma senha válida",
+      emptyMessage: "Sem registros encontrados",
+      emptyFilterMessage: "Nenhum resultado encontrado",
+      
+    });
   }
 }
