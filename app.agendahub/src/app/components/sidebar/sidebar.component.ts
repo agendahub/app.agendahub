@@ -97,7 +97,7 @@ import { MenuItem } from "primeng/api";
                 [ngClass]="{ 'justify-center': !open }"
               >
                 <i class="fa-solid fa-home w-5 transition duration-75"></i>
-                <span class="ms-3" *ngIf="open">Inicio</span>
+                <span class="ms-3 select-none" *ngIf="open">Inicio</span>
               </a>
               <hr *ngIf="open" class="border-gray-300 mx-3 -mt-1">
             </li>
@@ -108,7 +108,7 @@ import { MenuItem } from "primeng/api";
                 [ngClass]="{ 'justify-center': !open }"
               >
                 <i class="fa-solid fa-calendar-days w-5"></i>
-                <span class="ms-3" *ngIf="open">Agenda</span>
+                <span class="ms-3 select-none" *ngIf="open">Agenda</span>
               </a>
             </li>
             <li
@@ -130,7 +130,7 @@ import { MenuItem } from "primeng/api";
               >
                 <a class="flex items-center">
                   <i class="fa-solid fa-briefcase w-5 duration-75"></i>
-                  <span class="ms-3" *ngIf="open">Gestão</span>
+                  <span class="ms-3 select-none" *ngIf="open">Gestão</span>
                 </a>
                 <span
                   *ngIf="open"
@@ -165,7 +165,7 @@ import { MenuItem } from "primeng/api";
                 [ngClass]="{ 'justify-center': !open }"
               >
                 <i class="fa-solid fa-calendar-days w-5"></i>
-                <span class="ms-3" *ngIf="open">Atendimentos</span>
+                <span class="ms-3 select-none" *ngIf="open">Atendimentos</span>
               </a>
             </li>
           </ul>
