@@ -70,13 +70,13 @@ import { MenuItem } from "primeng/api";
       (dblclick)="setFixed()"
     >
       <div
-        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl"
-        [ngClass]="{ 'p-2': open }"
+        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl pb-1"
+        [ngClass]="{ 'px-2': open }"
       >
-        <div class="flex flex-col gap-5">
+        <div class="flex flex-col gap-3">
           <div class="flex justify-between items-center w-full sm:px-0">
             <img
-              class="w-auto, h-16"
+              class="w-auto, h-16 object-contain"
               [ngClass]="{ 'p-2': !open }"
               [src]="icon"
               alt="logotipo AgendaHub"
@@ -89,7 +89,7 @@ import { MenuItem } from "primeng/api";
             </div>
           </div>
 
-          <ul class="space-y-3 font-medium">
+          <ul class="space-y-2 font-medium">
             <li>
               <a
                 [routerLink]="['/home']"
@@ -99,6 +99,7 @@ import { MenuItem } from "primeng/api";
                 <i class="fa-solid fa-home w-5 transition duration-75"></i>
                 <span class="ms-3" *ngIf="open">Inicio</span>
               </a>
+              <hr *ngIf="open" class="border-gray-300 mx-3 -mt-1">
             </li>
             <li>
               <a
@@ -112,7 +113,7 @@ import { MenuItem } from "primeng/api";
             </li>
             <li
               *ngIf="userRole !== 'employee'"
-              (click)="showCrudLink = !showCrudLink"
+              (click)="showCrudLink = !showCrudLink; clickHandler($event)"
             >
               <div
                 class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group w-full"
@@ -127,7 +128,7 @@ import { MenuItem } from "primeng/api";
                   'dark:text-primary': showCrudLink && open,
                 }"
               >
-                <a>
+                <a class="flex items-center">
                   <i class="fa-solid fa-briefcase w-5 duration-75"></i>
                   <span class="ms-3" *ngIf="open">Gestão</span>
                 </a>
@@ -169,6 +170,7 @@ import { MenuItem } from "primeng/api";
             </li>
           </ul>
         </div>
+
         <div
           class="sticky bottom-0 left-0 right-0 z-30 backdrop-blur-md w-full rounded-md"
         >
@@ -190,8 +192,8 @@ import { MenuItem } from "primeng/api";
           </div>
           <div class="flex flex-col gap-3 w-full">
             <div
-              class=" text-primary rounded-lg hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group p-2 flex justify-between  "
-              (click)="showUserOptions = !showUserOptions"
+              class=" cursor-pointer text-primary rounded-lg hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group p-2 flex justify-between  "
+              (click)="showUserOptions = !showUserOptions; clickHandler($event)"
               [ngClass]="
               {
                 'rounded-none': showUserOptions,
@@ -308,7 +310,10 @@ export class SidebarComponent implements OnInit {
   }
 
   @HostListener("document:click", ["$event"])
-  clickout(event: Event) {}
+  clickout(event: Event) {
+    this.showCrudLink = false;
+    this.showUserOptions = false;
+  }
 
   ngOnInit(): void {
     this.toggleHandler();
@@ -322,6 +327,11 @@ export class SidebarComponent implements OnInit {
 
   isCurrent(path: string) {
     return location.pathname.includes(path);
+  }
+
+  clickHandler(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
   }
 
   setFixed(value?: boolean) {
