@@ -30,3 +30,10 @@ export class ScheduleViewLinkDto {
 
 
 }
+
+export class GetTableSchedulingListDto{
+    public CustomerName!: string
+    public StartDate!: Date
+    public EndDate!: Date
+    public Total!: number
+}

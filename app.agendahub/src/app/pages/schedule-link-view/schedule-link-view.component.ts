@@ -9,7 +9,7 @@ import { User } from '../../models/core/entities';
 import * as moment from 'moment';
 
 type Response = {schedules: any[], scheduleViewAccess: ScheduleViewLinkDto}
-
+ 
 @Component({
   selector: 'app-schedule-link-view',
   templateUrl: './schedule-link-view.component.html',
