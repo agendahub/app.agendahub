@@ -46,10 +46,10 @@ import { MenuItem } from "primeng/api";
       *ngIf="blockScroll"
     ></div>
 
-    <div class="absolute sm:block hidden z-[70] text-white top-7 ease-in-out duration-300" [ngClass]="{'left-72 translate-x-1': open, 'left-16 translate-x-0': !open}"
+    <div class="absolute sm:block hidden z-[70] top-7 ease-in-out duration-300" [ngClass]="{'left-[17.75rem] translate-x-1': open, 'left-[3.75rem] translate-x-0': !open}"
       (mouseleave)="open = fixed ? true : false">
-      <div class="w-5 h-5 rounded-full flex items-center justify-center border-[1px] cursor-pointer
-        bg-clean text-gray-300 border-gray-300 
+      <div class="w-4 h-4 rounded-full flex items-center justify-center border-[1px] cursor-pointer
+        bg-clean text-gray-400 border-gray-400 
         dark:bg-gray-800 dark:border-gray-700 
         hover:dark:bg-white hover:dark:text-gray-800" (click)="setFixed(); open = !open">
         <i class="fa-solid fa-chevron-left fa-2xs" [ngClass]="{'fa-crevron-left': open, 'fa-chevron-right': !open}"></i>
@@ -57,7 +57,7 @@ import { MenuItem } from "primeng/api";
     </div>
 
     <aside
-      class="inset-0 sm:inset-2 sm:z-20 z-[60] w-screen sm:h-[98vh] h-screen ease-in-out duration-300"
+      class="inset-0 sm:inset-1 sm:z-20 z-[60] w-screen sm:h-[99vh] h-screen ease-in-out duration-300"
       aria-label="Sidebar"
       id="default-sidebar"
       [ngClass]="{
