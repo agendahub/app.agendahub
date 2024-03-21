@@ -1,9 +1,9 @@
-import { AfterContentInit, AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, inject } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ContentChildren, EventEmitter, Inject, Input, OnInit, Output, QueryList, ViewChild, inject } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { faCalendarCheck, faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 import { FullCalendarComponent } from '@fullcalendar/angular';
-import { CalendarOptions, Calendar, EventClickArg, EventChangeArg, EventInput } from '@fullcalendar/core';
+import { CalendarOptions, Calendar, EventClickArg, EventChangeArg, EventInput, CalendarApi } from '@fullcalendar/core';
 import listPlugin from '@fullcalendar/list';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
@@ -13,7 +13,9 @@ import * as moment from 'moment';
 import { CalendarItemDirective } from './calendar-item.directive';
 import { CalendarNavigator } from './calendar-navigator';
 import { DOCUMENT } from '@angular/common';
+import { Tooltip } from "primeng/tooltip"
 
+var self: CalendarComponent;
 @Component({
   selector: 'app-calendar',
   templateUrl: './calendar.component.html',
@@ -49,16 +51,21 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   public faConfirm = faCheckCircle;
   public faDelete = faTimesCircle;
 
+  public state!: Record<string, any>
+  
   public nav: CalendarNavigator = new CalendarNavigator(this.Calendar, [this.checkPrevNext.bind(this), this.dispatchViewChange.bind(this)]);;
-
   public calendarOptions: CalendarOptions = {
     locale:"pt-br",
     height: 'auto',
     dayMaxEvents: 3,
+    nowIndicator: true,
+    now: () => moment().format("YYYY-MM-DDTHH:mm:ss"),
     headerToolbar: false,
     themeSystem: 'bootstrap',
     moreLinkContent : x => `+${x.num} mais`,
     moreLinkClick: this.onMoreLinkClick.bind(this),
+    navLinks: true,
+    navLinkDayClick: this.navLinkDayClick.bind(this.Calendar),
     dayHeaderClassNames: ["uppercase", "tracking-tight", "text-right" , "Roboto"],
     initialView: this.views[this.localStorageService.get("view") ?? 0],
     views: {
@@ -76,8 +83,11 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     eventClick : this.onEventClick.bind(this),
     dateClick: this.onDateClick.bind(this),
   }
- 
-  constructor(private localStorageService: LocalStorageService) { }
+
+  constructor(private localStorageService: LocalStorageService, @Inject(DOCUMENT) private doc: Document) {
+    self = this;
+    this.state = {};
+  }
 
   public ngAfterContentInit() {
     this.calendarItemsArray = this.isEditable 
@@ -116,9 +126,8 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
 
   public get month(): string {
     return moment(this.Calendar?.getDate()).format("MMMM").toUpperCapital();
-  };
+  }
 
-  private doc = inject(DOCUMENT);
   private onMoreLinkClick(arg: any) {
     setTimeout(() => {
       const close = this.doc.querySelector(".fc-popover-close")
@@ -230,9 +239,13 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     if (indexView != -1) {
       this.localStorageService.set("view", indexView)
       this.localStorageService.set("viewName", this.views[indexView])
+      this.Calendar.changeView(this.views[indexView]);
+      
+      if (!this.state["skipReload"]) {
+        this.dispatchViewChange();
+      }
+
     }    
-    this.Calendar.changeView(this.views[indexView]);
-    this.dispatchViewChange();
   }
 
   public onEventClick(arg: EventClickArg) {
@@ -249,6 +262,14 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     if (this.isEditable) {
       this.OnDateClick?.emit(arg);
     }
+  }
+
+  public navLinkDayClick(this: CalendarApi, date: Date, jsEvent: UIEvent) {
+    self.state["skipReload"] = true;
+    self.view = self.viewTranslate[1];
+    self!.changeView({value: self.view});
+    self!.Calendar.gotoDate(date);
+    delete self.state["skipReload"]
   }
 
 }
