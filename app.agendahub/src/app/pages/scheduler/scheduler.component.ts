@@ -169,11 +169,9 @@ export class SchedulerComponent implements OnInit {
   //#region Members 'Handling click'
 
   onEventClick(arg: EventClickArg) {
-    console.log(arg);
-    
     this.header = `Editar horário - ${moment(arg.event.extendedProps['schedule']['startDateTime']).format("DD/MM/yy")}`
     
-    let id = + arg.event._def.publicId;
+    let id = + arg.event.extendedProps['id'];
     let schedule = this.schedules.find(x => x.id === id);
 
     if (schedule) {
@@ -201,7 +199,7 @@ export class SchedulerComponent implements OnInit {
   onEventChange(arg: EventChangeArg) {
     this.edit = true;
 
-    let id = + arg.event._def.publicId;
+    let id = + arg.event.extendedProps['id'];
     let schedule = this.schedules.find(x => x.id === id);
 
     if (schedule) {
@@ -349,15 +347,14 @@ export class SchedulerComponent implements OnInit {
     this.visible = false;
   }
 
-  removeOrReplaceEvent(eventId : any, replace : UserSchedule | null = null) {
+  removeOrReplaceEvent(eventId : any, replace? : any) {
     this.events = this.events.filter(x => x.id !== eventId);
     this.schedules = this.schedules.filter(x => x.id != eventId);
     this.clearEvents.next(this.events.filter(x => x.id == eventId));
 
     if (replace) {
-      let event = mapScheduleToEvent([replace]);
-      this.events.push(event);
-      this.addEvent.next(event);
+      this.events.push(replace);
+      this.addEvent.next(replace);
       this.schedules.push(replace);
     }
   }
@@ -440,10 +437,7 @@ export class SchedulerComponent implements OnInit {
         next: x => {
           if (x) {
             if (this.schedules.some(y => y.id == x)) {
-              
               this.removeOrReplaceEvent(x, body);
-  
-              
             } else {
               let schedule = {...body, id: x};
               this.schedules.push(schedule);

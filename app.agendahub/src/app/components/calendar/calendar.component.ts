@@ -169,8 +169,6 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   }
 
   private handleRemoveEvent(event: EventInput | EventInput[] | undefined) {
-    console.log(event);
-    
     if (event) {
       if (event instanceof Array) {
         event.forEach(e => this.Calendar.getEventById(e.id!)?.remove())
