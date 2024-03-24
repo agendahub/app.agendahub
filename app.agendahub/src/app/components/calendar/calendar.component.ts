@@ -144,7 +144,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     }
   }
 
-  private get Calendar(): Calendar {
+  public get Calendar(): Calendar {
     return this.calendarComponent?.getApi();
   }
 
@@ -249,6 +249,12 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     if (this.isEditable) {
       this.OnDateClick?.emit(arg);
     }
+  }
+
+  public setEditable(value: boolean) {
+    this.Calendar.setOption("editable", value);
+    this.Calendar.setOption("selectable", value);
+    this.Calendar.setOption("eventAllow", () => value);
   }
 
 }
