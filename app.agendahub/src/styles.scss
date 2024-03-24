@@ -77,3 +77,11 @@
   overflow: auto;
   max-height: 35%;
 }
+
+.fc-event {
+  @apply border-none px-1
+}
+
+.fc-event:hover {
+  @apply transition duration-150 ease-in-out transform hover:scale-[1.01] z-[99];
+}

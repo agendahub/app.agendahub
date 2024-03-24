@@ -1,4 +1,4 @@
-import { AfterContentInit, AfterViewInit, Component, ContentChildren, EventEmitter, Inject, Input, OnInit, Output, QueryList, ViewChild, inject } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, ContentChildren, ElementRef, EventEmitter, Inject, Input, OnInit, Output, QueryList, ViewChild, inject } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { faCalendarCheck, faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
@@ -60,14 +60,22 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     dayMaxEvents: 3,
     nowIndicator: true,
     now: () => moment().format("YYYY-MM-DDTHH:mm:ss"),
+    // nowIndicatorClassNames: ["text-primary", "border-primary", "border-2"],
     headerToolbar: false,
     themeSystem: 'bootstrap',
-    moreLinkContent : x => `+${x.num} mais`,
-    moreLinkClick: this.onMoreLinkClick.bind(this),
     navLinks: true,
+    eventMinHeight: 45,
+    eventMouseEnter: this.handleTooltip.bind(this),
+    eventMouseLeave: this.handleTooltip.bind(this),
     navLinkDayClick: this.navLinkDayClick.bind(this.Calendar),
+    moreLinkClick: this.onMoreLinkClick.bind(this),
+    eventChange: this.onEventChange.bind(this),
+    eventClick : this.onEventClick.bind(this),
+    dateClick: this.onDateClick.bind(this),
+    moreLinkContent : x => `+${x.num} mais`,
     dayHeaderClassNames: ["uppercase", "tracking-tight", "text-right" , "Roboto"],
     initialView: this.views[this.localStorageService.get("view") ?? 0],
+    plugins: [interactionPlugin, timeGridPlugin, dayGridPlugin, listPlugin ],
     views: {
       timeGridFourDay: {
         type: 'timeGrid',
@@ -77,12 +85,9 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
         slotMinTime: "08:00:00",
         slotMaxTime: "23:00:00"
       }
-    },
-    plugins: [interactionPlugin, timeGridPlugin, dayGridPlugin, listPlugin ],
-    eventChange: this.onEventChange.bind(this),
-    eventClick : this.onEventClick.bind(this),
-    dateClick: this.onDateClick.bind(this),
+    }
   }
+
 
   constructor(private localStorageService: LocalStorageService, @Inject(DOCUMENT) private doc: Document) {
     self = this;
@@ -189,9 +194,29 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     } else {
       this.Calendar.removeAllEvents();
     }
-
   }
 
+  @ViewChild("tooltip") tooltip!: ElementRef<HTMLDivElement>
+  private handleTooltip(event: {event: any, el: any, jsEvent: any} ) {
+    const toggle = (type: "enter" | "leave") => {
+      this.tooltip.nativeElement.classList.remove(type == "enter" ? "hidden" : "block");
+      this.tooltip.nativeElement.classList.add(type == "enter" ? "block" : "hidden");
+    }
+
+    if (event.jsEvent.type == "mouseleave") {
+      return toggle("leave");
+    }
+
+    const coord = event.el.getBoundingClientRect();
+    this.tooltip.nativeElement.style.left = coord.left + (coord.width / 3) + "px"; 
+    this.tooltip.nativeElement.style.top = event.jsEvent.y - 40 + "px";
+
+    toggle("enter");
+
+    this.tooltip.nativeElement.innerHTML = event.event.title;
+    this.tooltip.nativeElement.style.top = coord.top - this.tooltip.nativeElement.clientHeight - 7 + "px";
+  }
+  
   private checkPrevNext() {
     if (this.viewDateRange) {
       let duration = this.Calendar.view.getOption("duration");

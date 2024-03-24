@@ -1,5 +1,5 @@
 <div class="sm:h-full h-max w-full sm:w-75 md:w-50 lg:w-25">
-    
+    <div class="bg-slate-800 opacity-70 rounded-md tracking-wider p-2 shadow-md transition-all ease-in duration-100 font-light" #tooltip style="position: absolute; z-index: 99999;"></div>
     <div class="w-full sm:h-full h-max md:p-2 lg:p-4 px-0">
         <div class="flex justify-between items-center p-2 bg-white sm:rounded-t-lg" [ngClass]="{'rounded-t-lg': !header}">
             <div class="text-4xl text-purple-hb font-bold tracking-tight sm:text-6xl" style="z-index: 2;">
@@ -41,12 +41,4 @@
         </div>
     </div>
 
-</ng-template>
-
-
-<ng-template #tooltipContent>
-    <div class="flex align-items-center">
-        <img src="https://primefaces.org/cdn/primeng/images/primeng.svg" height="20" class="mr-2" />
-        <span> <b>PrimeNG</b> rocks! </span>
-    </div>
 </ng-template>
