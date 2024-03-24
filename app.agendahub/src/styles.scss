@@ -13,6 +13,8 @@
   --base-dark: #2c2f40;
   --base-medium: #5a758c;
   --base-light: #a4b0bf;
+  
+  // overrides fullcalendar 
   --fc-now-indicator-color: @apply border-primary;
 }
 
@@ -73,15 +75,25 @@
   margin-top: 16px;
 }
 
+
+// overrides fullcalendar
 .fc-more-popover {
   overflow: auto;
   max-height: 35%;
 }
 
 .fc-event {
-  @apply border-none px-1
+  @apply border-none px-2 py-[2px] rounded-xl mix-blend-darken 
 }
 
 .fc-event:hover {
   @apply transition duration-150 ease-in-out transform hover:scale-[1.01] z-[99];
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+  @apply border-none
+}
+
+.fc-theme-standard td, .fc-theme-standard tr {
+  @apply border-none
 }

@@ -205,6 +205,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     } 
 
     const toggle = (type: "enter" | "leave") => {
+      this.tooltip.nativeElement.style.zIndex = "0";
       this.tooltip.nativeElement.classList.remove(type == "enter" ? "hidden" : "block");
       this.tooltip.nativeElement.classList.add(type == "enter" ? "block" : "hidden");
     }
@@ -219,6 +220,9 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
 
     toggle("enter");
 
+    setTimeout(() => {
+      this.tooltip.nativeElement.style.zIndex = "99999";
+    }, 75);
     this.tooltip.nativeElement.innerHTML = event.event.title;
     this.tooltip.nativeElement.style.top = coord.top - this.tooltip.nativeElement.clientHeight - 7 + "px";
   }
