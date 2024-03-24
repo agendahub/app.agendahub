@@ -88,3 +88,10 @@ function hashObject(object: any) : any {
 function isComplex(value: any) {
   return !(value instanceof Date) && (typeof value === 'object' || value instanceof Array);
 }
+
+export function isMobile() {
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window)
+  ) || /android/i.test(navigator.userAgent);
+  
+}

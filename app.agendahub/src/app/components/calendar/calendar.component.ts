@@ -14,6 +14,7 @@ import { CalendarItemDirective } from './calendar-item.directive';
 import { CalendarNavigator } from './calendar-navigator';
 import { DOCUMENT } from '@angular/common';
 import { Tooltip } from "primeng/tooltip"
+import { isMobile } from '../../utils/util';
 
 var self: CalendarComponent;
 @Component({
@@ -198,6 +199,11 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
 
   @ViewChild("tooltip") tooltip!: ElementRef<HTMLDivElement>
   private handleTooltip(event: {event: any, el: any, jsEvent: any} ) {
+    
+    if (isMobile()) {
+      return;
+    } 
+
     const toggle = (type: "enter" | "leave") => {
       this.tooltip.nativeElement.classList.remove(type == "enter" ? "hidden" : "block");
       this.tooltip.nativeElement.classList.add(type == "enter" ? "block" : "hidden");

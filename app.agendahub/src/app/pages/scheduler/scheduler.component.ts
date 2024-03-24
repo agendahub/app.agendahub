@@ -133,19 +133,19 @@ export class SchedulerComponent implements OnInit {
         base.startBase.setHours(rules.minHour);
         base.finishBase.setHours(rules.maxHour);
     
-        // if (moment(dates.start?.value).isBefore(base.startBase)) {
-        //   return {error: "O início precisa ser após as 08:00"}
+        if (moment(dates.start?.value).isBefore(base.startBase)) {
+          return {error: "O início precisa ser após as 08:00"}
           
-        // } else if (moment(dates.finish?.value).isAfter(base.finishBase)) {
-        //   return {error: "O fim precisa ser antes das 23:00"}
-        // }
+        } else if (moment(dates.finish?.value).isAfter(base.finishBase)) {
+          return {error: "O fim precisa ser antes das 23:00"}
+        }
 
-        // if (moment(dates.finish?.value).isBefore(dates.start?.value) || new Date(dates.finish?.value).getTime() === new Date(dates.start?.value).getTime()) {
-        //   return {error: "O fim não pode ser antes ou igual o início"};
-        // } else {
-        //   dates.start?.setErrors(null);
-        //   dates.finish?.setErrors(null); 
-        // }
+        if (moment(dates.finish?.value).isBefore(dates.start?.value) || new Date(dates.finish?.value).getTime() === new Date(dates.start?.value).getTime()) {
+          return {error: "O fim não pode ser antes ou igual o início"};
+        } else {
+          dates.start?.setErrors(null);
+          dates.finish?.setErrors(null); 
+        }
 
       }
   
