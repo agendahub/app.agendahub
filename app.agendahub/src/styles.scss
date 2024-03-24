@@ -22,6 +22,10 @@
   font-family: "Outfit", sans-serif;
 }
 
+*:focus-visible {
+  outline: none !important;
+}
+
 .p-paginator-bottom {
   border-radius: 0px 0px 7px 7px !important;
 }
@@ -90,10 +94,8 @@
   @apply transition duration-150 ease-in-out transform hover:scale-[1.01] z-[99];
 }
 
-.fc-theme-standard td, .fc-theme-standard th {
-  @apply border-none
-}
-
-.fc-theme-standard td, .fc-theme-standard tr {
-  @apply border-none
+.fc-theme-standard td, .fc-theme-standard th,
+.fc-theme-standard td, .fc-theme-standard tr,
+.fc-timegrid-event-harness-inset .fc-timegrid-event, .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
+  @apply border-none shadow-none
 }

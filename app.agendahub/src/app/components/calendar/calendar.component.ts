@@ -14,7 +14,7 @@ import { CalendarItemDirective } from './calendar-item.directive';
 import { CalendarNavigator } from './calendar-navigator';
 import { DOCUMENT } from '@angular/common';
 import { Tooltip } from "primeng/tooltip"
-import { isMobile } from '../../utils/util';
+import { isMobile, rgbToRgba, rgbaToRgb } from '../../utils/util';
 
 var self: CalendarComponent;
 @Component({
@@ -204,26 +204,30 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
       return;
     } 
 
+    const color = event.el.style.backgroundColor;
+
     const toggle = (type: "enter" | "leave") => {
+      event.el.style.backgroundColor = rgbaToRgb(color);
       this.tooltip.nativeElement.style.zIndex = "0";
       this.tooltip.nativeElement.classList.remove(type == "enter" ? "hidden" : "block");
       this.tooltip.nativeElement.classList.add(type == "enter" ? "block" : "hidden");
     }
-
+    
     if (event.jsEvent.type == "mouseleave") {
       return toggle("leave");
     }
-
+    
     const coord = event.el.getBoundingClientRect();
-    this.tooltip.nativeElement.style.left = coord.left + (coord.width / 3) + "px"; 
     this.tooltip.nativeElement.style.top = event.jsEvent.y - 40 + "px";
-
+    this.tooltip.nativeElement.style.left = coord.left + (coord.width / 3) + "px"; 
+    
     toggle("enter");
-
+    
     setTimeout(() => {
       this.tooltip.nativeElement.style.zIndex = "99999";
     }, 75);
     this.tooltip.nativeElement.innerHTML = event.event.title;
+    event.el.style.backgroundColor = rgbToRgba(color, 0.75);
     this.tooltip.nativeElement.style.top = coord.top - this.tooltip.nativeElement.clientHeight - 7 + "px";
   }
   

@@ -95,3 +95,17 @@ export function isMobile() {
   ) || /android/i.test(navigator.userAgent);
   
 }
+
+export function rgbaToRgb(rgba: string) {
+  if (!rgba.includes("rgba") || !rgba) return rgba;
+
+  const [r, g, b, a] = rgba.match(/\d+/g)!.map(Number);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+export function rgbToRgba(rgb: string, alpha: number) {
+  if (!rgb.includes("rgb") || !rgb) return rgb;
+
+  const [r, g, b] = rgb.match(/\d+/g)!.map(Number);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
