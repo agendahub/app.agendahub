@@ -19,7 +19,22 @@
                 </div>
             </div>
         </div>
-        <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+        <full-calendar #calendar [options]="calendarOptions">
+            <ng-template #eventContent let-arg>
+                <div class="h-full w-full px-1 hover:text-sky-50">
+                    <!-- <div [ngSwitch]="view">
+                        <div *ngSwitchCase="'Mês'">Mês</div>
+                        <div *ngSwitchCase="'Hora semana'">Hora</div>
+                        <div *ngSwitchCase="'Semana'">Semana</div>
+                        <div *ngSwitchCase="'Dia'">Dia</div>
+                    </div> -->
+                    <div class="w-full h-full flex gap-x-1" [ngClass]="{'flex-col': view == 'Hora semana'}">
+                        <div class="text-warmGray-100 rounded-md opacity-100" [ngStyle]="{'color': arg.event.extendedProps.employee.color}">{{arg.event.start | date: "h:mm"}}</div>
+                        <div class="text-warmGray-100 rounded-md opacity-100 mix-blend-darken" [ngStyle]="{'color': arg.event.extendedProps.employee.color}">{{arg.event.title}}</div>
+                    </div>
+                </div>
+            </ng-template>
+        </full-calendar>
         <div class="h-3 bg-white rounded-b-lg"></div>
     </div>        
 </div>

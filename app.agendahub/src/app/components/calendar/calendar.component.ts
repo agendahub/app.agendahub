@@ -14,7 +14,7 @@ import { CalendarItemDirective } from './calendar-item.directive';
 import { CalendarNavigator } from './calendar-navigator';
 import { DOCUMENT } from '@angular/common';
 import { Tooltip } from "primeng/tooltip"
-import { isMobile, rgbToRgba, rgbaToRgb } from '../../utils/util';
+import { hexToRgbA, isMobile, rgbToRgba, rgbaToRgb } from '../../utils/util';
 
 var self: CalendarComponent;
 @Component({
@@ -44,7 +44,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
 
   public views = ['dayGridMonth', 'timeGridFourDay', 'dayGridWeek', 'dayGridDay'];
   public viewTranslate = ["Mês", "Hora semana", "Semana", "Dia"];
-  public view = 'Padrão';
+  public view = 'Hora semana';
 
   public faNext = faArrowCircleRight;
   public faOptions = faCalendarCheck;
@@ -53,6 +53,12 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   public faDelete = faTimesCircle;
 
   public state!: Record<string, any>
+
+  public fork = {
+    rgbToRgba: rgbToRgba,
+    rgbaToRgb: rgbaToRgb,
+    hexToRgba: hexToRgbA
+  }
   
   public nav: CalendarNavigator = new CalendarNavigator(this.Calendar, [this.checkPrevNext.bind(this), this.dispatchViewChange.bind(this)]);;
   public calendarOptions: CalendarOptions = {
@@ -207,7 +213,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     const color = event.el.style.backgroundColor;
 
     const toggle = (type: "enter" | "leave") => {
-      event.el.style.backgroundColor = rgbaToRgb(color);
+      event.el.style.backgroundColor = rgbToRgba(rgbaToRgb(color), 0.5);
       this.tooltip.nativeElement.style.zIndex = "0";
       this.tooltip.nativeElement.classList.remove(type == "enter" ? "hidden" : "block");
       this.tooltip.nativeElement.classList.add(type == "enter" ? "block" : "hidden");
@@ -227,7 +233,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
       this.tooltip.nativeElement.style.zIndex = "99999";
     }, 75);
     this.tooltip.nativeElement.innerHTML = event.event.title;
-    event.el.style.backgroundColor = rgbToRgba(color, 0.75);
+    event.el.style.backgroundColor = rgbToRgba(color, 0.6);
     this.tooltip.nativeElement.style.top = coord.top - this.tooltip.nativeElement.clientHeight - 7 + "px";
   }
   

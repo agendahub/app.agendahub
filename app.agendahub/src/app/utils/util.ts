@@ -20,7 +20,7 @@ export function mapScheduleToEvent(schedules: UserSchedule[], filter: (x: UserSc
         title: `${x.employee.name} - ${x.customer?.name ?? "-"}`,
         start: x.schedule.startDateTime,
         end: x.schedule.finishDateTime,
-        color: x.employee.color,
+        color: x.employee.color ? hexToRgbA(x.employee.color!, 0.5) : x.employee.color,
         extendedProps: {...x},
       })
     })
@@ -108,4 +108,17 @@ export function rgbToRgba(rgb: string, alpha: number) {
 
   const [r, g, b] = rgb.match(/\d+/g)!.map(Number);
   return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+export function hexToRgbA(hex: string, alpha: number) {
+  let c : any;
+  if(/^#([a-f0-9]{3}){1,2}$/.test(hex)){
+    c= hex.substring(1).split('');
+      if(c.length== 3){
+          c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      c= '0x'+c.join('');
+      c= 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+ ',' + alpha + ' )';
+  }
+  return c ?? hex;
 }
