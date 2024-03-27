@@ -195,7 +195,7 @@ export class CalendarComponent
   momentHeader(day: any) {
     let m = moment(day.date);
     if (this.view == "Mês") {
-      m = m.substract(1, "day");
+      m = m.subtract(1, "day");
     }
     return m;
   }
