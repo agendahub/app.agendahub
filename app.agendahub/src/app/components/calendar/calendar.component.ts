@@ -192,12 +192,22 @@ export class CalendarComponent
     return moment(this.Calendar?.getDate()).format("MMMM").toUpperCapital();
   }
 
+  momentHeader(day: any) {
+    let m = moment(day.date);
+    if (this.view == "Mês") {
+      m = m.substract(1, "day");
+    }
+    return m;
+  }
+
   isToday(day: any) {
-    return moment(day.date).isSame(moment(), "d") || moment(day.date).get("e") == moment().get("e");
+    let mom = this.momentHeader(day);
+    return mom.isSame(moment(), "d") || mom.get("e") == moment().get("e");
   }
 
   formatHeaderDay(day: any, format: string) {
-    let m = moment(day.date);
+    let m = this.momentHeader(day);
+    
     let dayNumber = m.date();
     let dayName = m.format(format);
 
