@@ -16,6 +16,7 @@
   
   // overrides fullcalendar 
   --fc-now-indicator-color: @apply border-primary;
+  --fc-today-bg-color: rgba(240, 236, 229, 0.5);
 }
 
 * {
@@ -79,7 +80,6 @@
   margin-top: 16px;
 }
 
-
 // overrides fullcalendar
 .fc-more-popover {
   overflow: auto;
@@ -87,15 +87,47 @@
 }
 
 .fc-event {
-  @apply border-none rounded-md mix-blend-darken 
+  @apply border-none rounded-md mix-blend-darken p-1;
 }
 
 .fc-event:hover {
   @apply transition duration-150 ease-in-out transform hover:scale-[1.01] z-[99];
 }
 
-.fc-theme-standard td, .fc-theme-standard th,
-.fc-theme-standard td, .fc-theme-standard tr,
-.fc-timegrid-event-harness-inset .fc-timegrid-event, .fc-timegrid-event.fc-event-mirror, .fc-timegrid-more-link {
-  @apply border-none shadow-none
+.fc-theme-standard td,
+.fc-theme-standard th,
+.fc-theme-standard td,
+.fc-theme-standard tr,
+.fc-timegrid-event-harness-inset .fc-timegrid-event,
+.fc-timegrid-event.fc-event-mirror,
+.fc-timegrid-more-link {
+  @apply border-none shadow-none;
+}
+
+.fc-theme-standard td, .fc-theme-standard th {
+  // @apply border-collapse border-[1px] border-solid border-sky-50;
+}
+
+.fc.fc-theme-standard .fc-view-harness td {
+  @apply border-[1px] rounded-md;
+}
+
+.fc .fc-timegrid-now-indicator-line {
+  @apply border-primary h-[1px] bg-primary rounded border-l-4;
+}
+
+.fc-direction-ltr .fc-timegrid-now-indicator-arrow {
+  @apply rounded-md p-[1px];
+}
+
+.fc-v-event .fc-event-time {
+  @apply text-xs leading-3 -tracking-wider font-extralight;
+}
+
+.fc-v-event .fc-event-title {
+  @apply text-xs leading-4 -tracking-tighter font-light;
+}
+
+.fc .fc-daygrid-day-frame {
+  @apply border-[1px] border-clean border-opacity-30;
 }

@@ -1,61 +1,122 @@
-<div class="sm:h-full h-max w-full sm:w-75 md:w-50 lg:w-25">
-    <div class="hidden bg-slate-800 border-none rounded-md -tracking-wider px-2 py-1 leading-snug shadow-md transition-all ease-linear duration-200 font-light" 
-        #tooltip style="position: absolute;">
-    </div>
-    <div class="w-full sm:h-full h-max md:p-2 lg:p-4 px-0">
-        <div class="flex justify-between items-center p-2 bg-white sm:rounded-t-lg" [ngClass]="{'rounded-t-lg': !header}">
-            <div class="text-4xl text-purple-hb font-bold tracking-tight sm:text-6xl" style="z-index: 2;">
-                {{month}}
-            </div>
-            
-            <div class="flex gap-4 items-center justify-between">
-                <div class="bg-purple-hb rounded-full cursor-pointer" (click)="op.toggle($event)" *ngIf="header">
-                    <i class="fa-solid fa-sliders p-2"></i>
-                </div>
-                
-                <div class="flex gap-1" *ngIf="nav">
-                    <fa-icon size="2x" [icon]="faPrev" class="text-purple-hb cursor-pointer" [ngClass]="{'opacity-60': !nav.previousEnable}" (click)="nav.previousEnable && nav.previous()"></fa-icon>
-                    <fa-icon size="2x" [icon]="faNext" class="text-purple-hb cursor-pointer" [ngClass]="{'opacity-60': !nav.nextEnable}" (click)="nav.nextEnable && nav.next()"></fa-icon>
-                </div>
-            </div>
+<div
+  class="sm:h-full h-max w-full sm:w-75 md:w-50 lg:w-25 transition-all ease-linear duration-200"
+>
+  <div
+    class="hidden bg-slate-800 border-none rounded-md -tracking-wider px-2 py-1 leading-snug shadow-md font-light"
+    #tooltip
+    style="position: absolute"
+  ></div>
+  <div class="w-full sm:h-full h-max md:p-2 lg:p-4 px-0">
+    <div
+      class="flex justify-between items-center p-2 bg-white sm:rounded-t-lg translate-x-0 open:translate-x-1"
+      [ngClass]="{ 'rounded-t-lg': !header }"
+    >
+      <div
+        class="text-4xl text-purple-hb font-bold tracking-tight sm:text-6xl"
+        style="z-index: 2"
+      >
+        {{ month }}
+      </div>
+
+      <div class="flex gap-4 items-center justify-between">
+        <div
+          class="bg-purple-hb rounded-full cursor-pointer"
+          (click)="op.toggle($event)"
+          *ngIf="header"
+        >
+          <i class="fa-solid fa-sliders p-2"></i>
         </div>
-        <full-calendar #calendar [options]="calendarOptions">
-            <ng-template #eventContent let-arg>
-                <div class="h-full w-full px-1 hover:text-sky-50">
-                    <!-- <div [ngSwitch]="view">
-                        <div *ngSwitchCase="'Mês'">Mês</div>
-                        <div *ngSwitchCase="'Hora semana'">Hora</div>
-                        <div *ngSwitchCase="'Semana'">Semana</div>
-                        <div *ngSwitchCase="'Dia'">Dia</div>
-                    </div> -->
-                    <div class="w-full h-full flex gap-x-1" [ngClass]="{'flex-col': view == 'Hora semana'}">
-                        <div class="text-warmGray-100 rounded-md opacity-100" [ngStyle]="{'color': arg.event.extendedProps.employee.color}">{{arg.event.start | date: "h:mm"}}</div>
-                        <div class="text-warmGray-100 rounded-md opacity-100 mix-blend-darken" [ngStyle]="{'color': arg.event.extendedProps.employee.color}">{{arg.event.title}}</div>
-                    </div>
-                </div>
-            </ng-template>
-        </full-calendar>
-        <div class="h-3 bg-white rounded-b-lg"></div>
-    </div>        
+
+        <div class="flex gap-1" *ngIf="nav">
+          <fa-icon
+            size="2x"
+            [icon]="faPrev"
+            class="text-purple-hb cursor-pointer"
+            [ngClass]="{ 'opacity-60': !nav.previousEnable }"
+            (click)="nav.previousEnable && nav.previous()"
+          ></fa-icon>
+          <fa-icon
+            size="2x"
+            [icon]="faNext"
+            class="text-purple-hb cursor-pointer"
+            [ngClass]="{ 'opacity-60': !nav.nextEnable }"
+            (click)="nav.nextEnable && nav.next()"
+          ></fa-icon>
+        </div>
+      </div>
+    </div>
+    <full-calendar id="calendar" #calendar [options]="calendarOptions">
+      <!-- <ng-template #eventContent let-arg>
+        <div class="h-full w-full px-1 hover:text-sky-50">
+          <div
+            class="w-full h-full flex gap-x-1"
+            [ngClass]="{ 'flex-col': view == 'Hora semana' }"
+          >
+            <div
+              class="text-warmGray-100 rounded-md opacity-100"
+              [ngStyle]="{ color: arg.event.extendedProps.employee.color }"
+            >
+              {{ arg.event.start | date : "h:mm" }}
+            </div>
+            <div
+              class="text-warmGray-100 rounded-md opacity-100 mix-blend-darken"
+              [ngStyle]="{ color: arg.event.extendedProps.employee.color }"
+            >
+              {{ arg.event.title }}
+            </div>
+          </div>
+        </div>
+      </ng-template> -->
+
+      <ng-template #dayHeaderContent let-day>
+        <div class="text-warmGray-950 p-1 flex flex-col justify-center items-center inter uppercase -tracking-wide">
+          <span *ngIf="view != 'Mês'" class="flex justify-center items-center" [ngClass]="{'p-1 w-6 h-6 rounded-full bg-primary text-clean': isToday(day)}">
+            <small>{{formatHeaderDay(day, "ddd").dayNumber}}</small>
+          </span>
+          <span class="leading-5">{{formatHeaderDay(day, view === 'Dia' ? "dddd" : "ddd").dayName}}</span>
+          <span [ngClass]="{'border-[2px] w-full border-primary rounded-lg': isToday(day)}"></span>
+        </div>
+      </ng-template>
+
+      <ng-template #slotLabelContent let-day>
+        <div class="leading-5 -tracking-wider">
+          {{ day.date | date: 'h:mm' }}
+        </div>
+      </ng-template>
+
+      <ng-template #slotLaneaneContent let-day>
+        LANE
+      </ng-template>
+
+    </full-calendar>
+    <div class="h-3 bg-white rounded-b-lg"></div>
+  </div>
 </div>
 
-<p-overlayPanel #op [style]="{background: '#ddd'}">
-    <ng-container [ngTemplateOutlet]="headerView"></ng-container>
+<p-overlayPanel #op [style]="{ background: '#ddd' }">
+  <ng-container [ngTemplateOutlet]="headerView"></ng-container>
 </p-overlayPanel>
 
 <ng-template #headerView>
-
-    <div class="grid grid-cols-12 gap-1 py-2 md:px-2 lg:px-4 px-0" *ngIf="header">
-        <ng-container *ngFor="let item of calendarItemsArray">
-            <div class="md:col-span-6 col-span-6 flex items-center">
-                <ng-container [ngTemplateOutlet]="item.template"></ng-container>
-            </div>
-        </ng-container>
-        <div class="md:col-span-6 col-span-6 flex items-center" [ngClass]="{'col-span-12': calendarItemsArray.length === 0}">
-            <div class="w-full" >
-                <p-dropdown dropdownIcon="fa-solid fa-calendar-check" [options]="viewTranslate" [(ngModel)]="view" (onChange)="changeView($event)" [style]="{width: '100%'}"></p-dropdown>
-            </div>
-        </div>
+  <div class="grid grid-cols-12 gap-1 py-2 md:px-2 lg:px-4 px-0" *ngIf="header">
+    <ng-container *ngFor="let item of calendarItemsArray">
+      <div class="md:col-span-6 col-span-6 flex items-center">
+        <ng-container [ngTemplateOutlet]="item.template"></ng-container>
+      </div>
+    </ng-container>
+    <div
+      class="md:col-span-6 col-span-6 flex items-center"
+      [ngClass]="{ 'col-span-12': calendarItemsArray.length === 0 }"
+    >
+      <div class="w-full">
+        <p-dropdown
+          dropdownIcon="fa-solid fa-calendar-check"
+          [options]="viewTranslate"
+          [(ngModel)]="view"
+          (onChange)="changeView($event)"
+          [style]="{ width: '100%' }"
+        ></p-dropdown>
+      </div>
     </div>
-
+  </div>
 </ng-template>
