@@ -38,6 +38,8 @@ export class CalendarNavigator {
     let skip = false;
     let endX: number;
     let startX: number;
+    let deltaY: number;
+    let threshold = 50;
 
     function handleTouch() {
       if (endX - startX < 0) {
@@ -59,11 +61,14 @@ export class CalendarNavigator {
 
     calendar?.addEventListener("touchstart", (e: any) => {
       startX = e.touches[0].clientX;
+      deltaY = e.touches[0].clientY;
     });
 
     calendar?.addEventListener("touchend", (e: any) => {
       endX = e.changedTouches[0].clientX;
-      if (Math.abs(endX - startX) === 0 || skip) return;
+      deltaY = e.changedTouches[0].clientY - deltaY;
+      let deltaX = Math.abs(endX - startX)
+      if (deltaX === 0 || deltaX < threshold || skip || deltaY >= threshold) return;
       handleTouch();
     });
   }
