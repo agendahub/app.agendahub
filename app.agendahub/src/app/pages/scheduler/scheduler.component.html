@@ -40,7 +40,7 @@
 
             <div class="sm:col-span-6 col-span-12">
                 <label for="startDateTime">Início</label>
-                <p-calendar formControlName="startDateTime" [readonly]="isEditEnable" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                <p-calendar formControlName="startDateTime" [readonlyInput]="isEditEnable"  placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
                 <small class="text-red-600 ng-dirty" *ngIf="form.get('startDateTime')?.errors"> {{form.get('startDateTime')?.errors?.['error']}} </small>
             </div>
             
@@ -51,7 +51,7 @@
 
             <div class="sm:col-span-6 col-span-12">
                 <label for="finishDateTime">Fim</label>
-                <p-calendar formControlName="finishDateTime" placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                <p-calendar formControlName="finishDateTime" [readonlyInput]="isEditEnable" placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
                 <small class="text-red-600 ng-dirty" *ngIf="form.get('finishDateTime')?.errors"> {{form.get('finishDateTime')?.errors?.['error']}} </small>
             </div>
 

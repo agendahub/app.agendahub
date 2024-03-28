@@ -5,7 +5,7 @@ import { LoginComponent } from "./pages/login/login.component";
 import { HomeComponent } from "./pages/home/home.component";
 import { CommonModule } from "@angular/common";
 import { AuthGuardService } from "./auth/auth.guard.service";
-import { SettingsComponent } from "./pages/settings/settings.component";
+import { LinksComponent } from "./pages/links/links.component";
 import { ScheduleLinkViewComponent } from "./pages/schedule-link-view/schedule-link-view.component";
 import { SchedulingComponent } from "./modules/general/scheduling/scheduling.component";
 
@@ -17,11 +17,18 @@ const routes: Routes = [
     component: SchedulerComponent,
     canActivate: [AuthGuardService],
   },
-
+  {
+    path: "links",
+    component: LinksComponent,
+    canActivate: [AuthGuardService],
+  },
   {
     path: "settings",
-    component: SettingsComponent,
-    canActivate: [AuthGuardService],
+    canActivateChild: [AuthGuardService],
+    loadChildren: () =>
+      import("./modules/settings/settings-routing.module").then(
+        (r) => r.SettingsRoutingModule
+      ),
   },
   {
     path: "manager",
