@@ -181,23 +181,14 @@ export class AuthService {
   }
 
   private tryRefreshToken() {
-    console.log("Token its auto-refresh only on mobile");
-    if (!this.platform.isBrowser || this.platform.ANDROID || this.platform.IOS) {
-
-      console.log("Trying to refresh token");
-      this.httpClient.get(this.baseUrl + "Auth/Refresh").subscribe((x: any) => {
-        console.log(x);
-        
-        if (x && x.token) {
-          console.log("Token refreshed");
-          this.Token = x.token;
-          
-          this.checkToken()
-        }
-      }, err => {
-        this.back({beforeNavigate: () => this.messageService.add({severity: "warning", summary: "Erro ao atualizar token", detail: err})})
-      })
-    }
+    this.httpClient.get(this.baseUrl + "Auth/Refresh").subscribe((x: any) => {
+      if (x && x.token) {
+        this.Token = x.token;
+        this.checkToken()
+      }
+    }, err => {
+      this.back({beforeNavigate: () => this.messageService.add({severity: "warning", summary: "Erro ao atualizar token", detail: err})})
+    })
   }
 
 }
