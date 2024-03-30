@@ -1,7 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { SettingsService } from '../../services/settings.service';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, Validators } from '@angular/forms';
 import { FormUtils } from '../../../../utils/form';
+import { AuthService } from '../../../../auth/auth-service.service';
+import { Access } from '../../../../auth/acess';
+import { LoaderService } from '../../../../services/loader.service';
 
 @Component({
   selector: 'app-appointments',
@@ -10,6 +13,7 @@ import { FormUtils } from '../../../../utils/form';
 })
 export class AppointmentsComponent implements OnInit {
 
+  hasWriteAccess!: boolean
   loading!: boolean;
   futils!: FormUtils;
   state: any;
@@ -21,39 +25,38 @@ export class AppointmentsComponent implements OnInit {
     { label: 'Quinta', value: 4 },
     { label: 'Sexta', value: 5 },
     { label: 'Sábado', value: 6 },
-    
   ]
 
-  constructor(private settings: SettingsService, private fb: FormBuilder) { }
+  constructor(private settings: SettingsService, private fb: FormBuilder, private auth: AuthService, private loader: LoaderService) { }
 
   ngOnInit(): void {
+    this.checkAccess();
     this.createForm();
     this.loadState();
   }
 
   createForm() {
     this.futils = new FormUtils(this.fb.group({
-      openTime: [''],
-      closeTime: [''],
-      isOpen: [true],
-      days: ['']
+      openTime: [{value:'', disabled: !this.hasWriteAccess}, [Validators.required]],
+      closeTime: [{value:'', disabled: !this.hasWriteAccess}, [Validators.required]],
+      days: [{value:'', disabled: !this.hasWriteAccess}, [Validators.required]],
+      isOpen: [{value:true, disabled: !this.hasWriteAccess}],
     }));
+  }
 
-
+  checkAccess() {
+    this.hasWriteAccess = this.auth.getUserAccess() === Access.Admin;
   }
 
   async loadState() {
-    this.state = await this.settings.state('Appointments')
-    
+    this.loader.showById('appointments');
+    this.state = await this.settings.state('Appointments')   
     this.futils.form.patchValue(this.state);
-    console.log(this.state, this.futils.form.value);
-    
+    this.loader.hideById('appointments');
   }
 
   async save() {
     const form = this.futils.form.value;
-    console.log(form);
-
     await this.settings.save('Appointments', form);
   }
 

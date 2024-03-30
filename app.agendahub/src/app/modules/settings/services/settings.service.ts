@@ -55,12 +55,12 @@ export class SettingsService {
     return this._lock.asObservable();
   }
 
-  public async state(state: SettingsState) {
+  public async state<T = any>(state: SettingsState) : Promise<T> {
     if (state in this.states) {
-      return this.states[state]
+      return this.states[state] as T
     }
     
-    return await this.retrieveSettingsFromApi(state);
+    return await this.retrieveSettingsFromApi(state) as T;
   }
 
   public async save(state: SettingsState, settings: unknown) {

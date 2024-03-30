@@ -8,6 +8,7 @@ import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { Platform } from '@angular/cdk/platform';
+import { Access } from './acess';
 
 @Injectable({
   providedIn: 'root'
@@ -75,6 +76,10 @@ export class AuthService {
     const isValid = this.jwt.isTokenExpired(this.Token)
     
     return isValid
+  }
+
+  public getUserAccess(): Access {
+    return this.TokenData?.role;
   }
   
   public login(login: string, password: string, extras?: Record<string, any>) {

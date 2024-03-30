@@ -150,7 +150,7 @@
       }
 
       .p-menuitem-link {
-        @apply bg-gray-400 dark:bg-gray-800 dark:border-primary;
+        @apply bg-gray-400 dark:bg-gray-800 dark:border-primary font-medium;
         padding: 1rem !important;
         box-shadow: none !important; 
       }

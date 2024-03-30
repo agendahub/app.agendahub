@@ -16,6 +16,7 @@ import { CalendarItemDirective } from './calendar/calendar-item.directive';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -24,8 +25,10 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     SidebarComponent,
     CalendarComponent,
     CalendarItemDirective,
+    AlertComponent,
   ],
   exports: [
+    AlertComponent,
     NavComponent,
     LoaderComponent,
     SidebarComponent,

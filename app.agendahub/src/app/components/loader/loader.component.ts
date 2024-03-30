@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject, Input } from "@angular/core";
 import { LoaderService } from "../../services/loader.service";
 import { NgxUiLoaderService, SPINNER } from "ngx-ui-loader";
 import { DOCUMENT } from "@angular/common";
@@ -6,8 +6,7 @@ import { DOCUMENT } from "@angular/common";
 @Component({
     selector: "loader",
     template: ` 
-    <ngx-ui-loader 
-	[fgsType]="option"
+    <ngx-ui-loader [fgsType]="option"
 	[bgsType]="option"
 	bgsColor="#71798a"
     [bgsOpacity]="0.5"
@@ -24,12 +23,13 @@ import { DOCUMENT } from "@angular/common";
     [logoSize]="120"
     logoUrl=""
     masterLoaderId="master"
+    [loaderId]="taskId"
     overlayBorderRadius="0"
     overlayColor="rgba(40 40 40 0.8)"
     pbColor="#71798a"
     pbDirection="ltr"
     [pbThickness]="3"
-    [hasProgressBar]="true"
+    [hasProgressBar]="taskId === 'master'"
     textColor="#FFFFFF"
     textPosition="center-center"
     >
@@ -39,12 +39,17 @@ import { DOCUMENT } from "@angular/common";
 })
 export class LoaderComponent {
 
+    @Input() taskId: string = "master";
     isLoading = false;
     option = SPINNER.threeStrings;
 
-
     constructor(private loaderService: LoaderService, private ngxLoader: NgxUiLoaderService, @Inject(DOCUMENT) private document: Document) {
         this.loaderService.isLoading.subscribe(x  => {
+            if (x.taskId && x.taskId !== "master") {
+                x.state ? this.ngxLoader.startLoader(x.taskId!) : this.ngxLoader.stopLoader(x.taskId!);
+                return;
+            };
+
             this.isLoading = x.state;
 
             if (this.isLoading) {

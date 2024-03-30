@@ -11,6 +11,7 @@ import { SettingsService } from './services/settings.service';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { TooltipModule } from 'primeng/tooltip';
 
 
 @NgModule({
@@ -24,6 +25,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
     SharedModule,
     SettingsRoutingModule,
 
+    TooltipModule,
     MultiSelectModule,
     CalendarModule,
     TabMenuModule,
