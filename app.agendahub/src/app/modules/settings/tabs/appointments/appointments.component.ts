@@ -45,7 +45,7 @@ export class AppointmentsComponent implements OnInit {
   }
 
   checkAccess() {
-    this.hasWriteAccess = this.auth.getUserAccess() === Access.Admin;
+    this.hasWriteAccess = this.auth.getUserAccess() !== Access.Admin;
   }
 
   async loadState() {
