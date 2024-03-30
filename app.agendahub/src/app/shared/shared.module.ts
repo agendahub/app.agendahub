@@ -4,9 +4,7 @@ import { ComponentsModule } from '../components/components.module';
 import { PlatformModule } from '@angular/cdk/platform';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppRoutingModule } from '../app-routing.module';
 import { ApiService } from '../services/api-service.service';
 import { AuthService } from '../auth/auth-service.service';
 
@@ -14,24 +12,17 @@ import { AuthService } from '../auth/auth-service.service';
   declarations: [],
   imports: [
     FormsModule,
-    BrowserModule,
+    CommonModule,
     PlatformModule,
-    HttpClientModule,
-    AppRoutingModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
     ComponentsModule
   ],
   exports: [
     FormsModule,
-    BrowserModule,
+    CommonModule,
     PlatformModule,
-    HttpClientModule,
-    AppRoutingModule,
     ReactiveFormsModule,
-    BrowserAnimationsModule,
     ComponentsModule
   ],
-  providers: [ApiService, AuthService, HttpClient],
 })
 export class SharedModule { }

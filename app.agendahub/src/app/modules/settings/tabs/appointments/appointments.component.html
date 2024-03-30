@@ -1,0 +1,43 @@
+<div class="w-full h-full bg-opacity-40 sm:px-6 sm:py-4 p-2 relative">
+    <div class="indent-2 flex flex-col justify-center text-primary dark:text-very-clean">
+        <h2 class="text-lg leading-7 font-light -tracking-wide sm:truncate sm:text-2xl sm:tracking-tight">
+            Configure seus horários e dias de funcionamento
+        </h2>
+    </div>
+
+    <hr class="my-6 w-full h-0.5 border-t-0 bg-white/50 dark:bg-white/10" />
+
+    <div class="mt-2">
+        <form [formGroup]="futils.form" class="flex flex-col space-y-4 max-w-2xl text-primary dark:text-clean">
+            <div class="grid sm:grid-cols-2 grid-cols gap-2">
+                <div class="flex flex-col space-y-2">
+                    <label for="start" class="font-light">Início expediente</label>
+                    <p-calendar formControlName="openTime" appendTo="body" placeholder="08:00" inputId="openTime" [style]="{width:'100%'}" [timeOnly]="true" hourFormat="HH:MM"></p-calendar>
+                </div>
+                <div class="flex flex-col space-y-2">
+                    <label for="end" class="font-light">Fim expediente</label>
+                    <p-calendar formControlName="closeTime" appendTo="body" placeholder="18:00" inputId="closeTime" [style]="{width:'100%'}" [timeOnly]="true" hourFormat="HH:MM"></p-calendar>
+                </div>
+            </div>
+            <div class="w-full">
+                <label for="days" class="font-light">Dias expediente</label>
+                <p-multiSelect inputId="days" [virtualScrollItemSize]="10" [options]="days" formControlName="days" placeholder="Selecione os dias" optionValue="value" optionLabel="label" [style]="{width:'100%'}" display="chip" [showClear]="true"></p-multiSelect>
+            </div>
+            <div class="w-full flex flex-col gap-3">
+                <p-checkbox formControlName="isOpen" [binary]="true" label="Aberto"></p-checkbox>
+                <div class="flex items-center p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+                    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+                    </svg>
+                    <span class="sr-only">Info</span>
+                    <div>
+                      Os horários e dias de funcionamento são utilizados para agendamento de atendimentos.
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="bg-success text-white rounded-md p-2" (click)="save()">Salvar</button>
+        </form>
+    </div>
+
+    
+</div>
