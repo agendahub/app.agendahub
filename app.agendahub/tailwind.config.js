@@ -16,7 +16,7 @@ module.exports = {
       "primary": "#14052a",
       "secondary": "#23224a",
       "tertiary": "#71798a",
-      "clean": "#f0ece5",
+      "clean": "#e6e5e3",
       "very-clean": "#ffffff",
       ...colors
     },

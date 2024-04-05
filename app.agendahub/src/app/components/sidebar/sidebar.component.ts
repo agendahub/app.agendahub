@@ -57,10 +57,10 @@ import { MenuItem } from "primeng/api";
     ></div>
 
     <div
-      class="absolute sm:block hidden z-[70] top-7 ease-in-out duration-300"
+      class="absolute sm:block hidden z-[70] top-6 ease-in-out duration-300"
       [ngClass]="{
-        'left-[17.75rem] translate-x-1': open,
-        'left-[3.75rem] translate-x-0': !open
+        'left-[17.5rem] translate-x-1': open,
+        'left-[3.5rem] translate-x-0': !open
       }"
       (mouseleave)="open = fixed ? true : false"
     >
@@ -92,7 +92,7 @@ import { MenuItem } from "primeng/api";
       (dblclick)="setFixed()"
     >
       <div
-        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-primary border-l-0 border-r-2 dark:border-secondary border-very-clean flex flex-col justify-between gap-3 pb-1"
+        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-primary border-l-0 border-r-2 dark:border-secondary border-clean flex flex-col justify-between gap-3 pb-1"
         [ngClass]="{ 'px-2': open }"
       >
         <div class="flex flex-col gap-3">

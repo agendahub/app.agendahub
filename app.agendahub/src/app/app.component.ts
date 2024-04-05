@@ -14,14 +14,14 @@ import { Title } from "@angular/platform-browser";
     ></p-toast>
 
     <div id="app-container"
-      class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-clean"
+      class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean"
       [ngClass]="{ flex: sidebarFixed }"
     >
       
-      <sidebar *ngIf="!isLogin && !hideNav"></sidebar>
+      <sidebar *ngIf="!hideNav"></sidebar>
 
-      <div class="relative w-full md:h-full h-max overflow-auto" [ngClass]="{ 'sm:pl-2 pl-0 ': !isLogin && !hideNav }">
-        <div class="sm:block hidden" [ngClass]="{'-ml-1': sidebarFixed, 'pl-2': !sidebarFixed}">
+      <div class="relative w-full md:h-full h-max overflow-auto" [ngClass]="{ 'sm:pl-2 pl-0 ': !hideNav }">
+        <div class="sm:block hidden sticky right-0 top-0 z-10" *ngIf="!hideNav" [ngClass]="{'-ml-1': sidebarFixed, 'pl-2': !sidebarFixed}">
           <app-nav></app-nav>
         </div>
         <router-outlet></router-outlet>
@@ -38,10 +38,6 @@ export class AppComponent {
   ) {
     moment.locale("pt-br");
     this.configureTranslation();
-
-    primeNG.overlayOptions = {
-      appendTo: "body",
-    };
 
     title.setTitle("AgendaHub | Sistema de Gestão de Atividades");
   }

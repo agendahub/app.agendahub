@@ -1,0 +1,28 @@
+<i pBadge [value]="bubble.toString()" style="font-size: 2rem">
+  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6" (click)="open = !open">
+    <path stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0" />
+  </svg>
+</i>
+<div class="fixed w-80 shadow-lg z- bg-base-dark right-16 top-12 transition-opacity duration-300 rounded-lg" [ngClass]="{'opacity-1': open, 'opacity-0': !open}" style="z-index: 101010 !important;">
+    <div class="px-3 py-2 w-full">
+      <p class="pb-4 pt-2 text-xl font-semibold leading-5 -tracking-wide text-white">Notificações</p>
+      <div class="bg-slate-950 flex w-full h-full justify-between rounded-md p-[3px]">
+        <div (click)="set(1)" [ngClass]="{'bg-tertiary text-slate-300': tab == 1, 'text-slate-600': tab != 1}" class="p-0.5 flex h-full w-full justify-center rounded">Não lido</div>
+        <div (click)="set(2)" [ngClass]="{'bg-tertiary text-slate-300': tab == 2, 'text-slate-600': tab != 2}" class="p-0.5 flex h-full w-full justify-center rounded">Lido</div>
+        <div (click)="set(3)" [ngClass]="{'bg-tertiary text-slate-300': tab == 3, 'text-slate-600': tab != 3}" class="p-0.5 flex h-full w-full justify-center rounded shadow-sm">Arquivado</div>
+      </div>
+      <div class="py-2 h-80 overflow-auto">
+        <ng-container *ngTemplateOutlet="tabs"></ng-container>
+      </div>
+    </div>
+</div>
+
+<ng-template #tabs>
+  <div *ngFor="let item of displayMessages;">
+      <ng-container *ngTemplateOutlet="message; context:{item:item}"></ng-container>
+  </div>
+</ng-template>
+
+<ng-template #message let-item="item">
+  {{item|json}}
+</ng-template>
