@@ -1,0 +1,41 @@
+<div class="min-h-screen flex items-center justify-center">
+    <div class="max-w-4xl w-full p-8 rounded shadow-md">
+      <div class="flex items-center justify-center mb-6">
+        <img src="https://via.placeholder.com/150" alt="Profile Picture" class="w-24 h-24 rounded-full">
+      </div>
+      <h2 class="text-2xl text-white font-semibold mb-4 text-center">Nome do Usuário</h2>
+      <div class="grid grid-cols-2 gap-x-80 gap-4 mb-4">
+        <div>
+          <label for="email" class="text-white font-medium">E-mail:</label>
+          <p id="email" class="text-gray-200">usuario@example.com</p>
+        </div>
+        <div>
+          <label for="phone" class="text-white font-medium">Número de Telefone:</label>
+          <p id="phone" class="text-gray-200">(123) 456-7890</p>
+        </div>
+        <div>
+          <label for="address" class="block text-white font-medium">Endereço:</label>
+          <p id="address" class="text-gray-200">123 Rua Principal, Cidade, Estado, CEP 12345-678</p>
+        </div>
+        <div>
+          <label for="dob" class="block text-white font-medium">Data de Nascimento:</label>
+          <p id="dob" class="text-gray-200">01/01/1990</p>
+        </div>
+      </div>
+      <div class="text-center mb-6">
+        <a href="#" class="text-blue-500 hover:underline">Troca de Senha</a>
+      </div>
+      <div class="">
+        <h3 class="text-2xl text-center text-white font-semibold mb-4">Histórico de Compromissos</h3>
+        <p-timeline [value]="events">
+          <ng-template pTemplate="content" let-event>
+            <small class="p-text-secondary">{{ event.date }}</small>
+          </ng-template>
+          <ng-template pTemplate="opposite" let-event>
+            {{ event.status }}
+          </ng-template>
+        </p-timeline>
+      </div>
+    </div>
+  </div>
+  

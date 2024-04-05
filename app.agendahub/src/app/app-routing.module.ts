@@ -8,6 +8,7 @@ import { AuthGuardService } from "./auth/auth.guard.service";
 import { SettingsComponent } from "./pages/settings/settings.component";
 import { ScheduleLinkViewComponent } from "./pages/schedule-link-view/schedule-link-view.component";
 import { SchedulingComponent } from "./modules/general/scheduling/scheduling.component";
+import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -44,6 +45,10 @@ const routes: Routes = [
     path: "schedule-link",
     component: ScheduleLinkViewComponent,
     canActivate: [AuthGuardService],
+  },
+  {
+    path: "user-profile",
+    component: UserProfileComponent,
   },
   { path: "**", redirectTo: "home" },
 ];

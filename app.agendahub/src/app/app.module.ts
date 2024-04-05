@@ -29,6 +29,7 @@ import { ToastModule } from "primeng/toast"
 import { ListboxModule } from 'primeng/listbox';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { TimelineModule } from 'primeng/timeline';
 
 
 /** */
@@ -52,6 +53,7 @@ import { GeneralModule } from './modules/general/general.module';
 import { tokenGetter } from './auth/auth-utils';
 import { environment } from '../environments/environment.development';
 import { loadTypes } from './types/typing';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -60,7 +62,8 @@ import { loadTypes } from './types/typing';
     LoginComponent,
     HomeComponent,
     SettingsComponent,
-    ScheduleLinkViewComponent
+    ScheduleLinkViewComponent,
+    UserProfileComponent
   ],
   schemas: [
     NO_ERRORS_SCHEMA
@@ -95,6 +98,7 @@ import { loadTypes } from './types/typing';
     TableModule,
     InputSwitchModule,
     MultiSelectModule,
+    TimelineModule,
     
 
     FullCalendarModule,
