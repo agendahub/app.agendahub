@@ -92,7 +92,7 @@ import { MenuItem } from "primeng/api";
       (dblclick)="setFixed()"
     >
       <div
-        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-primary border-l-0 border-r-2 dark:border-secondary border-clean flex flex-col justify-between gap-3 pb-1"
+        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-primary border-l-0 border-r dark:border-secondary border-clean flex flex-col justify-between gap-3 pb-1"
         [ngClass]="{ 'px-2': open }"
       >
         <div class="flex flex-col gap-3">

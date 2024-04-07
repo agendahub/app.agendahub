@@ -20,6 +20,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { OverlayModule } from 'primeng/overlay';
 import { BadgeModule } from 'primeng/badge';
 import { NotificationComponent } from './notification/notification.component';
+import { ReadMoreComponent } from './read-more/read-more.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { NotificationComponent } from './notification/notification.component';
     CalendarComponent,
     CalendarItemDirective,
     NotificationComponent,
+    ReadMoreComponent,
   ],
   exports: [
     NavComponent,

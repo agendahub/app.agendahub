@@ -1,0 +1,9 @@
+<div>
+    <div class="see-more break-words" [style]="style" #content>
+        <ng-content></ng-content>
+    </div>
+    <span class="see-more-toggle" (click)="toggle()" *ngIf="isCollapseable">
+        ...
+        <span class="ml-1">{{text}}</span> 
+    </span>
+</div>

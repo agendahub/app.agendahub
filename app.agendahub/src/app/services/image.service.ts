@@ -20,7 +20,6 @@ export class ImageService {
   }
 
   public getLogoImage() {
-    
     return this.auth.getUserData().companyImage;
   }
 

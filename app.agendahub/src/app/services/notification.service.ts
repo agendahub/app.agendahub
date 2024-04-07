@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
-import { Notification } from '../models/core/notification';
+import { BehaviorSubject, map } from 'rxjs';
+import { Notification, NotificationStatus } from '../models/core/notification';
 import { environment } from '../../environments/environment.development';
 type BrowserNotification = Notification;
 
@@ -23,7 +23,26 @@ export class NotificationService {
   }
 
   preview() {
-    return this.http.get<Notification[]>(environment.apiUrl + "Notification/GetPreview");
+    return this.http.get<Notification[]>(environment.apiUrl + "Notification/GetPreview").pipe(map((notifications) => {
+      this.unread.set(notifications.filter((n) => n.status === NotificationStatus.Unread).length);
+      return notifications;
+    }));
+  }
+
+  read(id: number) {
+    return this.http.put(environment.apiUrl + "Notification/Read/" + id, null)
+      .pipe(map((x) => {
+        this.unread.update((unread) => unread - 1);
+        return x;
+      }));
+  }
+
+  readAll() {
+    return this.http.put(environment.apiUrl + "Notification/ReadAll", null)
+      .pipe(map((x) => {
+        this.unread.set(0);
+        return x;
+      }));
   }
 
   private listen() {
@@ -37,7 +56,7 @@ export class NotificationService {
 
     event.onmessage = (event) => {
       const notification: Notification[] = Array.from([JSON.parse(event.data)]);
-      this.unread.set(notification.filter((n) => n.state === 0).length);
+      this.unread.update((unread) => unread + 1);
       this.$notifications.next(this.$notifications.value.concat(notification));
     }
 

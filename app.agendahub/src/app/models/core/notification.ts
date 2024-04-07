@@ -1,19 +1,21 @@
 export class Notification {
     id!: number;
-    date!: Date;
     title!: string;
     message!: string;
+    createdAt!: Date;
+    readAt: Date | null = null;
     type!: NotificationType
-    state!: NotificationState
+    status!: NotificationStatus
 };
 
 export enum NotificationType {
-    Info,
-    Warning,
-    Error
+    Info = 1,
+    Warning = 2,
+    Error = 3,
+    Success = 4
 } 
 
-export enum NotificationState {
-    Read,
-    Unread
+export enum NotificationStatus {
+    Unread = 1,
+    Read = 2
 }
