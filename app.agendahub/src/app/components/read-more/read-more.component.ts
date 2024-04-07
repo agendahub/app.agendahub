@@ -38,8 +38,8 @@ export class ReadMoreComponent implements AfterViewInit {
     
     this.style = this.isCollapseable 
       ? {
-        'max-width': this.visible ? "95%" : `${this.minWidth + "px" ?? "95%" }`,
-        'max-height': this.visible ? "100%" : `${this.minHeight + "px" ?? "2rem" }`,
+        'max-width': this.visible ? "95%" : `${(this.minWidth ? this.minWidth + "px" : "95%" )}`,
+        'max-height': this.visible ? "100%" : `${(this.minHeight ? this.minHeight + "px" : "2rem") }`,
       }
       : {
         'max-width': '95%',
