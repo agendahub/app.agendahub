@@ -1,9 +1,37 @@
 <div>
-    <div class="see-more break-words" [style]="style" #content>
-        <ng-content></ng-content>
+  <div class="see-more break-words" [style]="style" #content>
+    <ng-content></ng-content>
+  </div>
+  <span class="see-more-toggle" *ngIf="isCollapseable">
+    <div class="w-max">
+      <div
+        role="button"
+        (click)="toggle()"
+        class="w-max flex gap-1 items-center text-primary dark:text-clean hover:text-secondary dark:hover:text-very-clean hover:underline"
+      >
+        <i
+          class="transition-transform duration-300"
+          [ngClass]="{ 'rotate-180': visible, 'rotate-0': !visible }"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-4 h-4"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5"
+            />
+          </svg>
+        </i>
+        <span class="font-semibold">
+          {{ text }}
+        </span>
+      </div>
     </div>
-    <span class="see-more-toggle" (click)="toggle()" *ngIf="isCollapseable">
-        ...
-        <span class="ml-1">{{text}}</span> 
-    </span>
+  </span>
 </div>

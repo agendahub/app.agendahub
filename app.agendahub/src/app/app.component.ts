@@ -13,18 +13,24 @@ import { Title } from "@angular/platform-browser";
       [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"
     ></p-toast>
 
-    <div id="app-container"
+    <div
+      id="app-container"
       class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean"
       [ngClass]="{ flex: sidebarFixed }"
     >
-      
       <sidebar *ngIf="!hideNav"></sidebar>
 
-      <div class="relative w-full md:h-full h-max overflow-auto" [ngClass]="{ 'sm:pl-2 pl-0 ': !hideNav }">
-        <div class="sm:block hidden sticky right-0 top-0 z-10" *ngIf="!hideNav" [ngClass]="{'-ml-1': sidebarFixed, 'pl-2': !sidebarFixed}">
+      <div class="relative w-full md:h-full h-max overflow-auto">
+        <div
+          class="sm:block hidden sticky right-0 top-0 z-10"
+          *ngIf="!hideNav"
+          [ngClass]="{ '-ml-1': sidebarFixed, 'pl-2': !sidebarFixed }"
+        >
           <app-nav></app-nav>
         </div>
-        <router-outlet></router-outlet>
+        <div [ngClass]="{ 'ml-16': !sidebarFixed || true }">
+          <router-outlet></router-outlet>
+        </div>
       </div>
     </div>
   `,
@@ -80,7 +86,7 @@ export class AppComponent {
       after: "Depois",
       before: "Antes",
       startsWith: "Começa com",
-      contains: "Contém", 
+      contains: "Contém",
       notContains: "Não contém",
       endsWith: "Termina com",
       equals: "Igual",
@@ -101,15 +107,40 @@ export class AppComponent {
       matchAny: "Corresponder qualquer",
       dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
       dayNamesMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-      monthNames: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
-      monthNamesShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
+      monthNames: [
+        "Janeiro",
+        "Fevereiro",
+        "Março",
+        "Abril",
+        "Maio",
+        "Junho",
+        "Julho",
+        "Agosto",
+        "Setembro",
+        "Outubro",
+        "Novembro",
+        "Dezembro",
+      ],
+      monthNamesShort: [
+        "Jan",
+        "Fev",
+        "Mar",
+        "Abr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Ago",
+        "Set",
+        "Out",
+        "Nov",
+        "Dez",
+      ],
       weak: "Fraca",
       medium: "Média",
       strong: "Forte",
       passwordPrompt: "Informe uma senha válida",
       emptyMessage: "Sem registros encontrados",
       emptyFilterMessage: "Nenhum resultado encontrado",
-      
     });
   }
 }

@@ -1,39 +1,57 @@
-import { Component, ElementRef, EventEmitter, Host, HostListener, Input, OnChanges, OnDestroy, OnInit, Output, SimpleChanges, ViewChild, effect, signal } from '@angular/core';
-import { NotificationService } from '../../services/notification.service';
-import { Notification, NotificationStatus, NotificationType } from '../../models/core/notification';
-import { Subscription } from 'rxjs';
-import * as moment from 'moment';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Host,
+  HostListener,
+  Input,
+  OnChanges,
+  OnDestroy,
+  OnInit,
+  Output,
+  SimpleChanges,
+  ViewChild,
+  effect,
+  signal,
+} from "@angular/core";
+import { NotificationService } from "../../services/notification.service";
+import {
+  Notification,
+  NotificationStatus,
+  NotificationType,
+} from "../../models/core/notification";
+import { Subscription } from "rxjs";
+import * as moment from "moment";
 
 @Component({
-  selector: 'notifications',
-  templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.scss']
+  selector: "notifications",
+  templateUrl: "./notification.component.html",
+  styleUrls: ["./notification.component.scss"],
 })
 export class NotificationComponent implements OnInit, OnDestroy {
-
   forkM = moment;
-  open: boolean = true;
-  messages: Notification[] = []; 
+  open: boolean = false;
+  messages: Notification[] = [];
 
   tab!: NotificationStatus | number;
   displayMessages: Notification[] = [];
   temporalMessages!: Array<{
-    key: string,
-    viewName: string,
-    value: Notification[]
+    key: string;
+    viewName: string;
+    value: Notification[];
   }>;
 
-  private subscription!: Subscription
-  
+  private subscription!: Subscription;
+
   saving: boolean = false;
 
-  @ViewChild('ref') elementRef!: ElementRef<HTMLDivElement>;
+  @ViewChild("ref") elementRef!: ElementRef<HTMLDivElement>;
 
   constructor(public notify: NotificationService) {
-    moment.locale('pt-br');
+    moment.locale("pt-br");
   }
 
-  @HostListener('document:click', ['$event'])
+  @HostListener("document:click", ["$event"])
   clickout(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target as Node)) {
       this.open = false;
@@ -70,31 +88,38 @@ export class NotificationComponent implements OnInit, OnDestroy {
       const index = this.temporalMessages.findIndex((x) => x.key === key);
 
       if (index === -1) {
-        this.temporalMessages.push({key, viewName: view, value: [value]});
+        this.temporalMessages.push({ key, viewName: view, value: [value] });
       } else {
         this.temporalMessages[index].value.push(value);
       }
-      
-    }
+    };
 
     this.displayMessages.forEach((m) => {
       const date = moment(m.createdAt);
 
-      if (today.isSame(date, 'day')) {
-        checkExists('today', "Hoje", m);
-      } else if (today.isSame(date, 'day')) {
-        checkExists('yesterday', "Ontem", m);
-      } else if (today.diff(date, 'days') <= 7) {
-        checkExists('thisWeek', "Essa semana", m);
+      if (today.isSame(date, "day")) {
+        checkExists("today", "Hoje", m);
+      } else if (today.isSame(date, "day")) {
+        checkExists("yesterday", "Ontem", m);
+      } else if (today.diff(date, "days") <= 7) {
+        checkExists("thisWeek", "Essa semana", m);
       } else {
-        checkExists(date.format("MMMM"), date.format("MMMM").toUpperCapital(), m);
+        checkExists(
+          date.format("MMMM"),
+          date.format("MMMM").toUpperCapital(),
+          m
+        );
       }
     });
   }
 
-  readAll() { 
+  readAll() {
     this.notify.readAll().subscribe(() => {
-      this.messages = this.messages.map((m) => m.status == NotificationStatus.Unread ? ({...m, status: NotificationStatus.Read}) : m);
+      this.messages = this.messages.map((m) =>
+        m.status == NotificationStatus.Unread
+          ? { ...m, status: NotificationStatus.Read }
+          : m
+      );
       this.set(NotificationStatus.Read);
     });
   }
@@ -103,12 +128,14 @@ export class NotificationComponent implements OnInit, OnDestroy {
     if (notification.status === NotificationStatus.Unread && !this.saving) {
       this.saving = true;
       this.notify.read(notification.id).subscribe(() => {
-        this.messages = this.messages.map((m) => m.id === notification.id ? {...m, status: NotificationStatus.Read} : m);
+        this.messages = this.messages.map((m) =>
+          m.id === notification.id
+            ? { ...m, status: NotificationStatus.Read }
+            : m
+        );
         this.set(this.tab);
         this.saving = false;
       });
     }
   }
-
-
 }
