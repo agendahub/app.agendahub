@@ -128,9 +128,7 @@
   @apply transition duration-150 ease-in-out transform hover:scale-[1.01] z-[99];
 }
 
-.fc-theme-standard td,
 .fc-theme-standard th,
-.fc-theme-standard td,
 .fc-theme-standard tr,
 .fc-timegrid-event-harness-inset .fc-timegrid-event,
 .fc-timegrid-event.fc-event-mirror,
@@ -138,8 +136,14 @@
   @apply border-none shadow-none;
 }
 
-.fc-theme-standard td, .fc-theme-standard th {
-  // @apply border-collapse border-[1px] border-solid border-sky-50;
+.fc-theme-standard td {
+  border-right: none !important;
+  border-left: none !important;
+}
+
+.fc .fc-timegrid-slot-minor {
+    border: none !important;
+    border-top-style: dotted;
 }
 
 .fc.fc-theme-standard .fc-view-harness td {

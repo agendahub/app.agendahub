@@ -59,7 +59,7 @@
       </ng-template> -->
 
       <ng-template #dayHeaderContent let-day>
-        <div class="text-warmGray-950 p-1 flex flex-col justify-center items-center inter uppercase -tracking-wide">
+        <div class="text-warmGray-950 px-1 flex flex-col justify-center items-center inter uppercase -tracking-wide">
           <span *ngIf="view != 'Mês'" class="flex justify-center items-center" [ngClass]="{'p-1 w-6 h-6 rounded-full bg-primary text-clean': isToday(day)}">
             <small>{{formatHeaderDay(day, "ddd").dayNumber}}</small>
           </span>
@@ -69,13 +69,13 @@
       </ng-template>
 
       <ng-template #slotLabelContent let-day>
-        <div class="leading-5 -tracking-wider">
+        <div class="-tracking-wider">
           {{ day.date | date: 'h:mm' }}
         </div>
       </ng-template>
 
     </full-calendar>
-    <div class="h-3 bg-white rounded-b-lg"></div>
+    <div class="h-3 bg-white rounded-b-lg sm:block hidden"></div>
   </div>
 </div>
 
