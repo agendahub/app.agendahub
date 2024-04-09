@@ -10,7 +10,7 @@ import { Title } from "@angular/platform-browser";
   template: `
     <loader></loader>
     <p-toast
-      [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"
+      [breakpoints]="{ '920px': { width: '100%', right: '5', left: '5' } }"
     ></p-toast>
 
     <div
