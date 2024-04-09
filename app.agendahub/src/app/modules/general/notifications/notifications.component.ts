@@ -19,7 +19,6 @@ export class NotificationsComponent implements OnInit {
   private loadNotifications() {
     this.notify.getNotifications().subscribe((res) => {
       this.notifications = res;
-      console.log(res);
     });
   }
 }

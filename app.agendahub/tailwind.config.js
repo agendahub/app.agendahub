@@ -18,6 +18,8 @@ module.exports = {
       "tertiary": "#71798a",
       "clean": "#e6e5e3",
       "very-clean": "#ffffff",
+      "action": "#380e76",
+      "subaction": "#2e2d63",
       ...colors
     },
     extend: {

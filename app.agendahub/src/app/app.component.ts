@@ -22,13 +22,13 @@ import { Title } from "@angular/platform-browser";
 
       <div class="relative w-full md:h-full h-max overflow-auto">
         <div
-          class="sm:block hidden sticky right-0 top-0 z-10"
           *ngIf="!hideNav"
-          [ngClass]="{ '-ml-1': sidebarFixed, 'pl-2': !sidebarFixed }"
+          class="sm:block hidden sticky right-0 top-0 z-10"
+          [ngClass]="{ 'ml-0': !falsy(sidebarFixed), 'ml-16': falsy(sidebarFixed) }"
         >
           <app-nav></app-nav>
         </div>
-        <div [ngClass]="{ 'ml-16': !sidebarFixed || true }">
+        <div [ngClass]="{ 'sm:ml-16 m-0': falsy(sidebarFixed) && !hideNav, 'm-0': hideNav }">
           <router-outlet></router-outlet>
         </div>
       </div>
@@ -58,6 +58,10 @@ export class AppComponent {
 
   get sidebarFixed() {
     return localStorage.getItem("sidebarFixed") === "true";
+  }
+
+  falsy(value: any) {
+    return value == null || value == undefined || value == "" || value == 0 || value == false;
   }
 
   configureTranslation() {

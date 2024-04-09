@@ -16,7 +16,7 @@ import { MenuItem } from "primeng/api";
 @Component({
   selector: "sidebar",
   template: `
-    <div class="flex justify-between py-2 sm:hidden">
+    <div class="flex justify-between py-2 sm:hidden" *ngIf="!open">
       <div class="flex justify-center items-center sm:px-0 px-2">
         <img
           class="w-auto"
@@ -83,9 +83,9 @@ import { MenuItem } from "primeng/api";
       aria-label="Sidebar"
       id="default-sidebar"
       [ngClass]="{
-        'fixed sm:w-16 max-w-screen-xl sm:translate-x-0 -translate-x-full':
+        'fixed sm:w-16 max-w-screen-xl sm:-translate-x-0 -translate-x-full':
           !open,
-        'absolute sm:w-72 sm:translate-x-1': open
+        'absolute sm:w-72 sm:translate-x-0': open
       }"
       (mouseenter)="open = true"
       (mouseleave)="open = fixed ? true : false"

@@ -1,5 +1,4 @@
 <div class="h-max w-full sm:w-75 md:w-50 lg:w-25">
-    
     <div class="w-full h-max ">
         <div class="flex justify-between items-center p-2 sm:rounded-t-lg bg-clean dark:bg-very-clean" [ngClass]="{'rounded-t-lg': !header}">
             <div class="text-4xl text-primary font-bold tracking-tight sm:text-6xl" style="z-index: 2;">
@@ -33,7 +32,6 @@
 </p-overlayPanel>
 
 <ng-template #headerView>
-
     <div class="grid grid-cols-12 gap-1 py-2 md:px-2 lg:px-4 px-0" *ngIf="header">
         <ng-container *ngFor="let item of calendarItemsArray">
             <div class="md:col-span-6 col-span-6 flex items-center">
@@ -46,5 +44,4 @@
             </div>
         </div>
     </div>
-
 </ng-template>

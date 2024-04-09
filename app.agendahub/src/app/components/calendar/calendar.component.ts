@@ -38,6 +38,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   @Input() isEditable!: boolean;
   @Input() events!: Array<any>
   @Input() header!: boolean;
+  @Input() items!: Array<any>;
 
   public views = ['dayGridMonth', 'timeGridFourDay', 'dayGridWeek', 'dayGridDay'];
   public viewTranslate = ["Mês", "Hora semana", "Semana", "Dia"];

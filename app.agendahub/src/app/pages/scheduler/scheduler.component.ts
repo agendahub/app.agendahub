@@ -61,6 +61,14 @@ export class SchedulerComponent implements OnInit {
   oldScheduleDisabled = false;
   validHelper = ValidatorsHelper;
 
+  items = [
+    {label: 'Agendamentos', icon: 'fa-solid fa-calendar', routerLink: '/scheduler'},
+    {label: 'Clientes', icon: 'fa-solid fa-users', routerLink: '/customers'},
+    {label: 'Funcionários', icon: 'fa-solid fa-users', routerLink: '/employees'},
+    {label: 'Serviços', icon: 'fa-solid fa-tools', routerLink: '/services'},
+    {label: 'Configurações', icon: 'fa-solid fa-cog', routerLink: '/settings'},
+  ];
+
   @ViewChild("calendar") calendar!: CalendarComponent;
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService, private loader: LoaderService) {

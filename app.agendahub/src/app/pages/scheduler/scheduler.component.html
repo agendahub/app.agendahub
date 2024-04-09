@@ -1,31 +1,29 @@
 <div class="text-white mx-auto max-w-7xl sm:pt-2 lg:pt-4 p-0 lg:rounded-lg md:rounded-md rounded-none h-fit overflow-h-auto">
-
-
-    <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" (OnViewChange)="onViewChange($event)"
-        (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
-        <ng-template calendarItem [enableForAll]="isEditEnable">
-            <div class="w-full">
-                <p-multiSelect dropdownIcon="fa-solid fa-clipboard-user" [options]="employees" [(ngModel)]="selectedEmployes" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeEmployees($event)" defaultLabel="Funcionária" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-            </div>
-        </ng-template>
-        <ng-template calendarItem [enableForAll]="true">
-            <div class="w-full">
-                <p-multiSelect dropdownIcon="fa-solid fa-user-clock" [options]="customers" [(ngModel)]="selectedCustomers" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeCustomers($event)" defaultLabel="Clientes" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-            </div>
-        </ng-template>
-        <ng-template calendarItem [enableForAll]="true">
-            <div class="w-full">
-                <p-multiSelect dropdownIcon="fa-solid fa-bell-concierge" [options]="services" [(ngModel)]="selectedServices" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeServices($event)" defaultLabel="Serviço" optionLabel="description" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-            </div>
-        </ng-template>
-        <ng-template calendarItem [enableForAll]="true">
-            <div class="w-full h-full flex justify-end">
-                <button pButton (click)="clearFilter()" [disabled]="!hasFilter" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
-                    <span>Limpar filtros</span>
-                    <i class="fa-solid fa-filter"></i>
-                </button>
-            </div>
-        </ng-template>
+    <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [items]="items" [clearAll]="clearEvents" (OnViewChange)="onViewChange($event)"
+    (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
+    <ng-template calendarItem [enableForAll]="isEditEnable">
+        <div class="w-full">
+            <p-multiSelect dropdownIcon="fa-solid fa-clipboard-user" [options]="employees" [(ngModel)]="selectedEmployes" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeEmployees($event)" defaultLabel="Funcionária" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
+        </div>
+    </ng-template>
+    <ng-template calendarItem [enableForAll]="true">
+        <div class="w-full">
+            <p-multiSelect dropdownIcon="fa-solid fa-user-clock" [options]="customers" [(ngModel)]="selectedCustomers" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeCustomers($event)" defaultLabel="Clientes" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
+        </div>
+    </ng-template>
+    <ng-template calendarItem [enableForAll]="true">
+        <div class="w-full">
+            <p-multiSelect dropdownIcon="fa-solid fa-bell-concierge" [options]="services" [(ngModel)]="selectedServices" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeServices($event)" defaultLabel="Serviço" optionLabel="description" display="chip" [style]="{width:'100%'}"></p-multiSelect>
+        </div>
+    </ng-template>
+    <ng-template calendarItem [enableForAll]="true">
+        <div class="w-full h-full flex justify-end">
+            <button pButton (click)="clearFilter()" [disabled]="!hasFilter" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
+                <span>Limpar filtros</span>
+                <i class="fa-solid fa-filter"></i>
+            </button>
+        </div>
+    </ng-template>
     </app-calendar>
 </div>
 

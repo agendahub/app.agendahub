@@ -21,6 +21,8 @@ import { OverlayModule } from "primeng/overlay";
 import { BadgeModule } from "primeng/badge";
 import { NotificationComponent } from "./notification/notification.component";
 import { ReadMoreComponent } from "./read-more/read-more.component";
+import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { SpeedDialModule } from "primeng/speeddial";
 
 @NgModule({
   declarations: [
@@ -31,6 +33,7 @@ import { ReadMoreComponent } from "./read-more/read-more.component";
     CalendarItemDirective,
     NotificationComponent,
     ReadMoreComponent,
+    BreadcrumbComponent,
   ],
   exports: [
     NavComponent,
@@ -58,6 +61,7 @@ import { ReadMoreComponent } from "./read-more/read-more.component";
     ButtonModule,
     MenuModule,
     BadgeModule,
+    SpeedDialModule
   ],
 })
 export class ComponentsModule {}

@@ -22,13 +22,14 @@ import {
 } from "../../models/core/notification";
 import { Subscription } from "rxjs";
 import * as moment from "moment";
+import { Forgetable } from "../../core/forgetable";
 
 @Component({
   selector: "notifications",
   templateUrl: "./notification.component.html",
   styleUrls: ["./notification.component.scss"],
 })
-export class NotificationComponent implements OnInit, OnDestroy {
+export class NotificationComponent extends Forgetable implements OnInit, OnDestroy {
   forkM = moment;
   open: boolean = false;
   messages: Notification[] = [];
@@ -47,7 +48,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
 
   @ViewChild("ref") elementRef!: ElementRef<HTMLDivElement>;
 
-  constructor(public notify: NotificationService) {
+  constructor(public notify: NotificationService,) {
+    super()
     moment.locale("pt-br");
   }
 
