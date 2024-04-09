@@ -74,6 +74,7 @@ export class CalendarComponent
   @Input() isEditable!: boolean;
   @Input() events!: Array<any>;
   @Input() header!: boolean;
+  @Input() items!: Array<any>;
 
   public views = [
     "dayGridMonth",
@@ -242,7 +243,7 @@ export class CalendarComponent
     }
   }
 
-  private get Calendar(): Calendar {
+  public get Calendar(): Calendar {
     return this.calendarComponent?.getApi();
   }
 
@@ -265,8 +266,6 @@ export class CalendarComponent
   }
 
   private handleRemoveEvent(event: EventInput | EventInput[] | undefined) {
-    console.log(event);
-
     if (event) {
       if (event instanceof Array) {
         event.forEach((e) => this.Calendar.getEventById(e.id!)?.remove());
@@ -381,6 +380,12 @@ export class CalendarComponent
     if (this.isEditable) {
       this.OnDateClick?.emit(arg);
     }
+  }
+
+  public setEditable(value: boolean) {
+    this.Calendar.setOption("editable", value);
+    this.Calendar.setOption("selectable", value);
+    this.Calendar.setOption("eventAllow", () => value);
   }
 
   public navLinkDayClick(this: CalendarApi, date: Date, jsEvent: UIEvent) {

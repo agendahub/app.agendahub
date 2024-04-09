@@ -7,6 +7,7 @@ import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ScreenHelperService } from '../../../services/screen-helper.service';
 import { customSort } from '../../../utils/util';
+import { FormUtils } from '../../../utils/form';
 
 @Component({
   selector: 'app-services',
@@ -28,6 +29,7 @@ export class ServicesComponent {
   edit = false;
   form!: FormGroup;
   formType!: FormGroup;
+  formUtils!: FormUtils;
 
   serviceTypes = new Array();
   services = new Array();
@@ -58,7 +60,7 @@ export class ServicesComponent {
       description: [""],
     })
 
-    
+    this.formUtils = new FormUtils(this.form);
     
   }
 

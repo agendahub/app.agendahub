@@ -44,9 +44,9 @@ export class LoginComponent implements OnInit {
         
         if (result.success) {
           this.authService.goFourth({
+            timeout: 333,
             target: "home",
-            beforeNavigate: () => this.messageService.add({severity: "success", summary: "Logado com sucesso!", detail: result.message}), 
-            afterNavigate: () => this.messageService.add({severity: "success", summary: "Visualize suas tarefas para hoje!"})
+            beforeNavigate: () => this.messageService.add({severity: "success", summary: "Logado com sucesso!", detail: result.message})
           })
   
         } else {

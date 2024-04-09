@@ -7,6 +7,7 @@ import { faPlusCircle, faMagnifyingGlass, faList, faGear, faUserGear } from '@fo
 import { ScreenHelperService } from '../../../services/screen-helper.service';
 import { customSort } from '../../../utils/util';
 import { UserType } from '../../../models/core/entities';
+import { FormUtils } from '../../../utils/form';
 
 @Component({
   selector: 'app-users',
@@ -25,6 +26,7 @@ export class UsersComponent {
   faList = faList
   
   edit = false;
+  formUtils!: FormUtils;
   form!: FormGroup;
   formType!: FormGroup;
   needPassword = false;
@@ -53,6 +55,8 @@ export class UsersComponent {
       color: [""],
       password: [""],
     })
+
+    this.formUtils = new FormUtils(this.form);
 
     this.formType = formBuilder.group({
       id: [0],

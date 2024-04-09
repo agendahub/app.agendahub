@@ -16,7 +16,7 @@ import { MenuItem } from "primeng/api";
 @Component({
   selector: "sidebar",
   template: `
-    <div class="flex justify-between py-2 sm:hidden">
+    <div class="flex justify-between py-2 sm:hidden" *ngIf="!open">
       <div class="flex justify-center items-center sm:px-0 px-2">
         <img
           class="w-auto"
@@ -38,13 +38,13 @@ import { MenuItem } from "primeng/api";
           class="w-6 h-6"
           aria-hidden="true"
           fill="currentColor"
-          viewBox="0 0 20 20"
           xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 40 40"
         >
           <path
-            clip-rule="evenodd"
-            fill-rule="evenodd"
-            d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"
+            d="M 4.717 8.824 L 4.717 29.658 C 4.717 32.184 6.774 34.241 9.3 34.241 L 30.134 34.241 C 32.66 34.241 34.717 32.184 34.717 29.658 L 34.717 8.824 C 34.717 6.298 32.66 4.241 30.134 4.241 L 9.3 4.241 C 6.774 4.241 4.717 6.298 4.717 8.824 Z M 19.073 10.074 C 19.073 9.154 20.138 8.408 21.059 8.408 L 28.884 8.408 C 29.805 8.408 30.55 9.154 30.55 10.074 L 30.55 28.408 C 30.55 29.329 29.805 30.074 28.884 30.074 L 21.165 30.074 C 20.244 30.074 19.179 29.222 19.179 28.301 L 19.179 17.776 L 19.073 10.074 Z"
+            style="transform-box: fill-box; transform-origin: 50% 50%;"
+            transform="matrix(-1, 0, 0, -1, 0, -0.000009)"
           ></path>
         </svg>
       </button>
@@ -56,21 +56,43 @@ import { MenuItem } from "primeng/api";
       *ngIf="blockScroll"
     ></div>
 
+    <div
+      class="absolute sm:block hidden z-[70] top-6 ease-in-out duration-300"
+      [ngClass]="{
+        'left-[17.5rem] translate-x-1': open,
+        'left-[3.5rem] translate-x-0': !open
+      }"
+      (mouseleave)="open = fixed ? true : false"
+    >
+      <div
+        class="w-4 h-4 rounded-full flex items-center justify-center border-[1px] cursor-pointer
+        bg-clean text-gray-400 border-gray-400 
+        dark:bg-gray-800 dark:border-gray-700 
+        hover:dark:bg-white hover:dark:text-gray-800"
+        (click)="setFixed(); open = !open"
+      >
+        <i
+          class="fa-solid fa-chevron-left fa-2xs"
+          [ngClass]="{ 'fa-crevron-left': open, 'fa-chevron-right': !open }"
+        ></i>
+      </div>
+    </div>
+
     <aside
-      class="inset-0 sm:inset-2 sm:z-20 z-[60] w-screen sm:h-[98vh] h-screen ease-in-out duration-300 absolute sm:fixed"
+      class="sm:z-20 z-[60] w-screen h-screen ease-in-out duration-300"
       aria-label="Sidebar"
       id="default-sidebar"
       [ngClass]="{
-        'sm:w-16 max-w-screen-xl translate-x-0': !open,
-        'absolute sm:w-72 sm:translate-x-1': open
+        'fixed sm:w-16 max-w-screen-xl sm:-translate-x-0 -translate-x-full':
+          !open,
+        'absolute sm:w-72 sm:translate-x-0': open
       }"
-      [hidden]="!open && (IOS || ANDROID)"
       (mouseenter)="open = true"
       (mouseleave)="open = fixed ? true : false"
       (dblclick)="setFixed()"
     >
       <div
-        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-secondary flex flex-col justify-between gap-3 rounded-none sm:rounded-xl pb-1"
+        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-primary border-l-0 border-r dark:border-secondary border-clean flex flex-col justify-between gap-3 pb-1"
         [ngClass]="{ 'px-2': open }"
       >
         <div class="flex flex-col gap-3">
@@ -85,7 +107,18 @@ import { MenuItem } from "primeng/api";
               class="sm:hidden cursor-pointer p-2 dark:text-very-clean text-secondary"
               (click)="open = false"
             >
-              <i class="fa-solid fa-times fa-lg"></i>
+              <svg
+                class="w-6 h-6"
+                aria-hidden="true"
+                fill="currentColor"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 40 40"
+              >
+                <path
+                  d="M 4.717 8.824 L 4.717 29.658 C 4.717 32.184 6.774 34.241 9.3 34.241 L 30.134 34.241 C 32.66 34.241 34.717 32.184 34.717 29.658 L 34.717 8.824 C 34.717 6.298 32.66 4.241 30.134 4.241 L 9.3 4.241 C 6.774 4.241 4.717 6.298 4.717 8.824 Z M 19.073 10.074 C 19.073 9.154 20.138 8.408 21.059 8.408 L 28.884 8.408 C 29.805 8.408 30.55 9.154 30.55 10.074 L 30.55 28.408 C 30.55 29.329 29.805 30.074 28.884 30.074 L 21.165 30.074 C 20.244 30.074 19.179 29.222 19.179 28.301 L 19.179 17.776 L 19.073 10.074 Z"
+                  style="transform-origin: 19.717px 19.241px;"
+                ></path>
+              </svg>
             </div>
           </div>
 
@@ -99,7 +132,7 @@ import { MenuItem } from "primeng/api";
                 <i class="fa-solid fa-home w-5 transition duration-75"></i>
                 <span class="ms-3 select-none" *ngIf="open">Inicio</span>
               </a>
-              <hr *ngIf="open" class="border-gray-300 mx-3 -mt-1">
+              <hr *ngIf="open" class="border-gray-300 mx-3 -mt-1" />
             </li>
             <li>
               <a
@@ -128,14 +161,20 @@ import { MenuItem } from "primeng/api";
                   'dark:text-primary': showCrudLink && open,
                 }"
               >
-                <a class="flex items-center">
+                <a
+                  class="flex items-center"
+                  [ngClass]="{ 'text-primary': showCrudLink && open }"
+                >
                   <i class="fa-solid fa-briefcase w-5 duration-75"></i>
                   <span class="ms-3 select-none" *ngIf="open">Gestão</span>
                 </a>
                 <span
                   *ngIf="open"
                   class="flex items-center justify-center cursor-pointer duration-300"
-                  [ngClass]="{ 'rotate-180': showCrudLink }"
+                  [ngClass]="{
+                    'rotate-180': showCrudLink,
+                    'text-primary': showCrudLink
+                  }"
                 >
                   <i class="fa-solid fa-arrow-circle-down"></i>
                 </span>
@@ -164,7 +203,10 @@ import { MenuItem } from "primeng/api";
                 class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{ 'justify-center': !open }"
               >
-                <i class="fa-solid fa-calendar-days w-5"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z" />
+                </svg>
+
                 <span class="ms-3 select-none" *ngIf="open">Atendimentos</span>
               </a>
             </li>

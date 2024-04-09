@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { EventClickArg, EventChangeArg, EventInput } from '@fullcalendar/core';
 import { DateClickArg } from '@fullcalendar/interaction';
 import * as moment from 'moment/moment';
@@ -13,6 +13,7 @@ import { rules } from '../../models/core/rules';
 import { mapScheduleToEvent } from '../../utils/util';
 import { CustomValidators, ValidatorsHelper } from '../../utils/validators';
 import { LoaderService } from '../../services/loader.service';
+import { CalendarComponent } from '../../components/calendar/calendar.component';
 
 
 @Component({
@@ -59,6 +60,16 @@ export class SchedulerComponent implements OnInit {
 
   oldScheduleDisabled = false;
   validHelper = ValidatorsHelper;
+
+  items = [
+    {label: 'Agendamentos', icon: 'fa-solid fa-calendar', routerLink: '/scheduler'},
+    {label: 'Clientes', icon: 'fa-solid fa-users', routerLink: '/customers'},
+    {label: 'Funcionários', icon: 'fa-solid fa-users', routerLink: '/employees'},
+    {label: 'Serviços', icon: 'fa-solid fa-tools', routerLink: '/services'},
+    {label: 'Configurações', icon: 'fa-solid fa-cog', routerLink: '/settings'},
+  ];
+
+  @ViewChild("calendar") calendar!: CalendarComponent;
 
   constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService, private loader: LoaderService) {
     this.createForm();
@@ -166,11 +177,9 @@ export class SchedulerComponent implements OnInit {
   //#region Members 'Handling click'
 
   onEventClick(arg: EventClickArg) {
-    console.log(arg);
-    
     this.header = `Editar horário - ${moment(arg.event.extendedProps['schedule']['startDateTime']).format("DD/MM/yy")}`
     
-    let id = + arg.event._def.publicId;
+    let id = + arg.event.extendedProps['id'];
     let schedule = this.schedules.find(x => x.id === id);
 
     if (schedule) {
@@ -198,7 +207,7 @@ export class SchedulerComponent implements OnInit {
   onEventChange(arg: EventChangeArg) {
     this.edit = true;
 
-    let id = + arg.event._def.publicId;
+    let id = + arg.event.extendedProps['id'];
     let schedule = this.schedules.find(x => x.id === id);
 
     if (schedule) {
@@ -346,15 +355,14 @@ export class SchedulerComponent implements OnInit {
     this.visible = false;
   }
 
-  removeOrReplaceEvent(eventId : any, replace : UserSchedule | null = null) {
+  removeOrReplaceEvent(eventId : any, replace? : any) {
     this.events = this.events.filter(x => x.id !== eventId);
     this.schedules = this.schedules.filter(x => x.id != eventId);
     this.clearEvents.next(this.events.filter(x => x.id == eventId));
 
     if (replace) {
-      let event = mapScheduleToEvent([replace]);
-      this.events.push(event);
-      this.addEvent.next(event);
+      this.events.push(replace);
+      this.addEvent.next(replace);
       this.schedules.push(replace);
     }
   }
@@ -430,29 +438,32 @@ export class SchedulerComponent implements OnInit {
 
   private save(body: any, arg?: EventChangeArg) {
     this.loader.showBackground();
-    this.isEditEnable && this.api.sendToApi("Schedule/Setup", body, false)?.subscribe({
-      next: x => {
-        if (x) {
-          if (this.schedules.some(y => y.id == x)) {
-            
-            this.removeOrReplaceEvent(x, body);
 
-            
-          } else {
-            let schedule = {...body, id: x};
-            this.schedules.push(schedule);
-            this.addEvent.next(mapScheduleToEvent([schedule]));
+    if (this.isEditEnable) {
+      this.calendar.setEditable(false);
+      this.api.sendToApi("Schedule/Setup", body, false)?.subscribe({
+        next: x => {
+          if (x) {
+            if (this.schedules.some(y => y.id == x)) {
+              this.removeOrReplaceEvent(x, body);
+            } else {
+              let schedule = {...body, id: x};
+              this.schedules.push(schedule);
+              this.addEvent.next(mapScheduleToEvent([schedule]));
+            }
           }
-        }
-  
-        this.form.reset({note: "", id: 0});
-      },
-      error: x => {
-        arg ? arg.revert(): void 0;
-        this.loader.hideBackground()
-      },
-      complete: () => this.loader.hideBackground()
-    })
-  }
+    
+          this.form.reset({note: "", id: 0});
+          this.calendar.setEditable(true);
+        },
+        error: x => {
+          arg ? arg.revert(): void 0;
+          this.loader.hideBackground()
+          this.calendar.setEditable(true);
+        },
+        complete: () => this.loader.hideBackground()
+      })
+    }
+   }
 
 }

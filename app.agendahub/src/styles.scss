@@ -40,19 +40,36 @@
   padding: 0 1rem;
 }
 
-::-webkit-scrollbar:vertical {
+::-webkit-scrollbar {
   width: 0.5rem;
   background-blend-mode: darken;
   padding: 1rem 0;
 }
+
+::-webkit-scrollbar:horizontal {
+  height: 0.5rem;
+  background-blend-mode: lighten;
+  padding: 0 1rem;
+}
+
 
 ::-webkit-scrollbar-thumb {
   background: rgba(90, 90, 90);
   border-radius: 2rem;
 }
 
+::-webkit-scrollbar-thumb:horizontal {
+  @apply bg-slate-950 bg-opacity-50 scroll-mx-2;
+  border-radius: 2rem;
+}
+
 ::-webkit-scrollbar-track {
+  @apply bg-opacity-0;
   background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-track:horizontal {
+  @apply bg-very-clean 
 }
 
 .p-overlaypanel.responsive-overlay {
@@ -86,6 +103,23 @@
   max-height: 35%;
 }
 
+.p-datatable .p-paginator-bottom {
+  button {
+    @apply rounded-md mx-0.5 min-w-fit w-9 h-9;
+  }
+
+  .p-paginator-pages {
+    .p-paginator-page.p-highlight {
+      @apply rounded-md mx-0.5 min-w-fit w-9 h-9;
+    }
+  
+    .p-paginator-page {
+      @apply rounded-md mx-0.5 min-w-fit w-9 h-9;
+    }
+  }
+
+}
+ 
 .fc-event {
   @apply border-none rounded-md mix-blend-darken p-1;
 }
