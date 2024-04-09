@@ -45,6 +45,11 @@ export class AppComponent {
     moment.locale("pt-br");
     this.configureTranslation();
 
+    this.primeNG.ripple = true;
+    this.primeNG.overlayOptions = {
+      appendTo: "body",
+    }
+
     title.setTitle("AgendaHub | Sistema de Gestão de Atividades");
   }
 
