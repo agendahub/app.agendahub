@@ -1,10 +1,14 @@
 import { User, Service } from "../core/entities";
 
 export class ErrorDto {
-    public code!: number;
+    public data!: any;
+    public error!: string;
     public message!: string;
-    public exception!: string;
-    public status!: number
+    public hasError!: boolean;
+    public statusCode!: number;
+    public errorDescription!: string;
+
+
 }
 
 export class RetornoDto<T = any> {

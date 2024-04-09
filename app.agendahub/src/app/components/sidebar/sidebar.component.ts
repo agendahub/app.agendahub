@@ -132,7 +132,7 @@ import { MenuItem } from "primeng/api";
                 <i class="fa-solid fa-home w-5 transition duration-75"></i>
                 <span class="ms-3 select-none" *ngIf="open">Inicio</span>
               </a>
-              <hr *ngIf="open" class="border-gray-300 mx-3 -mt-1" />
+              <hr *ngIf="open" class="w-full h-0.5 border-t-0 -mt-1 bg-gray-200 dark:bg-white/10" />
             </li>
             <li>
               <a

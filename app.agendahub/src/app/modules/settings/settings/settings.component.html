@@ -1,0 +1,27 @@
+<div class="sm:px-8 px-2 py-4 h-full">
+    <div class="sm:p-0 px-2 indent-2 flex flex-col justify-center text-primary dark:text-very-clean">
+        <h2 class="text-2xl font-bold leading-7 -tracking-wide sm:truncate sm:text-3xl sm:tracking-tight">Configurações</h2>
+        <small class="font-extralight tracking-wide">Configure a sua conta e escolha suas preferências</small>
+    </div>
+
+    <hr class="my-6 h-0.5 border-t-0 bg-white/50 dark:bg-white/10" />
+
+    <div class="mt-4 w-full h-5/6">
+        <p-tabMenu [model]="items" [activeItem]="item">
+            <ng-template pTemplate="item" let-item>
+                <div class="flex">
+                    <span class="sm:block hidden"> <i [class]="item.icon"></i> </span>
+                    <span class="font-normal sm-tracking-normal -tracking-wide"> {{ item.label }}</span>
+                    <span class="sm:block hidden" [pTooltip]="item.state?.readOnly ? 'Você só possui direito de visualizar essa aba' : ''">
+                        <i [class]="item.state?.readOnly ? 'fa-solid fa-lock ml-1' : ''"></i>
+                    </span>
+                </div>
+            </ng-template>
+        </p-tabMenu>        
+        <div class="w-full h-full">
+            <router-outlet></router-outlet>
+        </div>
+    </div>
+        
+
+</div>

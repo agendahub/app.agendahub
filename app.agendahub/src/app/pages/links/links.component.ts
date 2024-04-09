@@ -7,10 +7,10 @@ import { customSort } from '../../utils/util';
 import { environment } from '../../../environments/environment.development';
 
 @Component({
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss']
+  templateUrl: './links.component.html',
+  styleUrls: ['./links.component.scss']
 })
-export class SettingsComponent {
+export class LinksComponent {
 
   form!: FormGroup;
   today = new Date();
