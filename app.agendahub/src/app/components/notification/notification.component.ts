@@ -53,6 +53,10 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
     moment.locale("pt-br");
   }
 
+  public override forget(): void {
+    this.open = false;
+  }
+
   @HostListener("document:click", ["$event"])
   clickout(event: MouseEvent) {
     if (!this.elementRef.nativeElement.contains(event.target as Node)) {

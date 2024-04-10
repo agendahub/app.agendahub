@@ -1,5 +1,5 @@
 <div class="sm:pt-2 lg:pt-4 p-0 h-fit overflow-h-auto">
-  <div class="w-50 sm:py-2 sm:px-8 p-0 sm:text-left text-center">
+  <div class="w-50 sm:py-2 sm:px-8 px-2 sm:text-left text-center">
     <span
       class="dark:text-white text-primary text-4xl font-bold tracking-tight sm:text-6xl indent-4"
     >
@@ -11,13 +11,12 @@
         [paginator]="true"
         [rows]="10"
         [resizableColumns]="true"
-        styleClass="p-datatable-sm p-datatable-striped"
-        [tableStyle]="{ 'min-width': '50rem' }"
+        styleClass="p-datatable-sm"
       >
         <ng-template pTemplate="caption"></ng-template>
         <ng-template pTemplate="header">
           <tr>
-            <th></th>
+            <th class="w-3"></th>
             <th>Título</th>
             <th>Conteúdo</th>
             <th>Criada</th>
@@ -26,7 +25,7 @@
         </ng-template>
         <ng-template pTemplate="body" let-notification>
           <tr>
-            <td>
+            <td class="w-3">
               <span
                 class="flex items-center justify-center rounded-full"
                 [ngClass]="{

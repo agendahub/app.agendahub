@@ -16,7 +16,7 @@ import { MenuItem } from "primeng/api";
 @Component({
   selector: "sidebar",
   template: `
-    <div class="flex justify-between py-2 sm:hidden" *ngIf="!open">
+    <div class="flex justify-between items-center py-2 sm:hidden" *ngIf="!open">
       <div class="flex justify-center items-center sm:px-0 px-2">
         <img
           class="w-auto"
@@ -25,29 +25,34 @@ import { MenuItem } from "primeng/api";
           alt="logotipo AgendaHub"
         />
       </div>
-      <button
-        (click)="open = true"
-        data-drawer-target="default-sidebar"
-        data-drawer-toggle="default-sidebar"
-        aria-controls="default-sidebar"
-        type="button"
-        class="flex items-center p-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-      >
-        <span class="sr-only">Open sidebar</span>
-        <svg
-          class="w-6 h-6"
-          aria-hidden="true"
-          fill="currentColor"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 40 40"
+      <div class="flex justify-end items-center gap-1">
+        <span class="mt-1">
+          <notifications></notifications>
+        </span>
+        <button
+          (click)="open = true"
+          data-drawer-target="default-sidebar"
+          data-drawer-toggle="default-sidebar"
+          aria-controls="default-sidebar"
+          type="button"
+          class="flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
         >
-          <path
-            d="M 4.717 8.824 L 4.717 29.658 C 4.717 32.184 6.774 34.241 9.3 34.241 L 30.134 34.241 C 32.66 34.241 34.717 32.184 34.717 29.658 L 34.717 8.824 C 34.717 6.298 32.66 4.241 30.134 4.241 L 9.3 4.241 C 6.774 4.241 4.717 6.298 4.717 8.824 Z M 19.073 10.074 C 19.073 9.154 20.138 8.408 21.059 8.408 L 28.884 8.408 C 29.805 8.408 30.55 9.154 30.55 10.074 L 30.55 28.408 C 30.55 29.329 29.805 30.074 28.884 30.074 L 21.165 30.074 C 20.244 30.074 19.179 29.222 19.179 28.301 L 19.179 17.776 L 19.073 10.074 Z"
-            style="transform-box: fill-box; transform-origin: 50% 50%;"
-            transform="matrix(-1, 0, 0, -1, 0, -0.000009)"
-          ></path>
-        </svg>
-      </button>
+          <span class="sr-only">Open sidebar</span>
+          <svg
+            class="w-6 h-6"
+            aria-hidden="true"
+            fill="currentColor"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 40 40"
+          >
+            <path
+              d="M 4.717 8.824 L 4.717 29.658 C 4.717 32.184 6.774 34.241 9.3 34.241 L 30.134 34.241 C 32.66 34.241 34.717 32.184 34.717 29.658 L 34.717 8.824 C 34.717 6.298 32.66 4.241 30.134 4.241 L 9.3 4.241 C 6.774 4.241 4.717 6.298 4.717 8.824 Z M 19.073 10.074 C 19.073 9.154 20.138 8.408 21.059 8.408 L 28.884 8.408 C 29.805 8.408 30.55 9.154 30.55 10.074 L 30.55 28.408 C 30.55 29.329 29.805 30.074 28.884 30.074 L 21.165 30.074 C 20.244 30.074 19.179 29.222 19.179 28.301 L 19.179 17.776 L 19.073 10.074 Z"
+              style="transform-box: fill-box; transform-origin: 50% 50%;"
+              transform="matrix(-1, 0, 0, -1, 0, -0.000009)"
+            ></path>
+          </svg>
+        </button>
+      </div>
     </div>
 
     <div
@@ -89,7 +94,6 @@ import { MenuItem } from "primeng/api";
       }"
       (mouseenter)="open = true"
       (mouseleave)="open = fixed ? true : false"
-      (dblclick)="setFixed()"
     >
       <div
         class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-primary border-l-0 border-r dark:border-secondary border-clean flex flex-col justify-between gap-3 pb-1"
