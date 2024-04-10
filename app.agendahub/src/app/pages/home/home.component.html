@@ -1,50 +1,175 @@
-<div class="bg-blend-hue dark:text-white text-gray-800 mx-auto max-w-6xl sm:px-8 lg:px-12 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none h-full flex flex-col justify-between">
-    <div class="flex flex-col w-full gap-4 p-2">
-        <div class="flex items-center justify-between">
-            <h3 class="text-2xl dark:text-slate-200 text-slate-800 font-bold ml-3 md:w-max w-8">Próximos agendamentos</h3>
-            <p-dropdown placeholder="Tempo" [options]="dateRanges" [formControl]="dateRange" (onChange)="onChangeDateRange($event)"></p-dropdown>
+<div class="w-full dark:text-white text-primary flex justify-center px-10 py-8">
+  <div class="w-full h-[500px] dark:bg-secondary bg-very-clean rounded-xl p-8">
+    <p class="font-bold mb-8">Próximos agendamentos</p>
+    <div class="flex gap-6">
+      <div class="flex flex-col gap-6 items-start">
+        <div
+          class="flex gap-10 hover:bg-primary pr-40 rounded-xl hover:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] cursor-pointer duration-200 group"
+        >
+          <div
+            class="shadow-[6px_6px_0px_0px_white] w-[100px] h-[100px] bg-[#D66666] group-hover:bg-primary group-hover:shadow-none hover:bg-primary rounded-xl flex flex-col items-center justify-center font-bold"
+          >
+            <p class="mb-[-1rem]">ter</p>
+            <p class="text-[3rem]">20</p>
+          </div>
+
+          <div class="flex flex-col items-start">
+            <p class="font-bold mt-2">Nome Completo</p>
+            <p class="font-extralight leading-4">Nome do serviço</p>
+            <p
+              class="mt-4 text-sm bg-very-clean text-primary rounded-3xl px-2 font-bold"
+            >
+              00:00
+            </p>
+          </div>
         </div>
+        <div
+          class="flex gap-10 hover:bg-primary pr-40 rounded-xl hover:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] cursor-pointer duration-200 group"
+        >
+          <div
+            class="shadow-[6px_6px_0px_0px_white] w-[100px] h-[100px] bg-[#D66666] group-hover:bg-primary group-hover:shadow-none hover:bg-primary rounded-xl flex flex-col items-center justify-center font-bold"
+          >
+            <p class="mb-[-1rem]">ter</p>
+            <p class="text-[3rem]">20</p>
+          </div>
 
-        <ol *ngIf="events.length; else noneEvent">
-            <li [class]="'border-l-2 border-purple-600 ml-4 '" *ngFor="let event of events" [style]="{'border-color': event.employee.color ?? 'rgb(147 51 234)'}">
-                <div class="md:flex flex-start">
-                    <div [class]="'bg-purple-600 w-6 h-6 flex items-center text-white justify-center rounded-full -ml-3.5 p-0.5 shadow-base-medium shadow-md'" [style]="{background: event.employee.color ?? 'rgb(147 51 234)'}">
-                        <fa-icon [icon]="faCalendar"></fa-icon>
-                    </div>
-                    <div class="block rounded-lg bg-gray-100 w-90% ml-6 mb-0.5">
-                        <div class="md:p-4 p-2 rounded-t-lg shadow-lg md:w-full leading-3 sm:leading-4 -tracking-wide sm:tracking-wide">
-                            <div class="flex justify-between mb-2">
-                                <p>
-                                    <span class="font-semibold text-xl text-slate-900"> {{event.customer.name}} </span><br>
-                                    <span class="font-light text-lg text-slate-700">{{event.schedule.service.description}}</span>
-                                </p>
-                                <p>
-                                    <span class="font-medium md:text-xl text-base text-slate-900">{{event.schedule.startDateTime | date: "dd/MM/yy HH:mm"}}</span><br>
-                                    <span class="font-light md:text-base text-sm text-slate-700 float-right"> {{getDayName(event.schedule.startDateTime)}}</span>
-                                </p>
-                            </div>
-                            <div class="rounded-md indent-2 bg-gray-200" *ngIf="event.schedule.note || event.schedule.service.note">
-                                <small class="py-1 text-left text-gray-600">Observação:</small>
-                                <p class="py-2 text-gray-700"> {{event.schedule.note}} </p>
-                            </div>
-    
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ol>
+          <div class="flex flex-col items-start">
+            <p class="font-bold mt-2">Nome Completo</p>
+            <p class="font-extralight leading-4">Nome do serviço</p>
+            <p
+              class="mt-4 text-sm bg-very-clean text-primary rounded-3xl px-2 font-bold"
+            >
+              00:00
+            </p>
+          </div>
+        </div>
+        <div
+          class="flex gap-10 hover:bg-primary pr-40 rounded-xl hover:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] cursor-pointer duration-200 group"
+        >
+          <div
+            class="shadow-[6px_6px_0px_0px_white] w-[100px] h-[100px] bg-[#D66666] group-hover:bg-primary group-hover:shadow-none hover:bg-primary rounded-xl flex flex-col items-center justify-center font-bold"
+          >
+            <p class="mb-[-1rem]">ter</p>
+            <p class="text-[3rem]">20</p>
+          </div>
 
-        <p-overlayPanel [showCloseIcon]="true" #op  (onHide)="calendarOpen = false" [style]="{width: getWidth()}" styleClass="responsive-overlay">
-            <div class="w-full sm:w-75 md:w-50 lg:w-25" *ngIf="calendarOpen">
-                <app-calendar [header]="false" [events]="eventsCalendar" [isEditable]="false"></app-calendar>            
-            </div>
-        </p-overlayPanel>
-
-        <ng-template #noneEvent>
-            <div class="text-center font-semibold text-lg">Nenhum agendamento para esse período</div>
-        </ng-template>
+          <div class="flex flex-col items-start">
+            <p class="font-bold mt-2">Nome Completo</p>
+            <p class="font-extralight leading-4">Nome do serviço</p>
+            <p
+              class="mt-4 text-sm bg-very-clean text-primary rounded-3xl px-2 font-bold"
+            >
+              00:00
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="w-6/12 h-[350px] rounded-xl bg-primary"></div>
     </div>
-    <p class="text-base leading-1 font-medium text-center px-4">
-        Deseja visualizar agendamentos passados ou mais distantes? Veja direto na <a class="text-purple-400 cursor-pointer no-underline appearance-none select-none" routerLink="/scheduler">Agenda</a>
-    </p>
+  </div>
+</div>
+
+<div
+  class="bg-blend-hue dark:text-white text-gray-800 mx-auto max-w-6xl sm:px-8 lg:px-12 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none h-full flex flex-col justify-between"
+>
+  <div class="flex flex-col w-full gap-4 p-2">
+    <div class="flex items-center justify-between">
+      <h3
+        class="text-2xl dark:text-slate-200 text-slate-800 font-bold ml-3 md:w-max w-8"
+      >
+        Próximos agendamentos
+      </h3>
+      <p-dropdown
+        placeholder="Tempo"
+        [options]="dateRanges"
+        [formControl]="dateRange"
+        (onChange)="onChangeDateRange($event)"
+      ></p-dropdown>
+    </div>
+
+    <ol *ngIf="events.length; else noneEvent">
+      <li
+        [class]="'border-l-2 border-purple-600 ml-4 '"
+        *ngFor="let event of events"
+        [style]="{ 'border-color': event.employee.color ?? 'rgb(147 51 234)' }"
+      >
+        <div class="md:flex flex-start">
+          <div
+            [class]="
+              'bg-purple-600 w-6 h-6 flex items-center text-white justify-center rounded-full -ml-3.5 p-0.5 shadow-base-medium shadow-md'
+            "
+            [style]="{ background: event.employee.color ?? 'rgb(147 51 234)' }"
+          >
+            <fa-icon [icon]="faCalendar"></fa-icon>
+          </div>
+          <div class="block rounded-lg bg-gray-100 w-90% ml-6 mb-0.5">
+            <div
+              class="md:p-4 p-2 rounded-t-lg shadow-lg md:w-full leading-3 sm:leading-4 -tracking-wide sm:tracking-wide"
+            >
+              <div class="flex justify-between mb-2">
+                <p>
+                  <span class="font-semibold text-xl text-slate-900">
+                    {{ event.customer.name }} </span
+                  ><br />
+                  <span class="font-light text-lg text-slate-700">{{
+                    event.schedule.service.description
+                  }}</span>
+                </p>
+                <p>
+                  <span
+                    class="font-medium md:text-xl text-base text-slate-900"
+                    >{{
+                      event.schedule.startDateTime | date : "dd/MM/yy HH:mm"
+                    }}</span
+                  ><br />
+                  <span
+                    class="font-light md:text-base text-sm text-slate-700 float-right"
+                  >
+                    {{ getDayName(event.schedule.startDateTime) }}</span
+                  >
+                </p>
+              </div>
+              <div
+                class="rounded-md indent-2 bg-gray-200"
+                *ngIf="event.schedule.note || event.schedule.service.note"
+              >
+                <small class="py-1 text-left text-gray-600">Observação:</small>
+                <p class="py-2 text-gray-700">{{ event.schedule.note }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <p-overlayPanel
+      [showCloseIcon]="true"
+      #op
+      (onHide)="calendarOpen = false"
+      [style]="{ width: getWidth() }"
+      styleClass="responsive-overlay"
+    >
+      <div class="w-full sm:w-75 md:w-50 lg:w-25" *ngIf="calendarOpen">
+        <app-calendar
+          [header]="false"
+          [events]="eventsCalendar"
+          [isEditable]="false"
+        ></app-calendar>
+      </div>
+    </p-overlayPanel>
+
+    <ng-template #noneEvent>
+      <div class="text-center font-semibold text-lg">
+        Nenhum agendamento para esse período
+      </div>
+    </ng-template>
+  </div>
+  <p class="text-base leading-1 font-medium text-center px-4">
+    Deseja visualizar agendamentos passados ou mais distantes? Veja direto na
+    <a
+      class="text-purple-400 cursor-pointer no-underline appearance-none select-none"
+      routerLink="/scheduler"
+      >Agenda</a
+    >
+  </p>
 </div>
