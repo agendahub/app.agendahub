@@ -49,9 +49,9 @@ export class HomeComponent implements OnInit {
 
   private getEvents() {
     this.eventService
-      .getCurrentEvents(this.dateRange.value.index)
+      .getCurrentEvents(this.dateRange.value.index, 3)
       ?.subscribe((x) => {
-        this.events = x.slice(0, 3);
+        this.events = x;
         console.log(x);
       });
   }
