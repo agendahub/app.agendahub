@@ -13,17 +13,15 @@ export class UserProfileComponent {
         {
           status: 'Evento 1',
           date: '01/02/2024',
-          description: 'Descrição do Evento 1'
         },
         {
           status: 'Evento 2',
           date: '03/02/2024',
-          description: 'Descrição do Evento 2'
+
         },
         {
-          status: 'Evento 3',
+          status: '2020',
           date: '05/02/2024',
-          description: 'Descrição do Evento 3'
         }
       ];
     }
