@@ -2,64 +2,42 @@
   <div class="w-full h-[500px] dark:bg-secondary bg-very-clean rounded-xl p-8">
     <p class="font-bold mb-8">Próximos agendamentos</p>
     <div class="flex gap-6">
-      <div class="flex flex-col gap-6 items-start">
+      <div class="flex flex-col gap-6 items-start" *ngIf="events.length">
         <div
-          class="flex gap-10 hover:bg-primary pr-40 rounded-xl hover:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] cursor-pointer duration-200 group"
+          *ngFor="let event of events; let i = index"
+          class="flex gap-10 dark:hover:bg-primary hover:bg-clean w-[450px] rounded-xl dark:hover:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] hover:shadow-[6px_6px_0px_0px_rgba(207,207,207,1)] cursor-pointer duration-200 group"
         >
           <div
-            class="shadow-[6px_6px_0px_0px_white] w-[100px] h-[100px] bg-[#D66666] group-hover:bg-primary group-hover:shadow-none hover:bg-primary rounded-xl flex flex-col items-center justify-center font-bold"
+            [ngClass]="{
+              'bg-[#D66666]': i === 0,
+              'bg-[#D6A966]': i === 1,
+              'bg-[#6F66D6]': i === 2
+            }"
+            class="dark:shadow-[6px_6px_0px_0px_white] shadow-[6px_6px_0px_0px_rgba(20,5,42,1)] w-[100px] h-[100px] bg-[#D66666] dark:group-hover:bg-primary group-hover:bg-clean group-hover:shadow-none hover:bg-primary rounded-xl flex flex-col items-center justify-center font-bold"
           >
-            <p class="mb-[-1rem]">ter</p>
-            <p class="text-[3rem]">20</p>
-          </div>
-
-          <div class="flex flex-col items-start">
-            <p class="font-bold mt-2">Nome Completo</p>
-            <p class="font-extralight leading-4">Nome do serviço</p>
-            <p
-              class="mt-4 text-sm bg-very-clean text-primary rounded-3xl px-2 font-bold"
-            >
-              00:00
+            <p class="mb-[-1rem]">
+              {{
+                getDayName(event.schedule.startDateTime)
+                  | slice : 0 : 3
+                  | lowercase
+              }}
+            </p>
+            <p class="text-[3rem]">
+              {{ event.schedule.startDateTime | date : "dd" }}
             </p>
           </div>
-        </div>
-        <div
-          class="flex gap-10 hover:bg-primary pr-40 rounded-xl hover:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] cursor-pointer duration-200 group"
-        >
-          <div
-            class="shadow-[6px_6px_0px_0px_white] w-[100px] h-[100px] bg-[#D66666] group-hover:bg-primary group-hover:shadow-none hover:bg-primary rounded-xl flex flex-col items-center justify-center font-bold"
-          >
-            <p class="mb-[-1rem]">ter</p>
-            <p class="text-[3rem]">20</p>
-          </div>
 
           <div class="flex flex-col items-start">
-            <p class="font-bold mt-2">Nome Completo</p>
-            <p class="font-extralight leading-4">Nome do serviço</p>
+            <p class="font-bold mt-2">{{ event.customer.name | titlecase }}</p>
             <p
-              class="mt-4 text-sm bg-very-clean text-primary rounded-3xl px-2 font-bold"
+              class="dark:font-extralight dark:font-light leading-4 dark:text-very-clean text-primary"
             >
-              00:00
+              {{ event.schedule.service.description }}
             </p>
-          </div>
-        </div>
-        <div
-          class="flex gap-10 hover:bg-primary pr-40 rounded-xl hover:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] cursor-pointer duration-200 group"
-        >
-          <div
-            class="shadow-[6px_6px_0px_0px_white] w-[100px] h-[100px] bg-[#D66666] group-hover:bg-primary group-hover:shadow-none hover:bg-primary rounded-xl flex flex-col items-center justify-center font-bold"
-          >
-            <p class="mb-[-1rem]">ter</p>
-            <p class="text-[3rem]">20</p>
-          </div>
-
-          <div class="flex flex-col items-start">
-            <p class="font-bold mt-2">Nome Completo</p>
-            <p class="font-extralight leading-4">Nome do serviço</p>
             <p
-              class="mt-4 text-sm bg-very-clean text-primary rounded-3xl px-2 font-bold"
+              class="mt-4 text-sm dark:bg-very-clean bg-primary dark:text-primary text-very-clean rounded-3xl px-2 font-bold"
             >
-              00:00
+              {{ event.schedule.startDateTime | date : "HH:mm" }}
             </p>
           </div>
         </div>
