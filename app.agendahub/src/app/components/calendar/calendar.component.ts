@@ -92,6 +92,7 @@ export class CalendarComponent
   public faDelete = faTimesCircle;
 
   public state!: Record<string, any>;
+  public datePreview = moment().format("MMMM").toUpperCapital();
   public today = moment();
 
   public fork = {
@@ -189,8 +190,12 @@ export class CalendarComponent
     this.header = this.header ?? true;
   }
 
-  public get month(): string {
-    return moment(this.Calendar?.getDate()).format("MMMM").toUpperCapital();
+  public updateDateView(offset: { start: Date; end: Date }) {
+    const range = { start: moment(offset.start), end: moment(offset.end) };
+    
+    this.datePreview = `${ range.start.diff(range.end, "day") == -1 ? range.end.format("DD") : range.start.format("DD") + " - " + range.end.format("DD")} 
+            ${range.end.format("MMMM")}, ${range.end.format("YYYY")}
+            `
   }
 
   momentHeader(day: any) {
@@ -344,12 +349,16 @@ export class CalendarComponent
     }
   }
 
-  private dispatchViewChange() {
-    const offset = {
+  private getDateRange() {
+    return {
       start: this.Calendar.getCurrentData().dateProfile.renderRange.start,
       end: this.Calendar.getCurrentData().dateProfile.renderRange.end,
     };
+  }
 
+  private dispatchViewChange() {
+    const offset = this.getDateRange(); 
+    this.updateDateView(offset);
     this.OnViewChange.emit({ event: event, offset: offset });
   }
 

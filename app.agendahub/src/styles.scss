@@ -169,3 +169,7 @@
 .fc .fc-daygrid-day-frame {
   @apply border-[1px] border-clean border-opacity-30;
 }
+
+.text-optimized {
+  text-rendering: optimizeLegibility;
+}

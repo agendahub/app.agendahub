@@ -1,4 +1,4 @@
-<div class="text-white mx-auto max-w-7xl sm:pt-2 lg:pt-4 p-0 lg:rounded-lg md:rounded-md rounded-none h-fit overflow-h-auto">
+<div class="text-white mx-auto max-w-7xl lg:rounded-lg md:rounded-md rounded-none h-fit overflow-h-auto">
     <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [items]="items" [clearAll]="clearEvents" (OnViewChange)="onViewChange($event)"
     (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
     <ng-template calendarItem [enableForAll]="isEditEnable">
