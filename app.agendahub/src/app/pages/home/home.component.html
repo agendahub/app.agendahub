@@ -1,6 +1,8 @@
-<div class="w-full dark:text-white text-primary flex justify-center px-10 py-8">
+<div
+  class="w-full dark:text-white text-primary flex flex-col items-center gap-4 justify-center px-10 py-8"
+>
   <div
-    class="w-full xl:w-10/12 h-[500px] dark:bg-secondary bg-very-clean rounded-xl p-8"
+    class="w-full xl:w-11/12 h-[500px] dark:bg-secondary bg-very-clean rounded-xl p-8"
   >
     <p class="font-bold mb-8">Próximos agendamentos</p>
     <div class="flex justify-between gap-4">
@@ -18,7 +20,7 @@
               'bg-[#6F66D6]': i === 2,
               'shadow-[6px_6px_0px_0px_rgba(126,118,214,1)]': i === 2,
             }"
-            class="shadow-[6px_6px_0px_0px_rgba(20,5,42,1)] w-[100px] h-[100px] dark:group-hover:bg-primary group-hover:bg-clean group-hover:shadow-none hover:bg-primary rounded-xl flex flex-col items-center justify-center font-bold"
+            class="w-[100px] h-[100px] dark:group-hover:bg-primary group-hover:bg-clean group-hover:shadow-none hover:bg-primary rounded-xl flex flex-col items-center justify-center font-bold"
           >
             <p class="mb-[-1rem]">
               {{
@@ -33,14 +35,14 @@
           </div>
 
           <div class="flex flex-col items-start">
-            <p class="font-bold mt-2">{{ event.customer.name | titlecase }}</p>
-            <p
-              class="dark:font-extralight dark:font-light leading-4 dark:text-very-clean text-primary"
-            >
+            <p class="dark:text-clean text-primary font-bold mt-2">
+              {{ event.customer.name | titlecase }}
+            </p>
+            <p class="font-normal leading-4 dark:text-[#CFCFCF] text-[#251144]">
               {{ event.schedule.service.description }}
             </p>
             <p
-              class="mt-4 text-sm dark:bg-very-clean bg-primary dark:text-primary text-very-clean rounded-3xl px-2 font-bold"
+              class="mt-4 text-sm dark:bg-clean bg-primary dark:text-primary text-very-clean rounded-3xl px-2 font-bold"
             >
               {{ event.schedule.startDateTime | date : "HH:mm" }}
             </p>
@@ -52,13 +54,13 @@
         <div class="w-3/12 flex flex-col gap-4">
           <a href="">
             <button
-              class="dark:bg-primary bg-clean py-5 w-full rounded-xl flex items-center justify-center font-bold duration-200 hover:bg-primary hover:text-very-clean dark:hover:bg-very-clean dark:hover:text-primary"
+              class="text-primary dark:text-clean dark:bg-primary bg-clean py-5 w-full rounded-xl flex items-center justify-center font-bold duration-200 hover:bg-primary hover:text-very-clean dark:hover:bg-very-clean dark:hover:text-primary"
             >
               <i class="fa-solid fa-circle-plus mr-3 text-2xl"></i>Novo
             </button>
           </a>
           <div
-            class="flex flex-col gap-6 dark:bg-primary bg-clean rounded-xl py-2 px-4 pb-8 dark:text-very-clean text-primary"
+            class="flex flex-col gap-6 dark:bg-primary bg-clean rounded-xl py-2 px-4 pb-8 dark:text-clean text-primary"
           >
             <p class="font-bold">Agendamentos do dia</p>
             <div class="flex gap-10">
@@ -79,6 +81,30 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="w-full xl:w-11/12 h-[350px] flex gap-4">
+    <div
+      class="w-8/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
+    ></div>
+    <div
+      class="w-4/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
+    ></div>
+  </div>
+
+  <div class="w-full xl:w-11/12 h-[200px] flex gap-4">
+    <div
+      class="w-3/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
+    ></div>
+    <div
+      class="w-3/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
+    ></div>
+    <div
+      class="w-3/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
+    ></div>
+    <div
+      class="w-3/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
+    ></div>
   </div>
 </div>
 
