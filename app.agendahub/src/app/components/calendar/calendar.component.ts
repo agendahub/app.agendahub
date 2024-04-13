@@ -79,11 +79,16 @@ export class CalendarComponent
   public views = [
     "dayGridMonth",
     "timeGridFourDay",
-    "dayGridWeek",
+    // "dayGridWeek",
     "dayGridDayCustom",
   ];
-  public viewTranslate = ["Mês", "Hora semana", "Semana", "Dia"];
-  public view = "Hora semana";
+  public viewTranslate = [
+    "Mês",
+    "Semana", 
+    // "Semana", 
+    "Dia"
+  ];
+  public view = "Semana";
 
   public faNext = faArrowCircleRight;
   public faOptions = faCalendarCheck;
@@ -164,6 +169,8 @@ export class CalendarComponent
 
   public ngAfterViewInit(): void {
     this.view = this.initView;
+    console.log(this.view, this.initView, this.tab);
+    
     this.dispatchViewChange();
 
     if (!this.addEvent) {
@@ -196,6 +203,11 @@ export class CalendarComponent
     this.datePreview = `${ range.start.diff(range.end, "day") == -1 ? range.end.format("DD") : range.start.format("DD") + " - " + range.end.format("DD")} 
             ${range.end.format("MMMM")}, ${range.end.format("YYYY")}
             `
+  }
+
+  tab = this.view;
+  set(tab: string) {
+    this.tab = tab;
   }
 
   momentHeader(day: any) {
@@ -363,8 +375,9 @@ export class CalendarComponent
   }
 
   public changeView(event: any) {
-    const indexView = this.viewTranslate.indexOf(event.value);
+    const indexView = this.viewTranslate.indexOf(event);
     if (indexView != -1) {
+      this.view = event;
       this.localStorageService.set("view", indexView);
       this.localStorageService.set("viewName", this.views[indexView]);
       this.Calendar.changeView(this.views[indexView]);
