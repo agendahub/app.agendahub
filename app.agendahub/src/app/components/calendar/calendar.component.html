@@ -1,13 +1,11 @@
-<div
-  class="sm:h-full h-max w-full sm:w-75 md:w-50 lg:w-25 transition-all ease-linear duration-200"
->
-  <div
+<div class="w-full sm:w-75 md:w-50 lg:w-25 transition-all ease-linear duration-200">
+  <!-- <div
     class="hidden bg-slate-800 border-none rounded-md -tracking-wider px-2 py-1 leading-snug shadow-md font-light"
     #tooltip
     style="position: absolute"
-  ></div>
-  <div class="w-full sm:h-full h-max">
-    <div class="flex justify-between items-center px-2 sm:py-2 py-1 bg-white sm:rounded-t-lg translate-x-0 open:translate-x-1 text-optimized" [ngClass]="{ 'rounded-t-lg': !header }">
+  ></div> -->
+  <div class="w-full">
+    <div class="sm:h-16 border-b border-gray-300 flex justify-between items-center px-2 sm:py-2 py-1 bg-white translate-x-0 open:translate-x-1 text-optimized" [ngClass]="{ 'rounded-t-lg': !header }">
       <div class="flex sm:flex-row flex-col gap-x-1">
         <div class="flex gap-0.5" *ngIf="nav">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="sm:w-7 w-8 sm:h-7 h-8 cursor-pointer" [ngClass]="{'text-primary': nav.nextEnable, 'opacity-60': !nav.nextEnable}" (click)="nav.nextEnable && nav.previous()">
@@ -45,12 +43,12 @@
 
       <ng-template #slotLabelContent let-day>
         <div class="-tracking-wider">
-          {{ day.date | date: 'h:mm' }}
+          {{ day.date | date: 'H:mm' }}
         </div>
       </ng-template>
 
     </full-calendar>
-    <div class="h-3 bg-white rounded-b-lg sm:block hidden"></div>
+    <!-- <div class="h-3 bg-white rounded-b-lg sm:block hidden"></div> -->
   </div>
 </div>
 

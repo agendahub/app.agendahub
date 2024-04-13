@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
 import { EventClickArg, EventChangeArg, EventInput } from '@fullcalendar/core';
 import { DateClickArg } from '@fullcalendar/interaction';
 import * as moment from 'moment/moment';
@@ -14,6 +14,7 @@ import { mapScheduleToEvent } from '../../utils/util';
 import { CustomValidators, ValidatorsHelper } from '../../utils/validators';
 import { LoaderService } from '../../services/loader.service';
 import { CalendarComponent } from '../../components/calendar/calendar.component';
+import { ScreenHelperService } from '../../services/screen-helper.service';
 
 
 @Component({
@@ -71,6 +72,8 @@ export class SchedulerComponent implements OnInit {
 
   @ViewChild("calendar") calendar!: CalendarComponent;
 
+  helper = inject(ScreenHelperService)
+
   constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService, private loader: LoaderService) {
     this.createForm();
     this.loadCrudResources();
@@ -80,6 +83,8 @@ export class SchedulerComponent implements OnInit {
       customer: [],
       service: []
     }
+
+    this.helper.currentDevice
   }
 
   ngOnInit(): void {
@@ -242,6 +247,10 @@ export class SchedulerComponent implements OnInit {
     console.log(this.form.value);
 
     this.checkFormValidation();
+  }
+
+  sidebarChange(ev: any) {
+    window.dispatchEvent(new Event("resize"));
   }
 
   //#endregion

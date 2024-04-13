@@ -29,6 +29,7 @@ import { ToastModule } from "primeng/toast"
 import { ListboxModule } from 'primeng/listbox';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { SidebarModule } from 'primeng/sidebar';
 
 
 /** */
@@ -95,7 +96,7 @@ import { loadTypes } from './types/typing';
     TableModule,
     InputSwitchModule,
     MultiSelectModule,
-    
+    SidebarModule,
 
     FullCalendarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {

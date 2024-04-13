@@ -13,14 +13,9 @@ import { Title } from "@angular/platform-browser";
       [breakpoints]="{ '920px': { width: '100%', right: '5', left: '5' } }"
     ></p-toast>
 
-    <div
-      id="app-container"
-      class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean"
-      [ngClass]="{ flex: sidebarFixed }"
-    >
+    <div id="app-container" class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean" [ngClass]="{ flex: sidebarFixed }">
       <sidebar *ngIf="!hideNav"></sidebar>
-
-      <div class="relative w-full md:h-full h-max overflow-auto">
+      <div class="relative w-full sm:h-full h-fit overflow-auto">
         <div
           *ngIf="!hideNav"
           class="sm:block hidden sticky right-0 top-0 z-10"
@@ -28,7 +23,7 @@ import { Title } from "@angular/platform-browser";
         >
           <app-nav></app-nav>
         </div>
-        <div [ngClass]="{ 'sm:ml-16 m-0': falsy(sidebarFixed) && !hideNav, 'm-0': hideNav }">
+        <div class="h-fit" [ngClass]="{ 'sm:ml-16 m-0': falsy(sidebarFixed) && !hideNav, 'm-0': hideNav }">
           <router-outlet></router-outlet>
         </div>
       </div>

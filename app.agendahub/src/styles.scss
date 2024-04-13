@@ -173,3 +173,40 @@
 .text-optimized {
   text-rendering: optimizeLegibility;
 }
+
+
+.p-sidebar-right {
+  position: relative !important;
+  --tw-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+  --tw-shadow-colored: 0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color) !important;
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow) !important;
+}
+
+.p-sidebar {  
+  .p-sidebar-footer, .p-sidebar-header, .p-sidebar-content {
+    padding: 1rem !important;
+  }
+}
+
+// @media (prefers-color-scheme: dark) {
+//   .p-sidebar {  
+//     .p-sidebar-footer, .p-sidebar-header, .p-sidebar-content {
+//       background-color: rgb(20 5 42) !important;
+//       color: rgb(230 229 227) !important;
+//     }
+//   }
+// }
+
+@media screen and (max-width: 1024px) {
+  .p-sidebar {
+    position: fixed !important;
+    top: 64px !important;
+    height: calc(100% - 64px) !important;
+  }
+
+  .p-sidebar {  
+    .p-sidebar-footer, .p-sidebar-header, .p-sidebar-content {
+      padding: 0.7rem 1rem !important;
+    }
+  }
+}

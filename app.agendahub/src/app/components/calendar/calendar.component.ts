@@ -113,7 +113,6 @@ export class CalendarComponent
   public calendarOptions: CalendarOptions = {
     locale: "pt-br",
     height: "auto",
-    dayMaxEvents: 3,
     nowIndicator: true,
     now: () => moment().format("YYYY-MM-DDTHH:mm:ss"),
     headerToolbar: false,

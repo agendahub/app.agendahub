@@ -24,7 +24,8 @@ module.exports = {
     },
     extend: {
       width: {
-        "90%": "90%"
+        "90%": "90%",
+        "8xl": "88rem"
       }
     },
   },

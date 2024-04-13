@@ -1,6 +1,101 @@
-<div class="text-white mx-auto max-w-7xl lg:rounded-lg md:rounded-md rounded-none h-fit overflow-h-auto">
-    <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [items]="items" [clearAll]="clearEvents" (OnViewChange)="onViewChange($event)"
-    (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
+<div class="relative overflow-x-hidden h-[calc(100vh-64px)]">
+    <div class="flex justify-between h-full" #scheduler>
+        <div class="w-full min-w-[20rem] bg-very-clean sm:block hidden">
+            <div class="h-16 border-b border-gray-300 flex px-2 justify-center items-center gap-3">
+                <span class="text-2xl font-semibold text-primary">Agendamentos</span>
+                <div role="button" class="flex items-center gap-2 rounded bg-purple-500 text-xs text-white px-2 py-1">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>NOVO</span>
+                </div>
+            </div>
+        </div>
+        <div class="h-full">
+            <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [items]="items" [clearAll]="clearEvents" 
+                (OnViewChange)="onViewChange($event)" (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
+            </app-calendar>
+        </div>
+        <div class="w-full bg-very-clean" [ngClass]="{'sm:block hidden': visible, 'hidden': !visible}"> 
+            <div #side class="h-full"></div>
+        </div>
+    </div>
+</div>
+
+<p-sidebar [(visible)]="visible" [appendTo]="helper.currentDevice() != 2 ? side : null" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
+            [dismissible]="true" [modal]="false"
+            [style]="{'min-width': '30vw'}" (visibleChange)="sidebarChange($event)">
+    <ng-template pTemplate="header">
+        <h2 class="font-semibold text-2xl tracking-normal leading-relaxed">{{header}}</h2>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div *ngIf="oldScheduleDisabled" class="p-2 flex justify-center">
+            <span class="text-center text-base leading-tight bg-blue-400 text-neutral-100 rounded-lg p-2">
+                Datas/Agendamentos anteriores não podem ser alteradas
+            </span> 
+        </div>
+        <form [formGroup]="form">
+            <div class="grid grid-cols-12 gap-x-6 gap-y-4">
+    
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="startDateTime">Início</label>
+                    <p-calendar formControlName="startDateTime" [readonly]="isEditEnable" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                    <small class="text-red-600 ng-dirty" *ngIf="form.get('startDateTime')?.errors"> {{form.get('startDateTime')?.errors?.['error']}} </small>
+                </div>
+                
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="service">Serviço</label>
+                    <p-dropdown dataKey="id" placeholder="Selecione o serviço" [options]="services" formControlName="service" [showClear]="true" [autoDisplayFirst]="false" optionLabel="description" inputId="service" (onChange)="changeService($event)"  [style]="{width:'100%'}"></p-dropdown>
+                </div>
+    
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="finishDateTime">Fim</label>
+                    <p-calendar formControlName="finishDateTime" placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                    <small class="text-red-600 ng-dirty" *ngIf="form.get('finishDateTime')?.errors"> {{form.get('finishDateTime')?.errors?.['error']}} </small>
+                </div>
+    
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="price">Preço</label>
+                    <input type="number" id="price" pInputText placeholder="R$ 100,00" formControlName="price" [style]="{width:'100%'}"/>
+                </div>
+    
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="employee">Funcionária</label>
+                    <p-dropdown dataKey="id" placeholder="Selecione a funcionária" [options]="employees" formControlName="employee" [showClear]="true" [autoDisplayFirst]="false" optionLabel="name" inputId="employee" [style]="{width:'100%'}"></p-dropdown>
+                </div>
+    
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="customer">Cliente</label>
+                    <p-dropdown dataKey="id" placeholder="Selecione a cliente" [options]="customers" formControlName="customer" [showClear]="true" [autoDisplayFirst]="false" optionLabel="name" inputId="customer" [style]="{width:'100%'}"></p-dropdown>
+                    <span class="text-red-500 leading-4"> {{validHelper.getErrorMessage(form, 'customer', "notEqualsTo")}} </span>
+                </div>
+    
+                <div class="col-span-12">
+                    <label for="note">Anotação</label>
+                    <textarea id="note" formControlName="note" cols="10" [style]="{width: '100%'}" placeholder="Informações importantes..." pInputTextarea></textarea>
+                </div>
+    
+            </div>
+        </form>
+
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <!-- <div class="h-full flex justify-end gap-2">
+            <button class="rounded-md p-2 shadow-md">Cancelar</button>
+            <button class="rounded-md p-2 shadow-md bg-purple-500 text-white">Salvar</button>
+        </div> -->
+        <div class="flex gap-2">
+            <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()" [disabled]="!isEditEnable || oldScheduleDisabled">
+                <span class="tracking-tight text-white text-ellipsis">Excluir</span>
+                <fa-icon [icon]="faDelete" (click)="null"></fa-icon>
+            </button>
+            <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid || !isEditEnable || oldScheduleDisabled">
+                <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
+                <fa-icon [icon]="faConfirm" (click)="confirm()"></fa-icon>
+            </button>
+        </div>
+    </ng-template>
+</p-sidebar>
+
+<!-- filtros 
     <ng-template calendarItem [enableForAll]="isEditEnable">
         <div class="w-full">
             <p-multiSelect dropdownIcon="fa-solid fa-clipboard-user" [options]="employees" [(ngModel)]="selectedEmployes" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeEmployees($event)" defaultLabel="Funcionária" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
@@ -24,73 +119,4 @@
             </button>
         </div>
     </ng-template>
-    </app-calendar>
-</div>
-
-<p-dialog [header]="header" [(visible)]="visible" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" (onHide)="form.reset({note: ''})" [modal]="true">
-    <div *ngIf="oldScheduleDisabled" class="p-2 flex justify-center">
-        <span class="text-center text-base leading-tight bg-blue-400 text-neutral-100 rounded-lg p-2">
-            Datas/Agendamentos anteriores não podem ser alteradas
-        </span> 
-    </div>
-    <form [formGroup]="form">
-        <div class="grid grid-cols-12 gap-x-6 gap-y-4">
-
-            <div class="sm:col-span-6 col-span-12">
-                <label for="startDateTime">Início</label>
-                <p-calendar formControlName="startDateTime" [readonly]="isEditEnable" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
-                <small class="text-red-600 ng-dirty" *ngIf="form.get('startDateTime')?.errors"> {{form.get('startDateTime')?.errors?.['error']}} </small>
-            </div>
-            
-            <div class="sm:col-span-6 col-span-12">
-                <label for="service">Serviço</label>
-                <p-dropdown dataKey="id" placeholder="Selecione o serviço" [options]="services" formControlName="service" [showClear]="true" [autoDisplayFirst]="false" optionLabel="description" inputId="service" (onChange)="changeService($event)"  [style]="{width:'100%'}"></p-dropdown>
-            </div>
-
-            <div class="sm:col-span-6 col-span-12">
-                <label for="finishDateTime">Fim</label>
-                <p-calendar formControlName="finishDateTime" placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
-                <small class="text-red-600 ng-dirty" *ngIf="form.get('finishDateTime')?.errors"> {{form.get('finishDateTime')?.errors?.['error']}} </small>
-            </div>
-
-            <div class="sm:col-span-6 col-span-12">
-                <label for="price">Preço</label>
-                <input type="number" id="price" pInputText placeholder="R$ 100,00" formControlName="price" [style]="{width:'100%'}"/>
-            </div>
-
-            <div class="sm:col-span-6 col-span-12">
-                <label for="employee">Funcionária</label>
-                <p-dropdown dataKey="id" placeholder="Selecione a funcionária" [options]="employees" formControlName="employee" [showClear]="true" [autoDisplayFirst]="false" optionLabel="name" inputId="employee" [style]="{width:'100%'}"></p-dropdown>
-            </div>
-
-            <div class="sm:col-span-6 col-span-12">
-                <label for="customer">Cliente</label>
-                <p-dropdown dataKey="id" placeholder="Selecione a cliente" [options]="customers" formControlName="customer" [showClear]="true" [autoDisplayFirst]="false" optionLabel="name" inputId="customer" [style]="{width:'100%'}"></p-dropdown>
-                <span class="text-red-500 leading-4"> {{validHelper.getErrorMessage(form, 'customer', "notEqualsTo")}} </span>
-            </div>
-
-            <div class="col-span-12">
-                <label for="note">Anotação</label>
-                <textarea id="note" formControlName="note" cols="10" [style]="{width: '100%'}" placeholder="Informações importantes..." pInputTextarea></textarea>
-            </div>
-
-        </div>
-    </form>
-
-    <ng-template pTemplate="footer">
-        <div class="flex gap-2">
-            <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()" [disabled]="!isEditEnable || oldScheduleDisabled">
-                <span class="tracking-tight text-white text-ellipsis">Excluir</span>
-                <fa-icon [icon]="faDelete" (click)="null"></fa-icon>
-            </button>
-            <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid || !isEditEnable || oldScheduleDisabled">
-                <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-                <fa-icon [icon]="faConfirm" (click)="confirm()"></fa-icon>
-            </button>
-        </div>
-    </ng-template>
-</p-dialog>
-
-<ng-template #filters>
-
-</ng-template>
+ -->
