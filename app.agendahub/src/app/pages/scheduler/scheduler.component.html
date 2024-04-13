@@ -9,10 +9,13 @@
                 </div>
             </div>
         </div>
-        <div class="h-full">
+        <div class="h-full flex flex-col bg-very-clean">
             <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [items]="items" [clearAll]="clearEvents" 
                 (OnViewChange)="onViewChange($event)" (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
             </app-calendar>
+            <div class="h-full flex items-end justify-center gap-1">
+                Powered by <a href="https://fullcalendar.io/" target="_blank"> FullCalendar</a>
+            </div>
         </div>
         <div class="w-full bg-very-clean" [ngClass]="{'sm:block hidden': visible, 'hidden': !visible}"> 
             <div #side class="h-full"></div>
@@ -20,7 +23,7 @@
     </div>
 </div>
 
-<p-sidebar [(visible)]="visible" [appendTo]="helper.currentDevice() != 2 ? side : null" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
+<p-sidebar [(visible)]="visible" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
             [dismissible]="true" [modal]="false"
             [style]="{'min-width': '30vw'}" (visibleChange)="sidebarChange($event)">
     <ng-template pTemplate="header">
@@ -78,18 +81,12 @@
 
     </ng-template>
     <ng-template pTemplate="footer">
-        <!-- <div class="h-full flex justify-end gap-2">
-            <button class="rounded-md p-2 shadow-md">Cancelar</button>
-            <button class="rounded-md p-2 shadow-md bg-purple-500 text-white">Salvar</button>
-        </div> -->
-        <div class="flex gap-2">
-            <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()" [disabled]="!isEditEnable || oldScheduleDisabled">
-                <span class="tracking-tight text-white text-ellipsis">Excluir</span>
-                <fa-icon [icon]="faDelete" (click)="null"></fa-icon>
+        <div class="h-full flex items-end justify-end gap-2">
+            <button class="flex items-center gap-2 rounded bg-red-600 px-2 py-1 text-slate-100 disabled:opacity-70" *ngIf="edit" (click)="tryDelete()" [disabled]="!isEditEnable || oldScheduleDisabled">
+                <span class="tracking-tight">Excluir</span>
             </button>
-            <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid || !isEditEnable || oldScheduleDisabled">
-                <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-                <fa-icon [icon]="faConfirm" (click)="confirm()"></fa-icon>
+            <button class="flex items-center gap-2 rounded bg-action px-2 py-1 text-slate-100 disabled:opacity-70" (click)="confirm()" [disabled]="form.invalid || !isEditEnable || oldScheduleDisabled">
+                <span class="tracking-tight">Salvar</span>
             </button>
         </div>
     </ng-template>
