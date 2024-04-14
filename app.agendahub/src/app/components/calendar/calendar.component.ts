@@ -112,7 +112,8 @@ export class CalendarComponent
   ]);
   public calendarOptions: CalendarOptions = {
     locale: "pt-br",
-    height: "auto",
+    height: "calc(100vh - 4.5rem - 64px)",
+    aspectRatio: 0.8,
     nowIndicator: true,
     now: () => moment().format("YYYY-MM-DDTHH:mm:ss"),
     headerToolbar: false,
@@ -123,8 +124,8 @@ export class CalendarComponent
     eventClassNames: (arg) => {
       return [`text-gray-500`];
     },
-    eventMouseEnter: this.handleTooltip.bind(this),
-    eventMouseLeave: this.handleTooltip.bind(this),
+    // eventMouseEnter: this.handleTooltip.bind(this),
+    // eventMouseLeave: this.handleTooltip.bind(this),
     navLinkDayClick: this.navLinkDayClick.bind(this.Calendar),
     moreLinkClick: this.onMoreLinkClick.bind(this),
     eventChange: this.onEventChange.bind(this),
@@ -234,6 +235,14 @@ export class CalendarComponent
     };
   }
 
+  clickDay(day: {date: Date}) {
+    this.state["skipReload"] = true;
+    this.view = this.viewTranslate[2];
+    this!.changeView(this.view);
+    this!.Calendar.gotoDate(day.date);
+    delete this.state["skipReload"];
+  }
+
   private onMoreLinkClick(arg: any) {
     setTimeout(() => {
       const close = this.doc.querySelector(".fc-popover-close");
@@ -293,41 +302,41 @@ export class CalendarComponent
     }
   }
 
-  @ViewChild("tooltip") tooltip!: ElementRef<HTMLDivElement>;
-  private handleTooltip(event: { event: any; el: any; jsEvent: any }) {
-    if (isMobile()) {
-      return;
-    }
+  // @ViewChild("tooltip") tooltip!: ElementRef<HTMLDivElement>;
+  // private handleTooltip(event: { event: any; el: any; jsEvent: any }) {
+  //   if (isMobile()) {
+  //     return;
+  //   }
 
-    const color = event.el.style.backgroundColor;
+  //   const color = event.el.style.backgroundColor;
 
-    const toggle = (type: "enter" | "leave") => {
-      event.el.style.backgroundColor = rgbToRgba(rgbaToRgb(color), 0.5);
-      this.tooltip.nativeElement.style.zIndex = "0";
-      this.tooltip.nativeElement.classList.remove(
-        type == "enter" ? "hidden" : "block"
-      );
-      this.tooltip.nativeElement.classList.add(
-        type == "enter" ? "block" : "hidden"
-      );
-    };
+  //   const toggle = (type: "enter" | "leave") => {
+  //     event.el.style.backgroundColor = rgbToRgba(rgbaToRgb(color), 0.5);
+  //     this.tooltip.nativeElement.style.zIndex = "0";
+  //     this.tooltip.nativeElement.classList.remove(
+  //       type == "enter" ? "hidden" : "block"
+  //     );
+  //     this.tooltip.nativeElement.classList.add(
+  //       type == "enter" ? "block" : "hidden"
+  //     );
+  //   };
 
-    if (event.jsEvent.type == "mouseleave") {
-      return toggle("leave");
-    }
+  //   if (event.jsEvent.type == "mouseleave") {
+  //     return toggle("leave");
+  //   }
 
-    const coord = event.el.getBoundingClientRect();
-    this.tooltip.nativeElement.style.top = event.jsEvent.y - 40 + "px";
-    this.tooltip.nativeElement.style.left = coord.left + coord.width / 3 + "px";
+  //   const coord = event.el.getBoundingClientRect();
+  //   this.tooltip.nativeElement.style.top = event.jsEvent.y - 40 + "px";
+  //   this.tooltip.nativeElement.style.left = coord.left + coord.width / 3 + "px";
 
-    toggle("enter");
+  //   toggle("enter");
 
-    setTimeout(() => this.tooltip.nativeElement.style.zIndex = "99999", 75);
-    event.el.style.color = color;
-    event.el.style.backgroundColor = rgbToRgba(color, 0.6);
-    this.tooltip.nativeElement.innerHTML = event.event.title;
-    this.tooltip.nativeElement.style.top = coord.top - this.tooltip.nativeElement.clientHeight - 7 + "px";
-  }
+  //   setTimeout(() => this.tooltip.nativeElement.style.zIndex = "99999", 75);
+  //   event.el.style.color = color;
+  //   event.el.style.backgroundColor = rgbToRgba(color, 0.6);
+  //   this.tooltip.nativeElement.innerHTML = event.event.title;
+  //   this.tooltip.nativeElement.style.top = coord.top - this.tooltip.nativeElement.clientHeight - 7 + "px";
+  // }
 
   private checkPrevNext() {
     if (this.viewDateRange) {
@@ -409,10 +418,10 @@ export class CalendarComponent
     this.Calendar.setOption("eventAllow", () => value);
   }
 
-  public navLinkDayClick(this: CalendarApi, date: Date, jsEvent: UIEvent) {
+  public navLinkDayClick(this: CalendarApi, date: Date, jsEvent?: UIEvent) {
     self.state["skipReload"] = true;
-    self.view = self.viewTranslate[1];
-    self!.changeView({ value: self.view });
+    self.view = self.viewTranslate[2];
+    self!.changeView(self.view);
     self!.Calendar.gotoDate(date);
     delete self.state["skipReload"];
   }

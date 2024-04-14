@@ -96,7 +96,7 @@ import { MenuItem } from "primeng/api";
       (mouseleave)="open = fixed ? true : false"
     >
       <div
-        class="h-full overflow-y-auto scroll- overflow-x-hidden bg-very-clean dark:bg-primary border-l-0 border-r dark:border-secondary border-clean flex flex-col justify-between gap-3 pb-1"
+        class="h-full overflow-y-auto dark:shadow-xl shadow-md overflow-x-hidden bg-very-clean dark:bg-primary border-l-0 border-r dark:border-secondary border-clean flex flex-col justify-between gap-3 pb-1"
         [ngClass]="{ 'px-2': open }"
       >
         <div class="flex flex-col gap-3">

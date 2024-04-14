@@ -20,7 +20,7 @@ export function mapScheduleToEvent(schedules: UserSchedule[], filter: (x: UserSc
         title: `${x.employee.name} - ${x.customer?.name ?? "-"}`,
         start: x.schedule.startDateTime,
         end: x.schedule.finishDateTime,
-        color: x.employee.color ? hexToRgbA(x.employee.color!, 0.5) : x.employee.color,
+        color: x.employee.color ? hexToRgbA(x.employee.color!, 1) : x.employee.color,
         extendedProps: {...x},
       })
     })

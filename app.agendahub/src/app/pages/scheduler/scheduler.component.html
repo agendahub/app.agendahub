@@ -1,30 +1,24 @@
-<div class="relative overflow-x-hidden h-[calc(100vh-64px)]">
+<div class="relative overflow-x-hidden h-[calc(100vh-64px)]" [ngClass]="{'opacity-95': visible}">
     <div class="flex justify-between h-full" #scheduler>
-        <div class="w-full min-w-[20rem] bg-very-clean sm:block hidden">
+        <div class="w-full bg-very-clean sm:block hidden">
             <div class="h-16 border-b border-gray-300 flex px-2 justify-center items-center gap-3">
                 <span class="text-2xl font-semibold text-primary">Agendamentos</span>
-                <div role="button" class="flex items-center gap-2 rounded bg-purple-500 text-xs text-white px-2 py-1">
+                <div role="button" class="flex items-center gap-2 rounded bg-action text-xs text-white px-2 py-1">
                     <i class="fa-solid fa-plus"></i>
                     <span>NOVO</span>
                 </div>
             </div>
         </div>
-        <div class="h-full flex flex-col bg-very-clean">
+        <div class="h-full sm:min-w-[75vw] w-full flex flex-col bg-very-clean">
             <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [items]="items" [clearAll]="clearEvents" 
                 (OnViewChange)="onViewChange($event)" (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
             </app-calendar>
-            <div class="h-full flex items-end justify-center gap-1">
-                Powered by <a href="https://fullcalendar.io/" target="_blank"> FullCalendar</a>
-            </div>
-        </div>
-        <div class="w-full bg-very-clean" [ngClass]="{'sm:block hidden': visible, 'hidden': !visible}"> 
-            <div #side class="h-full"></div>
         </div>
     </div>
 </div>
 
-<p-sidebar [(visible)]="visible" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
-            [dismissible]="true" [modal]="false"
+<p-sidebar [(visible)]="visible" appendTo="body" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
+            [dismissible]="true" [modal]="false" styleClass="scheduler"
             [style]="{'min-width': '30vw'}" (visibleChange)="sidebarChange($event)">
     <ng-template pTemplate="header">
         <h2 class="font-semibold text-2xl tracking-normal leading-relaxed">{{header}}</h2>
