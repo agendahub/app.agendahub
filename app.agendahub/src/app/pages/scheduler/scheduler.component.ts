@@ -24,8 +24,6 @@ import { ScreenHelperService } from '../../services/screen-helper.service';
 })
 export class SchedulerComponent implements OnInit {
 
-  faConfirm = faCheckCircle;
-  faDelete = faTimesCircle;
   header!: string
 
   edit = false;
@@ -43,17 +41,7 @@ export class SchedulerComponent implements OnInit {
 
   addEvent = new Subject();
   clearEvents = new Subject();
-
-  selectedEmployes = new Array();
-  selectedCustomers = new Array();
-  selectedServices = new Array();
   
-  filter! : {
-    employee: number[],
-    customer: number[],
-    service: number[]
-  }
-
   currentDateRange! : {
     start: Date,
     end: Date
@@ -61,14 +49,6 @@ export class SchedulerComponent implements OnInit {
 
   oldScheduleDisabled = false;
   validHelper = ValidatorsHelper;
-
-  items = [
-    {label: 'Agendamentos', icon: 'fa-solid fa-calendar', routerLink: '/scheduler'},
-    {label: 'Clientes', icon: 'fa-solid fa-users', routerLink: '/customers'},
-    {label: 'Funcionários', icon: 'fa-solid fa-users', routerLink: '/employees'},
-    {label: 'Serviços', icon: 'fa-solid fa-tools', routerLink: '/services'},
-    {label: 'Configurações', icon: 'fa-solid fa-cog', routerLink: '/settings'},
-  ];
 
   @ViewChild("calendar") calendar!: CalendarComponent;
 
@@ -78,13 +58,6 @@ export class SchedulerComponent implements OnInit {
     this.createForm();
     this.loadCrudResources();
     setTimeout(() => this.enableEdit.next(this.authService.TokenData?.role != "employee"), 100);
-    this.filter = {
-      employee: [],
-      customer: [],
-      service: []
-    }
-
-    this.helper.currentDevice
   }
 
   ngOnInit(): void {
@@ -249,10 +222,6 @@ export class SchedulerComponent implements OnInit {
     this.checkFormValidation();
   }
 
-  sidebarChange(ev: any) {
-    window.dispatchEvent(new Event("resize"));
-  }
-
   //#endregion
 
   //#region Members "Events"
@@ -274,7 +243,6 @@ export class SchedulerComponent implements OnInit {
   }
 
   onViewChange(arg: {event:any, offset: {start: Date, end: Date}} | undefined) {
-    console.log(arg);
     if (arg) {
       this.currentDateRange = arg.offset;
       this.loadEvents(this.currentDateRange);
@@ -282,79 +250,15 @@ export class SchedulerComponent implements OnInit {
 
   }
 
-  changeEmployees(event: any) {
-    this.clearEvents.next(0);
-    if (event && event.value.length) {
-      this.filter.employee = event.value.map((x: any) => x.id);
-      let schedulesfiltered = this.schedules.filter(x => this.filter.employee.includes(x.employee.id));
-      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
-    } else {
-      this.loadEvents(this.currentDateRange);      
-      this.filter.employee = [];
-    }
+  sidebarChange(ev: any) {
+    window.dispatchEvent(new Event("resize"));
   }
 
-  changeCustomers(event: any) {
-    this.clearEvents.next(0);
-    if (event && event.value.length) {
-      this.filter.customer = event.value.map((x: any) => x.id);
-      let schedulesfiltered = this.schedules.filter(x => this.filter.customer.includes(x.customer.id));
-      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
-    } else {
-      this.loadEvents(this.currentDateRange);      
-      this.filter.customer = [];
-    }
-  }
-
-  changeServices(event: any) {
-    this.clearEvents.next(0);
-    if (event && event.value.length) {
-      this.filter.service = event.value.map((x: any) => x.id);
-      let schedulesfiltered = this.schedules.filter(x => this.filter.service.includes(x.schedule.service.id));
-      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
-    } else {
-      this.loadEvents(this.currentDateRange);      
-      this.filter.service = [];
-    }
-  }
-
-  //#endregion
-
-  //#region Filter
-
-  doFilter(schedules: UserSchedule[]) {
-    return schedules.filter(x => {
-      if (this.filter.customer.length && !this.filter.customer.includes(x.customer.id)) {
-        return false;
-      } return true;})
-      .filter(x => {
-        if (this.filter.employee.length && !this.filter.employee.includes(x.employee.id)) {
-          return false;
-        } return true;
-      })
-      .filter(x => {
-        if (this.filter.service.length && !this.filter.service.includes(x.schedule.service.id)) {
-          return false;
-        } return true;
-      })
-  }
-
-  get hasFilter() {
-    return this.filter.customer.length || this.filter.employee.length || this.filter.service.length;
-  }
-
-  clearFilter() {
-    this.filter = {
-      employee: [],
-      customer: [],
-      service: []
-    }
-
-    this.selectedCustomers = [];
-    this.selectedEmployes = [];
-    this.selectedServices = [];
-
-    this.loadEvents(this.currentDateRange);
+  rawOne = false;
+  addNewOne() {
+    this.header = "Novo agendamento";
+    this.rawOne = true
+    this.visible = true;
   }
 
   //#endregion
@@ -378,14 +282,28 @@ export class SchedulerComponent implements OnInit {
   
   trySave() {
     const schedule = new UserSchedule();
-    const form = structuredClone(this.form.value);   
-
-    console.log(this.form.value);
+    const form = structuredClone(this.form.value);  
     
+    console.log(this.form.value, form);
+
     form.startDateTime = new Date(form.startDateTime);
     form.finishDateTime = new Date(form.finishDateTime);
     
     if (form.day) {
+      // dando erro aqui 
+      /**
+       * scheduler.component.html:87 ERROR RangeError: Invalid time value
+          at Date.toISOString (<anonymous>)
+          at SchedulerComponent.trySave (scheduler.component.ts:307:58)
+          at SchedulerComponent.confirm (scheduler.component.ts:267:10)
+          at SchedulerComponent_ng_template_17_Template_button_click_2_listener (scheduler.component.html:87:125)
+          at executeListenerWithErrorHandling (core.mjs:15772:16)
+          at wrapListenerIn_markDirtyAndPreventDefault (core.mjs:15805:22)
+          at HTMLButtonElement.<anonymous> (platform-browser.mjs:666:17)
+          at _ZoneDelegate.invokeTask (zone.js:402:31)
+          at core.mjs:25960:55
+          at AsyncStackTaggingZoneSpec.onInvokeTask (core.mjs:25960:36)
+       */
       form.startDateTime.setDate(form.day);
       form.finishDateTime.setDate(form.day);
     }
@@ -439,7 +357,7 @@ export class SchedulerComponent implements OnInit {
     this.api.requestFromApi<UserSchedule[]>(endpoint, params)?.subscribe(
       x => {
         this.schedules.push(...x);
-        this.events = mapScheduleToEvent(this.hasFilter ? this.doFilter(x) : x);
+        this.events = mapScheduleToEvent(x);
         this.addEvent.next(this.events)
       }
     )
@@ -470,7 +388,10 @@ export class SchedulerComponent implements OnInit {
           this.loader.hideBackground()
           this.calendar.setEditable(true);
         },
-        complete: () => this.loader.hideBackground()
+        complete: () => {
+          this.loader.hideBackground();
+          this.rawOne = false;
+        }
       })
     }
    }

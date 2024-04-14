@@ -52,8 +52,6 @@ export class ScreenHelperService {
     this.isMobile = this.document.body.clientWidth <= 600;
     this.isMid = this.document.body.clientWidth > 600 && this.document.body.clientWidth <= 1033;
     this.isDesktop = this.document.body.clientWidth > 1033;
-    console.log(this.specs);
-    
   }
 
   currentDevice() {

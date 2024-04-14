@@ -1,9 +1,4 @@
 <div class="w-full sm:w-75 md:w-50 lg:w-25 transition-all ease-linear duration-200">
-  <!-- <div
-    class="hidden bg-slate-800 border-none rounded-md -tracking-wider px-2 py-1 leading-snug shadow-md font-light"
-    #tooltip
-    style="position: absolute"
-  ></div> -->
   <div class="w-full">
     <div class="sm:h-16 border-b border-gray-300 flex justify-between items-center px-2 sm:py-2 py-1 bg-white translate-x-0 open:translate-x-1 text-optimized" [ngClass]="{ 'rounded-t-lg': !header }">
       <div class="flex sm:flex-row flex-col gap-x-1">
@@ -48,34 +43,5 @@
       </ng-template>
 
     </full-calendar>
-    <!-- <div class="h-3 bg-white rounded-b-lg sm:block hidden"></div> -->
   </div>
 </div>
-
-<p-overlayPanel #op [style]="{ background: '#ddd' }">
-  <ng-container [ngTemplateOutlet]="headerView"></ng-container>
-</p-overlayPanel>
-
-<ng-template #headerView>
-  <div class="grid grid-cols-12 gap-1 py-2 md:px-2 lg:px-4 px-0" *ngIf="header">
-    <ng-container *ngFor="let item of calendarItemsArray">
-      <div class="md:col-span-6 col-span-6 flex items-center">
-        <ng-container [ngTemplateOutlet]="item.template"></ng-container>
-      </div>
-    </ng-container>
-    <div
-      class="md:col-span-6 col-span-6 flex items-center"
-      [ngClass]="{ 'col-span-12': calendarItemsArray.length === 0 }"
-    >
-      <div class="w-full">
-        <p-dropdown
-          dropdownIcon="fa-solid fa-calendar-check"
-          [options]="viewTranslate"
-          [(ngModel)]="view"
-          (onChange)="changeView($event)"
-          [style]="{ width: '100%' }"
-        ></p-dropdown>
-      </div>
-    </div>
-  </div>
-</ng-template>

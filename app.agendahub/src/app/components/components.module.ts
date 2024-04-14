@@ -13,7 +13,6 @@ import { FullCalendarModule } from "@fullcalendar/angular";
 import { DropdownModule } from "primeng/dropdown";
 import { AccordionModule } from "primeng/accordion";
 import { FormsModule } from "@angular/forms";
-import { CalendarItemDirective } from "./calendar/calendar-item.directive";
 import { OverlayPanelModule } from "primeng/overlaypanel";
 import { NgxUiLoaderModule } from "ngx-ui-loader";
 import { SidebarComponent } from "./sidebar/sidebar.component";
@@ -30,7 +29,6 @@ import { SpeedDialModule } from "primeng/speeddial";
     LoaderComponent,
     SidebarComponent,
     CalendarComponent,
-    CalendarItemDirective,
     NotificationComponent,
     ReadMoreComponent,
     BreadcrumbComponent,
@@ -40,8 +38,7 @@ import { SpeedDialModule } from "primeng/speeddial";
     LoaderComponent,
     SidebarComponent,
     CalendarComponent,
-    NotificationComponent,
-    CalendarItemDirective,
+    NotificationComponent
   ],
   imports: [
     ProgressSpinnerModule,

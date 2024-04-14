@@ -3,14 +3,14 @@
         <div class="w-full bg-very-clean sm:block hidden">
             <div class="h-16 border-b border-gray-300 flex px-2 justify-center items-center gap-3">
                 <span class="text-2xl font-semibold text-primary">Agendamentos</span>
-                <div role="button" class="flex items-center gap-2 rounded bg-action text-xs text-white px-2 py-1">
+                <div role="button" class="flex items-center gap-2 rounded bg-action text-xs text-white px-2 py-1" (click)="addNewOne()">
                     <i class="fa-solid fa-plus"></i>
                     <span>NOVO</span>
                 </div>
             </div>
         </div>
         <div class="h-full sm:min-w-[75vw] w-full flex flex-col bg-very-clean">
-            <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [items]="items" [clearAll]="clearEvents" 
+            <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" 
                 (OnViewChange)="onViewChange($event)" (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
             </app-calendar>
         </div>
@@ -32,6 +32,11 @@
         <form [formGroup]="form">
             <div class="grid grid-cols-12 gap-x-6 gap-y-4">
     
+                <div class="col-span-12" [hidden]="!rawOne">
+                    <label for="day">Dia</label>
+                    <p-calendar formControlName="day" appendTo="body" [readonly]="isEditEnable" dateFormat="dd/MM/yy" placeholder="01/01/2021" inputId="day" [style]="{width:'100%'}"></p-calendar>
+                </div>
+
                 <div class="sm:col-span-6 col-span-12">
                     <label for="startDateTime">Início</label>
                     <p-calendar formControlName="startDateTime" [readonly]="isEditEnable" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
@@ -85,29 +90,3 @@
         </div>
     </ng-template>
 </p-sidebar>
-
-<!-- filtros 
-    <ng-template calendarItem [enableForAll]="isEditEnable">
-        <div class="w-full">
-            <p-multiSelect dropdownIcon="fa-solid fa-clipboard-user" [options]="employees" [(ngModel)]="selectedEmployes" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeEmployees($event)" defaultLabel="Funcionária" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-        </div>
-    </ng-template>
-    <ng-template calendarItem [enableForAll]="true">
-        <div class="w-full">
-            <p-multiSelect dropdownIcon="fa-solid fa-user-clock" [options]="customers" [(ngModel)]="selectedCustomers" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeCustomers($event)" defaultLabel="Clientes" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-        </div>
-    </ng-template>
-    <ng-template calendarItem [enableForAll]="true">
-        <div class="w-full">
-            <p-multiSelect dropdownIcon="fa-solid fa-bell-concierge" [options]="services" [(ngModel)]="selectedServices" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeServices($event)" defaultLabel="Serviço" optionLabel="description" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-        </div>
-    </ng-template>
-    <ng-template calendarItem [enableForAll]="true">
-        <div class="w-full h-full flex justify-end">
-            <button pButton (click)="clearFilter()" [disabled]="!hasFilter" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
-                <span>Limpar filtros</span>
-                <i class="fa-solid fa-filter"></i>
-            </button>
-        </div>
-    </ng-template>
- -->

@@ -2,16 +2,12 @@ import {
   AfterContentInit,
   AfterViewInit,
   Component,
-  ContentChildren,
-  ElementRef,
   EventEmitter,
   Inject,
   Input,
   OnInit,
   Output,
-  QueryList,
   ViewChild,
-  inject,
 } from "@angular/core";
 import { LocalStorageService } from "../../services/local-storage.service";
 import {
@@ -32,17 +28,14 @@ import {
   EventInput,
   CalendarApi,
 } from "@fullcalendar/core";
-import listPlugin from "@fullcalendar/list";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { Subject } from "rxjs";
 import * as moment from "moment";
-import { CalendarItemDirective } from "./calendar-item.directive";
 import { CalendarNavigator } from "./calendar-navigator";
 import { DOCUMENT } from "@angular/common";
-import { Tooltip } from "primeng/tooltip";
-import { hexToRgbA, isMobile, rgbToRgba, rgbaToRgb } from "../../utils/util";
+import { hexToRgbA, rgbToRgba, rgbaToRgb } from "../../utils/util";
 
 var self: CalendarComponent;
 @Component({
@@ -55,10 +48,6 @@ export class CalendarComponent
 {
   @ViewChild("calendar")
   calendarComponent!: FullCalendarComponent;
-
-  @ContentChildren(CalendarItemDirective)
-  calendarItems!: QueryList<CalendarItemDirective>;
-  calendarItemsArray!: Array<CalendarItemDirective>;
 
   @Output() OnViewChange = new EventEmitter<{
     event: any;
@@ -74,21 +63,18 @@ export class CalendarComponent
   @Input() isEditable!: boolean;
   @Input() events!: Array<any>;
   @Input() header!: boolean;
-  @Input() items!: Array<any>;
 
   public views = [
     "dayGridMonth",
     "timeGridFourDay",
-    // "dayGridWeek",
     "dayGridDayCustom",
   ];
   public viewTranslate = [
     "Mês",
-    "Semana", 
-    // "Semana", 
+    "Semana",
     "Dia"
   ];
-  public view = "Semana";
+  public view!: string;
 
   public faNext = faArrowCircleRight;
   public faOptions = faCalendarCheck;
@@ -162,15 +148,10 @@ export class CalendarComponent
   }
 
   public ngAfterContentInit() {
-    this.calendarItemsArray = this.isEditable
-      ? this.calendarItems.toArray()
-      : this.calendarItems.toArray().filter((x) => x.enableForAll);
   }
 
   public ngAfterViewInit(): void {
     this.view = this.initView;
-    console.log(this.view, this.initView, this.tab);
-    
     this.dispatchViewChange();
 
     if (!this.addEvent) {
@@ -183,6 +164,7 @@ export class CalendarComponent
   }
 
   public ngOnInit(): void {
+    this.view = this.initView ?? "Semana";
     this.clearAll?.subscribe((x) => this.handleRemoveEvent(x));
     this.addEvent?.subscribe((x) => this.handleAddEvent(x));
     this.editable?.subscribe((x) => {
@@ -378,7 +360,7 @@ export class CalendarComponent
 
   private dispatchViewChange() {
     const offset = this.getDateRange(); 
-    this.updateDateView(offset);
+    setTimeout(() => this.updateDateView(offset));
     this.OnViewChange.emit({ event: event, offset: offset });
   }
 
