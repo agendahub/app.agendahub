@@ -1,21 +1,23 @@
 <div class="relative overflow-x-hidden h-[calc(100vh-64px)]" [ngClass]="{'opacity-95': visible}">
     <div class="flex justify-between h-full" #scheduler>
-        <div class="w-full bg-very-clean sm:block hidden">
-            <div class="h-16 border-b border-gray-300 flex px-2 justify-center items-center gap-3">
-                <span class="text-2xl font-semibold text-primary">Agendamentos</span>
-                <div role="button" class="flex items-center gap-2 rounded bg-action text-xs text-white px-2 py-1" (click)="addNewOne()">
-                    <i class="fa-solid fa-plus"></i>
-                    <span>NOVO</span>
-                </div>
-            </div>
+        <div class="w-1/4 bg-very-clean sm:block hidden">
+            <ng-template [ngTemplateOutlet]="options"></ng-template>
         </div>
-        <div class="h-full sm:min-w-[75vw] w-full flex flex-col bg-very-clean">
-            <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" 
+        <div class="h-full w-full flex flex-col bg-very-clean">
+            <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" [options]="true" (OnOptionsClick)="optionsClick()"
                 (OnViewChange)="onViewChange($event)" (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
             </app-calendar>
         </div>
     </div>
 </div>
+
+<p-sidebar [(visible)]="optionsVisible" appendTo="body" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
+        [dismissible]="true" [modal]="false" styleClass="noborder"
+        [style]="{'min-width': '30vw'}">
+    <ng-template pTemplate="content">
+        <ng-template [ngTemplateOutlet]="options"></ng-template>
+    </ng-template>
+</p-sidebar>
 
 <p-sidebar [(visible)]="visible" appendTo="body" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
             [dismissible]="true" [modal]="false" styleClass="scheduler"
@@ -90,3 +92,80 @@
         </div>
     </ng-template>
 </p-sidebar>
+
+
+<ng-template #options>
+    <div class="h-16 border-b relative border-gray-300 flex px-2 justify-center items-center gap-3">
+        <span class="text-2xl font-semibold text-primary">Agendamentos</span>
+        <div role="button" class="flex items-center gap-2 rounded bg-action text-xs text-white px-2 py-1" (click)="addNewOne()">
+            <i class="fa-solid fa-plus"></i>
+            <span>NOVO</span>
+        </div>
+        <div class="absolute right-4 sm:hidden block" (click)="optionsVisible = false">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>              
+        </div>
+    </div>
+    <div class="h-[calc(100vh-8rem)] bg-purple-50 overflow-y-auto px-4 py-2">
+        <div class="mb-2">
+            <span class="p-input-icon-left w-full">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="p-inputtext-sm w-full" pInputText placeholder="Pesquise por agendamento"/>
+            </span>
+        </div>
+        <hr class="w-full h-0.5 my-2 bg-clean border-0 rounded">
+        <div>
+            <h4 class="text-lg font-semibold text-primary">Carregados</h4>
+            <div class="container flex flex-col gap-1 p-1 max-h-60 overflow-y-auto">
+                <div *ngFor="let item of schedules" 
+                    class="p-2 shadow-md rounded border border-gray-200 bg-very-clean
+                            transition duration-150 ease-in-out transform hover:scale-[1.01]
+                            hover:border-action hover:shadow-subaction hover:shadow-sm">
+                    <div class="flex justify-between items-center gap-2">
+                        <span class="text-sm">{{item.schedule.startDateTime | date: 'dd/MM/yyyy HH:mm'}}</span>
+                        <span class="text-sm">{{item.schedule.service.description}}</span>
+                    </div>
+                    <div class="flex justify-between items-center gap-2">
+                        <span class="text-sm">{{item.employee.name}}</span>
+                        <span class="text-sm">{{item.customer.name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="w-full h-0.5 my-2 bg-clean border-0 rounded">
+        <div>
+            <h4 class="text-lg font-semibold text-primary">Funcionários</h4>
+            <div class="container flex flex-col gap-1 p-1 ">
+                    <div *ngFor="let employee of employees" 
+                    class="p-2 shadow-md rounded border border-gray-200 bg-very-clean
+                    transition duration-150 ease-in-out transform hover:scale-[1.01]
+                    hover:border-action hover:shadow-subaction hover:shadow-sm">
+                    
+                    <div class="flex justify-between items-center gap-2">
+                        <span class="text-sm capitalize">{{employee.name }} {{ employee.surname}}</span>
+                        <span class="w-5 h-5 rounded-full" [style]="{background: employee.color && employee.color != '' ? employee.color :  '#3788d8'}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="w-full h-0.5 my-2 bg-clean border-0 rounded">
+        <div>
+            <h4 class="text-lg font-semibold text-primary">Serviços</h4>
+            <div class="container flex flex-col gap-1 p-1">
+                <div *ngFor="let item of services" 
+                    class="p-2 shadow-md rounded border border-gray-200 bg-very-clean
+                            transition duration-150 ease-in-out transform hover:scale-[1.01]
+                            hover:border-action hover:shadow-subaction hover:shadow-sm">
+                    <div class="flex justify-between items-center gap-2">
+                        <span class="flex gap-2 flex-wrap">
+                            <span class="text-sm font-bold">#{{item.code}}</span>
+                            <span class="text-sm">{{item.description}}</span>
+                        </span>
+                        <span class="text-sm text-end">{{item.price | currency:'BRL'}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

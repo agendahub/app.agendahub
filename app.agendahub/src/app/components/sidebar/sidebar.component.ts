@@ -391,6 +391,10 @@ export class SidebarComponent implements OnInit {
       this.sidebar.classList.remove("relative");
       this.sidebar.classList.add("sm:fixed");
     }
+
+    window.dispatchEvent(new Event("resize"));
+    console.log(this.fixed);
+    
   }
 
   get blockScroll() {

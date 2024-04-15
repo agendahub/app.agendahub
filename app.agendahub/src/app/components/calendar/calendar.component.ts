@@ -56,6 +56,7 @@ export class CalendarComponent
   @Output() OnDateClick = new EventEmitter<DateClickArg>();
   @Output() OnChange = new EventEmitter<EventChangeArg>();
   @Output() OnClick = new EventEmitter<EventClickArg>();
+  @Output() OnOptionsClick = new EventEmitter<any>();
   @Input() viewDateRange?: Array<Date>;
   @Input() editable!: Subject<boolean>;
   @Input() clearAll!: Subject<any>;
@@ -63,6 +64,7 @@ export class CalendarComponent
   @Input() isEditable!: boolean;
   @Input() events!: Array<any>;
   @Input() header!: boolean;
+  @Input() options = false;
 
   public views = [
     "dayGridMonth",
@@ -105,13 +107,12 @@ export class CalendarComponent
     headerToolbar: false,
     themeSystem: "bootstrap",
     navLinks: true,
+    dayMaxEvents: 3,
     eventMinHeight: 50,
     stickyHeaderDates: true,
     eventClassNames: (arg) => {
       return [`text-gray-500`];
     },
-    // eventMouseEnter: this.handleTooltip.bind(this),
-    // eventMouseLeave: this.handleTooltip.bind(this),
     navLinkDayClick: this.navLinkDayClick.bind(this.Calendar),
     moreLinkClick: this.onMoreLinkClick.bind(this),
     eventChange: this.onEventChange.bind(this),
@@ -183,7 +184,7 @@ export class CalendarComponent
     const range = { start: moment(offset.start), end: moment(offset.end) };
     
     this.datePreview = `${ range.start.diff(range.end, "day") == -1 ? range.end.format("DD") : range.start.format("DD") + " - " + range.end.format("DD")} 
-            ${range.end.format("MMMM")}, ${range.end.format("YYYY")}
+            ${range.end.format("MMMM")}, ${range.end.format("YY")}
             `
   }
 
@@ -218,6 +219,10 @@ export class CalendarComponent
   }
 
   clickDay(day: {date: Date}) {
+    if (this.view == "Mês") {
+      return;
+    }
+
     this.state["skipReload"] = true;
     this.view = this.viewTranslate[2];
     this!.changeView(this.view);
@@ -283,42 +288,6 @@ export class CalendarComponent
       this.Calendar.removeAllEvents();
     }
   }
-
-  // @ViewChild("tooltip") tooltip!: ElementRef<HTMLDivElement>;
-  // private handleTooltip(event: { event: any; el: any; jsEvent: any }) {
-  //   if (isMobile()) {
-  //     return;
-  //   }
-
-  //   const color = event.el.style.backgroundColor;
-
-  //   const toggle = (type: "enter" | "leave") => {
-  //     event.el.style.backgroundColor = rgbToRgba(rgbaToRgb(color), 0.5);
-  //     this.tooltip.nativeElement.style.zIndex = "0";
-  //     this.tooltip.nativeElement.classList.remove(
-  //       type == "enter" ? "hidden" : "block"
-  //     );
-  //     this.tooltip.nativeElement.classList.add(
-  //       type == "enter" ? "block" : "hidden"
-  //     );
-  //   };
-
-  //   if (event.jsEvent.type == "mouseleave") {
-  //     return toggle("leave");
-  //   }
-
-  //   const coord = event.el.getBoundingClientRect();
-  //   this.tooltip.nativeElement.style.top = event.jsEvent.y - 40 + "px";
-  //   this.tooltip.nativeElement.style.left = coord.left + coord.width / 3 + "px";
-
-  //   toggle("enter");
-
-  //   setTimeout(() => this.tooltip.nativeElement.style.zIndex = "99999", 75);
-  //   event.el.style.color = color;
-  //   event.el.style.backgroundColor = rgbToRgba(color, 0.6);
-  //   this.tooltip.nativeElement.innerHTML = event.event.title;
-  //   this.tooltip.nativeElement.style.top = coord.top - this.tooltip.nativeElement.clientHeight - 7 + "px";
-  // }
 
   private checkPrevNext() {
     if (this.viewDateRange) {

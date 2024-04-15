@@ -181,8 +181,8 @@ thead tr th .fc-scroller-harness .fc-scroller {
   top: 64px !important;
   height: calc(100% - 64px) !important;
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
-
 }
+
 
 .p-sidebar {  
   .p-sidebar-footer, .p-sidebar-header, .p-sidebar-content {
@@ -201,5 +201,25 @@ thead tr th .fc-scroller-harness .fc-scroller {
     .p-sidebar-footer, .p-sidebar-header, .p-sidebar-content {
       padding: 0.7rem 1rem !important;
     }
+  }
+
+  .p-sidebar.noborder {
+    
+    & {
+      top: 64px !important;
+      height: calc(100% - 64px) !important;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+      overflow: hidden !important;
+    }
+
+    .p-sidebar-content {
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    .p-sidebar-header, .p-sidebar-footer {
+      display: none !important;
+    }
+
   }
 }

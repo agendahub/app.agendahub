@@ -47,6 +47,8 @@ export class SchedulerComponent implements OnInit {
     end: Date
   }
 
+  optionsVisible = false
+
   oldScheduleDisabled = false;
   validHelper = ValidatorsHelper;
 
@@ -114,28 +116,29 @@ export class SchedulerComponent implements OnInit {
           finish: this.form.get("finishDateTime"),
         }
 
-        const base = {
-          startBase: new Date(dates.start?.value),
-          finishBase: new Date(dates.finish?.value)
+        if (dates.start?.value && dates.finish?.value) {
+          const base = {
+            startBase: new Date(dates.start?.value),
+            finishBase: new Date(dates.finish?.value)
+          }
+  
+          base.startBase.setHours(rules.minHour);
+          base.finishBase.setHours(rules.maxHour);
+      
+          if (moment(dates.start?.value).isBefore(base.startBase)) {
+            return {error: "O início precisa ser após as 08:00"}
+            
+          } else if (moment(dates.finish?.value).isAfter(base.finishBase)) {
+            return {error: "O fim precisa ser antes das 23:00"}
+          }
+  
+          if (moment(dates.finish?.value).isBefore(dates.start?.value) || new Date(dates.finish?.value).getTime() === new Date(dates.start?.value).getTime()) {
+            return {error: "O fim não pode ser antes ou igual o início"};
+          } else {
+            dates.start?.setErrors(null);
+            dates.finish?.setErrors(null); 
+          }
         }
-
-        base.startBase.setHours(rules.minHour);
-        base.finishBase.setHours(rules.maxHour);
-    
-        if (moment(dates.start?.value).isBefore(base.startBase)) {
-          return {error: "O início precisa ser após as 08:00"}
-          
-        } else if (moment(dates.finish?.value).isAfter(base.finishBase)) {
-          return {error: "O fim precisa ser antes das 23:00"}
-        }
-
-        if (moment(dates.finish?.value).isBefore(dates.start?.value) || new Date(dates.finish?.value).getTime() === new Date(dates.start?.value).getTime()) {
-          return {error: "O fim não pode ser antes ou igual o início"};
-        } else {
-          dates.start?.setErrors(null);
-          dates.finish?.setErrors(null); 
-        }
-
       }
   
       return null;
@@ -176,9 +179,6 @@ export class SchedulerComponent implements OnInit {
       this.edit = true;
 
       this.checkFormValidation();
-
-      // console.log(new Date(arg.event.extendedProps['schedule']['startDateTime']),
-      // new Date(arg.event.extendedProps['schedule']['finishDateTime']));
     }
   }
 
@@ -217,8 +217,6 @@ export class SchedulerComponent implements OnInit {
     this.form.get("finishDateTime")?.setValue(finishDate);
     this.form.get("day")?.setValue(arg.date.getDate());
 
-    console.log(this.form.value);
-
     this.checkFormValidation();
   }
 
@@ -251,12 +249,21 @@ export class SchedulerComponent implements OnInit {
   }
 
   sidebarChange(ev: any) {
-    window.dispatchEvent(new Event("resize"));
+    if (!ev) {
+      this.form.reset({note: "", id: 0});
+      this.rawOne = false;
+    }
+  }
+
+  optionsClick() {
+    this.optionsVisible = true;
   }
 
   rawOne = false;
   addNewOne() {
     this.header = "Novo agendamento";
+    this.disableFormByOldDate();
+    this.checkFormValidation();
     this.rawOne = true
     this.visible = true;
   }
@@ -283,29 +290,13 @@ export class SchedulerComponent implements OnInit {
   trySave() {
     const schedule = new UserSchedule();
     const form = structuredClone(this.form.value);  
-    
-    console.log(this.form.value, form);
 
     form.startDateTime = new Date(form.startDateTime);
     form.finishDateTime = new Date(form.finishDateTime);
     
-    if (form.day) {
-      // dando erro aqui 
-      /**
-       * scheduler.component.html:87 ERROR RangeError: Invalid time value
-          at Date.toISOString (<anonymous>)
-          at SchedulerComponent.trySave (scheduler.component.ts:307:58)
-          at SchedulerComponent.confirm (scheduler.component.ts:267:10)
-          at SchedulerComponent_ng_template_17_Template_button_click_2_listener (scheduler.component.html:87:125)
-          at executeListenerWithErrorHandling (core.mjs:15772:16)
-          at wrapListenerIn_markDirtyAndPreventDefault (core.mjs:15805:22)
-          at HTMLButtonElement.<anonymous> (platform-browser.mjs:666:17)
-          at _ZoneDelegate.invokeTask (zone.js:402:31)
-          at core.mjs:25960:55
-          at AsyncStackTaggingZoneSpec.onInvokeTask (core.mjs:25960:36)
-       */
-      form.startDateTime.setDate(form.day);
-      form.finishDateTime.setDate(form.day);
+    if (form.day && form.day instanceof Date) {
+      form.startDateTime.setDate(form.day.getDate());
+      form.finishDateTime.setDate(form.day.getDate());
     }
 
     schedule.customer = Object.assign({}, form.customer);
@@ -356,6 +347,8 @@ export class SchedulerComponent implements OnInit {
       
     this.api.requestFromApi<UserSchedule[]>(endpoint, params)?.subscribe(
       x => {
+        console.log(x);
+        
         this.schedules.push(...x);
         this.events = mapScheduleToEvent(x);
         this.addEvent.next(this.events)
@@ -390,7 +383,6 @@ export class SchedulerComponent implements OnInit {
         },
         complete: () => {
           this.loader.hideBackground();
-          this.rawOne = false;
         }
       })
     }
