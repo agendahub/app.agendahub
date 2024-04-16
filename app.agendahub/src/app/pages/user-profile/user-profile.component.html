@@ -1,53 +1,87 @@
 <div class="min-h-screen flex items-center justify-center">
-  <div class="max-w-6xl w-full p-8 rounded-lg shadow-md bg-secondary text-gray-200">
-      <div class="flex items-center justify-between mb-10">
-          <div class="flex items-center relative">
-              <!-- Círculo de upload -->
-              <label for="profileImage" class="w-24 h-24 rounded-full transition duration-300 ease-in-out transform bg-gray-700 flex items-center justify-center cursor-pointer relative">
-                  <!-- Círculo menor para o ícone -->
-                  <div class="w-14 h-14 rounded-full border bg-secondary flex items-center justify-center  absolute bottom-0 right-0 -mb-4 -mr-4 transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-110">
-                      <!-- Ícone da câmera -->
-                      <i class="w-12 h-12 text-gray-200 fas fa-camera flex justify-center items-center 	"></i>
-                  </div>
-                  <input type="file" id="profileImage" class="hidden" accept="image/*">
-              </label>
-              <div class="ml-4">
-                  <h1 class="text-4xl font-semibold">
-                    <span id="name">Ana Maria</span>
-                    <input type="text" id="editName" class="ml-2 bg-secondary text-gray-200 border-b-2 border-gray-300 focus:outline-none" style="border-color: transparent;">
-                  </h1>
-              </div>
-          </div>
-          <a href="#" class="text-blue-500 hover:underline">Editar Perfil</a>
-      </div>
-      <div class="grid grid-cols-2 gap-8 mb-10">
-          <div>
-              <label for="email" class="text-gray-300 font-medium">E-mail</label>
-              <p id="email" class="text-gray-200">ana.maria@email.com</p>
-          </div>
-          <div>
-              <label for="dob" class="text-gray-300 font-medium">Data de Nascimento</label>
-              <p id="dob" class="text-gray-200">10 de Maio de 1985</p>
-          </div>
-          <div>
-              <label for="phone" class="text-gray-300 font-medium">Telefone</label>
-              <p id="phone" class="text-gray-200">(11) 98765-4321</p>
-          </div>
-          <div>
-              <label for="address" class="text-gray-300 font-medium">Endereço</label>
-              <p id="address" class="text-gray-200">Rua das Flores, 123, São Paulo - SP</p>
-          </div>
-      </div>
-      <div class="pl-4 mb-10"> <!-- Removida a classe "border-l-2" -->
-        <h2 class="text-3xl text-center font-semibold mb-4">Histórico de Compromissos</h2>
-
-        <p-timeline [value]="events" class="w-full md:w-20rem" align="alternate">
-          <ng-template pTemplate="content" let-event>
-              {{ event.status }}
-              |
-              {{ event.date }}
-          </ng-template>
-        </p-timeline>
-      </div>
-  </div>
+    <div class="max-w-6xl w-full p-8 rounded-lg shadow-md bg-secondary text-gray-200">
+        <div class="flex flex-wrap">
+            <!-- Div das informações e input da foto -->
+            <div class="w-full md:w-1/2 pr-4 mb-8">
+                <div class="flex items-center justify-between mb-10">
+                    <div class="flex items-center relative">
+                        <label
+                            for="profileImage"
+                            class="w-20 h-20 rounded-full transition duration-300 ease-in-out transform bg-gray-700 flex items-center justify-center cursor-pointer relative"
+                        >
+                            <div
+                                class="w-14 h-14 rounded-full border bg-secondary flex items-center justify-center absolute bottom-0 right-0 -mb-4 -mr-4 transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-110"
+                            >
+                                <i class="w-12 h-12 text-gray-200 fas fa-camera flex justify-center items-center"></i>
+                            </div>
+                            <input
+                                type="file"
+                                id="profileImage"
+                                class="hidden"
+                                accept="image/*"
+                            />
+                        </label>
+                    </div>
+                    
+                </div>
+                <div class="mb-4 flex items-center">
+                    <h1 class="text-4xl font-semibold">
+                        <span id="name"> Olá, Ana Maria</span>
+                    </h1>
+                    <a href=""><i class="fa-regular fa-pen-to-square ml-6 fa-xl"></i></a>
+                </div>  
+                <div class="mb-4">
+                    <div class="mb-2 flex items-center">
+                        <i class="fas fa-envelope text-gray-300 mr-2"></i>
+                        <span class="text-gray-300 font-medium">E-mail</span>
+                    </div>
+                    <div class="rounded-lg  bg-primary p-2">
+                        <p id="email" class="text-gray-200">ana.maria@email.com</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="mb-2 flex items-center">
+                        <i class="fas fa-birthday-cake text-gray-300 mr-2"></i>
+                        <span class="text-gray-300 font-medium">Data de Nascimento</span>
+                    </div>
+                    <div class="rounded-lg  bg-primary p-2">
+                        <p id="dob" class="text-gray-200">10 de Maio de 1985</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="mb-2 flex items-center">
+                        <i class="fas fa-phone text-gray-300 mr-2"></i>
+                        <span class="text-gray-300 font-medium">Telefone</span>
+                    </div>
+                    <div class="rounded-lg bg-primary p-2">
+                        <p id="phone" class="text-gray-200">(11) 98765-4321</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <div class="mb-2 flex items-center">
+                        <i class="fas fa-map-marker-alt text-gray-300 mr-2"></i>
+                        <span class="text-gray-300 font-medium">Endereço</span>
+                    </div>
+                    <div class="rounded-lg  bg-primary p-2">
+                        <p id="address" class="text-gray-200">Rua das Flores, 123, São Paulo - SP</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Div do histórico de compromissos -->
+            <div class="w-full md:w-1/2 pl-4">
+                <div>
+                    <h2 class="text-3xl text-center font-semibold mb-8 mt-8">
+                        Histórico de Compromissos
+                    </h2>
+                    <p-timeline [value]="events" class="w-full md:w-20rem" align="alternate">
+                        <ng-template pTemplate="content" let-event>
+                            {{ event.status }}
+                            |
+                            {{ event.date }}
+                        </ng-template>
+                    </p-timeline>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

@@ -20,9 +20,23 @@ export class UserProfileComponent {
 
         },
         {
-          status: '2020',
+          status: 'Evento 3',
           date: '05/02/2024',
+        },
+        {
+          status: 'Evento 4',
+          date: '07/02/2024',
+        },
+        {
+          status: 'Evento 5',
+          date: '09/02/2024',
+        },
+        {
+          status: 'Evento 6',
+          date: '11/02/2024',
         }
+
+
       ];
     }
     
