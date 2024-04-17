@@ -22,21 +22,24 @@
                             />
                         </label>
                     </div>
-                    
+                    <div>
+                        <i class="fas fa-user-edit text-2xl cursor-pointer hover:bg-sky-700 rounded-lg" (click)="toggleEdit()"></i>
+                        
+                    </div>
                 </div>
                 <div class="mb-4 flex items-center">
                     <h1 class="text-4xl font-semibold">
-                        <span id="name"> Olá, Ana Maria</span>
+                        <span >{{ name }}</span>
                     </h1>
-                    <a href=""><i class="fa-regular fa-pen-to-square ml-6 fa-xl"></i></a>
-                </div>  
+                </div>
                 <div class="mb-4">
                     <div class="mb-2 flex items-center">
                         <i class="fas fa-envelope text-gray-300 mr-2"></i>
                         <span class="text-gray-300 font-medium">E-mail</span>
                     </div>
-                    <div class="rounded-lg  bg-primary p-2">
-                        <p id="email" class="text-gray-200">ana.maria@email.com</p>
+                    <div class="rounded-lg bg-primary p-2">
+                        <p *ngIf="!isEditing">{{ email }}</p>
+                        <input *ngIf="isEditing" type="email" [(ngModel)]="email" class=" bg-secondary w-full rounded-md text-gray-200" />
                     </div>
                 </div>
                 <div class="mb-4">
@@ -44,8 +47,9 @@
                         <i class="fas fa-birthday-cake text-gray-300 mr-2"></i>
                         <span class="text-gray-300 font-medium">Data de Nascimento</span>
                     </div>
-                    <div class="rounded-lg  bg-primary p-2">
-                        <p id="dob" class="text-gray-200">10 de Maio de 1985</p>
+                    <div class="rounded-lg bg-primary p-2">
+                        <p *ngIf="!isEditing">{{ dob }}</p>
+                        <input *ngIf="isEditing" type="text" [(ngModel)]="dob" class=" bg-secondary w-full rounded-md text-gray-200" />
                     </div>
                 </div>
                 <div class="mb-4">
@@ -54,7 +58,8 @@
                         <span class="text-gray-300 font-medium">Telefone</span>
                     </div>
                     <div class="rounded-lg bg-primary p-2">
-                        <p id="phone" class="text-gray-200">(11) 98765-4321</p>
+                        <p *ngIf="!isEditing">{{ phone }}</p>
+                        <input *ngIf="isEditing" [(ngModel)]="phone" class=" bg-secondary w-full rounded-md text-gray-200" />
                     </div>
                 </div>
                 <div class="mb-4">
@@ -62,8 +67,9 @@
                         <i class="fas fa-map-marker-alt text-gray-300 mr-2"></i>
                         <span class="text-gray-300 font-medium">Endereço</span>
                     </div>
-                    <div class="rounded-lg  bg-primary p-2">
-                        <p id="address" class="text-gray-200">Rua das Flores, 123, São Paulo - SP</p>
+                    <div class="rounded-lg bg-primary p-2">
+                        <p *ngIf="!isEditing">{{ address }}</p>
+                        <input *ngIf="isEditing" type="text" [(ngModel)]="address" class=" bg-secondary w-full rounded-md text-gray-200" />
                     </div>
                 </div>
             </div>
