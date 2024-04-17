@@ -15,7 +15,7 @@ import { Title } from "@angular/platform-browser";
 
     <div id="app-container" class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean" [ngClass]="{ flex: sidebarFixed }">
       <sidebar *ngIf="!hideNav"></sidebar>
-      <div class="relative w-full sm:h-full h-fit overflow-auto">
+      <div class="relative w-full overflow-auto" [ngClass]="{'sm:h-full h-fit': !hideNav, 'h-full': hideNav}">
         <div
           *ngIf="!hideNav"
           class="sm:block hidden sticky right-0 top-0 z-10"

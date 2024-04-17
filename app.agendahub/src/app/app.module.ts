@@ -53,6 +53,7 @@ import { GeneralModule } from './modules/general/general.module';
 import { tokenGetter } from './auth/auth-utils';
 import { environment } from '../environments/environment.development';
 import { loadTypes } from './types/typing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -62,9 +63,6 @@ import { loadTypes } from './types/typing';
     HomeComponent,
     SettingsComponent,
     ScheduleLinkViewComponent
-  ],
-  schemas: [
-    NO_ERRORS_SCHEMA
   ],
   imports: [
     FormsModule,
@@ -77,7 +75,8 @@ import { loadTypes } from './types/typing';
     ManagerRoutingModule,
     BrowserAnimationsModule,
     GeneralModule,
-    
+    MatSnackBarModule,
+
     ListboxModule,
     ToastModule,
     DialogModule,

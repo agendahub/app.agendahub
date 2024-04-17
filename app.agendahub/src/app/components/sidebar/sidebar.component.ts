@@ -83,8 +83,7 @@ import { MenuItem } from "primeng/api";
       </div>
     </div>
 
-    <aside
-      class="sm:z-20 z-[60] w-screen h-screen ease-in-out duration-300"
+    <aside class="z-[2000] w-screen h-screen ease-in-out duration-300"
       aria-label="Sidebar"
       id="default-sidebar"
       [ngClass]="{
@@ -95,8 +94,7 @@ import { MenuItem } from "primeng/api";
       (mouseenter)="open = true"
       (mouseleave)="open = fixed ? true : false"
     >
-      <div
-        class="h-full overflow-y-auto dark:shadow-xl shadow-md overflow-x-hidden bg-very-clean dark:bg-primary border-l-0 border-r dark:border-secondary border-clean flex flex-col justify-between gap-3 pb-1"
+      <div class="z-[2000] h-full overflow-y-auto dark:shadow-xl shadow-md overflow-x-hidden bg-very-clean dark:bg-primary border-l-0 border-r dark:border-secondary border-clean flex flex-col justify-between gap-3 pb-1"
         [ngClass]="{ 'px-2': open }"
       >
         <div class="flex flex-col gap-3">
@@ -217,9 +215,7 @@ import { MenuItem } from "primeng/api";
           </ul>
         </div>
 
-        <div
-          class="sticky bottom-0 left-0 right-0 z-30 backdrop-blur-md w-full rounded-md"
-        >
+        <div  class="sticky bottom-0 left-0 right-0 z-30 backdrop-blur-md w-full rounded-md">
           <div
             id="user-options"
             class="w-full p-2 bg-slate-100 rounded-t-md shadow-md mt-0"

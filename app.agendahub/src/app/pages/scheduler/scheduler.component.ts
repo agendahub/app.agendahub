@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { EventClickArg, EventChangeArg, EventInput } from '@fullcalendar/core';
 import { DateClickArg } from '@fullcalendar/interaction';
 import * as moment from 'moment/moment';
@@ -56,7 +57,9 @@ export class SchedulerComponent implements OnInit {
 
   helper = inject(ScreenHelperService)
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService, private loader: LoaderService) {
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService, private loader: LoaderService,
+              private snackBar: MatSnackBar
+  ) {
     this.createForm();
     this.loadCrudResources();
     setTimeout(() => this.enableEdit.next(this.authService.TokenData?.role != "employee"), 100);
@@ -164,21 +167,7 @@ export class SchedulerComponent implements OnInit {
     let schedule = this.schedules.find(x => x.id === id);
 
     if (schedule) {
-      this.form.get("id")?.setValue(id);
-      this.form.get("day")?.setValue(new Date(arg.event.extendedProps['schedule']['startDateTime']).getDate());
-      this.form.get("startDateTime")?.setValue(new Date(arg.event.extendedProps['schedule']['startDateTime']));
-      this.form.get("finishDateTime")?.setValue(new Date(arg.event.extendedProps['schedule']['finishDateTime']));
-      this.form.get("service")?.setValue(schedule["schedule"]["service"])
-      this.form.get("price")?.setValue(schedule["schedule"]["price"])
-      this.form.get("customer")?.setValue(schedule["customer"])
-      this.form.get("schedule")?.setValue(schedule["schedule"])
-      this.form.get("note")?.setValue(schedule["schedule"]["note"])
-      this.form.get("employee")?.setValue(schedule["employee"])
-      
-      this.visible = true
-      this.edit = true;
-
-      this.checkFormValidation();
+      this.openFormEdit(schedule);
     }
   }
 
@@ -268,7 +257,31 @@ export class SchedulerComponent implements OnInit {
     this.visible = true;
   }
 
+  openFormEdit(schedule: UserSchedule) {
+    this.header = `Editar horário - ${moment(schedule.schedule.startDateTime).format("DD/MM/yy")}`
+    this.form.get("id")?.setValue(schedule.id);
+    this.form.get("day")?.setValue(new Date(schedule.schedule.startDateTime).getDate());
+    this.form.get("startDateTime")?.setValue(new Date(schedule.schedule.startDateTime));
+    this.form.get("finishDateTime")?.setValue(new Date(schedule.schedule.finishDateTime));
+    this.form.get("service")?.setValue(schedule.schedule.service)
+    this.form.get("price")?.setValue(schedule.schedule.price)
+    this.form.get("customer")?.setValue(schedule.customer)
+    this.form.get("schedule")?.setValue(schedule.schedule)
+    this.form.get("note")?.setValue(schedule.schedule.note)
+    this.form.get("employee")?.setValue(schedule.employee)
+    
+    this.visible = true
+    this.edit = true;
+
+    this.checkFormValidation();
+    this.showSnack("Agendamento carregado com sucesso!")
+  }
+
   //#endregion
+
+  showSnack(message: string) {
+    this.snackBar.open(message, undefined, {duration: 2000, panelClass: "successful"});
+  }
 
   confirm() {
     this.trySave()
@@ -366,10 +379,12 @@ export class SchedulerComponent implements OnInit {
           if (x) {
             if (this.schedules.some(y => y.id == x)) {
               this.removeOrReplaceEvent(x, body);
+              this.showSnack("Agendamento atualizado com sucesso!")
             } else {
               let schedule = {...body, id: x};
               this.schedules.push(schedule);
               this.addEvent.next(mapScheduleToEvent([schedule]));
+              this.showSnack("Agendamento criado com sucesso!")
             }
           }
     
@@ -380,6 +395,7 @@ export class SchedulerComponent implements OnInit {
           arg ? arg.revert(): void 0;
           this.loader.hideBackground()
           this.calendar.setEditable(true);
+          this.showSnack(`Erro ao salvar agendamento!`)
         },
         complete: () => {
           this.loader.hideBackground();

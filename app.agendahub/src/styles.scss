@@ -2,6 +2,7 @@
 @import url(../node_modules/@fortawesome/fontawesome-free/css/all.min.css);
 @import url(../node_modules/@fortawesome/fontawesome-free/css/brands.min.css);
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
 @tailwind base;
 @tailwind components;
@@ -222,4 +223,24 @@ thead tr th .fc-scroller-harness .fc-scroller {
     }
 
   }
+}
+
+.successful {
+  background-color: #4CAF50 !important;
+  color: white !important;
+}
+
+.info {
+  background-color: #2196F3 !important;
+  color: white !important;
+}
+
+.warning {
+  background-color: #ff9800 !important;
+  color: white !important;
+}
+
+.error {
+  background-color: #f44336 !important;
+  color: white !important;
 }

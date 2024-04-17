@@ -11,7 +11,7 @@
     </div>
 </div>
 
-<p-sidebar [(visible)]="optionsVisible" appendTo="body" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
+<p-sidebar [(visible)]="optionsVisible" [appendTo]="helper.currentDevice() == 2 ? '' : 'body'" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
         [dismissible]="true" [modal]="false" styleClass="noborder"
         [style]="{'min-width': '30vw'}">
     <ng-template pTemplate="content">
@@ -19,11 +19,18 @@
     </ng-template>
 </p-sidebar>
 
-<p-sidebar [(visible)]="visible" appendTo="body" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
-            [dismissible]="true" [modal]="false" styleClass="scheduler"
+<p-sidebar [(visible)]="visible" [appendTo]="helper.currentDevice() == 2 ? '' : 'body'" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
+            [dismissible]="true" [modal]="false" styleClass="scheduler" [showCloseIcon]="false"
             [style]="{'min-width': '30vw'}" (visibleChange)="sidebarChange($event)">
     <ng-template pTemplate="header">
-        <h2 class="font-semibold text-2xl tracking-normal leading-relaxed">{{header}}</h2>
+        <div class="relative flex justify-between items-center gap-3 w-full">
+            <h2 class="font-semibold text-2xl tracking-normal leading-relaxed">{{header}}</h2>
+            <div (click)="visible = false" role="button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>              
+            </div>
+        </div>
     </ng-template>
     <ng-template pTemplate="content">
         <div *ngIf="oldScheduleDisabled" class="p-2 flex justify-center">
@@ -36,12 +43,12 @@
     
                 <div class="col-span-12" [hidden]="!rawOne">
                     <label for="day">Dia</label>
-                    <p-calendar formControlName="day" appendTo="body" [readonly]="isEditEnable" dateFormat="dd/MM/yy" placeholder="01/01/2021" inputId="day" [style]="{width:'100%'}"></p-calendar>
+                    <p-calendar formControlName="day" appendTo="body" [readonlyInput]="isEditEnable" dateFormat="dd/MM/yy" placeholder="01/01/2021" inputId="day" [style]="{width:'100%'}"></p-calendar>
                 </div>
 
                 <div class="sm:col-span-6 col-span-12">
                     <label for="startDateTime">Início</label>
-                    <p-calendar formControlName="startDateTime" [readonly]="isEditEnable" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                    <p-calendar formControlName="startDateTime" [readonlyInput]="isEditEnable" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
                     <small class="text-red-600 ng-dirty" *ngIf="form.get('startDateTime')?.errors"> {{form.get('startDateTime')?.errors?.['error']}} </small>
                 </div>
                 
@@ -119,9 +126,10 @@
             <h4 class="text-lg font-semibold text-primary">Carregados</h4>
             <div class="container flex flex-col gap-1 p-1 max-h-60 overflow-y-auto">
                 <div *ngFor="let item of schedules" 
+                    (click)="openFormEdit(item)"    
                     class="p-2 shadow-md rounded border border-gray-200 bg-very-clean
                             transition duration-150 ease-in-out transform hover:scale-[1.01]
-                            hover:border-action hover:shadow-subaction hover:shadow-sm">
+                            hover:border-action hover:shadow-subaction hover:shadow-sm select-none cursor-pointer">
                     <div class="flex justify-between items-center gap-2">
                         <span class="text-sm">{{item.schedule.startDateTime | date: 'dd/MM/yyyy HH:mm'}}</span>
                         <span class="text-sm">{{item.schedule.service.description}}</span>
