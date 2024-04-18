@@ -1,9 +1,7 @@
 import { Component } from '@angular/core';
-import { faCheckCircle, faPenToSquare, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { ApiService } from '../../../services/api-service.service';
 import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { faPlusCircle, faMagnifyingGlass, faList, faGear, faUserGear } from '@fortawesome/free-solid-svg-icons';
 import { ScreenHelperService } from '../../../services/screen-helper.service';
 import { customSort } from '../../../utils/util';
 import { UserType } from '../../../models/core/entities';
@@ -14,16 +12,10 @@ import { FormUtils } from '../../../utils/form';
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
+
 export class UsersComponent {
 
-  
   visible = false;
-  faConfirm = faCheckCircle;
-  faDelete = faTimesCircle;
-  faNew = faPlusCircle;
-  faSearch = faMagnifyingGlass;
-  faGear = faUserGear
-  faList = faList
   
   edit = false;
   formUtils!: FormUtils;

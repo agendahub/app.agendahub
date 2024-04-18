@@ -12,20 +12,21 @@
                 <div class="flex md:flex-row sm:align-items-center justify-between flex-col gap-2 mb-3">
                     <div class="flex justify-start gap-2 items-center">
                         <button pButton (click)="visible = true" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
-                            <fa-icon size="lg" [icon]="faNew"></fa-icon>
-                            <span class="tracking-tight text-white text-ellipsis">Novo</span>
+                            <i class="fa-solid fa-circle-plus"></i>                            <span class="tracking-tight text-white text-ellipsis">Novo</span>
                         </button>
                         <button pButton  [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2" (click)="tp.show($event)">
                             <div #typeTarget></div>
-                            <fa-icon size="lg" [icon]="faList"></fa-icon>
+                            <i class="fa-solid fa-list-ul"></i>
                             <span class="tracking-tight text-white text-ellipsis">Tipos</span>   
                         </button>
                     </div>
                     <div class="flex flex-row justify-end sm:w-auto w-full">
                         <span class="p-input-icon-left ml-auto sm:w-auto w-full shadow-sm">
                             <i style="margin-top: -0.69rem;">
-                                <fa-icon [icon]="faSearch"></fa-icon>
-                            </i>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
+                                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                </svg>
+                            </i>                                                        
                             <input pInputText type="text" (input)="applyFilter(dt, $event, 'contains')" placeholder="Buscar..." class="p-inputtext-sm sm:w-auto w-full" />
                         </span>
                     </div>
@@ -47,7 +48,9 @@
                         <div>
                             <button pButton (click)="confirmType();tp.show($event, typeTarget)" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="formType.invalid">
                                 <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-                                <fa-icon [icon]="faConfirm" ></fa-icon>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                                </svg>
                             </button>
                         </div>
         
@@ -61,10 +64,9 @@
                         
                         <ng-template pTemplate="caption">
                             <button pButton (click)="op.show($event)" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
-                                <fa-icon size="lg" [icon]="faNew"></fa-icon>
+                                <i class="fa-solid fa-circle-plus"></i>
                                 <span class="tracking-tight text-white text-ellipsis">Novo</span>
                             </button>
-                            <!-- <fa-icon class="cursor-pointer"  [icon]="faNew"></fa-icon> -->
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr>
@@ -79,8 +81,8 @@
                                 <td>{{serviceType.description}}</td>
                                 <th> 
                                     <span class="rounded-md bg-red-600 cursor-pointer text-white p-2" (click)="deleteType(serviceType.id)">
-                                        <fa-icon [icon]="faDelete"></fa-icon>
-                                    </span>
+                                        <i class="fa-regular fa-circle-xmark"></i>
+                                    </span>                                    
                                 </th>
                             </tr>
                         </ng-template>
@@ -108,7 +110,7 @@
                     <td>{{service.description}}</td>
                     <td>{{service.price | currency: "BRL"}}</td>
                     <td>{{service.serviceType.description}}</td>
-                    <td><fa-icon class="cursor-pointer" (click)="change(service)" [icon]="faEdit"></fa-icon></td>
+                    <td><i class="fa-solid fa-gear cursor-pointer" (click)="change(service)"></i></td>
                 </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
@@ -164,12 +166,14 @@
         <div class="flex gap-2">
             <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()">
                 <span class="tracking-tight text-white text-ellipsis">Excluir</span>
-                <fa-icon [icon]="faDelete" (click)="tryDelete()"></fa-icon>
-            </button>
+                <i class="fa-regular fa-circle-xmark"></i>
+            </button>            
             <button pButton (click)="confirm()" form="form" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid">
                 <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-                <fa-icon [icon]="faConfirm" (click)="confirm()"></fa-icon>
-            </button>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                </svg>
+            </button>            
         </div>
     </ng-template>
 </p-dialog>

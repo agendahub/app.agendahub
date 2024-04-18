@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
-import { faCheckCircle, faPenToSquare, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { ApiService } from '../../../services/api-service.service';
 import { SortEvent } from 'primeng/api';
-import { faGear, faList, faMagnifyingGlass, faPencil, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ScreenHelperService } from '../../../services/screen-helper.service';
@@ -17,12 +15,6 @@ import { FormUtils } from '../../../utils/form';
 export class ServicesComponent {
 
   visible = false;
-  faConfirm = faCheckCircle;
-  faDelete = faTimesCircle;
-  faNew = faPlusCircle;
-  faSearch = faMagnifyingGlass;
-  faEdit = faGear
-  faList = faList
 
   customSort = customSort
   
