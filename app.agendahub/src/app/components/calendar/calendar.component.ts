@@ -1,7 +1,6 @@
 import { AfterContentInit, AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, inject } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { faCalendarCheck, faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
-import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { CalendarOptions, Calendar, EventClickArg, EventChangeArg, EventInput } from '@fullcalendar/core';
 import listPlugin from '@fullcalendar/list';
@@ -45,9 +44,9 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   public viewTranslate = ["Mês", "Hora semana", "Semana", "Dia"];
   public view = 'Padrão';
 
-  public faNext = faArrowCircleRight;
+  
   public faOptions = faCalendarCheck;
-  public faPrev = faArrowCircleLeft;
+  
   public faConfirm = faCheckCircle;
   public faDelete = faTimesCircle;
 
