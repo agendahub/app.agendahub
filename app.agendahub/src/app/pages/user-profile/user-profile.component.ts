@@ -1,8 +1,12 @@
+import { AuthService } from './../../auth/auth-service.service';
+import { EventService } from './../../models/services/event.service';
 import { Component } from '@angular/core';
 import { GetTableSchedulingListDto } from '../../models/dtos/dtos';
 import { ApiService } from '../../services/api-service.service';
 import { MessageService } from 'primeng/api';
 import { co } from '@fullcalendar/core/internal-common';
+import { ServiceUser, User } from '../../models/core/entities';
+
 
 @Component({
   selector: 'app-user-profile',
@@ -13,44 +17,35 @@ export class UserProfileComponent {
   events: any[] = [];
   isEditing: boolean = false;
 
-  name: string = 'Ana Maria';
-  email: string = 'ana.maria@email.com';
-  dob: string = '10 de Maio de 1985';
-  phone: string = '(11) 98765-4321';
+  user!: User;
 
   rangeDates: Date[] | undefined;
   searchClient: string = '';
   schedulingList: GetTableSchedulingListDto[] = [];
   filteredSchedulingList: GetTableSchedulingListDto[] = [];
 
-  constructor(private apiService: ApiService, private messageService: MessageService) { }
+  constructor(private authService: AuthService, private apiService: ApiService, private eventService: EventService, private messageService: MessageService) { }
 
-  ngOnInit() {
-    this.getSchedulingList();
+    
+  ngOnInit(): void {
+    this.getEvents();
+    this.getInfoUser();
   }
 
-  getSchedulingList() {
-    this.apiService.requestFromApi<any>('Schedule/GetTableSchedulingList')
-      .subscribe({
-        next: (response: any) => {
-          if (response && response.length > 0) {
-            this.schedulingList = response.map((item: any) => ({
-              name: item.customerName,
-              finishDate: item.endDate,
-            }));
-            this.events = [...this.schedulingList];
-            this.filterSchedulingList();
-            console.log(this.events)
-          } else {
-            this.schedulingList = [];
-            this.filteredSchedulingList = [];
-          }
-        },
-        error: (error: any) => {
-          console.error('Error fetching scheduling list:', error);
-        }
-      });
+  private getEvents() {
+    this.eventService.getHistoricEvents()?.subscribe(x => {
+      this.events = x;
+      
+    });
   }
+
+  public getInfoUser(){
+    let info = this.authService.getUserData();
+    this.apiService.requestFromApi('user/' + info.nameid).subscribe((x: User) => {
+      this.user = x;
+    });
+  }
+
 
   toggleEdit() {
     this.isEditing = !this.isEditing;
@@ -60,9 +55,4 @@ export class UserProfileComponent {
     this.isEditing = false;
   }
 
-  filterSchedulingList() {
-    this.filteredSchedulingList = this.schedulingList.filter((item: any) => {
-      return item.name.toLowerCase().includes(this.searchClient.toLowerCase());
-    });
-  }
 }

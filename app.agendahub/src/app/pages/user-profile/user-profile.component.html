@@ -40,7 +40,7 @@
         </div>
         <div class="mb-4 flex items-center">
           <h1 class="text-4xl font-semibold">
-            <span>{{ name }}</span>
+            <span>{{ user.name }}</span>
           </h1>
         </div>
         <div class="mb-4">
@@ -49,10 +49,10 @@
             <span class="text-gray-300 font-medium">E-mail</span>
           </div>
           <div class="rounded-lg bg-primary p-2">
-              <p *ngIf="!isEditing">{{ email }}</p>
+              <p *ngIf="!isEditing">{{ user.email }}</p>
               <input
                 *ngIf="isEditing"
-                [(ngModel)]="email"
+                [(ngModel)]="user.email"
                 class="input w-full"
                 autocomplete="current-password"
               />
@@ -64,11 +64,11 @@
             <span class="text-gray-300 font-medium">Data de Nascimento</span>
           </div>
           <div class="rounded-lg bg-primary p-2">
-            <p *ngIf="!isEditing">{{ dob }}</p>
+            <p *ngIf="!isEditing">{{ user.dateBirth | date: 'dd/MM/yyyy' }}</p>
             <input
               *ngIf="isEditing"
               
-              [(ngModel)]="dob"
+              [(ngModel)]="user.dateBirth"
               class="input w-full"
               autocomplete="current-password"
             />
@@ -80,10 +80,10 @@
             <span class="text-gray-300 font-medium">Telefone</span>
           </div>
           <div class="rounded-lg bg-primary p-2">
-            <p *ngIf="!isEditing">{{ phone }}</p>
+            <p *ngIf="!isEditing">{{ user.phone }}</p>
             <input
               *ngIf="isEditing"
-              [(ngModel)]="phone"
+              [(ngModel)]="user.phone"
               class="input w-full"
               autocomplete="current-password"
             />
@@ -102,7 +102,7 @@
             align="alternate"
           >
             <ng-template pTemplate="content" let-event>
-              {{ event.name }} | {{ event.finishDate | date: 'dd/MM/yyyy'}}
+              {{ event.customer.name }} | {{ event.schedule.finishDateTime | date: 'dd/MM/yyyy'}}
             </ng-template>
           </p-timeline>
         </div>
