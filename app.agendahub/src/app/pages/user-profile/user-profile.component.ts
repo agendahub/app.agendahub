@@ -47,4 +47,8 @@ export class UserProfileComponent {
   toggleEdit() {
     this.isEditing = !this.isEditing;
   }
+
+  saveUserInfo() {
+    this.isEditing = false;
+  }
 }
