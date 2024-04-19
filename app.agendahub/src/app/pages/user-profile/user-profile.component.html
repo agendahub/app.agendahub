@@ -102,7 +102,7 @@
             align="alternate"
           >
             <ng-template pTemplate="content" let-event>
-              {{ event.status }} | {{ event.date }}
+              {{ event.name }} | {{ event.finishDate | date: 'dd/MM/yyyy'}}
             </ng-template>
           </p-timeline>
         </div>
