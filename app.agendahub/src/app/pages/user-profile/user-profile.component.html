@@ -89,21 +89,6 @@
             />
           </div>
         </div>
-        <div class="mb-4">
-          <div class="mb-2 flex items-center">
-            <i class="fas fa-map-marker-alt text-gray-300 mr-2"></i>
-            <span class="text-gray-300 font-medium">Endereço</span>
-          </div>
-          <div class="rounded-lg bg-primary p-2">
-            <p *ngIf="!isEditing">{{ address }}</p>
-            <input
-              *ngIf="isEditing"
-              [(ngModel)]="address"
-              class="input w-full"
-              autocomplete="current-password"
-            />
-          </div>
-        </div>
       </div>
       <!-- Div do histórico de compromissos -->
       <div class="w-full md:w-1/2 pl-4">

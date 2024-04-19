@@ -13,12 +13,12 @@ export class UserProfileComponent {
   email: string = 'ana.maria@email.com';
   dob: string = '10 de Maio de 1985';
   phone: string = '(11) 98765-4321';
-  address: string = 'Rua das Flores, 123, São Paulo - SP';
+
 
   constructor() { 
     this.events = [
       {
-        status: 'Evento 1',
+        status: 'Gabriel Silva',
         date: '01/02/2024',
       },
       {
