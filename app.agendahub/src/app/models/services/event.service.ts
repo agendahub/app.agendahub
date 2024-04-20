@@ -38,4 +38,18 @@ export class EventService {
 
     return this.apiService.requestFromApi(query, params);
   }
+  public getHistoricEvents() {
+    let query = "Schedule/ScheduleDay";
+    let today = this.today.clone();
+    let startDate = today.clone().subtract(1, "month");
+
+    let params = {
+      startDate: startDate.toISOString(),
+      endDate: today.toISOString(),
+      onlyMine: true,
+      quantity: 5
+    }
+
+    return this.apiService.requestFromApi(query, params)
+  }
 }

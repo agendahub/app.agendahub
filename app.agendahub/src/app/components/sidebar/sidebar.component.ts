@@ -218,6 +218,11 @@ import { MenuItem } from "primeng/api";
             class="w-full p-2 bg-slate-100 rounded-t-md shadow-md mt-0"
             *ngIf="showUserOptions && open"
           >
+          <a
+              routerLink="/profile"
+              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
+              >Perfil</a
+            >
             <a
               routerLink="/settings"
               class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
