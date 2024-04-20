@@ -8,13 +8,22 @@
             
             <div class="flex gap-4 items-center justify-between">
                 <div class="bg-purple-hb rounded-full cursor-pointer" (click)="op.toggle($event)" *ngIf="header">
-                    <i class="fa-solid fa-sliders p-2"></i>
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
+                      </svg>                      
+                  </div>
+
+                  <div class="flex gap-1" *ngIf="nav">
+                    <div class="flex gap-1" *ngIf="nav">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer transform rotate-180" [ngClass]="{'text-purple-hb': nav.previousEnable, 'opacity-60': !nav.previousEnable}" (click)="nav.previousEnable && nav.previous()">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>                        
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-8 h-8 cursor-pointer transform rotate-180" [ngClass]="{'text-purple-hb': nav.nextEnable, 'opacity-60': !nav.nextEnable}" (click)="nav.nextEnable && nav.next()">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+                        </svg>
+                    </div>                    
                 </div>
-                
-                <div class="flex gap-1" *ngIf="nav">
-                    <fa-icon size="2x" [icon]="faPrev" class="text-purple-hb cursor-pointer" [ngClass]="{'opacity-60': !nav.previousEnable}" (click)="nav.previousEnable && nav.previous()"></fa-icon>
-                    <fa-icon size="2x" [icon]="faNext" class="text-purple-hb cursor-pointer" [ngClass]="{'opacity-60': !nav.nextEnable}" (click)="nav.nextEnable && nav.next()"></fa-icon>
-                </div>
+                                        
             </div>
         </div>
         <full-calendar #calendar [options]="calendarOptions"></full-calendar>

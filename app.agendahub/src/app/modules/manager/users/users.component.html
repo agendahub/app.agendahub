@@ -14,21 +14,20 @@
                 <div class="flex md:flex-row sm:align-items-center justify-between flex-col gap-2">
                     <div class="flex justify-start gap-2 items-center">
                         <button pButton (click)="visible = true" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
-                            <fa-icon size="lg" [icon]="faNew"></fa-icon>
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                            </svg>
                             <span class="tracking-tight text-white text-ellipsis">Novo</span>
-                        </button>
+                        </button>                                                
                         <button pButton [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2" (click)="tp.show($event)">
                             <div #typeTarget></div>
-                            <fa-icon size="lg" [icon]="faList"></fa-icon>
+                            <i class="fa-solid fa-list"></i>
                             <span class="tracking-tight text-white text-ellipsis">Tipos</span>   
                         </button>
-                        
                     </div>
                     <div class="flex flex-row justify-end sm:w-auto w-full">
                         <span class="p-input-icon-left ml-auto sm:w-auto w-full shadow-sm">
-                            <i style="margin-top: -0.69rem;">
-                                <fa-icon [icon]="faSearch"></fa-icon>
-                            </i>
+                            <i class="fa-solid fa-magnifying-glass" style="margin-top: -0.69rem;"></i>
                             <input pInputText type="text" (input)="applyFilter(dt, $event, 'contains')" placeholder="Buscar..." class="p-inputtext-sm sm:w-auto w-full" />
                         </span>
                     </div>
@@ -50,7 +49,7 @@
                         <div>
                             <button pButton (click)="confirmType();tp.show($event, typeTarget)" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="formType.invalid">
                                 <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-                                <fa-icon [icon]="faConfirm" ></fa-icon>
+                                <i class="fa-regular fa-circle-check"></i>
                             </button>
                         </div>
         
@@ -64,9 +63,11 @@
                         
                         <ng-template pTemplate="caption">
                             <button pButton (click)="op.show($event)" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
-                                <fa-icon size="lg" [icon]="faNew"></fa-icon>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
+                                    <path fill-rule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clip-rule="evenodd" />
+                                </svg>
                                 <span class="tracking-tight text-white text-ellipsis">Novo</span>
-                            </button>
+                            </button>                            
                         </ng-template>
                         <ng-template pTemplate="header">
                             <tr class="sm:tracking-normal tracking-tighter">
@@ -81,7 +82,7 @@
                                 <td>{{userType.description}}</td>
                                 <th> 
                                     <span class="rounded-md bg-red-600 cursor-pointer text-white p-2" (click)="isDeletable(userType) ? deleteType(userType.id) : null" [ngClass]="{'opacity-60': !isDeletable(userType)}">
-                                        <fa-icon [icon]="faDelete"></fa-icon>
+                                        <i class="fa-regular fa-circle-xmark"></i>
                                         <i class="fa-solid fa-lock ml-2" *ngIf="!isDeletable(userType)"></i>
                                     </span>
                                 </th>
@@ -120,8 +121,8 @@
                     <td>{{user.phone}}</td>
                     <td>{{user.dateBirth | date: "dd/MM/yy"}}</td>
                     <td>{{user.userType.description}}</td>
-                    <td><fa-icon class="cursor-pointer" (click)="change(user)" [icon]="faGear"></fa-icon></td>
-                </tr>
+                    <td><i class="fa-solid fa-user-gear cursor-pointer" (click)="change(user)"></i></td>
+                </tr>                
             </ng-template>
             <ng-template pTemplate="emptymessage">
                 <tr>
@@ -134,7 +135,7 @@
 
 
 
-<p-dialog [header]="'Usuários'"  position="top" [(visible)]="visible" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" [modal]="true" >
+<p-dialog [header]="'Usuários'" (onHide)="formUtils.reset()"  position="top" [(visible)]="visible" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" [modal]="true" >
     <form [formGroup]="form">
         <div class="grid grid-cols-12 gap-x-6 gap-y-4">
             
@@ -182,11 +183,11 @@
         <div class="flex gap-2">
             <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()">
                 <span class="tracking-tight text-white text-ellipsis">Excluir</span>
-                <fa-icon [icon]="faDelete" (click)="tryDelete()"></fa-icon>
+                <i class="fa-regular fa-circle-xmark cursor-pointer" (click)="tryDelete()"></i>
             </button>
             <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid">
                 <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-                <fa-icon [icon]="faConfirm"></fa-icon>
+                <i class="fa-regular fa-circle-check"></i>
             </button>
         </div>
     </ng-template>

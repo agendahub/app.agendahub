@@ -1,7 +1,6 @@
 import { AfterContentInit, AfterViewInit, Component, ContentChildren, EventEmitter, Input, OnInit, Output, QueryList, ViewChild, inject } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { faCalendarCheck, faCheckCircle, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
-import { faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons';
 import { FullCalendarComponent } from '@fullcalendar/angular';
 import { CalendarOptions, Calendar, EventClickArg, EventChangeArg, EventInput } from '@fullcalendar/core';
 import listPlugin from '@fullcalendar/list';
@@ -13,6 +12,8 @@ import * as moment from 'moment';
 import { CalendarItemDirective } from './calendar-item.directive';
 import { CalendarNavigator } from './calendar-navigator';
 import { DOCUMENT } from '@angular/common';
+import { SettingsService } from '../../modules/settings/services/settings.service';
+import { SettingsApp } from '../../modules/settings/models/settingsApp';
 
 @Component({
   selector: 'app-calendar',
@@ -43,9 +44,9 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   public viewTranslate = ["Mês", "Hora semana", "Semana", "Dia"];
   public view = 'Padrão';
 
-  public faNext = faArrowCircleRight;
+  
   public faOptions = faCalendarCheck;
-  public faPrev = faArrowCircleLeft;
+  
   public faConfirm = faCheckCircle;
   public faDelete = faTimesCircle;
 
@@ -76,8 +77,15 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     eventClick : this.onEventClick.bind(this),
     dateClick: this.onDateClick.bind(this),
   }
+
+  private settings!: SettingsApp;
  
-  constructor(private localStorageService: LocalStorageService) { }
+  constructor(private localStorageService: LocalStorageService, private settingsService: SettingsService) {
+    this.settingsService.state('Appointments')
+      .then(x => {
+        this.settings = x;
+      })
+  }
 
   public ngAfterContentInit() {
     this.calendarItemsArray = this.isEditable 
@@ -86,6 +94,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   }
 
   public ngAfterViewInit(): void {
+    this.configureCalendar();
     this.view = this.initView;
     this.dispatchViewChange();
 
@@ -144,7 +153,7 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     }
   }
 
-  private get Calendar(): Calendar {
+  public get Calendar(): Calendar {
     return this.calendarComponent?.getApi();
   }
 
@@ -169,8 +178,6 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   }
 
   private handleRemoveEvent(event: EventInput | EventInput[] | undefined) {
-    console.log(event);
-    
     if (event) {
       if (event instanceof Array) {
         event.forEach(e => this.Calendar.getEventById(e.id!)?.remove())
@@ -181,6 +188,32 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
       this.Calendar.removeAllEvents();
     }
 
+  }
+  private configureCalendar() {
+    const sync = setInterval(() => {
+      if (this.settings) {
+        clearInterval(sync);
+        this.Calendar.setOption("businessHours", {
+          daysOfWeek: this.settings.days.map(x => x),
+          startTime: this.settings.openTime,
+          endTime: this.settings.closeTime
+        });
+    
+        this.Calendar.setOption("views", {
+          timeGridFourDay: {
+            type: 'timeGrid',
+            allDaySlot: false,
+            duration: { days: this.settings.days.length },
+          }
+        })
+    
+        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter(x => !this.settings.days.includes(x));
+        this.Calendar.setOption("hiddenDays", hiddenDays);
+        this.Calendar.setOption("duration", { days: this.settings.days.length });
+        this.Calendar.setOption("slotMinTime", moment(this.settings.openTime).format("HH:mm:ss")); 
+        this.Calendar.setOption("slotMaxTime", moment(this.settings.closeTime).add(1, 'h').format("HH:mm:ss"));
+      }
+    }, 100);
   }
 
   private checkPrevNext() {
@@ -249,6 +282,12 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
     if (this.isEditable) {
       this.OnDateClick?.emit(arg);
     }
+  }
+
+  public setEditable(value: boolean) {
+    this.Calendar.setOption("editable", value);
+    this.Calendar.setOption("selectable", value);
+    this.Calendar.setOption("eventAllow", () => value);
   }
 
 }

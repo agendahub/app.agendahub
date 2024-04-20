@@ -46,7 +46,7 @@ import { ManagerModule } from './modules/manager/manager.module';
 import { MessageService } from 'primeng/api';
 import { AuthService } from './auth/auth-service.service';
 import { AuthGuardService } from './auth/auth.guard.service';
-import { SettingsComponent } from './pages/settings/settings.component';
+import { LinksComponent } from './pages/links/links.component';
 import { ScheduleLinkViewComponent } from './pages/schedule-link-view/schedule-link-view.component';
 import { TableModule } from 'primeng/table';
 import { MegaMenuModule } from 'primeng/megamenu';
@@ -65,9 +65,8 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     SettingsComponent,
     ScheduleLinkViewComponent,
     UserProfileComponent
-  ],
-  schemas: [
-    NO_ERRORS_SCHEMA
+    LinksComponent,
+    ScheduleLinkViewComponent
   ],
   imports: [
     FormsModule,
@@ -75,10 +74,11 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     PlatformModule,
     HttpClientModule,
     AppRoutingModule,
-    FontAwesomeModule,
     ReactiveFormsModule,
-    ManagerRoutingModule,
     BrowserAnimationsModule,
+    
+    FontAwesomeModule,
+    ManagerRoutingModule,
     GeneralModule,
     
     ListboxModule,

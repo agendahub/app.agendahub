@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { faCheckCircle, faPenToSquare, faTimesCircle } from '@fortawesome/free-regular-svg-icons';
 import { ApiService } from '../../../services/api-service.service';
 import { SortEvent } from 'primeng/api';
-import { faGear, faList, faMagnifyingGlass, faPencil, faPlusCircle } from '@fortawesome/free-solid-svg-icons';
 import { Table } from 'primeng/table';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ScreenHelperService } from '../../../services/screen-helper.service';
 import { customSort } from '../../../utils/util';
+import { FormUtils } from '../../../utils/form';
 
 @Component({
   selector: 'app-services',
@@ -16,18 +15,13 @@ import { customSort } from '../../../utils/util';
 export class ServicesComponent {
 
   visible = false;
-  faConfirm = faCheckCircle;
-  faDelete = faTimesCircle;
-  faNew = faPlusCircle;
-  faSearch = faMagnifyingGlass;
-  faEdit = faGear
-  faList = faList
 
   customSort = customSort
   
   edit = false;
   form!: FormGroup;
   formType!: FormGroup;
+  formUtils!: FormUtils;
 
   serviceTypes = new Array();
   services = new Array();
@@ -58,7 +52,7 @@ export class ServicesComponent {
       description: [""],
     })
 
-    
+    this.formUtils = new FormUtils(this.form);
     
   }
 

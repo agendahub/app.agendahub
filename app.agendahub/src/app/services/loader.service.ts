@@ -36,4 +36,13 @@ export class LoaderService {
       this.isLoading.next({state:false, isBack: true, taskId: taskId});
     }
 
+    showById(taskId: string) {
+      this.isLoading.next({state:true, isBack: false, taskId: taskId});
+    }
+
+    hideById(taskId: string) {
+      
+      this.isLoading.next({state:false, isBack: false, taskId: taskId});
+    }
+
 }

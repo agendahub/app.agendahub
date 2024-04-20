@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavComponent } from './nav/nav.component';
-import { AppRoutingModule } from '../app-routing.module';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { LoaderComponent } from './loader/loader.component';
 import { AnimateModule } from 'primeng/animate';
@@ -17,6 +16,7 @@ import { CalendarItemDirective } from './calendar/calendar-item.directive';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -25,8 +25,10 @@ import { SidebarComponent } from './sidebar/sidebar.component';
     SidebarComponent,
     CalendarComponent,
     CalendarItemDirective,
+    AlertComponent,
   ],
   exports: [
+    AlertComponent,
     NavComponent,
     LoaderComponent,
     SidebarComponent,
@@ -35,7 +37,6 @@ import { SidebarComponent } from './sidebar/sidebar.component';
   ],
   imports: [
     ProgressSpinnerModule,
-    AppRoutingModule,
     AnimateModule,
     CommonModule,
     FormsModule,

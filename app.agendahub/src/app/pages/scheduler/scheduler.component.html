@@ -1,7 +1,7 @@
 <div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none sm:min-h-[calc(80vh)] sm:h-full h-max overflow-h-auto">
 
 
-    <app-calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" (OnViewChange)="onViewChange($event)"
+    <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" (OnViewChange)="onViewChange($event)"
         (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
         <ng-template calendarItem [enableForAll]="isEditEnable">
             <div class="w-full">
@@ -40,7 +40,7 @@
 
             <div class="sm:col-span-6 col-span-12">
                 <label for="startDateTime">Início</label>
-                <p-calendar formControlName="startDateTime" [readonly]="isEditEnable" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                <p-calendar formControlName="startDateTime" [readonlyInput]="isEditEnable"  placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
                 <small class="text-red-600 ng-dirty" *ngIf="form.get('startDateTime')?.errors"> {{form.get('startDateTime')?.errors?.['error']}} </small>
             </div>
             
@@ -51,7 +51,7 @@
 
             <div class="sm:col-span-6 col-span-12">
                 <label for="finishDateTime">Fim</label>
-                <p-calendar formControlName="finishDateTime" placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                <p-calendar formControlName="finishDateTime" [readonlyInput]="isEditEnable" placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
                 <small class="text-red-600 ng-dirty" *ngIf="form.get('finishDateTime')?.errors"> {{form.get('finishDateTime')?.errors?.['error']}} </small>
             </div>
 
