@@ -62,9 +62,8 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     SchedulerComponent,
     LoginComponent,
     HomeComponent,
-    SettingsComponent,
     ScheduleLinkViewComponent,
-    UserProfileComponent
+    UserProfileComponent,
     LinksComponent,
     ScheduleLinkViewComponent
   ],
