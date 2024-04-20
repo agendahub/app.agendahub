@@ -47,7 +47,7 @@ const routes: Routes = [
     canActivate: [AuthGuardService],
   },
   {
-    path: "user-profile",
+    path: "profile",
     component: UserProfileComponent,
   },
   { path: "**", redirectTo: "home" },
