@@ -62,9 +62,9 @@ import { MenuItem } from "primeng/api";
     ></div>
 
     <div
-      class="absolute sm:block hidden z-[70] top-6 ease-in-out duration-300"
+      class="absolute sm:block hidden z-[9999] top-6 ease-in-out duration-300"
       [ngClass]="{
-        'left-[17.5rem] translate-x-1': open,
+        'left-[17.15rem] translate-x-1': open,
         'left-[3.5rem] translate-x-0': !open
       }"
       (mouseleave)="open = fixed ? true : false"
@@ -364,6 +364,10 @@ export class SidebarComponent implements OnInit {
     if (this.ANDROID || this.IOS) {
       this.open = false;
       this.setFixed(false);
+    }
+
+    if (this.fixedSidebar) {
+      this.setFixed(true);
     }
   }
 

@@ -186,8 +186,7 @@ export class SchedulerComponent implements OnInit {
         return
       }
 
-      this.save(schedule, arg);
-      
+      this.save(schedule, arg); 
     }
   }
 
@@ -274,7 +273,6 @@ export class SchedulerComponent implements OnInit {
     this.edit = true;
 
     this.checkFormValidation();
-    this.showSnack("Agendamento carregado com sucesso!")
   }
 
   //#endregion
@@ -294,9 +292,10 @@ export class SchedulerComponent implements OnInit {
     this.clearEvents.next(this.events.filter(x => x.id == eventId));
 
     if (replace) {
-      this.events.push(replace);
-      this.addEvent.next(replace);
+      const source = mapScheduleToEvent([replace])[0];
+      this.events.push(source);
       this.schedules.push(replace);
+      this.calendar.Calendar.addEvent(source);
     }
   }
   

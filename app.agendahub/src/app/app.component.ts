@@ -10,7 +10,7 @@ import { Title } from "@angular/platform-browser";
   template: `
     <loader></loader>
     <p-toast
-      [breakpoints]="{ '920px': { width: '100%', right: '5', left: '5' } }"
+      [breakpoints]="{ '920px': { width: '85%', right: '5', left: '5' } }"
     ></p-toast>
 
     <div id="app-container" class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean" [ngClass]="{ flex: sidebarFixed }">

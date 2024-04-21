@@ -1,8 +1,10 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable, signal } from "@angular/core";
-import { BehaviorSubject, map } from "rxjs";
+import { BehaviorSubject, map, of } from "rxjs";
 import { Notification, NotificationStatus } from "../models/core/notification";
 import { environment } from "../../environments/environment.development";
+import { ApiService } from "./api-service.service";
+import { AuthService } from "../auth/auth-service.service";
 type BrowserNotification = Notification;
 
 @Injectable({
@@ -17,11 +19,16 @@ export class NotificationService {
   connected = signal<boolean>(false);
   unread = signal<number>(0);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private auth: AuthService) {
     // this.listen();
   }
 
   preview() {
+
+    if (!this.auth.isLogged) {
+      return of([])
+    }
+
     return this.http
       .get<Notification[]>(environment.apiUrl + "Notification/GetPreview")
       .pipe(

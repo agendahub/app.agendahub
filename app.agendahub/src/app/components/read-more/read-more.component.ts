@@ -1,4 +1,5 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { defer } from '../../decorators/defer';
 
 @Component({
   selector: 'read-more',
@@ -22,8 +23,8 @@ export class ReadMoreComponent implements AfterViewInit {
   }
   
   public text!: string;
-  private _visible!: boolean;
-  public isCollapseable!: boolean;
+  private _visible: boolean = false;
+  public isCollapseable: boolean = false;
   public style!: Record<string, string>;
 
   @ViewChild('content') content!: ElementRef<HTMLDivElement>;
@@ -33,6 +34,7 @@ export class ReadMoreComponent implements AfterViewInit {
     this.toggle(true);
   }
 
+  @defer()
   public toggle(skip = false) {
     if (!skip) this.visible = !this.visible;
     
@@ -49,6 +51,7 @@ export class ReadMoreComponent implements AfterViewInit {
     this.text = this.visible ? 'Ver menos' : 'Ver mais';
   }
 
+  @defer(10)
   private checkContent() {
     if (this.content) {
       const content = this.content.nativeElement as HTMLElement;
