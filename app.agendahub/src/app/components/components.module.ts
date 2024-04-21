@@ -22,6 +22,7 @@ import { NotificationComponent } from "./notification/notification.component";
 import { ReadMoreComponent } from "./read-more/read-more.component";
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { SpeedDialModule } from "primeng/speeddial";
+import { AlertComponent } from './alert/alert.component';
 
 @NgModule({
   declarations: [
@@ -32,8 +33,10 @@ import { SpeedDialModule } from "primeng/speeddial";
     NotificationComponent,
     ReadMoreComponent,
     BreadcrumbComponent,
+    AlertComponent,
   ],
   exports: [
+    AlertComponent,
     NavComponent,
     LoaderComponent,
     SidebarComponent,
@@ -42,7 +45,6 @@ import { SpeedDialModule } from "primeng/speeddial";
   ],
   imports: [
     ProgressSpinnerModule,
-    AppRoutingModule,
     AnimateModule,
     CommonModule,
     FormsModule,

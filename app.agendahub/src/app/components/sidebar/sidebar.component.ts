@@ -134,7 +134,7 @@ import { MenuItem } from "primeng/api";
                 <i class="fa-solid fa-home w-5 transition duration-75"></i>
                 <span class="ms-3 select-none" *ngIf="open">Inicio</span>
               </a>
-              <hr *ngIf="open" class="border-gray-300 mx-3 -mt-1" />
+              <hr *ngIf="open" class="w-full h-0.5 border-t-0 -mt-1 bg-gray-200 dark:bg-white/10" />
             </li>
             <li>
               <a
@@ -221,6 +221,11 @@ import { MenuItem } from "primeng/api";
             class="w-full p-2 bg-slate-100 rounded-t-md shadow-md mt-0"
             *ngIf="showUserOptions && open"
           >
+          <a
+              routerLink="/profile"
+              class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"
+              >Perfil</a
+            >
             <a
               routerLink="/settings"
               class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary"

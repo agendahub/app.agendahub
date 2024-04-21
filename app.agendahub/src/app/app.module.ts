@@ -30,10 +30,7 @@ import { ListboxModule } from 'primeng/listbox';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { SidebarModule } from 'primeng/sidebar';
-
-
-/** */
-
+import { TimelineModule } from 'primeng/timeline';
 import { JwtModule } from "@auth0/angular-jwt"
 
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
@@ -45,7 +42,7 @@ import { ManagerModule } from './modules/manager/manager.module';
 import { MessageService } from 'primeng/api';
 import { AuthService } from './auth/auth-service.service';
 import { AuthGuardService } from './auth/auth.guard.service';
-import { SettingsComponent } from './pages/settings/settings.component';
+import { LinksComponent } from './pages/links/links.component';
 import { ScheduleLinkViewComponent } from './pages/schedule-link-view/schedule-link-view.component';
 import { TableModule } from 'primeng/table';
 import { MegaMenuModule } from 'primeng/megamenu';
@@ -54,6 +51,7 @@ import { tokenGetter } from './auth/auth-utils';
 import { environment } from '../environments/environment.development';
 import { loadTypes } from './types/typing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 
 @NgModule({
   declarations: [
@@ -61,7 +59,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     SchedulerComponent,
     LoginComponent,
     HomeComponent,
-    SettingsComponent,
+    ScheduleLinkViewComponent,
+    UserProfileComponent,
+    LinksComponent,
     ScheduleLinkViewComponent
   ],
   imports: [
@@ -70,10 +70,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     PlatformModule,
     HttpClientModule,
     AppRoutingModule,
-    FontAwesomeModule,
     ReactiveFormsModule,
-    ManagerRoutingModule,
     BrowserAnimationsModule,
+    
+    FontAwesomeModule,
+    ManagerRoutingModule,
     GeneralModule,
     MatSnackBarModule,
 
@@ -96,7 +97,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     InputSwitchModule,
     MultiSelectModule,
     SidebarModule,
-
+    TimelineModule,
     FullCalendarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),

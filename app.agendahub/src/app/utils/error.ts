@@ -1,5 +1,6 @@
 import { MessageService } from "primeng/api";
 import { AuthService } from "../auth/auth-service.service";
+import { ErrorDto } from "../models/dtos/dtos";
 
 export class ErrorHandler {
 
@@ -8,7 +9,7 @@ export class ErrorHandler {
         if (request.status) {
 
             if (request.error?.hasError) {
-              messages.add({severity: "error", summary: "Erro ao salvar!", detail: this.handleErrorMessage(request.error.errorDescription)});
+              messages.add({severity: "error", summary: "Erro ao salvar!", detail: this.handleErrorMessage(request.error).substring(0, 200)});
               return void 0;
             }
       
@@ -18,9 +19,13 @@ export class ErrorHandler {
                 auth.logout(() => messages.add({severity: "error", summary: "Erro ao validar identidade!", detail: "É necessário realizar o login."}));
                 return void 0;
               }
+
+              if (request.status === 403) {
+                messages.add({severity: "error", summary: "Sem permissão!", detail: "Você não possui permissão para realizar essa ação!"});
+              }
       
             } else {
-              messages.add({severity: "error", summary: "Erro desconhecido!", detail: request.message});
+              messages.add({severity: "error", summary: "Erro desconhecido!", detail: request.message?.substring(0, 100)});
             }
       
           }
@@ -31,8 +36,8 @@ export class ErrorHandler {
      * @param error ErrorDescription from server
      * @returns string
      */
-    private static handleErrorMessage(error: string) {
-        return error.includes("Exception") ? this.detectError(error) : error;
+    private static handleErrorMessage(error: ErrorDto) {
+        return error.errorDescription.includes("Exception") ? this.detectError(error.errorDescription) : error;
     }
 
     /**

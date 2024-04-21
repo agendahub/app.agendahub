@@ -13,6 +13,7 @@ module.exports = {
       "base-light": '#a4b0bf',
       "purple-hb": "#362b45",
       
+      "success": "#380e76",
       "primary": "#14052a",
       "secondary": "#23224a",
       "tertiary": "#71798a",

@@ -36,8 +36,11 @@ import * as moment from "moment";
 import { CalendarNavigator } from "./calendar-navigator";
 import { DOCUMENT } from "@angular/common";
 import { hexToRgbA, rgbToRgba, rgbaToRgb } from "../../utils/util";
+import { SettingsService } from '../../modules/settings/services/settings.service';
+import { SettingsApp } from '../../modules/settings/models/settingsApp';
 
 var self: CalendarComponent;
+
 @Component({
   selector: "app-calendar",
   templateUrl: "./calendar.component.html",
@@ -78,9 +81,9 @@ export class CalendarComponent
   ];
   public view!: string;
 
-  public faNext = faArrowCircleRight;
+  
   public faOptions = faCalendarCheck;
-  public faPrev = faArrowCircleLeft;
+  
   public faConfirm = faCheckCircle;
   public faDelete = faTimesCircle;
 
@@ -148,10 +151,19 @@ export class CalendarComponent
     this.state = {};
   }
 
-  public ngAfterContentInit() {
+  private settings!: SettingsApp;
+ 
+  constructor(private localStorageService: LocalStorageService, private settingsService: SettingsService) {
+    this.settingsService.state('Appointments')
+      .then(x => {
+        this.settings = x;
+      })
   }
 
+  public ngAfterContentInit() { }
+
   public ngAfterViewInit(): void {
+    this.configureCalendar();
     this.view = this.initView;
     this.dispatchViewChange();
 
@@ -287,6 +299,32 @@ export class CalendarComponent
     } else {
       this.Calendar.removeAllEvents();
     }
+  }
+  private configureCalendar() {
+    const sync = setInterval(() => {
+      if (this.settings) {
+        clearInterval(sync);
+        this.Calendar.setOption("businessHours", {
+          daysOfWeek: this.settings.days.map(x => x),
+          startTime: this.settings.openTime,
+          endTime: this.settings.closeTime
+        });
+    
+        this.Calendar.setOption("views", {
+          timeGridFourDay: {
+            type: 'timeGrid',
+            allDaySlot: false,
+            duration: { days: this.settings.days.length },
+          }
+        })
+    
+        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter(x => !this.settings.days.includes(x));
+        this.Calendar.setOption("hiddenDays", hiddenDays);
+        this.Calendar.setOption("duration", { days: this.settings.days.length });
+        this.Calendar.setOption("slotMinTime", moment(this.settings.openTime).format("HH:mm:ss")); 
+        this.Calendar.setOption("slotMaxTime", moment(this.settings.closeTime).add(1, 'h').format("HH:mm:ss"));
+      }
+    }, 100);
   }
 
   private checkPrevNext() {

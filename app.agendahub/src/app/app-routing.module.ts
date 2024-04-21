@@ -5,9 +5,10 @@ import { LoginComponent } from "./pages/login/login.component";
 import { HomeComponent } from "./pages/home/home.component";
 import { CommonModule } from "@angular/common";
 import { AuthGuardService } from "./auth/auth.guard.service";
-import { SettingsComponent } from "./pages/settings/settings.component";
+import { LinksComponent } from "./pages/links/links.component";
 import { ScheduleLinkViewComponent } from "./pages/schedule-link-view/schedule-link-view.component";
 import { SchedulingComponent } from "./modules/general/scheduling/scheduling.component";
+import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -19,10 +20,18 @@ const routes: Routes = [
     data: { breadcrumb: { label: "Agenda", url: "scheduler", icon: "fa-solid fa-calendar" } },
   },
   {
-    path: "settings",
-    component: SettingsComponent,
+    path: "links",
+    component: LinksComponent,
     canActivate: [AuthGuardService],
     data: { breadcrumb: { label: "Configurações", url: "settings", icon: "fa-solid fa-cog" } },
+  },
+  {
+    path: "settings",
+    canActivateChild: [AuthGuardService],
+    loadChildren: () =>
+      import("./modules/settings/settings.module").then(
+        (r) => r.SettingsModule
+      ),
   },
   {
     path: "manager",
@@ -44,6 +53,10 @@ const routes: Routes = [
     path: "schedule-link",
     component: ScheduleLinkViewComponent,
     canActivate: [AuthGuardService],
+  },
+  {
+    path: "profile",
+    component: UserProfileComponent,
   },
   { path: "**", redirectTo: "home" },
 ];
