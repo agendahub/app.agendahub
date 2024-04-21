@@ -143,17 +143,12 @@ export class CalendarComponent
     },
   };
 
-  constructor(
-    private localStorageService: LocalStorageService,
-    @Inject(DOCUMENT) private doc: Document
-  ) {
-    self = this;
-    this.state = {};
-  }
 
   private settings!: SettingsApp;
  
-  constructor(private localStorageService: LocalStorageService, private settingsService: SettingsService) {
+  constructor(private localStorageService: LocalStorageService, private settingsService: SettingsService, @Inject(DOCUMENT) private doc: Document) {
+  self = this;
+  this.state = {};
     this.settingsService.state('Appointments')
       .then(x => {
         this.settings = x;
