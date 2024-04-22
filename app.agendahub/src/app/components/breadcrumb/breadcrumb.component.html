@@ -1,0 +1,13 @@
+<ol class="flex items-center whitespace-nowrap">
+  <li class="inline-flex items-center" *ngFor="let item of breadcrumbs; let $i = index">
+    <a [routerLink]="item.url ? [item.url] : null" class="flex gap-2 items-center text-sm cursor-default"
+    [ngClass]="{'hover:text-action focus:outline-none dark:hover:text-violet-500 cursor-pointer': item.url}">
+      <i [ngClass]="item.icon" class="fa-sm"></i>
+      {{ item.label }}
+    </a>
+    <svg *ngIf="$i < breadcrumbs.length - 1" class="flex-shrink-0 size-5 text-gray-400 dark:text-gray-600 mx-2" width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 13L10 3" stroke="currentColor" stroke-linecap="round"></path>
+    </svg>
+  </li>
+</ol>
+  

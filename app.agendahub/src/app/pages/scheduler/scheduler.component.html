@@ -1,98 +1,179 @@
-<div class="bg-blend-hue bg-opacity-50 bg-slate-900 text-white mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none sm:min-h-[calc(80vh)] sm:h-full h-max overflow-h-auto">
-
-
-    <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" (OnViewChange)="onViewChange($event)"
-        (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
-        <ng-template calendarItem [enableForAll]="isEditEnable">
-            <div class="w-full">
-                <p-multiSelect dropdownIcon="fa-solid fa-clipboard-user" [options]="employees" [(ngModel)]="selectedEmployes" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeEmployees($event)" defaultLabel="Funcionária" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-            </div>
-        </ng-template>
-        <ng-template calendarItem [enableForAll]="true">
-            <div class="w-full">
-                <p-multiSelect dropdownIcon="fa-solid fa-user-clock" [options]="customers" [(ngModel)]="selectedCustomers" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeCustomers($event)" defaultLabel="Clientes" optionLabel="name" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-            </div>
-        </ng-template>
-        <ng-template calendarItem [enableForAll]="true">
-            <div class="w-full">
-                <p-multiSelect dropdownIcon="fa-solid fa-bell-concierge" [options]="services" [(ngModel)]="selectedServices" [showClear]="true" (onClear)="changeEmployees(null)" (onChange)="changeServices($event)" defaultLabel="Serviço" optionLabel="description" display="chip" [style]="{width:'100%'}"></p-multiSelect>
-            </div>
-        </ng-template>
-        <ng-template calendarItem [enableForAll]="true">
-            <div class="w-full h-full flex justify-end">
-                <button pButton (click)="clearFilter()" [disabled]="!hasFilter" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
-                    <span>Limpar filtros</span>
-                    <i class="fa-solid fa-filter"></i>
-                </button>
-            </div>
-        </ng-template>
-    </app-calendar>
+<div class="relative overflow-x-hidden h-[calc(100vh-64px)]" [ngClass]="{'opacity-95': visible}">
+    <div class="flex justify-between h-full" #scheduler>
+        <div class="w-1/4 bg-very-clean sm:block hidden">
+            <ng-template [ngTemplateOutlet]="options"></ng-template>
+        </div>
+        <div class="h-full w-full flex flex-col bg-very-clean">
+            <app-calendar #calendar [editable]="enableEdit" [addEvent]="addEvent" [clearAll]="clearEvents" [options]="true" (OnOptionsClick)="optionsClick()"
+                (OnViewChange)="onViewChange($event)" (OnChange)="onEventChange($event)" (OnClick)="onEventClick($event)" (OnDateClick)="onDateClick($event)">
+            </app-calendar>
+        </div>
+    </div>
 </div>
 
-<p-dialog [header]="header" [(visible)]="visible" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" (onHide)="form.reset({note: ''})" [modal]="true">
-    <div *ngIf="oldScheduleDisabled" class="p-2 flex justify-center">
-        <span class="text-center text-base leading-tight bg-blue-400 text-neutral-100 rounded-lg p-2">
-            Datas/Agendamentos anteriores não podem ser alteradas
-        </span> 
-    </div>
-    <form [formGroup]="form">
-        <div class="grid grid-cols-12 gap-x-6 gap-y-4">
+<p-sidebar [(visible)]="optionsVisible" [appendTo]="helper.currentDevice() == 2 ? '' : 'body'" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
+        [dismissible]="true" [modal]="false" styleClass="noborder"
+        [style]="{'min-width': '30vw'}">
+    <ng-template pTemplate="content">
+        <ng-template [ngTemplateOutlet]="options"></ng-template>
+    </ng-template>
+</p-sidebar>
 
-            <div class="sm:col-span-6 col-span-12">
-                <label for="startDateTime">Início</label>
-                <p-calendar formControlName="startDateTime" [readonlyInput]="isEditEnable"  placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
-                <small class="text-red-600 ng-dirty" *ngIf="form.get('startDateTime')?.errors"> {{form.get('startDateTime')?.errors?.['error']}} </small>
+<p-sidebar [(visible)]="visible" [appendTo]="helper.currentDevice() == 2 ? '' : 'body'" [fullScreen]="helper.currentDevice() == 2"  [position]="'right'" 
+            [dismissible]="true" [modal]="false" styleClass="scheduler" [showCloseIcon]="false"
+            [style]="{'min-width': '30vw'}" (visibleChange)="sidebarChange($event)">
+    <ng-template pTemplate="header">
+        <div class="relative flex justify-between items-center gap-3 w-full">
+            <h2 class="font-semibold text-2xl tracking-normal leading-relaxed">{{header}}</h2>
+            <div (click)="visible = false" role="button">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                </svg>              
             </div>
-            
-            <div class="sm:col-span-6 col-span-12">
-                <label for="service">Serviço</label>
-                <p-dropdown dataKey="id" placeholder="Selecione o serviço" [options]="services" formControlName="service" [showClear]="true" [autoDisplayFirst]="false" optionLabel="description" inputId="service" (onChange)="changeService($event)"  [style]="{width:'100%'}"></p-dropdown>
-            </div>
-
-            <div class="sm:col-span-6 col-span-12">
-                <label for="finishDateTime">Fim</label>
-                <p-calendar formControlName="finishDateTime" [readonlyInput]="isEditEnable" placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
-                <small class="text-red-600 ng-dirty" *ngIf="form.get('finishDateTime')?.errors"> {{form.get('finishDateTime')?.errors?.['error']}} </small>
-            </div>
-
-            <div class="sm:col-span-6 col-span-12">
-                <label for="price">Preço</label>
-                <input type="number" id="price" pInputText placeholder="R$ 100,00" formControlName="price" [style]="{width:'100%'}"/>
-            </div>
-
-            <div class="sm:col-span-6 col-span-12">
-                <label for="employee">Funcionária</label>
-                <p-dropdown dataKey="id" placeholder="Selecione a funcionária" [options]="employees" formControlName="employee" [showClear]="true" [autoDisplayFirst]="false" optionLabel="name" inputId="employee" [style]="{width:'100%'}"></p-dropdown>
-            </div>
-
-            <div class="sm:col-span-6 col-span-12">
-                <label for="customer">Cliente</label>
-                <p-dropdown dataKey="id" placeholder="Selecione a cliente" [options]="customers" formControlName="customer" [showClear]="true" [autoDisplayFirst]="false" optionLabel="name" inputId="customer" [style]="{width:'100%'}"></p-dropdown>
-                <span class="text-red-500 leading-4"> {{validHelper.getErrorMessage(form, 'customer', "notEqualsTo")}} </span>
-            </div>
-
-            <div class="col-span-12">
-                <label for="note">Anotação</label>
-                <textarea id="note" formControlName="note" cols="10" [style]="{width: '100%'}" placeholder="Informações importantes..." pInputTextarea></textarea>
-            </div>
-
         </div>
-    </form>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div *ngIf="oldScheduleDisabled" class="p-2 flex justify-center">
+            <span class="text-center text-base leading-tight bg-blue-400 text-neutral-100 rounded-lg p-2">
+                Datas/Agendamentos anteriores não podem ser alteradas
+            </span> 
+        </div>
+        <form [formGroup]="form">
+            <div class="grid grid-cols-12 gap-x-6 gap-y-4">
+    
+                <div class="col-span-12" [hidden]="!rawOne">
+                    <label for="day">Dia</label>
+                    <p-calendar formControlName="day" appendTo="body" [readonlyInput]="isEditEnable" dateFormat="dd/MM/yy" placeholder="01/01/2021" inputId="day" [style]="{width:'100%'}"></p-calendar>
+                </div>
 
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="startDateTime">Início</label>
+                    <p-calendar formControlName="startDateTime" [readonlyInput]="isEditEnable" placeholder="08:00" inputId="startDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                    <small class="text-red-600 ng-dirty" *ngIf="form.get('startDateTime')?.errors"> {{form.get('startDateTime')?.errors?.['error']}} </small>
+                </div>
+                
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="service">Serviço</label>
+                    <p-dropdown dataKey="id" placeholder="Selecione o serviço" [options]="services" formControlName="service" [showClear]="true" [autoDisplayFirst]="false" optionLabel="description" inputId="service" (onChange)="changeService($event)"  [style]="{width:'100%'}"></p-dropdown>
+                </div>
+    
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="finishDateTime">Fim</label>
+                    <p-calendar formControlName="finishDateTime" placeholder="10:00" inputId="finishDateTime" [style]="{width:'100%'}" [showOnFocus]="true" [showTime]="true" [timeOnly]="true"></p-calendar>
+                    <small class="text-red-600 ng-dirty" *ngIf="form.get('finishDateTime')?.errors"> {{form.get('finishDateTime')?.errors?.['error']}} </small>
+                </div>
+    
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="price">Preço</label>
+                    <input type="number" id="price" pInputText placeholder="R$ 100,00" formControlName="price" [style]="{width:'100%'}"/>
+                </div>
+    
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="employee">Funcionária</label>
+                    <p-dropdown dataKey="id" placeholder="Selecione a funcionária" [options]="employees" formControlName="employee" [showClear]="true" [autoDisplayFirst]="false" optionLabel="name" inputId="employee" [style]="{width:'100%'}"></p-dropdown>
+                </div>
+    
+                <div class="sm:col-span-6 col-span-12">
+                    <label for="customer">Cliente</label>
+                    <p-dropdown dataKey="id" placeholder="Selecione a cliente" [options]="customers" formControlName="customer" [showClear]="true" [autoDisplayFirst]="false" optionLabel="name" inputId="customer" [style]="{width:'100%'}"></p-dropdown>
+                    <span class="text-red-500 leading-4"> {{validHelper.getErrorMessage(form, 'customer', "notEqualsTo")}} </span>
+                </div>
+    
+                <div class="col-span-12">
+                    <label for="note">Anotação</label>
+                    <textarea id="note" formControlName="note" cols="10" [style]="{width: '100%'}" placeholder="Informações importantes..." pInputTextarea></textarea>
+                </div>
+    
+            </div>
+        </form>
+
+    </ng-template>
     <ng-template pTemplate="footer">
-        <div class="flex gap-2">
-            <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()" [disabled]="!isEditEnable || oldScheduleDisabled">
-                <span class="tracking-tight text-white text-ellipsis">Excluir</span>
-                <fa-icon [icon]="faDelete" (click)="null"></fa-icon>
+        <div class="h-full flex items-end justify-end gap-2">
+            <button class="flex items-center gap-2 rounded bg-red-600 px-2 py-1 text-slate-100 disabled:opacity-70" *ngIf="edit" (click)="tryDelete()" [disabled]="!isEditEnable || oldScheduleDisabled">
+                <span class="tracking-tight">Excluir</span>
             </button>
-            <button pButton (click)="confirm()" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid || !isEditEnable || oldScheduleDisabled">
-                <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-                <fa-icon [icon]="faConfirm" (click)="confirm()"></fa-icon>
+            <button class="flex items-center gap-2 rounded bg-action px-2 py-1 text-slate-100 disabled:opacity-70" (click)="confirm()" [disabled]="form.invalid || !isEditEnable || oldScheduleDisabled">
+                <span class="tracking-tight">Salvar</span>
             </button>
         </div>
     </ng-template>
-</p-dialog>
+</p-sidebar>
 
-<ng-template #filters>
 
+<ng-template #options>
+    <div class="h-16 border-b relative border-gray-300 flex px-2 justify-center items-center gap-3">
+        <span class="text-2xl font-semibold text-primary">Agendamentos</span>
+        <div role="button" class="flex items-center gap-2 rounded bg-action text-xs text-white px-2 py-1" (click)="addNewOne()">
+            <i class="fa-solid fa-plus"></i>
+            <span>NOVO</span>
+        </div>
+        <div class="absolute right-4 sm:hidden block" (click)="optionsVisible = false">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+            </svg>              
+        </div>
+    </div>
+    <div class="h-[calc(100vh-8rem)] bg-purple-50 overflow-y-auto px-4 py-2">
+        <div class="mb-2">
+            <span class="p-input-icon-left w-full">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="p-inputtext-sm w-full" pInputText placeholder="Pesquise por agendamento"/>
+            </span>
+        </div>
+        <hr class="w-full h-0.5 my-2 bg-clean border-0 rounded">
+        <div>
+            <h4 class="text-lg font-semibold text-primary">Carregados</h4>
+            <div class="container flex flex-col gap-1 p-1 max-h-60 overflow-y-auto">
+                <div *ngFor="let item of schedules" 
+                    (click)="openFormEdit(item)"    
+                    class="p-2 shadow-md rounded border border-gray-200 bg-very-clean
+                            transition duration-150 ease-in-out transform hover:scale-[1.01]
+                            hover:border-action hover:shadow-subaction hover:shadow-sm select-none cursor-pointer">
+                    <div class="flex justify-between items-center gap-2">
+                        <span class="text-sm">{{item.schedule.startDateTime | date: 'dd/MM/yyyy HH:mm'}}</span>
+                        <span class="text-sm">{{item.schedule.service.description}}</span>
+                    </div>
+                    <div class="flex justify-between items-center gap-2">
+                        <span class="text-sm">{{item.employee.name}}</span>
+                        <span class="text-sm">{{item.customer.name}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="w-full h-0.5 my-2 bg-clean border-0 rounded">
+        <div>
+            <h4 class="text-lg font-semibold text-primary">Funcionários</h4>
+            <div class="container flex flex-col gap-1 p-1 ">
+                    <div *ngFor="let employee of employees" 
+                    class="p-2 shadow-md rounded border border-gray-200 bg-very-clean
+                    transition duration-150 ease-in-out transform hover:scale-[1.01]
+                    hover:border-action hover:shadow-subaction hover:shadow-sm">
+                    
+                    <div class="flex justify-between items-center gap-2">
+                        <span class="text-sm capitalize">{{employee.name }} {{ employee.surname}}</span>
+                        <span class="w-5 h-5 rounded-full" [style]="{background: employee.color && employee.color != '' ? employee.color :  '#3788d8'}"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr class="w-full h-0.5 my-2 bg-clean border-0 rounded">
+        <div>
+            <h4 class="text-lg font-semibold text-primary">Serviços</h4>
+            <div class="container flex flex-col gap-1 p-1">
+                <div *ngFor="let item of services" 
+                    class="p-2 shadow-md rounded border border-gray-200 bg-very-clean
+                            transition duration-150 ease-in-out transform hover:scale-[1.01]
+                            hover:border-action hover:shadow-subaction hover:shadow-sm">
+                    <div class="flex justify-between items-center gap-2">
+                        <span class="flex gap-2 flex-wrap">
+                            <span class="text-sm font-bold">#{{item.code}}</span>
+                            <span class="text-sm">{{item.description}}</span>
+                        </span>
+                        <span class="text-sm text-end">{{item.price | currency:'BRL'}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </ng-template>

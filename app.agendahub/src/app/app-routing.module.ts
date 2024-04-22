@@ -17,11 +17,13 @@ const routes: Routes = [
     path: "scheduler",
     component: SchedulerComponent,
     canActivate: [AuthGuardService],
+    data: { breadcrumb: { label: "Agenda", url: "scheduler", icon: "fa-solid fa-calendar" } },
   },
   {
     path: "links",
     component: LinksComponent,
     canActivate: [AuthGuardService],
+    data: { breadcrumb: { label: "Configurações", url: "settings", icon: "fa-solid fa-cog" } },
   },
   {
     path: "settings",
@@ -47,7 +49,6 @@ const routes: Routes = [
         (r) => r.GeneralRoutingModule
       ),
   },
-
   {
     path: "schedule-link",
     component: ScheduleLinkViewComponent,

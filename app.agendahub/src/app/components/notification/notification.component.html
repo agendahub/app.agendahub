@@ -1,0 +1,227 @@
+<div #ref >
+  <i
+    class="relative inline-flex items-center"
+    role="button"
+    (click)="open = !open"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="w-6 h-6 text-primary dark:text-clean"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
+      />
+    </svg>
+    <div
+      class="absolute inline-flex items-center justify-center pr-[2px] w-5 h-5 text-xs font-semibold bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900"
+    >
+      {{ notify.unread() >= 10 ? "9+" : notify.unread() }}
+    </div>
+  </i>
+  <div
+    class="fixed sm:right-16 right-0 sm:top-12 top-0 sm:w-96 w-screen sm:h-max h-screen transition-all duration-300 shadow-lg z- dark:bg-secondary bg-clean sm:rounded-lg rounded-none"
+    [ngClass]="{
+      'opacity-1 sm:translate-y-1': open,
+      'opacity-0 -translate-y-1 invisible': !open
+    }"
+    style="z-index: 101010 !important"
+  >
+    <div class="px-3 py-2 w-full dark:text-slate-50">
+      <div class="flex justify-start gap-4 py-2 items-center">
+        <span role="button" class="sm:hidden block" (click)="open = false">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+          </svg>
+        </span>
+        <span class="text-xl font-light leading-5 -tracking-wide">
+          Notificações
+        </span>
+      </div>
+      <div
+        class="bg-slate-950 flex w-full h-full justify-between rounded-md p-[3px] select-none font-extralight gap-1"
+      >
+        <div
+          role="button"
+          (click)="set(1)"
+          [ngClass]="{
+            'bg-tertiary text-slate-300': tab == 1,
+            'text-slate-600': tab != 1
+          }"
+          class="p-0.5 flex h-full w-full justify-center rounded transition-colors duration-200"
+        >
+          Não lido
+        </div>
+        <div
+          role="button"
+          (click)="set(2)"
+          [ngClass]="{
+            'bg-tertiary text-slate-300': tab == 2,
+            'text-slate-600': tab != 2
+          }"
+          class="p-0.5 flex h-full w-full justify-center rounded transition-colors duration-200"
+        >
+          Lido
+        </div>
+        <!-- <div role="button" (click)="set(3)" [ngClass]="{'bg-tertiary text-slate-300': tab == 3, 'text-slate-600': tab != 3}" 
+              class="p-0.5 flex h-full w-full justify-center rounded transition-colors duration-200 shadow-sm">Arquivado
+          </div> -->
+      </div>
+      <div class="py-2">
+        <div
+          class="sm:max-h-80 h-[82vh] overflow-y-auto overflow-x-hidden pr-1 scroll-smooth"
+        >
+          <ng-container *ngTemplateOutlet="tabs"></ng-container>
+        </div>
+        <hr class="w-full h-0.5 border-t-0 my-2 bg-gray-400 dark:bg-white/10" />
+        <div class="flex justify-between items-center">
+          <span
+            role="button"
+            [routerLink]="'/general/notifications'"
+            class="flex items-center text-sm"
+          >
+            <small>Visualizar todas</small>
+            <i class="fa-solid fa-arrow-up-long fa-xs ml-1 rotate-45"></i>
+          </span>
+          <span
+            role="button"
+            class="flex items-center text-sm"
+            [ngClass]="{
+              'opacity-50 cursor-default': notify.unread() <= 0 || saving
+            }"
+            *ngIf="tab == 1"
+            (click)="notify.unread() > 0 && !saving && readAll()"
+          >
+            <i class="fa-solid fa-check-double fa-xs mr-1"></i>
+            <small>Marcar todas como lida</small>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #tabs>
+  <div
+    *ngIf="displayMessages.length == 0"
+    class="flex justify-center items-center py-4"
+  >
+    <p class="text-lg tracking-tighter">Nenhuma notificação</p>
+  </div>
+
+  <div *ngIf="temporalMessages.length > 0" class="flex flex-col gap-2">
+    <div *ngFor="let temporal of temporalMessages">
+      <ng-container *ngIf="temporal.value && temporal.value.length">
+        <div class="flex justify-between font-light pb-2">
+          <p class="text-lg">{{ temporal.viewName }}</p>
+          <p class="text-sm tracking-wider">({{ temporal.value.length }})</p>
+        </div>
+        <div *ngFor="let item of temporal.value; let $index = index">
+          <ng-container
+            *ngTemplateOutlet="
+              message;
+              context: { item: item, temporal: temporal.key }
+            "
+          ></ng-container>
+          <hr
+            *ngIf="temporal.value.length > $index + 1"
+            class="w-full h-0.5 border-t-0 my-1 bg-gray-400 dark:bg-white/10"
+          />
+        </div>
+      </ng-container>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #message let-item="item" let-temp="temporal">
+  <div
+    class="rounded-md hover:dark:bg-primary hover:bg-very-clean  px-2 py-1 min-h-16" (mouseleave)="read(item)"
+  >
+    <div class="flex gap-2 h-full">
+      <div class="flex items-start justify-center">
+        <span
+          class="flex items-center justify-center rounded-full"
+          [ngClass]="{
+                      'text-blue-500': item.type == 1,
+                      'text-yellow-500': item.type == 2,
+                      'text-red-500': item.type == 3,
+                      'text-green-500': item.type == 4,
+                      }"
+        >
+          <svg
+            *ngIf="item.type == 1"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+            />
+          </svg>
+          <svg
+            *ngIf="item.type == 2 || item.type == 3"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
+            />
+          </svg>
+          <svg
+            *ngIf="item.type == 4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+        </span>
+      </div>
+      <div class="h-full w-full">
+        <h2 class="text-lg font-light">{{ item.title }}</h2>
+        <div class="py-1 leading-4 text-sm font-extralight">
+          <read-more [maxHeight]="50" [minHeight]="20" [visible]="false">
+            <div [innerHTML]="item.content"></div>
+          </read-more>
+        </div>
+        <div class="flex items-center justify-between gap-1 pt-0.5">
+          <span class="text-sm leading-3 font-thin">
+            {{ forkM(item.createdAt).fromNow() }}
+          </span>
+          <span
+            role="button"
+            class="text-sm font-thin"
+            (click)="read(item)"
+            *ngIf="tab == 1"
+          >
+            <i class="fa-solid fa-check mr-1"></i>
+            Marcar como lida
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -12,6 +12,9 @@ import { getTheme } from '../../utils/util';
 })
 export class NavComponent {
 
+  popNotifications = true;
+  notificationTab = 1;
+
   sidebarOpen = false;
   faArrowDown = faArrowCircleDown
 

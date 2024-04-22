@@ -28,7 +28,7 @@ export class ApiService {
     }, 333);
   }
 
-  private connected!: boolean;
+  public connected!: boolean;
 
   private get isConnect() {
     if (!this.connected && navigator.onLine) {

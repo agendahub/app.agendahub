@@ -29,12 +29,8 @@ import { ToastModule } from "primeng/toast"
 import { ListboxModule } from 'primeng/listbox';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { SidebarModule } from 'primeng/sidebar';
 import { TimelineModule } from 'primeng/timeline';
-
-
-
-/** */
-
 import { JwtModule } from "@auth0/angular-jwt"
 
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
@@ -54,6 +50,7 @@ import { GeneralModule } from './modules/general/general.module';
 import { tokenGetter } from './auth/auth-utils';
 import { environment } from '../environments/environment.development';
 import { loadTypes } from './types/typing';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 
 @NgModule({
@@ -79,7 +76,8 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     FontAwesomeModule,
     ManagerRoutingModule,
     GeneralModule,
-    
+    MatSnackBarModule,
+
     ListboxModule,
     ToastModule,
     DialogModule,
@@ -98,9 +96,8 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     TableModule,
     InputSwitchModule,
     MultiSelectModule,
+    SidebarModule,
     TimelineModule,
-    
-
     FullCalendarModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: !isDevMode(),

@@ -1,10 +1,13 @@
+import { Platform } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
-import { HostListener, Inject, Injectable, OnInit } from '@angular/core';
+import { HostListener, Inject, Injectable, OnInit, inject } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ScreenHelperService {
+
+  private platform = inject(Platform)
 
   public specs: DeviceSpec = {
     isMobile: null,
@@ -49,12 +52,10 @@ export class ScreenHelperService {
     this.isMobile = this.document.body.clientWidth <= 600;
     this.isMid = this.document.body.clientWidth > 600 && this.document.body.clientWidth <= 1033;
     this.isDesktop = this.document.body.clientWidth > 1033;
-    console.log(this.specs);
-    
   }
 
   currentDevice() {
-    if (this.specs.isDesktop) {
+    if (this.specs.isDesktop || this.platform.isBrowser && !this.platform.IOS && !this.platform.ANDROID) {
       return 0
     } else if (this.specs.isMid) {
       return 1

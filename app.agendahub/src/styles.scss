@@ -2,6 +2,7 @@
 @import url(../node_modules/@fortawesome/fontawesome-free/css/all.min.css);
 @import url(../node_modules/@fortawesome/fontawesome-free/css/brands.min.css);
 @import url("https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
 
 @tailwind base;
 @tailwind components;
@@ -13,7 +14,9 @@
   --base-dark: #2c2f40;
   --base-medium: #5a758c;
   --base-light: #a4b0bf;
-
+  // overrides fullcalendar 
+  --fc-now-indicator-color: @apply border-primary;
+  --fc-today-bg-color: rgba(240, 236, 229, 0.5);
   --primary-color: #14052a;
   --secondary-color: #23224a;
   --tertiary: #71798a;
@@ -24,6 +27,10 @@
 
 * {
   font-family: "Outfit", sans-serif;
+}
+
+*:focus-visible {
+  outline: none !important;
 }
 
 .p-paginator-bottom {
@@ -39,19 +46,36 @@
   padding: 0 1rem;
 }
 
-::-webkit-scrollbar:vertical {
+::-webkit-scrollbar {
   width: 0.5rem;
   background-blend-mode: darken;
   padding: 1rem 0;
 }
+
+::-webkit-scrollbar:horizontal {
+  height: 0.5rem;
+  background-blend-mode: lighten;
+  padding: 0 1rem;
+}
+
 
 ::-webkit-scrollbar-thumb {
   background: rgba(90, 90, 90);
   border-radius: 2rem;
 }
 
+::-webkit-scrollbar-thumb:horizontal {
+  @apply bg-slate-950 bg-opacity-50 scroll-mx-2;
+  border-radius: 2rem;
+}
+
 ::-webkit-scrollbar-track {
+  @apply bg-opacity-0;
   background: rgba(0, 0, 0, 0.2);
+}
+
+::-webkit-scrollbar-track:horizontal {
+  @apply bg-very-clean 
 }
 
 .p-overlaypanel.responsive-overlay {
@@ -79,9 +103,151 @@
   margin-top: 16px;
 }
 
+// overrides fullcalendar
 .fc-more-popover {
   overflow: auto;
   max-height: 35%;
+}
+
+.p-datatable .p-paginator-bottom {
+  button {
+    @apply rounded-md mx-0.5 min-w-fit w-9 h-9;
+  }
+
+  .p-paginator-pages {
+    .p-paginator-page.p-highlight {
+      @apply rounded-md mx-0.5 min-w-fit w-9 h-9;
+    }
+  
+    .p-paginator-page {
+      @apply rounded-md mx-0.5 min-w-fit w-9 h-9;
+    }
+  }
+
+}
+ 
+.fc-event {
+  @apply border-none rounded-md mix-blend-darken p-1;
+}
+
+.fc-event:hover {
+  @apply transition duration-150 ease-in-out transform hover:scale-[1.01] z-[99];
+}
+
+.fc-theme-standard th,
+.fc-theme-standard tr,
+.fc-timegrid-event-harness-inset .fc-timegrid-event,
+.fc-timegrid-event.fc-event-mirror,
+.fc-timegrid-more-link {
+  @apply border-none shadow-none;
+}
+
+.fc-theme-standard td {
+  border-right: none !important;
+  border-left: none !important;
+}
+
+.fc .fc-timegrid-slot-minor {
+    border: none !important;
+}
+
+.fc.fc-theme-standard .fc-view-harness td {
+  @apply border-[1px] rounded-md;
+}
+
+.fc .fc-timegrid-now-indicator-line {
+  @apply border-primary h-[1px] bg-primary rounded border-l-4;
+}
+
+.fc-direction-ltr .fc-timegrid-now-indicator-arrow {
+  @apply rounded-md p-[1px];
+}
+
+.fc-v-event .fc-event-time {
+  @apply text-xs leading-3 -tracking-wider font-extralight;
+}
+
+.fc-v-event .fc-event-title {
+  @apply text-xs leading-4 -tracking-tighter font-light;
+}
+
+.fc .fc-daygrid-day-frame {
+  @apply border-[1px] border-clean border-opacity-10;
+}
+
+thead tr th .fc-scroller-harness .fc-scroller {
+  overflow: hidden !important;
+}
+
+.text-optimized {
+  text-rendering: optimizeLegibility;
+}
+
+.p-sidebar-right.scheduler {
+  top: 64px !important;
+  height: calc(100% - 64px) !important;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+}
+
+
+.p-sidebar {  
+  .p-sidebar-footer, .p-sidebar-header, .p-sidebar-content {
+    padding: 1rem !important;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .p-sidebar {
+    position: fixed !important;
+    top: 64px !important;
+    height: calc(100% - 64px) !important;
+  }
+
+  .p-sidebar {  
+    .p-sidebar-footer, .p-sidebar-header, .p-sidebar-content {
+      padding: 0.7rem 1rem !important;
+    }
+  }
+
+  .p-sidebar.noborder {
+    
+    & {
+      top: 64px !important;
+      height: calc(100% - 64px) !important;
+      box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+      overflow: hidden !important;
+    }
+
+    .p-sidebar-content {
+      padding: 0 !important;
+      overflow: hidden !important;
+    }
+
+    .p-sidebar-header, .p-sidebar-footer {
+      display: none !important;
+    }
+
+  }
+}
+
+.successful {
+  background-color: #4CAF50 !important;
+  color: white !important;
+}
+
+.info {
+  background-color: #2196F3 !important;
+  color: white !important;
+}
+
+.warning {
+  background-color: #ff9800 !important;
+  color: white !important;
+}
+
+.error {
+  background-color: #f44336 !important;
+  color: white !important;
 }
 
 .p-tabview {

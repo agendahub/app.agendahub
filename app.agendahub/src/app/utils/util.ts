@@ -20,7 +20,7 @@ export function mapScheduleToEvent(schedules: UserSchedule[], filter: (x: UserSc
         title: `${x.employee.name} - ${x.customer?.name ?? "-"}`,
         start: x.schedule.startDateTime,
         end: x.schedule.finishDateTime,
-        color: x.employee.color,
+        color: x.employee.color ? hexToRgbA(x.employee.color!, 1) : x.employee.color,
         extendedProps: {...x},
       })
     })
@@ -87,4 +87,38 @@ function hashObject(object: any) : any {
 
 function isComplex(value: any) {
   return !(value instanceof Date) && (typeof value === 'object' || value instanceof Array);
+}
+
+export function isMobile() {
+  return (
+    /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window)
+  ) || /android/i.test(navigator.userAgent);
+  
+}
+
+export function rgbaToRgb(rgba: string) {
+  if (!rgba.includes("rgba") || !rgba) return rgba;
+
+  const [r, g, b, a] = rgba.match(/\d+/g)!.map(Number);
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+export function rgbToRgba(rgb: string, alpha: number) {
+  if (!rgb.includes("rgb") || !rgb) return rgb;
+
+  const [r, g, b] = rgb.match(/\d+/g)!.map(Number);
+  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+}
+
+export function hexToRgbA(hex: string, alpha: number) {
+  let c : any;
+  if(/^#([a-f0-9]{3}){1,2}$/.test(hex)){
+    c= hex.substring(1).split('');
+      if(c.length== 3){
+          c= [c[0], c[0], c[1], c[1], c[2], c[2]];
+      }
+      c= '0x'+c.join('');
+      c= 'rgba('+[(c>>16)&255, (c>>8)&255, c&255].join(',')+ ',' + alpha + ' )';
+  }
+  return c ?? hex;
 }

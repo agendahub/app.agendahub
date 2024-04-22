@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, inject } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { EventClickArg, EventChangeArg, EventInput } from '@fullcalendar/core';
 import { DateClickArg } from '@fullcalendar/interaction';
 import * as moment from 'moment/moment';
@@ -14,6 +15,7 @@ import { mapScheduleToEvent } from '../../utils/util';
 import { CustomValidators, ValidatorsHelper } from '../../utils/validators';
 import { LoaderService } from '../../services/loader.service';
 import { CalendarComponent } from '../../components/calendar/calendar.component';
+import { ScreenHelperService } from '../../services/screen-helper.service';
 
 
 @Component({
@@ -23,8 +25,6 @@ import { CalendarComponent } from '../../components/calendar/calendar.component'
 })
 export class SchedulerComponent implements OnInit {
 
-  faConfirm = faCheckCircle;
-  faDelete = faTimesCircle;
   header!: string
 
   edit = false;
@@ -42,36 +42,27 @@ export class SchedulerComponent implements OnInit {
 
   addEvent = new Subject();
   clearEvents = new Subject();
-
-  selectedEmployes = new Array();
-  selectedCustomers = new Array();
-  selectedServices = new Array();
   
-  filter! : {
-    employee: number[],
-    customer: number[],
-    service: number[]
-  }
-
   currentDateRange! : {
     start: Date,
     end: Date
   }
+
+  optionsVisible = false
 
   oldScheduleDisabled = false;
   validHelper = ValidatorsHelper;
 
   @ViewChild("calendar") calendar!: CalendarComponent;
 
-  constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService, private loader: LoaderService) {
+  helper = inject(ScreenHelperService)
+
+  constructor(private api: ApiService, private formBuilder: FormBuilder, private authService: AuthService, private loader: LoaderService,
+              private snackBar: MatSnackBar
+  ) {
     this.createForm();
     this.loadCrudResources();
     setTimeout(() => this.enableEdit.next(this.authService.TokenData?.role != "employee"), 100);
-    this.filter = {
-      employee: [],
-      customer: [],
-      service: []
-    }
   }
 
   ngOnInit(): void {
@@ -128,28 +119,29 @@ export class SchedulerComponent implements OnInit {
           finish: this.form.get("finishDateTime"),
         }
 
-        const base = {
-          startBase: new Date(dates.start?.value),
-          finishBase: new Date(dates.finish?.value)
+        if (dates.start?.value && dates.finish?.value) {
+          const base = {
+            startBase: new Date(dates.start?.value),
+            finishBase: new Date(dates.finish?.value)
+          }
+  
+          base.startBase.setHours(rules.minHour);
+          base.finishBase.setHours(rules.maxHour);
+      
+          if (moment(dates.start?.value).isBefore(base.startBase)) {
+            return {error: "O início precisa ser após as 08:00"}
+            
+          } else if (moment(dates.finish?.value).isAfter(base.finishBase)) {
+            return {error: "O fim precisa ser antes das 23:00"}
+          }
+  
+          if (moment(dates.finish?.value).isBefore(dates.start?.value) || new Date(dates.finish?.value).getTime() === new Date(dates.start?.value).getTime()) {
+            return {error: "O fim não pode ser antes ou igual o início"};
+          } else {
+            dates.start?.setErrors(null);
+            dates.finish?.setErrors(null); 
+          }
         }
-
-        base.startBase.setHours(rules.minHour);
-        base.finishBase.setHours(rules.maxHour);
-    
-        if (moment(dates.start?.value).isBefore(base.startBase)) {
-          return {error: "O início precisa ser após as 08:00"}
-          
-        } else if (moment(dates.finish?.value).isAfter(base.finishBase)) {
-          return {error: "O fim precisa ser antes das 23:00"}
-        }
-
-        if (moment(dates.finish?.value).isBefore(dates.start?.value) || new Date(dates.finish?.value).getTime() === new Date(dates.start?.value).getTime()) {
-          return {error: "O fim não pode ser antes ou igual o início"};
-        } else {
-          dates.start?.setErrors(null);
-          dates.finish?.setErrors(null); 
-        }
-
       }
   
       return null;
@@ -175,24 +167,7 @@ export class SchedulerComponent implements OnInit {
     let schedule = this.schedules.find(x => x.id === id);
 
     if (schedule) {
-      this.form.get("id")?.setValue(id);
-      this.form.get("day")?.setValue(new Date(arg.event.extendedProps['schedule']['startDateTime']).getDate());
-      this.form.get("startDateTime")?.setValue(new Date(arg.event.extendedProps['schedule']['startDateTime']));
-      this.form.get("finishDateTime")?.setValue(new Date(arg.event.extendedProps['schedule']['finishDateTime']));
-      this.form.get("service")?.setValue(schedule["schedule"]["service"])
-      this.form.get("price")?.setValue(schedule["schedule"]["price"])
-      this.form.get("customer")?.setValue(schedule["customer"])
-      this.form.get("schedule")?.setValue(schedule["schedule"])
-      this.form.get("note")?.setValue(schedule["schedule"]["note"])
-      this.form.get("employee")?.setValue(schedule["employee"])
-      
-      this.visible = true
-      this.edit = true;
-
-      this.checkFormValidation();
-
-      // console.log(new Date(arg.event.extendedProps['schedule']['startDateTime']),
-      // new Date(arg.event.extendedProps['schedule']['finishDateTime']));
+      this.openFormEdit(schedule);
     }
   }
 
@@ -211,8 +186,7 @@ export class SchedulerComponent implements OnInit {
         return
       }
 
-      this.save(schedule, arg);
-      
+      this.save(schedule, arg); 
     }
   }
 
@@ -230,8 +204,6 @@ export class SchedulerComponent implements OnInit {
     this.form.get("startDateTime")?.setValue(startDate);
     this.form.get("finishDateTime")?.setValue(finishDate);
     this.form.get("day")?.setValue(arg.date.getDate());
-
-    console.log(this.form.value);
 
     this.checkFormValidation();
   }
@@ -257,7 +229,6 @@ export class SchedulerComponent implements OnInit {
   }
 
   onViewChange(arg: {event:any, offset: {start: Date, end: Date}} | undefined) {
-    console.log(arg);
     if (arg) {
       this.currentDateRange = arg.offset;
       this.loadEvents(this.currentDateRange);
@@ -265,82 +236,50 @@ export class SchedulerComponent implements OnInit {
 
   }
 
-  changeEmployees(event: any) {
-    this.clearEvents.next(0);
-    if (event && event.value.length) {
-      this.filter.employee = event.value.map((x: any) => x.id);
-      let schedulesfiltered = this.schedules.filter(x => this.filter.employee.includes(x.employee.id));
-      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
-    } else {
-      this.loadEvents(this.currentDateRange);      
-      this.filter.employee = [];
+  sidebarChange(ev: any) {
+    if (!ev) {
+      this.form.reset({note: "", id: 0});
+      this.rawOne = false;
     }
   }
 
-  changeCustomers(event: any) {
-    this.clearEvents.next(0);
-    if (event && event.value.length) {
-      this.filter.customer = event.value.map((x: any) => x.id);
-      let schedulesfiltered = this.schedules.filter(x => this.filter.customer.includes(x.customer.id));
-      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
-    } else {
-      this.loadEvents(this.currentDateRange);      
-      this.filter.customer = [];
-    }
+  optionsClick() {
+    this.optionsVisible = true;
   }
 
-  changeServices(event: any) {
-    this.clearEvents.next(0);
-    if (event && event.value.length) {
-      this.filter.service = event.value.map((x: any) => x.id);
-      let schedulesfiltered = this.schedules.filter(x => this.filter.service.includes(x.schedule.service.id));
-      mapScheduleToEvent(schedulesfiltered).forEach(x => this.addEvent.next(x));
-    } else {
-      this.loadEvents(this.currentDateRange);      
-      this.filter.service = [];
-    }
+  rawOne = false;
+  addNewOne() {
+    this.header = "Novo agendamento";
+    this.disableFormByOldDate();
+    this.checkFormValidation();
+    this.rawOne = true
+    this.visible = true;
+  }
+
+  openFormEdit(schedule: UserSchedule) {
+    this.header = `Editar horário - ${moment(schedule.schedule.startDateTime).format("DD/MM/yy")}`
+    this.form.get("id")?.setValue(schedule.id);
+    this.form.get("day")?.setValue(new Date(schedule.schedule.startDateTime).getDate());
+    this.form.get("startDateTime")?.setValue(new Date(schedule.schedule.startDateTime));
+    this.form.get("finishDateTime")?.setValue(new Date(schedule.schedule.finishDateTime));
+    this.form.get("service")?.setValue(schedule.schedule.service)
+    this.form.get("price")?.setValue(schedule.schedule.price)
+    this.form.get("customer")?.setValue(schedule.customer)
+    this.form.get("schedule")?.setValue(schedule.schedule)
+    this.form.get("note")?.setValue(schedule.schedule.note)
+    this.form.get("employee")?.setValue(schedule.employee)
+    
+    this.visible = true
+    this.edit = true;
+
+    this.checkFormValidation();
   }
 
   //#endregion
 
-  //#region Filter
-
-  doFilter(schedules: UserSchedule[]) {
-    return schedules.filter(x => {
-      if (this.filter.customer.length && !this.filter.customer.includes(x.customer.id)) {
-        return false;
-      } return true;})
-      .filter(x => {
-        if (this.filter.employee.length && !this.filter.employee.includes(x.employee.id)) {
-          return false;
-        } return true;
-      })
-      .filter(x => {
-        if (this.filter.service.length && !this.filter.service.includes(x.schedule.service.id)) {
-          return false;
-        } return true;
-      })
+  showSnack(message: string) {
+    this.snackBar.open(message, undefined, {duration: 2000, panelClass: "successful"});
   }
-
-  get hasFilter() {
-    return this.filter.customer.length || this.filter.employee.length || this.filter.service.length;
-  }
-
-  clearFilter() {
-    this.filter = {
-      employee: [],
-      customer: [],
-      service: []
-    }
-
-    this.selectedCustomers = [];
-    this.selectedEmployes = [];
-    this.selectedServices = [];
-
-    this.loadEvents(this.currentDateRange);
-  }
-
-  //#endregion
 
   confirm() {
     this.trySave()
@@ -353,24 +292,23 @@ export class SchedulerComponent implements OnInit {
     this.clearEvents.next(this.events.filter(x => x.id == eventId));
 
     if (replace) {
-      this.events.push(replace);
-      this.addEvent.next(replace);
+      const source = mapScheduleToEvent([replace])[0];
+      this.events.push(source);
       this.schedules.push(replace);
+      this.calendar.Calendar.addEvent(source);
     }
   }
   
   trySave() {
     const schedule = new UserSchedule();
-    const form = structuredClone(this.form.value);   
+    const form = structuredClone(this.form.value);  
 
-    console.log(this.form.value);
-    
     form.startDateTime = new Date(form.startDateTime);
     form.finishDateTime = new Date(form.finishDateTime);
     
-    if (form.day) {
-      form.startDateTime.setDate(form.day);
-      form.finishDateTime.setDate(form.day);
+    if (form.day && form.day instanceof Date) {
+      form.startDateTime.setDate(form.day.getDate());
+      form.finishDateTime.setDate(form.day.getDate());
     }
 
     schedule.customer = Object.assign({}, form.customer);
@@ -421,8 +359,10 @@ export class SchedulerComponent implements OnInit {
       
     this.api.requestFromApi<UserSchedule[]>(endpoint, params)?.subscribe(
       x => {
+        console.log(x);
+        
         this.schedules.push(...x);
-        this.events = mapScheduleToEvent(this.hasFilter ? this.doFilter(x) : x);
+        this.events = mapScheduleToEvent(x);
         this.addEvent.next(this.events)
       }
     )
@@ -438,10 +378,12 @@ export class SchedulerComponent implements OnInit {
           if (x) {
             if (this.schedules.some(y => y.id == x)) {
               this.removeOrReplaceEvent(x, body);
+              this.showSnack("Agendamento atualizado com sucesso!")
             } else {
               let schedule = {...body, id: x};
               this.schedules.push(schedule);
               this.addEvent.next(mapScheduleToEvent([schedule]));
+              this.showSnack("Agendamento criado com sucesso!")
             }
           }
     
@@ -452,8 +394,11 @@ export class SchedulerComponent implements OnInit {
           arg ? arg.revert(): void 0;
           this.loader.hideBackground()
           this.calendar.setEditable(true);
+          this.showSnack(`Erro ao salvar agendamento!`)
         },
-        complete: () => this.loader.hideBackground()
+        complete: () => {
+          this.loader.hideBackground();
+        }
       })
     }
    }
