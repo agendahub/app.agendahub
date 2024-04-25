@@ -1,5 +1,5 @@
 <div
-  class="w-full dark:text-white text-primary flex flex-col items-center gap-4 justify-center px-2 py-2 sm:px-8 sm:py-8"
+  class="w-full dark:text-white text-primary flex flex-col items-center gap-4 justify-center px-2 py-2 sm:px-4 sm:py-4"
 >
   <div
     class="w-full h-auto lg:h-[500px] dark:bg-secondary bg-very-clean rounded-xl p-8"
@@ -86,7 +86,7 @@
                 >
                   Em andamento
                 </p>
-                <p class="font-bold text-4xl">5</p>
+                <p class="font-bold text-4xl">{{ inProgress }}</p>
               </div>
               <div>
                 <p
@@ -94,7 +94,7 @@
                 >
                   Concluídas
                 </p>
-                <p class="font-bold text-4xl">2</p>
+                <p class="font-bold text-4xl">{{ concluded }}</p>
               </div>
             </div>
           </div>

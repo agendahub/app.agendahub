@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { LoaderService } from "../../services/loader.service";
 import { EventService } from "../../models/services/event.service";
-import { User, UserSchedule } from "../../models/core/entities";
+import { Schedule, User, UserSchedule } from "../../models/core/entities";
 import { SchedulesDateRangeEnum } from "../../models/core/enums";
 import { FormControl } from "@angular/forms";
 import { AuthService } from "../../auth/auth-service.service";
@@ -20,6 +20,8 @@ import * as moment from "moment";
 export class HomeComponent implements OnInit {
   calendarOpen = false;
   faCalendar = faCalendar;
+  inProgress = 0;
+  concluded = 0;
 
   events: UserSchedule[] = [];
   eventsCalendar: EventInput[] = [];
@@ -52,7 +54,21 @@ export class HomeComponent implements OnInit {
       .getCurrentEvents(this.dateRange.value.index, 3)
       ?.subscribe((x) => {
         this.events = x;
-        console.log(x);
+      });
+
+    this.eventService
+      .getCurrentEvents(this.dateRange.value.index, 0)
+      ?.subscribe((x) => {
+        this.inProgress = x.length;
+      });
+
+    this.eventService
+      .getCompletedDayEvents()
+      ?.subscribe((events: UserSchedule[]) => {
+        this.concluded = events.filter((event) => {
+          return new Date(event.schedule.finishDateTime) < new Date();
+        }).length;
+        console.log(this.concluded);
       });
   }
 
