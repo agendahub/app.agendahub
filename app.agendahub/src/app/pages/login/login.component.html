@@ -1,36 +1,19 @@
 <body id="login_page" class="w-screen h-screen z-[100] bg-transparent">
   <div class="grid md:grid-cols-2 grid-cols-1 text-white h-full">
-    <img
-      src="../../../assets/icons/icon-96x96.png"
-      class="fixed w-12 m-6"
-      alt="Icone AgendaHub"
-    />
+    <img src="../../../assets/icons/icon-96x96.png" class="fixed w-12 m-6" alt="Icone AgendaHub" />
     <div class="opacity-60 h-full overflow-hidden md:block hidden">
-      <img
-        loading="eager"
-        [src]="image"
-        class="opacity-60 w-full object-cover object-center h-full"
-        style="zoom: -50%"
-        alt="landscape"
-      />
+      <img loading="eager" [src]="image" class="opacity-60 w-full object-cover object-center h-full" style="zoom: -50%" alt="landscape" />
     </div>
 
-    <div
-      class="flex justify-center items-center h-full bg-opacity-60 bg-primary"
-    >
+    <div class="flex justify-center items-center h-full bg-opacity-60 bg-primary">
       <div class="sm:mx-auto sm:max-w-md w-[85vw] overflow-hidden">
-        
         <button class="mb-4 text-sm text-gray-400 hover:text-gray-300 flex gap-3 items-center" *ngIf="forgotten" (click)="remember()">
-            <i class="fas fa-arrow-left ml-2"></i>
-            Login  
+          <i class="fas fa-arrow-left ml-2"></i>
+          Login
         </button>
 
         <div class="justify-center flex mb-10">
-          <img
-            class="w-60 sm:w-90% self-center"
-            src="../../../assets/logo/logo_texto.png"
-            alt="Logo AgendaHub"
-          />
+          <img class="w-60 sm:w-90% self-center" src="../../../assets/logo/logo_texto.png" alt="Logo AgendaHub" />
         </div>
 
         <div [hidden]="!forgotten">
@@ -43,35 +26,19 @@
             [formGroup]="loginForm"
             id="form-login-page"
             class="flex flex-col gap-4 my-6 transition-all duration-300"
-            [ngClass]="{'translate-x-0 opacity-100 visible': !forgotten, '-translate-x-full opacity-0 invisible absolute': forgotten}"
+            [ngClass]="{
+              'translate-x-0 opacity-100 visible': !forgotten,
+              '-translate-x-full opacity-0 invisible absolute': forgotten
+            }"
           >
             <div>
-              <label
-                for="login"
-                class="text-left text-base sm:text-sm font-normal leading-9 tracking-normal text-gray-400"
-                >Email ou Telefone</label
-              >
-              <input
-                formControlName="login"
-                type="text"
-                id="login"
-                class="input w-full"
-              />
+              <label for="login" class="text-left text-base sm:text-sm font-normal leading-9 tracking-normal text-gray-400">Email ou Telefone</label>
+              <input formControlName="login" type="text" id="login" class="input w-full" />
             </div>
 
             <div>
-              <label
-                for="password"
-                class="text-left text-base sm:text-sm font-normal leading-9 tracking-normal text-gray-400"
-                >Senha</label
-              >
-              <input
-                id="password"
-                formControlName="password"
-                type="password"
-                autocomplete="current-password"
-                class="input w-full"
-              />
+              <label for="password" class="text-left text-base sm:text-sm font-normal leading-9 tracking-normal text-gray-400">Senha</label>
+              <input id="password" formControlName="password" type="password" autocomplete="current-password" class="input w-full" />
             </div>
 
             <div class="mt-5">
@@ -82,42 +49,30 @@
                 type="submit"
                 class="w-full text-white bg-action hover:bg-subaction focus:ring-2 disabled:opacity-50 focus:ring-[#f0ece5] font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-action dark:hover:bg-[blue-700] focus:outline-none dark:focus:ring-subaction"
               >
-                <span class="flex w-full justify-center items-center text-sm">
-                  Continuar <i class="fas fa-arrow-right ml-2"></i>
-                </span>
+                <span class="flex w-full justify-center items-center text-sm"> Continuar <i class="fas fa-arrow-right ml-2"></i> </span>
               </button>
-    
+
               <div class="w-full flex">
-                <button class="text-sm text-gray-400 hover:text-gray-300" (click)="forgot()"
-                  >Esqueceu a senha?
-                </button>
+                <button class="text-sm text-gray-400 hover:text-gray-300" (click)="forgot()">Esqueceu a senha?</button>
               </div>
             </div>
-
           </form>
 
           <form
             [formGroup]="forgotForm"
             id="form-recover-page"
             class="flex flex-col gap-4 my-6 transition-all duration-300"
-            [ngClass]="{'translate-x-0 opacity-100 visible': forgotten, 'translate-x-full opacity-0 invisible absolute': !forgotten}"
+            [ngClass]="{
+              'translate-x-0 opacity-100 visible': forgotten,
+              'translate-x-full opacity-0 invisible absolute': !forgotten
+            }"
           >
             <div>
-              <label
-                for="email"
-                class="text-left text-base sm:text-sm font-normal leading-9 tracking-normal text-gray-400"
-                >Email de Recuperação (cadastrado)</label
-              >
-              <input
-                formControlName="email"
-                type="text"
-                id="email"
-                class="input w-full"
-              />
+              <label for="email" class="text-left text-base sm:text-sm font-normal leading-9 tracking-normal text-gray-400">Email de Recuperação (cadastrado)</label>
+              <input formControlName="email" type="text" id="email" class="input w-full" />
             </div>
 
             <div class="mt-5">
-              
               <button
                 (click)="sendRecover()"
                 form="form-recover-page"
@@ -126,19 +81,40 @@
                 class="w-full text-white bg-action hover:bg-subaction focus:ring-2 disabled:opacity-50 focus:ring-[#f0ece5] font-medium rounded-lg text-md px-5 py-2.5 me-2 mb-2 dark:bg-action dark:hover:bg-[blue-700] focus:outline-none dark:focus:ring-subaction"
               >
                 <span class="flex w-full justify-center items-center text-sm">
-                  Enviar link de recuperação 
-                  <i [ngClass]="{'fa-regular': !send, 'fa-solid': send, 'animate-bounce' : sending}" class="fa-paper-plane ml-2"></i>
+                  Enviar link de recuperação
+                  <i
+                    [ngClass]="{
+                      'fa-regular': !send,
+                      'fa-solid': send,
+                      'animate-bounce': sending || (send && sendCountDown > 0)
+                    }"
+                    class="fa-paper-plane ml-2"
+                  ></i>
                 </span>
               </button>
 
-              <div class="mt-2" *ngIf="send">
-                <alert type="success" message="Email enviado!"></alert>
+              <div class="mt-2">
+                <alert *ngIf="send" type="success" message="Email enviado!"></alert>
+
+                <alert *ngIf="tries > 1" type="info" message="Cheque novamente sua caixa de entrada antes de solicitar novo email"></alert>
+
+                <p *ngIf="tries > 0.5" class="text-sm text-gray-400">
+                  Não recebeu o email?
+                  <button
+                    [disabled]="send"
+                    class="hover:text-white underline underline-offset-1"
+                    [ngClass]="{ 'cursor-not-allowed': sendCountDown > 0 && send }"
+                    (click)="sendRecover()"
+                  >
+                    Reenviar
+                  </button>
+                </p>
+
+                <h2 class="text-sm text-gray-400" *ngIf="send">Aguarde {{ sendCountDown }} segundos para reenviar o email.</h2>
               </div>
             </div>
-
           </form>
         </div>
-
       </div>
     </div>
   </div>
