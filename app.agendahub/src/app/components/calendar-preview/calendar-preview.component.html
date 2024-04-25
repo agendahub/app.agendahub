@@ -1,0 +1,34 @@
+<div
+  class="w-full sm:w-75 md:w-50 lg:w-25 transition-all ease-linear duration-200"
+>
+  <div class="w-full">
+    <div
+      class="sm:h-16 border-b border-gray-300 flex justify-between items-center sm:px-2 px-1 sm:py-2 py-0.5 bg-white translate-x-0 open:translate-x-1 text-optimized"
+      [ngClass]="{ 'rounded-t-lg': !header }"
+    >
+      <p class="text-xl font-bold">{{ getMonthHeader() }}</p>
+    </div>
+    <full-calendar
+      id="calendar"
+      #calendar
+      [options]="calendarOptions"
+      [style]="{ width: '100%' }"
+    >
+      <ng-template #dayHeaderContent let-day>
+        <div
+          class="text-warmGray-950 px-1 flex justify-center items-center inter uppercase -tracking-wide"
+        >
+          <span class="leading-5">{{
+            formatHeaderDay(day, "dddd").dayName
+          }}</span>
+        </div>
+      </ng-template>
+
+      <ng-template #slotLabelContent let-day>
+        <div class="-tracking-wider">
+          {{ day.date | date : "H:mm" }}
+        </div>
+      </ng-template>
+    </full-calendar>
+  </div>
+</div>
