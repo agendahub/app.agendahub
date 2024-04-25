@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { LocalStorageService } from '../services/local-storage.service';
 import { LoaderService } from '../services/loader.service';
 import { environment } from '../../environments/environment.development';
-import { Subject, finalize, map } from 'rxjs';
+import { Subject, finalize, firstValueFrom, map } from 'rxjs';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
@@ -89,8 +89,6 @@ export class AuthService {
     }
 
     this.loader.show()
-    console.log(extras);
-    
 
     return this.httpClient.post(this.baseUrl + "Auth/Login", loginModel, extras ? {params: extras} : undefined).pipe(finalize(() => this.loader.hide())).pipe(map((r: any) => {
       this.Token = r.token;
@@ -110,6 +108,37 @@ export class AuthService {
       beforeNavigate: fnLogout,
       timeout: 1000
     })
+  }
+
+  public async canAccess(role: Access) {
+    const userRole = this.getUserAccess();
+    if (userRole === role) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public async resetPassword(token: string, password: string) {
+    this.loader.show();
+    let result;
+    try {
+      result = await firstValueFrom(this.httpClient.post(this.baseUrl + "Auth/ResetPassword", {token, password}));
+    } catch (error) { } finally {
+      this.loader.hide();
+    }
+    return result;
+  }
+
+  public async forgotPassword(email: string) {
+    this.loader.show();
+    let result;
+    try {
+      result = await firstValueFrom(this.httpClient.post(this.baseUrl + "Auth/RecoverPassword", {email}));
+    } catch (error) { } finally {
+      this.loader.hide();
+    }
+    return result;
   }
 
   public back (navigate?: NavigateOptions) {

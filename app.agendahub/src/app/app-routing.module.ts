@@ -9,9 +9,11 @@ import { LinksComponent } from "./pages/links/links.component";
 import { ScheduleLinkViewComponent } from "./pages/schedule-link-view/schedule-link-view.component";
 import { SchedulingComponent } from "./modules/general/scheduling/scheduling.component";
 import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
+import { ResetPasswordComponent } from "./pages/reset-password/reset-password.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
+  { path: "reset-password/:token", component: ResetPasswordComponent},
   { path: "home", component: HomeComponent, canActivate: [AuthGuardService] },
   {
     path: "scheduler",

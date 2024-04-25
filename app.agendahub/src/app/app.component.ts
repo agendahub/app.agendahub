@@ -1,7 +1,7 @@
 import { Component } from "@angular/core";
 import * as moment from "moment";
 import { PrimeNGConfig } from "primeng/api";
-import { Router } from "@angular/router";
+import { NavigationEnd, Router } from "@angular/router";
 import { skipRoutes } from "./models/core/rules";
 import { Title } from "@angular/platform-browser";
 
@@ -46,11 +46,27 @@ export class AppComponent {
     }
 
     title.setTitle("AgendaHub | Sistema de Gestão de Atividades");
+    
+    this.router.events.forEach(x => {
+      if (x instanceof NavigationEnd) {
+        this.evalueteRoute(location.pathname.substring(1))
+      }
+    })
+    
   }
 
-  get hideNav() {
-    return skipRoutes.includes(location.pathname.replaceAll("/", ""));
+  evalueteRoute(route: string) {
+    for(let skip of skipRoutes) {
+      if (route.match(skip)){
+        this.hideNav = true;
+        return;
+      }
+    }
+
+    this.hideNav = false;
   }
+
+  hideNav: boolean = true;
 
   get isLogin() {
     return this.router.url.includes("login");

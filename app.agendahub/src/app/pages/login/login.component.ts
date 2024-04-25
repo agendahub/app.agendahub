@@ -4,6 +4,9 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MessageService } from 'primeng/api';
 import { Platform } from '@angular/cdk/platform';
 import { DOCUMENT } from '@angular/common';
+import { defer } from '../../types/typing';
+import { getRandomImage, notNull } from '../../utils/util';
+import { of, delay, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-login',
@@ -12,11 +15,16 @@ import { DOCUMENT } from '@angular/common';
 })
 export class LoginComponent implements OnInit {
 
+  forgotten: boolean = false;
+  sending: boolean = false;
+  send: boolean = false;
+
   loginForm!: FormGroup;
+  forgotForm!: FormGroup;
+
   image! : string;
 
-  constructor(@Inject(DOCUMENT) private document: Document,
-              private authService: AuthService,
+  constructor(private authService: AuthService,
               private formBuilder: FormBuilder,
               private messageService: MessageService,
               private platform: Platform) {
@@ -25,10 +33,13 @@ export class LoginComponent implements OnInit {
       password: ["", Validators.required]
     });
 
+    this.forgotForm = this.formBuilder.group({
+      email: ["", Validators.required]
+    });
   }
 
   ngOnInit(): void {
-    this.image = this.getRandomImage();
+    this.image = getRandomImage();
   }
 
   get isMobile() {
@@ -58,10 +69,28 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  getRandomImage() {
-    const thisPage = this.document.querySelector("#login_page") as HTMLElement;
-    const [width, height] = [thisPage.clientWidth - 200, thisPage.clientHeight];
+  remember() {
+    this.forgotten = false;
+  }
+
+  forgot() {
+    const login = this.loginForm.value.login;
+    console.log(login);
     
-    return `https://source.unsplash.com/random/${height}x${width}/?landscape?grayscale`;
+    
+    if (notNull(login) && typeof login == "string" && login.includes("@")) {
+      this.forgotForm.reset({email: login})
+    }
+    
+    this.forgotten = true;
+  }
+
+  async sendRecover() {
+    this.sending = true;
+    const email = this.forgotForm.value.email;
+    await this.authService.forgotPassword(email)
+    
+    this.sending = false
+    this.send = true;
   }
 }

@@ -52,6 +52,8 @@ import { environment } from '../environments/environment.development';
 import { loadTypes } from './types/typing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { UserProfileComponent } from './pages/user-profile/user-profile.component';
+import { ResetPasswordComponent } from './pages/reset-password/reset-password.component';
+import { NgOptimizedImage } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -62,7 +64,8 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     ScheduleLinkViewComponent,
     UserProfileComponent,
     LinksComponent,
-    ScheduleLinkViewComponent
+    ScheduleLinkViewComponent,
+    ResetPasswordComponent
   ],
   imports: [
     FormsModule,
@@ -72,6 +75,7 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    NgOptimizedImage,
     
     FontAwesomeModule,
     ManagerRoutingModule,
