@@ -6,7 +6,9 @@
       class="h-12 sm:h-16 border-gray-300 flex justify-between items-center px-2 py-2 bg-primary translate-x-0 open:translate-x-1 text-optimized"
       [ngClass]="{ 'rounded-t-lg': !header }"
     >
-      <p class="text-xl font-bold text-clean dark:text-[#F0ECE5] ml-3">
+      <p
+        class="text-sm sm:text-xl font-bold text-clean dark:text-[#F0ECE5] ml-3"
+      >
         {{ getMonthHeader() }}
       </p>
     </div>
@@ -18,7 +20,7 @@
     >
       <ng-template #dayHeaderContent let-day>
         <div
-          class="text-warmGray-950 w-full py-2 flex justify-center items-center inter uppercase -tracking-wide"
+          class="text-primary text-sm sm:text-base w-full py-2 flex justify-center items-center inter uppercase -tracking-wide"
         >
           <span class="leading-5">{{
             formatHeaderDay(day, "dddd").dayName
@@ -27,7 +29,9 @@
       </ng-template>
 
       <ng-template #slotLabelContent let-day>
-        <div class="-tracking-wider mx-2 mt-4 font-bold text-primary">
+        <div
+          class="-tracking-wider mx-2 mt-4 font-bold text-primary text-sm sm:text-base"
+        >
           {{ day.date | date : "H:mm" }}
         </div>
       </ng-template>
