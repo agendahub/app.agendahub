@@ -1,7 +1,6 @@
-<div class="min-h-screen flex items-center justify-center">
+<!-- <div class="min-h-screen flex items-center justify-center">
   <div class="max-w-6xl w-full p-8 rounded-lg shadow-md bg-secondary text-gray-200">
     <div class="flex flex-wrap">
-      <!-- Div das informações e input da foto -->
       <div class="w-full md:w-1/2 pr-4 mb-8">
         <div class="flex items-center justify-between mb-10">
           <div class="flex items-center relative">
@@ -90,7 +89,6 @@
           </div>
         </div>
       </div>
-      <!-- Div do histórico de compromissos -->
       <div class="w-full md:w-1/2 pl-4">
         <div>
           <h2 class="text-3xl text-center font-semibold mb-8 mt-8">
@@ -106,6 +104,77 @@
             </ng-template>
           </p-timeline>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+ -->
+ <div class="px-4 pt-4 pb-2 w-full">
+  <div class="grid sm:grid-cols-3 grid-cols-1 gap-4 w-full text-white">
+    <div class="col-span-1 rounded-lg shadow-md bg-secondary flex flex-col gap-12">
+      <div class="head bg-gradient-to-r from-blue-800 to-indigo-900 px-8 rounded-t-lg relative w-full">
+        <div class="flex justify-center w-full relative -bottom-10">
+          <label
+            for="profileImage"
+            class="w-24 h-24 rounded-full transition duration-300 ease-in-out transform bg-gray-700 flex items-center justify-center cursor-pointer relative"
+          >
+            <div
+              class="w-12 h-12 rounded-full border bg-secondary flex items-center justify-center absolute bottom-0 right-0 -mb-4 -mr-4 transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-110 hover:border-none"
+            >
+              <i class="w-8 h-8 fas fa-camera flex justify-center items-center"></i>
+            </div>
+            <input type="file" id="profileImage" class="hidden" accept="image/*" />
+          </label>
+        </div>
+      </div>
+      <div class="body px-8 pb-8">
+        <div class="flex items-center justify-between">
+          <h1 class="text-4xl font-semibold">
+            <span class="capitalize">{{ user.name }} </span> <span class="capitalize"> {{ user.surname }}</span>
+          </h1>
+          <div>
+            <i *ngIf="!isEditing" class="fas fa-user-edit text-2xl cursor-pointer" (click)="toggleEdit()"></i>
+            <i *ngIf="isEditing" class="fas fa-save text-2xl cursor-pointer" (click)="saveUserInfo()"> </i>
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="mb-2 flex items-center">
+            <i class="fas fa-envelope mr-2"></i>
+            <span class="font-medium">E-mail</span>
+          </div>
+          <div class="rounded-lg bg-primary p-2">
+            <p *ngIf="!isEditing">{{ user.email }}</p>
+            <input *ngIf="isEditing" [(ngModel)]="user.email" class="input w-full" autocomplete="current-password" />
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="mb-2 flex items-center">
+            <i class="fas fa-birthday-cake mr-2"></i>
+            <span class="font-medium">Data de Nascimento</span>
+          </div>
+          <div class="rounded-lg bg-primary p-2">
+            <p *ngIf="!isEditing">{{ user.dateBirth | date : "dd/MM/yyyy" }}</p>
+            <input *ngIf="isEditing" [(ngModel)]="user.dateBirth" class="input w-full" autocomplete="current-password" />
+          </div>
+        </div>
+        <div class="mb-4">
+          <div class="mb-2 flex items-center">
+            <i class="fas fa-phone mr-2"></i>
+            <span class="font-medium">Telefone</span>
+          </div>
+          <div class="rounded-lg bg-primary p-2">
+            <p *ngIf="!isEditing">{{ user.phone }}</p>
+            <input *ngIf="isEditing" [(ngModel)]="user.phone" class="input w-full" autocomplete="current-password" />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-span-2 p-8 rounded-lg shadow-md bg-secondary">
+      <div>
+        <h2 class="text-3xl text-center font-semibold mb-8 mt-8">Histórico de Compromissos</h2>
+        <p-timeline [value]="events" class="w-full md:w-20rem" [align]="'alternate'">
+          <ng-template pTemplate="content" let-event> {{ event.customer.name }} | {{ event.schedule.finishDateTime | date : "dd/MM/yyyy" }} </ng-template>
+        </p-timeline>
       </div>
     </div>
   </div>
