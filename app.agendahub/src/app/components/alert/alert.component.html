@@ -1,14 +1,42 @@
-<div class="flex items-center p-4 mb-4 text-sm rounded-lg" role="alert" [ngClass]="{
-    'text-green-800 bg-green-50 dark:bg-green-400 dark:text-green-700': 'success' == this.type,
-    'text-blue-800 bg-blue-50 dark:bg-blue-400 dark:text-blue-700': 'info' == this.type,
-    'text-yellow-800 bg-yellow-50 dark:bg-yellow-400 dark:text-yellow-700': 'warning' == this.type,
-    'text-red-800 bg-red-50 dark:bg-red-400 dark:text-red-700': 'danger' == this.type,
-  }">
-    <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-      <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
-    </svg>
-    <span class="sr-only">Info</span>
-    <div>
-      {{message}}
-    </div>
+<div
+  class="flex items-center mb-4 text-sm rounded-lg hover:shadow hover:scale-95 hover:skew-x-1 transition-all duration-200 ease-in-out"
+  role="alert"
+  [ngClass]="{
+    'text-green-800 bg-green-400 shadow-green-200': 'success' == this.type,
+    'text-blue-800 bg-blue-400 shadow-blue-200': 'info' == this.type,
+    'text-yellow-800 bg-yellow-400 shadow-yellow-200': 'warning' == this.type,
+    'text-red-800 bg-red-400 shadow-red-200': 'danger' == this.type,
+    'p-1': 'xsmall' == this.size,
+    'p-2': 'small' == this.size,
+    'p-3': 'medium' == this.size,
+    'p-4': 'large' == this.size,
+    'p-5': 'xlarge' == this.size
+  }"
+>
+  <ng-container [ngSwitch]="type">
+    <ng-container *ngSwitchCase="'success'">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+      </svg>
+    </ng-container>
+    <ng-container *ngSwitchCase="'danger'">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
+        />
+      </svg>
+    </ng-container>
+    <ng-container *ngSwitchDefault>
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
+      </svg>
+    </ng-container>
+  </ng-container>
+
+  <span class="sr-only">Info</span>
+  <div class="indent-3 font-medium">
+    {{ message }}
   </div>
+</div>

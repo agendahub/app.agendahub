@@ -9,6 +9,7 @@ export type AlertType = "success" | "info" | "warning" | "danger";
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertComponent implements OnInit {
+  @Input() size: "xsmall" | "small" | "medium" | "large" | "xlarge" = "medium";
   @Input() type: AlertType = "info";
   @Input() message: string = "";
   @Input() title: string = "";

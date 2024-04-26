@@ -28,6 +28,8 @@ export class LoginComponent implements OnInit {
   image!: string;
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private messageService: MessageService, private platform: Platform) {
+    localStorage.clear();
+
     this.loginForm = this.formBuilder.group({
       login: ["", Validators.required],
       password: ["", Validators.required],
@@ -87,7 +89,8 @@ export class LoginComponent implements OnInit {
     this.sending = true;
     this.tries = 0.6;
     const email = this.forgotForm.value.email;
-    await this.authService.forgotPassword(email);
+    // await this.authService.forgotPassword(email);
+    await firstValueFrom(of(null).pipe(delay(1000)));
 
     this.sending = false;
     this.send = true;
