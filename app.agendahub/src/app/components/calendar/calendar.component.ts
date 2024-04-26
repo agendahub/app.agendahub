@@ -36,8 +36,8 @@ import * as moment from "moment";
 import { CalendarNavigator } from "./calendar-navigator";
 import { DOCUMENT } from "@angular/common";
 import { hexToRgbA, rgbToRgba, rgbaToRgb } from "../../utils/util";
-import { SettingsService } from '../../modules/settings/services/settings.service';
-import { SettingsApp } from '../../modules/settings/models/settingsApp';
+import { SettingsService } from "../../modules/settings/services/settings.service";
+import { SettingsApp } from "../../modules/settings/models/settingsApp";
 
 var self: CalendarComponent;
 
@@ -69,21 +69,12 @@ export class CalendarComponent
   @Input() header!: boolean;
   @Input() options = false;
 
-  public views = [
-    "dayGridMonth",
-    "timeGridFourDay",
-    "dayGridDayCustom",
-  ];
-  public viewTranslate = [
-    "Mês",
-    "Semana",
-    "Dia"
-  ];
+  public views = ["dayGridMonth", "timeGridFourDay", "dayGridDayCustom"];
+  public viewTranslate = ["Mês", "Semana", "Dia"];
   public view!: string;
 
-  
   public faOptions = faCalendarCheck;
-  
+
   public faConfirm = faCheckCircle;
   public faDelete = faTimesCircle;
 
@@ -143,19 +134,21 @@ export class CalendarComponent
     },
   };
 
-
   private settings!: SettingsApp;
- 
-  constructor(private localStorageService: LocalStorageService, private settingsService: SettingsService, @Inject(DOCUMENT) private doc: Document) {
-  self = this;
-  this.state = {};
-    this.settingsService.state('Appointments')
-      .then(x => {
-        this.settings = x;
-      })
+
+  constructor(
+    private localStorageService: LocalStorageService,
+    private settingsService: SettingsService,
+    @Inject(DOCUMENT) private doc: Document
+  ) {
+    self = this;
+    this.state = {};
+    this.settingsService.state("Appointments").then((x) => {
+      this.settings = x;
+    });
   }
 
-  public ngAfterContentInit() { }
+  public ngAfterContentInit() {}
 
   public ngAfterViewInit(): void {
     this.configureCalendar();
@@ -189,10 +182,14 @@ export class CalendarComponent
 
   public updateDateView(offset: { start: Date; end: Date }) {
     const range = { start: moment(offset.start), end: moment(offset.end) };
-    
-    this.datePreview = `${ range.start.diff(range.end, "day") == -1 ? range.end.format("DD") : range.start.format("DD") + " - " + range.end.format("DD")} 
+
+    this.datePreview = `${
+      range.start.diff(range.end, "day") == -1
+        ? range.end.format("DD")
+        : range.start.format("DD") + " - " + range.end.format("DD")
+    } 
             ${range.end.format("MMMM")}, ${range.end.format("YY")}
-            `
+            `;
   }
 
   tab = this.view;
@@ -215,7 +212,7 @@ export class CalendarComponent
 
   formatHeaderDay(day: any, format: string) {
     let m = this.momentHeader(day);
-    
+
     let dayNumber = m.date();
     let dayName = m.format(format);
 
@@ -225,7 +222,7 @@ export class CalendarComponent
     };
   }
 
-  clickDay(day: {date: Date}) {
+  clickDay(day: { date: Date }) {
     if (this.view == "Mês") {
       return;
     }
@@ -300,24 +297,34 @@ export class CalendarComponent
       if (this.settings) {
         clearInterval(sync);
         this.Calendar.setOption("businessHours", {
-          daysOfWeek: this.settings.days.map(x => x),
+          daysOfWeek: this.settings.days.map((x) => x),
           startTime: this.settings.openTime,
-          endTime: this.settings.closeTime
+          endTime: this.settings.closeTime,
         });
-    
+
         this.Calendar.setOption("views", {
           timeGridFourDay: {
-            type: 'timeGrid',
+            type: "timeGrid",
             allDaySlot: false,
             duration: { days: this.settings.days.length },
-          }
-        })
-    
-        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter(x => !this.settings.days.includes(x));
+          },
+        });
+
+        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter(
+          (x) => !this.settings.days.includes(x)
+        );
         this.Calendar.setOption("hiddenDays", hiddenDays);
-        this.Calendar.setOption("duration", { days: this.settings.days.length });
-        this.Calendar.setOption("slotMinTime", moment(this.settings.openTime).format("HH:mm:ss")); 
-        this.Calendar.setOption("slotMaxTime", moment(this.settings.closeTime).add(1, 'h').format("HH:mm:ss"));
+        this.Calendar.setOption("duration", {
+          days: this.settings.days.length,
+        });
+        this.Calendar.setOption(
+          "slotMinTime",
+          moment(this.settings.openTime).format("HH:mm:ss")
+        );
+        this.Calendar.setOption(
+          "slotMaxTime",
+          moment(this.settings.closeTime).add(1, "h").format("HH:mm:ss")
+        );
       }
     }, 100);
   }
@@ -361,7 +368,7 @@ export class CalendarComponent
   }
 
   private dispatchViewChange() {
-    const offset = this.getDateRange(); 
+    const offset = this.getDateRange();
     setTimeout(() => this.updateDateView(offset));
     this.OnViewChange.emit({ event: event, offset: offset });
   }

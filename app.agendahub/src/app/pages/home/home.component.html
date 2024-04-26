@@ -1,5 +1,5 @@
 <div
-  class="w-full dark:text-white text-primary flex flex-col items-center gap-4 justify-center px-2 py-2 sm:px-4 sm:py-4"
+  class="w-full dark:text-white text-primary flex flex-col items-center gap-4 justify-center px-2 py-2 sm:px-4 sm:py-4 bg-clean dark:bg-primary"
 >
   <div
     class="w-full h-auto lg:h-[500px] dark:bg-secondary bg-very-clean rounded-xl p-8"
@@ -44,7 +44,7 @@
               {{ event.customer.name | titlecase }}
             </p>
             <p
-              class="text-sm 2xl:text-base leading-4 dark:text-[#CFCFCF] text-[#251144]"
+              class="text-sm 2xl:text-base leading-4 dark:text-clean text-[#251144]"
             >
               {{ event.schedule.service.description }}
             </p>
@@ -60,10 +60,12 @@
         class="flex flex-col-reverse md:flex-row justify-end w-full lg:w-9/12 gap-2 sm:gap-4"
       >
         <div
-          class="w-full md:w-8/12 lg:w-9/12 h-[360px] rounded-xl dark:bg-primary bg-clean"
-        ></div>
+          class="w-full md:w-8/12 lg:w-9/12 h-[360px] rounded-xl dark:bg-primary bg-clean overflow-hidden mt-4 sm:mt-0 shadow-md"
+        >
+          <app-calendar-preview></app-calendar-preview>
+        </div>
         <div
-          class="w-full h-auto md:w-4/12 lg:w-3/12 flex flex-col-reverse sm:flex-row md:flex-col gap-2 sm:gap-4"
+          class="w-full h-auto md:w-4/12 lg:w-3/12 flex flex-col sm:flex-row md:flex-col gap-2 sm:gap-4"
         >
           <a class="w-full sm:w-6/12 md:w-full" routerLink="/scheduler">
             <button
@@ -127,8 +129,6 @@
     ></div>
   </div> -->
 </div>
-
-<app-calendar-preview></app-calendar-preview>
 
 <!-- <div
   class="bg-blend-hue dark:text-white text-gray-800 mx-auto max-w-6xl sm:px-8 lg:px-12 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none h-full flex flex-col justify-between"

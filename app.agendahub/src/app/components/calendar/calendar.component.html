@@ -6,6 +6,55 @@
       class="sm:h-16 border-b border-gray-300 flex justify-between items-center sm:px-2 px-1 sm:py-2 py-0.5 bg-white translate-x-0 open:translate-x-1 text-optimized"
       [ngClass]="{ 'rounded-t-lg': !header }"
     >
+      <div class="flex sm:flex-row flex-col gap-x-1">
+        <div class="flex gap-0.5" *ngIf="nav">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="sm:w-7 w-8 sm:h-7 h-8 cursor-pointer"
+            [ngClass]="{
+              'text-primary': nav.nextEnable,
+              'opacity-60': !nav.nextEnable
+            }"
+            (click)="nav.nextEnable && nav.previous()"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="sm:w-7 w-8 sm:h-7 h-8 cursor-pointer"
+            [ngClass]="{
+              'text-primary': nav.previousEnable,
+              'opacity-60': !nav.previousEnable
+            }"
+            (click)="nav.previousEnable && nav.next()"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+            />
+          </svg>
+        </div>
+        <div
+          class="text-base sm:text-xl text-primary font-bold tracking-tight"
+          style="z-index: 2"
+        >
+          {{ datePreview }}
+        </div>
+      </div>
+
       <div class="flex gap-4 items-center justify-between">
         <svg
           *ngIf="options"
