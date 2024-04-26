@@ -18,6 +18,7 @@ import {
 import {
   faArrowCircleLeft,
   faArrowCircleRight,
+  faL,
 } from "@fortawesome/free-solid-svg-icons";
 import { FullCalendarComponent } from "@fullcalendar/angular";
 import {
@@ -33,11 +34,11 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
 import { Subject } from "rxjs";
 import * as moment from "moment";
-import { CalendarNavigator } from "./calendar-navigator";
 import { DOCUMENT } from "@angular/common";
 import { hexToRgbA, rgbToRgba, rgbaToRgb } from "../../utils/util";
 import { SettingsService } from "../../modules/settings/services/settings.service";
 import { SettingsApp } from "../../modules/settings/models/settingsApp";
+import { CalendarNavigator } from "../calendar/calendar-navigator";
 
 var self: CalendarPreviewComponent;
 
@@ -56,7 +57,7 @@ export class CalendarPreviewComponent
     event: any;
     offset: { start: Date; end: Date };
   }>();
-  @Output() OnDateClick = new EventEmitter<DateClickArg>();
+
   @Output() OnChange = new EventEmitter<EventChangeArg>();
   @Output() OnClick = new EventEmitter<EventClickArg>();
   @Output() OnOptionsClick = new EventEmitter<any>();
@@ -64,13 +65,14 @@ export class CalendarPreviewComponent
   @Input() editable!: Subject<boolean>;
   @Input() clearAll!: Subject<any>;
   @Input() addEvent!: Subject<any>;
-  @Input() isEditable!: boolean;
+  @Input() isEditable!: false;
   @Input() events!: Array<any>;
   @Input() header!: boolean;
   @Input() options = false;
 
-  public view = "dayGridDayCustom";
+  public views = "dayGridDayCustom";
   public viewTranslate = ["Mês", "Semana", "Dia"];
+  public view!: string;
 
   public faOptions = faCalendarCheck;
 
@@ -87,9 +89,12 @@ export class CalendarPreviewComponent
     hexToRgba: hexToRgbA,
   };
 
+  public nav: CalendarNavigator = new CalendarNavigator(this.Calendar, [
+    this.dispatchViewChange.bind(this),
+  ]);
   public calendarOptions: CalendarOptions = {
     locale: "pt-br",
-    height: "calc(100vh - 4.5rem - 64px)",
+    height: "auto",
     aspectRatio: 0.8,
     headerToolbar: false,
     themeSystem: "bootstrap",
@@ -97,19 +102,19 @@ export class CalendarPreviewComponent
     dayMaxEvents: 3,
     eventMinHeight: 50,
     stickyHeaderDates: true,
+    editable: false,
     eventClassNames: (arg) => {
       return [`text-gray-500`];
     },
-    moreLinkClick: this.onMoreLinkClick.bind(this),
-    moreLinkContent: (x) => `+${x.num} mais`,
+    initialView: this.views,
     plugins: [interactionPlugin, timeGridPlugin, dayGridPlugin],
     views: {
       dayGridDayCustom: {
         type: "timeGrid",
         allDaySlot: false,
         duration: { days: 1 },
-        slotMinTime: moment().format("HH:mm:ss"),
-        slotMaxTime: moment().add(5, "hours").format("HH:mm:ss"),
+        slotMinTime: "08:00:00",
+        slotMaxTime: "23:00:00",
       },
     },
   };
@@ -133,6 +138,7 @@ export class CalendarPreviewComponent
   public ngAfterViewInit(): void {
     this.configureCalendar();
     this.view = this.initView;
+    this.dispatchViewChange();
 
     if (!this.addEvent) {
       this.Calendar.addEventSource(this.events);
@@ -141,28 +147,12 @@ export class CalendarPreviewComponent
 
   public ngOnInit(): void {
     this.view = this.initView ?? "Semana";
+    this.addEvent?.subscribe((x) => this.handleAddEvent(x));
     this.editable?.subscribe((x) => {
-      this.isEditable = x;
+      this.isEditable = false;
       this.Calendar.setOption("editable", x);
       this.Calendar.setOption("selectable", x);
     });
-  }
-
-  public updateDateView(offset: { start: Date; end: Date }) {
-    const range = { start: moment(offset.start), end: moment(offset.end) };
-
-    this.datePreview = `${
-      range.start.diff(range.end, "day") == -1
-        ? range.end.format("DD")
-        : range.start.format("DD") + " - " + range.end.format("DD")
-    } 
-            ${range.end.format("MMMM")}, ${range.end.format("YY")}
-            `;
-  }
-
-  tab = this.view;
-  set(tab: string) {
-    this.tab = tab;
   }
 
   momentHeader(day: any) {
@@ -190,29 +180,37 @@ export class CalendarPreviewComponent
     };
   }
 
-  private onMoreLinkClick(arg: any) {
-    setTimeout(() => {
-      const close = this.doc.querySelector(".fc-popover-close");
-      const icon = this.doc.createElement("i");
-
-      icon.setAttribute("class", "fas fa-times cursor-pointer");
-      this.doc.body.onclick = () => {
-        (close as any).click();
-        this.doc.body.onclick = null;
-      };
-
-      close?.setAttribute("style", "display: none");
-      close?.before(icon);
-    }, 50);
-  }
-
   private get initView() {
-    this.Calendar.changeView(this.view);
-    return this.view;
+    if (this.editable) {
+      return this.viewTranslate[
+        this.localStorageService.get("view") ?? this.views
+      ];
+    } else {
+      this.Calendar.changeView(this.views);
+      return this.views;
+    }
   }
 
   public get Calendar(): Calendar {
     return this.calendarComponent?.getApi();
+  }
+
+  private handleAddEvent(event: EventInput | EventInput[]) {
+    const checkEvent = (e: EventInput) => {
+      var enable = this.isEditable && moment(e.end).isAfter(moment());
+      e.durationEditable = enable;
+      e.startEditable = enable;
+      e.interactive = enable;
+      e.editable = enable;
+    };
+
+    if (event instanceof Array) {
+      event.forEach((e) => checkEvent(e));
+      this.Calendar.addEventSource(event);
+    } else {
+      checkEvent(event);
+      this.Calendar.addEvent(event);
+    }
   }
 
   private configureCalendar() {
@@ -223,14 +221,11 @@ export class CalendarPreviewComponent
         const closeTime = moment(this.settings.closeTime, "HH:mm:ss").startOf(
           "hour"
         );
+
         const currentTime = moment().startOf("hour");
         let endTime = moment().add(5, "hours").startOf("hour");
 
-        if (endTime.isAfter(closeTime)) {
-          endTime = closeTime;
-        }
-
-        if (moment().add(5, "hours").isAfter(closeTime)) {
+        if (endTime.isBefore(closeTime)) {
           endTime = closeTime;
         }
 
@@ -256,6 +251,18 @@ export class CalendarPreviewComponent
     }, 100);
   }
 
+  private getDateRange() {
+    return {
+      start: this.Calendar.getCurrentData().dateProfile.renderRange.start,
+      end: this.Calendar.getCurrentData().dateProfile.renderRange.end,
+    };
+  }
+
+  private dispatchViewChange() {
+    const offset = this.getDateRange();
+    this.OnViewChange.emit({ event: event, offset: offset });
+  }
+
   public getMonthHeader(): string {
     const months = [
       "Janeiro",
@@ -272,7 +279,6 @@ export class CalendarPreviewComponent
       "Dezembro",
     ];
     const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    return months[currentMonth];
+    return `${currentDate.getDate()}/${months[currentDate.getMonth()]}`;
   }
 }

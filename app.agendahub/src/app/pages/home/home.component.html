@@ -62,7 +62,14 @@
         <div
           class="w-full md:w-8/12 lg:w-9/12 h-[360px] rounded-xl dark:bg-primary bg-clean overflow-hidden mt-4 sm:mt-0 shadow-md"
         >
-          <app-calendar-preview></app-calendar-preview>
+          <app-calendar-preview
+            #calendar
+            [editable]="enableEdit"
+            [addEvent]="addEvent"
+            [options]="true"
+            (OnViewChange)="onViewChange($event)"
+          >
+          </app-calendar-preview>
         </div>
         <div
           class="w-full h-auto md:w-4/12 lg:w-3/12 flex flex-col sm:flex-row md:flex-col gap-2 sm:gap-4"

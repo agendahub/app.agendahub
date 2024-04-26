@@ -11,6 +11,8 @@ import { mapScheduleToEvent } from "../../utils/util";
 import { EventInput } from "@fullcalendar/core";
 import { ScreenHelperService } from "../../services/screen-helper.service";
 import * as moment from "moment";
+import { Subject } from "rxjs";
+import { ApiService } from "../../services/api-service.service";
 
 @Component({
   selector: "app-home",
@@ -37,16 +39,64 @@ export class HomeComponent implements OnInit {
 
   user!: User;
 
+  schedules: UserSchedule[] = [];
+  nextEvents: EventInput[] = [];
+  enableEdit = new Subject<boolean>();
+  addEvent = new Subject();
+
+  currentDateRange!: {
+    start: Date;
+    end: Date;
+  };
+
   constructor(
+    private api: ApiService,
     private eventService: EventService,
     private auth: AuthService,
     public scHelp: ScreenHelperService
   ) {
     this.user = auth.getUserData();
+    setTimeout(
+      () => this.enableEdit.next(this.auth.TokenData?.role != "employee"),
+      100
+    );
   }
 
   ngOnInit(): void {
     this.getEvents();
+  }
+
+  onViewChange(
+    arg: { event: any; offset: { start: Date; end: Date } } | undefined
+  ) {
+    if (arg) {
+      this.currentDateRange = arg.offset;
+      this.loadEvents(this.currentDateRange);
+    }
+  }
+
+  private async loadEvents(range: { start: Date; end: Date } | null = null) {
+    let endpoint = range ? "Schedule/ScheduleDay" : "Schedule/Schedules";
+
+    const params = range
+      ? {
+          startDate: range.start.toISOString(),
+          endDate: range.end.toISOString(),
+          ignore: this.schedules.length
+            ? this.schedules.map((x) => +x.id!)
+            : [],
+        }
+      : undefined;
+
+    this.api
+      .requestFromApi<UserSchedule[]>(endpoint, params)
+      ?.subscribe((x) => {
+        console.log(x);
+
+        this.schedules.push(...x);
+        this.nextEvents = mapScheduleToEvent(this.events);
+        this.addEvent.next(this.nextEvents);
+      });
   }
 
   private getEvents() {
@@ -58,8 +108,15 @@ export class HomeComponent implements OnInit {
 
     this.eventService
       .getCurrentEvents(this.dateRange.value.index, 0)
-      ?.subscribe((x) => {
-        this.inProgress = x.length;
+      ?.subscribe((events: UserSchedule[]) => {
+        const eventsToday = events.filter((event) => {
+          const today = moment().startOf("day");
+          const tomorrow = moment().endOf("day");
+          const eventDate = moment(event.schedule.startDateTime);
+          return eventDate.isSameOrAfter(today) && eventDate.isBefore(tomorrow);
+        });
+
+        this.inProgress = eventsToday.length;
       });
 
     this.eventService
