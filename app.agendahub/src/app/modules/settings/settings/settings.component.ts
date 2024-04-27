@@ -48,6 +48,13 @@ export class SettingsComponent implements OnInit {
 
     defer(() => {
       this.item = this.items[0];
+
+      const current = this.router.url.split("/").pop();
+
+      if (current && current.trim() && current !== "settings") {
+        this.item = this.items.find((item) => item.routerLink === current);
+      }
+
       this.router.navigate([`/settings/${this.item?.routerLink}`], { replaceUrl: false });
     }, 1);
   }

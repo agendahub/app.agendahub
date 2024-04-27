@@ -1,10 +1,10 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
-import { SettingsService } from "../../services/settings.service";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, Validators } from "@angular/forms";
-import { FormUtils } from "../../../../utils/form";
-import { AuthService } from "../../../../auth/auth-service.service";
 import { Access } from "../../../../auth/acess";
+import { AuthService } from "../../../../auth/auth-service.service";
 import { LoaderService } from "../../../../services/loader.service";
+import { FormUtils } from "../../../../utils/form";
+import { SettingsService } from "../../services/settings.service";
 
 @Component({
   selector: "app-appointments",
@@ -54,8 +54,6 @@ export class AppointmentsComponent implements OnInit {
     this.loader.showById("appointments");
     this.state = await this.settings.state("Appointments");
     this.futils.form.patchValue(this.state);
-    console.log(this.state);
-
     this.loader.hideById("appointments");
   }
 

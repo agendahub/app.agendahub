@@ -9,18 +9,12 @@ import { Title } from "@angular/platform-browser";
   selector: "app-root",
   template: `
     <loader></loader>
-    <p-toast
-      [breakpoints]="{ '920px': { width: '85%', right: '5', left: '5' } }"
-    ></p-toast>
+    <p-toast [breakpoints]="{ '920px': { width: '85%', right: '5', left: '5' } }"></p-toast>
 
     <div id="app-container" class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean" [ngClass]="{ flex: sidebarFixed }">
       <sidebar *ngIf="!hideNav"></sidebar>
-      <div class="relative w-full overflow-auto" [ngClass]="{'sm:h-full h-fit': !hideNav, 'h-full': hideNav}">
-        <div
-          *ngIf="!hideNav"
-          class="sm:block hidden sticky right-0 top-0 z-10"
-          [ngClass]="{ 'ml-0': !falsy(sidebarFixed), 'ml-16': falsy(sidebarFixed) }"
-        >
+      <div class="relative w-full overflow-auto" [ngClass]="{ 'sm:h-full h-fit': !hideNav, 'h-full': hideNav }" cdk-scrollable>
+        <div *ngIf="!hideNav" class="sm:block hidden sticky right-0 top-0 z-10" [ngClass]="{ 'ml-0': !falsy(sidebarFixed), 'ml-16': falsy(sidebarFixed) }">
           <app-nav></app-nav>
         </div>
         <div class="h-fit" [ngClass]="{ 'sm:ml-16 m-0': falsy(sidebarFixed) && !hideNav, 'm-0': hideNav }">
@@ -32,32 +26,27 @@ import { Title } from "@angular/platform-browser";
   styles: [],
 })
 export class AppComponent {
-  constructor(
-    private primeNG: PrimeNGConfig,
-    private router: Router,
-    private title: Title
-  ) {
+  constructor(private primeNG: PrimeNGConfig, private router: Router, private title: Title) {
     moment.locale("pt-br");
     this.configureTranslation();
 
     this.primeNG.ripple = true;
     this.primeNG.overlayOptions = {
       appendTo: "body",
-    }
+    };
 
     title.setTitle("AgendaHub | Sistema de Gestão de Atividades");
-    
-    this.router.events.forEach(x => {
+
+    this.router.events.forEach((x) => {
       if (x instanceof NavigationEnd) {
-        this.evalueteRoute(location.pathname.substring(1))
+        this.evalueteRoute(location.pathname.substring(1));
       }
-    })
-    
+    });
   }
 
   evalueteRoute(route: string) {
-    for(let skip of skipRoutes) {
-      if (route.match(skip)){
+    for (let skip of skipRoutes) {
+      if (route.match(skip)) {
         this.hideNav = true;
         return;
       }
@@ -87,15 +76,7 @@ export class AppComponent {
       choose: "Escolher",
       upload: "Enviar",
       cancel: "Cancelar",
-      dayNames: [
-        "Domingo",
-        "Segunda",
-        "Terça",
-        "Quarta",
-        "Quinta",
-        "Sexta",
-        "Sábado",
-      ],
+      dayNames: ["Domingo", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado"],
       addRule: "Adicionar Regra",
       removeRule: "Remover Regra",
       weekHeader: "Semana",
@@ -127,34 +108,8 @@ export class AppComponent {
       matchAny: "Corresponder qualquer",
       dayNamesShort: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
       dayNamesMin: ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"],
-      monthNames: [
-        "Janeiro",
-        "Fevereiro",
-        "Março",
-        "Abril",
-        "Maio",
-        "Junho",
-        "Julho",
-        "Agosto",
-        "Setembro",
-        "Outubro",
-        "Novembro",
-        "Dezembro",
-      ],
-      monthNamesShort: [
-        "Jan",
-        "Fev",
-        "Mar",
-        "Abr",
-        "Mai",
-        "Jun",
-        "Jul",
-        "Ago",
-        "Set",
-        "Out",
-        "Nov",
-        "Dez",
-      ],
+      monthNames: ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"],
+      monthNamesShort: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"],
       weak: "Fraca",
       medium: "Média",
       strong: "Forte",

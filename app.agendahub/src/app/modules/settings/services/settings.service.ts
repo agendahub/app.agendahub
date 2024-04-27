@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { ApiService } from "../../../services/api-service.service";
 import { BehaviorSubject, firstValueFrom } from "rxjs";
+import { ApiService } from "../../../services/api-service.service";
 import { SettingsApp } from "../models/settingsApp";
 
 export type SettingsState = "General" | "Notifications" | "Appointments" | "Security";
@@ -55,8 +55,8 @@ export class SettingsService {
     return this._lock.asObservable();
   }
 
-  public async state<T = any>(state: SettingsState): Promise<T> {
-    if (state in this.states) {
+  public async state<T = any>(state: SettingsState, forceRequest = false): Promise<T> {
+    if (state in this.states && !forceRequest) {
       return this.states[state] as T;
     }
 

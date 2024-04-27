@@ -7,18 +7,47 @@
 
   <div class="mt-2">
     <form [formGroup]="form" class="flex flex-col space-y-4 max-w-2xl text-primary dark:text-clean">
-      <div class="w-full">
-        <label for="days" class="font-light">Senha</label>
-        <input type="text" pInputText formControlName="password" />
-      </div>
-      <div class="grid sm:grid-cols-2 grid-cols gap-2">
-        <div class="flex flex-col space-y-2">
-          <label for="start" class="font-light">Nova Senha</label>
-          <input type="text" pInputText formControlName="password" />
+      <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col sm:w-1/2 w-full space-y-2">
+          <label for="oldPassword" class="font-light">Senha</label>
+          <p-password
+            [style]="{ width: '100%' }"
+            [feedback]="false"
+            [toggleMask]="true"
+            class="p-inputtext-sm"
+            inputId="oldPassword"
+            formControlName="oldPassword"
+            placeholder="Senha atual"
+          ></p-password>
         </div>
-        <div class="flex flex-col space-y-2">
-          <label for="end" class="font-light">Confirma Senha</label>
-          <input type="text" pInputText formControlName="confirmPassword" />
+        <div class="flex flex-col sm:w-1/2 w-full space-y-2">
+          <label for="newPassword" class="font-light">Nova Senha</label>
+          <p-password
+            [style]="{ width: '100%' }"
+            [toggleMask]="true"
+            class="p-inputtext-sm"
+            inputId="newPassword"
+            formControlName="newPassword"
+            placeholder="Nova senha"
+          ></p-password>
+          <small class="text-red-500">
+            {{ form.get("newPassword")?.getError("notEqualsTo") ? "Nova senha não pode ser igual a senha atual" : "" }}
+          </small>
+        </div>
+        <div class="flex flex-col sm:w-1/2 w-full space-y-2">
+          <label for="confirmPassword" class="font-light">Confirma Senha</label>
+          <p-password
+            [style]="{ width: '100%' }"
+            [toggleMask]="true"
+            [feedback]="false"
+            class="p-inputtext-sm"
+            inputId="confirmPassword"
+            formControlName="confirmPassword"
+            placeholder="Confirme nova senha"
+          ></p-password>
+          <small class="text-red-500">
+            {{ form.get("confirmPassword")?.getError("equalTo") ? "Senhas não batem" : "" }}
+          </small>
         </div>
       </div>
       <button type="submit" [disabled]="form.invalid" class="bg-success disabled:opacity-50 text-white rounded-md p-2" (click)="save()">Salvar</button>

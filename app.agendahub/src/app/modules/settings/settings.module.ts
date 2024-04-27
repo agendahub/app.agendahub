@@ -14,10 +14,11 @@ import { MultiSelectModule } from "primeng/multiselect";
 import { TooltipModule } from "primeng/tooltip";
 import { SecurityComponent } from "./tabs/security/security.component";
 import { InputTextModule } from "primeng/inputtext";
+import { PasswordModule } from "primeng/password";
 
 @NgModule({
   declarations: [SettingsComponent, GeneralComponent, NotificationsComponent, AppointmentsComponent, SecurityComponent],
-  imports: [SharedModule, SettingsRoutingModule, InputTextModule, TooltipModule, MultiSelectModule, CalendarModule, TabMenuModule, CheckboxModule],
+  imports: [SharedModule, SettingsRoutingModule, InputTextModule, TooltipModule, MultiSelectModule, CalendarModule, TabMenuModule, CheckboxModule, PasswordModule],
   exports: [SettingsRoutingModule],
   providers: [SettingsService],
 })

@@ -121,6 +121,17 @@ export class AuthService {
     return false;
   }
 
+  public async updatePassword(change: { oldPassword: string; newPassword: string; confirmPassword: string }) {
+    this.loader.show();
+    try {
+      return await firstValueFrom(this.httpClient.post(this.baseUrl + "Auth/UpdatePassword", change));
+    } catch (error) {
+      return error;
+    } finally {
+      this.loader.hide();
+    }
+  }
+
   public async resetPassword(token: string, password: string) {
     this.loader.show();
     try {
