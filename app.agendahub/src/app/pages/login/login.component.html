@@ -6,14 +6,14 @@
     </div>
 
     <div class="flex justify-center items-center h-full bg-opacity-60 bg-primary">
-      <div class="sm:mx-auto sm:max-w-md w-[85vw] overflow-hidden">
+      <div class="sm:mx-auto sm:max-w-md md:w-[85%] w-[85%] overflow-hidden">
         <button class="mb-4 text-sm text-gray-400 hover:text-gray-300 flex gap-3 items-center" *ngIf="forgotten" (click)="remember()">
           <i class="fas fa-arrow-left ml-2"></i>
           Login
         </button>
 
         <div class="justify-center flex mb-10">
-          <img class="w-60 sm:w-90% self-center" src="../../../assets/logo/logo_texto.png" alt="Logo AgendaHub" />
+          <img class="w-90% self-center" src="../../../assets/logo/logo_texto.png" alt="Logo AgendaHub" />
         </div>
 
         <div [hidden]="!forgotten">
