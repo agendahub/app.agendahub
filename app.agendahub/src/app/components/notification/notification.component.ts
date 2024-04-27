@@ -45,7 +45,7 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
 
   @HostListener("document:click", ["$event"])
   clickout(event: MouseEvent) {
-    if (!this.wrapperRef.nativeElement.contains(event.target as Node)) {
+    if (!this.wrapperRef.nativeElement.contains(event.target as Node) && !this.mobileOverlay) {
       this.opened = false;
     }
   }
