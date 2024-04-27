@@ -1,37 +1,21 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, inject } from "@angular/core";
 
-export type AlertType = 'success' | 'info' | 'warning' | 'danger';
+export type AlertType = "success" | "info" | "warning" | "danger";
 
 @Component({
-  selector: 'alert',
-  templateUrl: './alert.component.html',
-  styleUrls: ['./alert.component.scss']
+  selector: "alert",
+  templateUrl: "./alert.component.html",
+  styleUrls: ["./alert.component.scss"],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AlertComponent implements OnInit {
-  
-  @Input() type: AlertType = 'info';
-  @Input() message: string = '';
-  @Input() title: string = '';
-  color!: string;
+  @Input() size: "xsmall" | "small" | "medium" | "large" | "xlarge" = "medium";
+  @Input() type: AlertType = "info";
+  @Input() message: string = "";
+  @Input() title: string = "";
+  colors!: string;
 
-  ngOnInit(): void {
-    this.color = this.getColor();
-  }
+  detector = inject(ChangeDetectorRef);
 
-  getColor() {
-    switch (this.type) {
-      case 'success':
-        return 'green';
-      case 'info':
-        return 'blue';
-      case 'warning':
-        return 'yellow';
-      case 'danger':
-        return 'red';
-      default:
-        return 'info';
-    }
-  }
-
-
+  ngOnInit(): void {}
 }

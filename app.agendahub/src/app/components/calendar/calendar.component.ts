@@ -1,43 +1,18 @@
-import {
-  AfterContentInit,
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from "@angular/core";
-import { LocalStorageService } from "../../services/local-storage.service";
-import {
-  faCalendarCheck,
-  faCheckCircle,
-  faTimesCircle,
-} from "@fortawesome/free-regular-svg-icons";
-import {
-  faArrowCircleLeft,
-  faArrowCircleRight,
-} from "@fortawesome/free-solid-svg-icons";
-import { FullCalendarComponent } from "@fullcalendar/angular";
-import {
-  CalendarOptions,
-  Calendar,
-  EventClickArg,
-  EventChangeArg,
-  EventInput,
-  CalendarApi,
-} from "@fullcalendar/core";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { Subject } from "rxjs";
-import * as moment from "moment";
-import { CalendarNavigator } from "./calendar-navigator";
 import { DOCUMENT } from "@angular/common";
+import { AfterContentInit, AfterViewInit, Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild } from "@angular/core";
+import { faCalendarCheck, faCheckCircle, faTimesCircle } from "@fortawesome/free-regular-svg-icons";
+import { FullCalendarComponent } from "@fullcalendar/angular";
+import { Calendar, CalendarApi, CalendarOptions, EventChangeArg, EventClickArg, EventInput } from "@fullcalendar/core";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import * as moment from "moment";
+import { Subject } from "rxjs";
+import { SettingsApp } from "../../modules/settings/models/settingsApp";
+import { SettingsService } from "../../modules/settings/services/settings.service";
+import { LocalStorageService } from "../../services/local-storage.service";
 import { hexToRgbA, rgbToRgba, rgbaToRgb } from "../../utils/util";
-import { SettingsService } from '../../modules/settings/services/settings.service';
-import { SettingsApp } from '../../modules/settings/models/settingsApp';
+import { CalendarNavigator } from "./calendar-navigator";
 
 var self: CalendarComponent;
 
@@ -46,9 +21,7 @@ var self: CalendarComponent;
   templateUrl: "./calendar.component.html",
   styleUrls: ["./calendar.component.scss"],
 })
-export class CalendarComponent
-  implements OnInit, AfterViewInit, AfterContentInit
-{
+export class CalendarComponent implements OnInit, AfterViewInit, AfterContentInit {
   @ViewChild("calendar")
   calendarComponent!: FullCalendarComponent;
 
@@ -69,21 +42,12 @@ export class CalendarComponent
   @Input() header!: boolean;
   @Input() options = false;
 
-  public views = [
-    "dayGridMonth",
-    "timeGridFourDay",
-    "dayGridDayCustom",
-  ];
-  public viewTranslate = [
-    "Mês",
-    "Semana",
-    "Dia"
-  ];
+  public views = ["dayGridMonth", "timeGridFourDay", "dayGridDayCustom"];
+  public viewTranslate = ["Mês", "Semana", "Dia"];
   public view!: string;
 
-  
   public faOptions = faCalendarCheck;
-  
+
   public faConfirm = faCheckCircle;
   public faDelete = faTimesCircle;
 
@@ -97,10 +61,7 @@ export class CalendarComponent
     hexToRgba: hexToRgbA,
   };
 
-  public nav: CalendarNavigator = new CalendarNavigator(this.Calendar, [
-    this.checkPrevNext.bind(this),
-    this.dispatchViewChange.bind(this),
-  ]);
+  public nav: CalendarNavigator = new CalendarNavigator(this.Calendar, [this.checkPrevNext.bind(this), this.dispatchViewChange.bind(this)]);
   public calendarOptions: CalendarOptions = {
     locale: "pt-br",
     height: "calc(100vh - 4.5rem - 64px)",
@@ -143,19 +104,17 @@ export class CalendarComponent
     },
   };
 
-
   private settings!: SettingsApp;
- 
+
   constructor(private localStorageService: LocalStorageService, private settingsService: SettingsService, @Inject(DOCUMENT) private doc: Document) {
-  self = this;
-  this.state = {};
-    this.settingsService.state('Appointments')
-      .then(x => {
-        this.settings = x;
-      })
+    self = this;
+    this.state = {};
+    this.settingsService.state("Appointments").then((x) => {
+      this.settings = x;
+    });
   }
 
-  public ngAfterContentInit() { }
+  public ngAfterContentInit() {}
 
   public ngAfterViewInit(): void {
     this.configureCalendar();
@@ -189,10 +148,10 @@ export class CalendarComponent
 
   public updateDateView(offset: { start: Date; end: Date }) {
     const range = { start: moment(offset.start), end: moment(offset.end) };
-    
-    this.datePreview = `${ range.start.diff(range.end, "day") == -1 ? range.end.format("DD") : range.start.format("DD") + " - " + range.end.format("DD")} 
+
+    this.datePreview = `${range.start.diff(range.end, "day") == -1 ? range.end.format("DD") : range.start.format("DD") + " - " + range.end.format("DD")} 
             ${range.end.format("MMMM")}, ${range.end.format("YY")}
-            `
+            `;
   }
 
   tab = this.view;
@@ -215,7 +174,7 @@ export class CalendarComponent
 
   formatHeaderDay(day: any, format: string) {
     let m = this.momentHeader(day);
-    
+
     let dayNumber = m.date();
     let dayName = m.format(format);
 
@@ -225,7 +184,7 @@ export class CalendarComponent
     };
   }
 
-  clickDay(day: {date: Date}) {
+  clickDay(day: { date: Date }) {
     if (this.view == "Mês") {
       return;
     }
@@ -268,7 +227,7 @@ export class CalendarComponent
 
   private handleAddEvent(event: EventInput | EventInput[]) {
     const checkEvent = (e: EventInput) => {
-      var enable = this.isEditable && moment(e.end).isAfter(moment());
+      var enable = this.isEditable && (this.settings.changeOld || moment(e.end).isAfter(moment()));
       e.durationEditable = enable;
       e.startEditable = enable;
       e.interactive = enable;
@@ -300,24 +259,24 @@ export class CalendarComponent
       if (this.settings) {
         clearInterval(sync);
         this.Calendar.setOption("businessHours", {
-          daysOfWeek: this.settings.days.map(x => x),
+          daysOfWeek: this.settings.days.map((x) => x),
           startTime: this.settings.openTime,
-          endTime: this.settings.closeTime
+          endTime: this.settings.closeTime,
         });
-    
+
         this.Calendar.setOption("views", {
           timeGridFourDay: {
-            type: 'timeGrid',
+            type: "timeGrid",
             allDaySlot: false,
             duration: { days: this.settings.days.length },
-          }
-        })
-    
-        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter(x => !this.settings.days.includes(x));
+          },
+        });
+
+        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter((x) => !this.settings.days.includes(x));
         this.Calendar.setOption("hiddenDays", hiddenDays);
         this.Calendar.setOption("duration", { days: this.settings.days.length });
-        this.Calendar.setOption("slotMinTime", moment(this.settings.openTime).format("HH:mm:ss")); 
-        this.Calendar.setOption("slotMaxTime", moment(this.settings.closeTime).add(1, 'h').format("HH:mm:ss"));
+        this.Calendar.setOption("slotMinTime", moment(this.settings.openTime).format("HH:mm:ss"));
+        this.Calendar.setOption("slotMaxTime", moment(this.settings.closeTime).add(1, "h").format("HH:mm:ss"));
       }
     }, 100);
   }
@@ -361,7 +320,7 @@ export class CalendarComponent
   }
 
   private dispatchViewChange() {
-    const offset = this.getDateRange(); 
+    const offset = this.getDateRange();
     setTimeout(() => this.updateDateView(offset));
     this.OnViewChange.emit({ event: event, offset: offset });
   }

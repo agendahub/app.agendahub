@@ -1,0 +1,56 @@
+<div class="w-full h-full bg-opacity-40 sm:px-6 sm:py-4 p-2 relative">
+  <div class="indent-2 flex flex-col justify-center text-primary dark:text-very-clean">
+    <h2 class="text-lg leading-7 font-light -tracking-wide sm:truncate sm:text-2xl sm:tracking-tight">Configure suas preferências de segurança</h2>
+  </div>
+
+  <hr class="my-6 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
+
+  <div class="mt-2">
+    <form [formGroup]="form" class="flex flex-col space-y-4 max-w-2xl text-primary dark:text-clean">
+      <div class="flex flex-col gap-2 w-full">
+        <div class="flex flex-col sm:w-1/2 w-full space-y-2">
+          <label for="oldPassword" class="font-light">Senha</label>
+          <p-password
+            [style]="{ width: '100%' }"
+            [feedback]="false"
+            [toggleMask]="true"
+            class="p-inputtext-sm"
+            inputId="oldPassword"
+            formControlName="oldPassword"
+            placeholder="Senha atual"
+          ></p-password>
+        </div>
+        <div class="flex flex-col sm:w-1/2 w-full space-y-2">
+          <label for="newPassword" class="font-light">Nova Senha</label>
+          <p-password
+            [style]="{ width: '100%' }"
+            [toggleMask]="true"
+            class="p-inputtext-sm"
+            inputId="newPassword"
+            formControlName="newPassword"
+            placeholder="Nova senha"
+          ></p-password>
+          <small class="text-red-500">
+            {{ form.get("newPassword")?.getError("notEqualsTo") ? "Nova senha não pode ser igual a senha atual" : "" }}
+          </small>
+        </div>
+        <div class="flex flex-col sm:w-1/2 w-full space-y-2">
+          <label for="confirmPassword" class="font-light">Confirma Senha</label>
+          <p-password
+            [style]="{ width: '100%' }"
+            [toggleMask]="true"
+            [feedback]="false"
+            class="p-inputtext-sm"
+            inputId="confirmPassword"
+            formControlName="confirmPassword"
+            placeholder="Confirme nova senha"
+          ></p-password>
+          <small class="text-red-500">
+            {{ form.get("confirmPassword")?.getError("equalTo") ? "Senhas não batem" : "" }}
+          </small>
+        </div>
+      </div>
+      <button type="submit" [disabled]="form.invalid" class="bg-success disabled:opacity-50 text-white rounded-md p-2" (click)="save()">Salvar</button>
+    </form>
+  </div>
+</div>

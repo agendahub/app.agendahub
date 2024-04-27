@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from '@angular/router';
+import { Component, OnInit } from "@angular/core";
+import { ActivatedRoute, ActivatedRouteSnapshot, NavigationEnd, Router } from "@angular/router";
 
 export type Breadcrumb = {
   label: string;
@@ -8,26 +8,31 @@ export type Breadcrumb = {
 };
 
 @Component({
-  selector: 'breadcrumb',
-  templateUrl: './breadcrumb.component.html',
-  styleUrls: ['./breadcrumb.component.scss']
+  selector: "breadcrumb",
+  templateUrl: "./breadcrumb.component.html",
+  styleUrls: ["./breadcrumb.component.scss"],
 })
 export class BreadcrumbComponent implements OnInit {
+  breadcrumbs: Breadcrumb[] = [
+    {
+      label: "",
+      icon: "fa-solid fa-home",
+      url: "home",
+    },
+  ];
 
-  breadcrumbs: Breadcrumb[] = [{
-    label: "Home",
-    icon: "fa-solid fa-home",
-    url: "home"
-  }];
+  constructor(private router: Router, private activated: ActivatedRoute) {}
 
-  constructor(private router: Router, private activated: ActivatedRoute) { }
-  
   ngOnInit(): void {
     this.router.events.subscribe((event) => {
       if (event instanceof NavigationEnd) {
         this.parse(this.activated.snapshot);
       }
     });
+
+    if (this.breadcrumbs.length === 1) {
+      this.parse(this.activated.snapshot);
+    }
   }
 
   parse(snapshot: ActivatedRouteSnapshot | (null | undefined), take = 1) {
@@ -48,8 +53,14 @@ export class BreadcrumbComponent implements OnInit {
         }
       }
 
-      this.breadcrumbs.push(...Array.from(breadcrumb.values()).flat());
+      const flatten = Array.from(breadcrumb.values()).flat();
+      this.breadcrumbs.push(...flatten);
+
+      if (this.breadcrumbs.length == 1) {
+        this.breadcrumbs[0].label = "Home";
+      } else {
+        this.breadcrumbs[0].label = "";
+      }
     }
   }
-
 }
