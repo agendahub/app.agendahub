@@ -1,0 +1,27 @@
+<div class="w-full h-full bg-opacity-40 sm:px-6 sm:py-4 p-2 relative">
+  <div class="indent-2 flex flex-col justify-center text-primary dark:text-very-clean">
+    <h2 class="text-lg leading-7 font-light -tracking-wide sm:truncate sm:text-2xl sm:tracking-tight">Configure suas preferências de segurança</h2>
+  </div>
+
+  <hr class="my-6 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
+
+  <div class="mt-2">
+    <form [formGroup]="form" class="flex flex-col space-y-4 max-w-2xl text-primary dark:text-clean">
+      <div class="w-full">
+        <label for="days" class="font-light">Senha</label>
+        <input type="text" pInputText formControlName="password" />
+      </div>
+      <div class="grid sm:grid-cols-2 grid-cols gap-2">
+        <div class="flex flex-col space-y-2">
+          <label for="start" class="font-light">Nova Senha</label>
+          <input type="text" pInputText formControlName="password" />
+        </div>
+        <div class="flex flex-col space-y-2">
+          <label for="end" class="font-light">Confirma Senha</label>
+          <input type="text" pInputText formControlName="confirmPassword" />
+        </div>
+      </div>
+      <button type="submit" [disabled]="form.invalid" class="bg-success disabled:opacity-50 text-white rounded-md p-2" (click)="save()">Salvar</button>
+    </form>
+  </div>
+</div>

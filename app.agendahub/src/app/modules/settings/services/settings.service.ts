@@ -1,28 +1,29 @@
-import { Injectable } from '@angular/core';
-import { ApiService } from '../../../services/api-service.service';
-import { BehaviorSubject, firstValueFrom } from 'rxjs';
-import { SettingsApp } from '../models/settingsApp';
+import { Injectable } from "@angular/core";
+import { ApiService } from "../../../services/api-service.service";
+import { BehaviorSubject, firstValueFrom } from "rxjs";
+import { SettingsApp } from "../models/settingsApp";
 
-export type SettingsState = 'General' | 'Notifications' | 'Appointments';
+export type SettingsState = "General" | "Notifications" | "Appointments" | "Security";
 
 export const SettingsEndpoints: Record<SettingsState, string> = {
-  General: 'api/CompanyParameter/',
-  Notifications: 'api/CompanyParameter/',
-  Appointments: 'api/CompanyParameter/'
-}
+  General: "api/CompanyParameter/",
+  Notifications: "api/CompanyParameter/",
+  Appointments: "api/CompanyParameter/",
+  Security: "api/CompanyParameter/",
+};
 
 /**
  * Service to manage the settings of the application
- * 
+ *
  * ### Features:
  * * Retrieve the settings from the API
  * * Store the settings in the states object
  * * Provide the settings to the components
- * 
+ *
  * ### Usage:
  * * Import the service in the component
  * * Use the state method to get the settings
- * 
+ *
  * ### Example:
  * ```typescript
  * constructor(private settings: SettingsService) {
@@ -31,19 +32,18 @@ export const SettingsEndpoints: Record<SettingsState, string> = {
  * ```
  */
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class SettingsService {
-
   /**
    * Object with the states of the settings
    * ### States to handle:
    * * General
    * * Notifications
    * * Appointments
-   * 
-  */
-  private states!: Record<SettingsState, unknown>
+   *
+   */
+  private states!: Record<SettingsState, unknown>;
 
   private _lock = new BehaviorSubject<SettingsState | null>(null);
 
@@ -55,12 +55,12 @@ export class SettingsService {
     return this._lock.asObservable();
   }
 
-  public async state<T = any>(state: SettingsState) : Promise<T> {
+  public async state<T = any>(state: SettingsState): Promise<T> {
     if (state in this.states) {
-      return this.states[state] as T
+      return this.states[state] as T;
     }
-    
-    return await this.retrieveSettingsFromApi(state) as T;
+
+    return (await this.retrieveSettingsFromApi(state)) as T;
   }
 
   public async save(state: SettingsState, settings: unknown) {
@@ -75,30 +75,28 @@ export class SettingsService {
     this._lock.next(null);
   }
 
-  private async retrieveSettingsFromApi(state: SettingsState) {    
-    return firstValueFrom(this.api.requestFromApi(SettingsEndpoints[state], null, false)).then(response => {
+  private async retrieveSettingsFromApi(state: SettingsState) {
+    return firstValueFrom(this.api.requestFromApi(SettingsEndpoints[state], null, false)).then((response) => {
       this.states[state] = this.parse(response, state);
       return this.states[state];
-    })
+    });
   }
 
   private async saveSettingsToApi(state: SettingsState, settings: unknown) {
-    return firstValueFrom(this.api.updateToApi(SettingsEndpoints[state], settings)).then(response => {
+    return firstValueFrom(this.api.updateToApi(SettingsEndpoints[state], settings)).then((response) => {
       this.states[state] = response;
       return response;
-    })
+    });
   }
 
   private parse(value: any, state: SettingsState) {
     switch (state) {
-      case 'General':
+      case "General":
         return value;
-      case 'Notifications':
+      case "Notifications":
         return value;
-      case 'Appointments':
+      case "Appointments":
         return SettingsApp.fromJson(value);
     }
-
   }
-
 }

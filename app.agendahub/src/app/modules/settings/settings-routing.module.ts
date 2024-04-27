@@ -4,6 +4,7 @@ import { SettingsComponent } from "./settings/settings.component";
 import { GeneralComponent } from "./tabs/general/general.component";
 import { NotificationsComponent } from "./tabs/notifications/notifications.component";
 import { AppointmentsComponent } from "./tabs/appointments/appointments.component";
+import { SecurityComponent } from "./tabs/security/security.component";
 
 const config = { label: "Configurações", url: "settings", icon: "fa-solid fa-cog" };
 const routes: Routes = [
@@ -15,6 +16,7 @@ const routes: Routes = [
       { path: "general", component: GeneralComponent, data: { breadcrumb: [config, { label: "Geral", icon: "fa-solid fa-cog" }] } },
       { path: "notifications", component: NotificationsComponent, data: { breadcrumb: [config, { label: "Notificações", icon: "fa-solid fa-bell" }] } },
       { path: "appointments", component: AppointmentsComponent, data: { breadcrumb: [config, { label: "Agendamentos", icon: "fa-solid fa-clock" }] } },
+      { path: "security", component: SecurityComponent, data: { breadcrumb: [config, { label: "Segurança", icon: "fa-solid fa-lock" }] } },
     ],
   },
   { path: "**", redirectTo: "" },
