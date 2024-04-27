@@ -1,14 +1,9 @@
-import { Component, Inject, OnInit } from "@angular/core";
-import { AuthService } from "../../auth/auth-service.service";
+import { Platform } from "@angular/cdk/platform";
+import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MessageService } from "primeng/api";
-import { Platform } from "@angular/cdk/platform";
-import { DOCUMENT } from "@angular/common";
-import { defer } from "../../types/typing";
+import { AuthService } from "../../auth/auth-service.service";
 import { getRandomImage, notNull } from "../../utils/util";
-import { of, delay, firstValueFrom } from "rxjs";
-import { Moment } from "moment";
-import * as moment from "moment";
 
 @Component({
   selector: "app-login",
@@ -26,6 +21,10 @@ export class LoginComponent implements OnInit {
   forgotForm!: FormGroup;
 
   image!: string;
+
+  eyes = {
+    pass: false,
+  };
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private messageService: MessageService, private platform: Platform) {
     localStorage.clear();
@@ -89,8 +88,7 @@ export class LoginComponent implements OnInit {
     this.sending = true;
     this.tries = 0.6;
     const email = this.forgotForm.value.email;
-    // await this.authService.forgotPassword(email);
-    await firstValueFrom(of(null).pipe(delay(1000)));
+    await this.authService.forgotPassword(email);
 
     this.sending = false;
     this.send = true;

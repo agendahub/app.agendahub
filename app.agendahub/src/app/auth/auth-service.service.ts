@@ -1,13 +1,13 @@
+import { Platform } from "@angular/cdk/platform";
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { LocalStorageService } from "../services/local-storage.service";
-import { LoaderService } from "../services/loader.service";
-import { environment } from "../../environments/environment.development";
-import { Subject, finalize, firstValueFrom, map } from "rxjs";
-import { JwtHelperService } from "@auth0/angular-jwt";
 import { Router } from "@angular/router";
+import { JwtHelperService } from "@auth0/angular-jwt";
 import { MessageService } from "primeng/api";
-import { Platform } from "@angular/cdk/platform";
+import { Subject, finalize, firstValueFrom, map } from "rxjs";
+import { environment } from "../../environments/environment.development";
+import { LoaderService } from "../services/loader.service";
+import { LocalStorageService } from "../services/local-storage.service";
 import { Access } from "./acess";
 
 @Injectable({
@@ -104,10 +104,9 @@ export class AuthService {
   }
 
   public logout(fnLogout = () => this.messageService.add({ severity: "info", summary: "Até breve..." })) {
-    this.Token = null;
-
     this.back({
       beforeNavigate: fnLogout,
+      afterNavigate: () => (this.Token = null),
       timeout: 1000,
     });
   }
@@ -132,10 +131,10 @@ export class AuthService {
     }
   }
 
-  public async resetPassword(token: string, password: string) {
+  public async resetPassword(token: string, password: string, email: string) {
     this.loader.show();
     try {
-      return await firstValueFrom(this.httpClient.post(this.baseUrl + "Auth/ResetPassword", { token, password }));
+      return await firstValueFrom(this.httpClient.post(this.baseUrl + "Auth/ResetPassword", { token, password, email }));
     } catch (error) {
       return error;
     } finally {

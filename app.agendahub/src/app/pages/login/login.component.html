@@ -36,9 +36,12 @@
               <input formControlName="login" type="text" id="login" class="input w-full" />
             </div>
 
-            <div>
+            <div class="relative">
               <label for="password" class="text-left text-base sm:text-sm font-normal leading-9 tracking-normal text-gray-400">Senha</label>
-              <input id="password" formControlName="password" type="password" autocomplete="current-password" class="input w-full" />
+              <input id="password" formControlName="password" [type]="eyes.pass ? 'text' : 'password'" autocomplete="current-password" class="input w-full" />
+              <div class="eye" (click)="eyes.pass = !eyes.pass">
+                <i class="fa-solid" [ngClass]="{ 'fa-eye': eyes.pass, 'fa-eye-slash': !eyes.pass }"></i>
+              </div>
             </div>
 
             <div class="mt-5">

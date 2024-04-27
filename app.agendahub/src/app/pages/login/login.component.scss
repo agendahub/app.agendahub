@@ -35,3 +35,13 @@ input:focus,
 input:hover {
   border-bottom: 0.1rem solid #380e76;
 }
+
+.eye {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  padding: 0.3rem;
+  color: #b1adad;
+  cursor: pointer;
+}
