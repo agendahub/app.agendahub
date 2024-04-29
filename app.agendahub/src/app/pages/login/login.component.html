@@ -22,6 +22,14 @@
         </div>
 
         <div class="relative max-w-full overflow-hidden">
+          <div *ngIf="isDevelopment">
+            <div class="absolute top-0 right-0 p-2 bg-blueGray-500 text-white rounded text-xs">DEVELOPMENT</div>
+            <div>
+              <label for="login" class="text-left text-base sm:text-sm font-normal leading-9 tracking-normal text-gray-400">Empresa</label>
+              <input [(ngModel)]="company" type="text" id="login" class="input w-full" />
+            </div>
+          </div>
+
           <form
             [formGroup]="loginForm"
             id="form-login-page"
