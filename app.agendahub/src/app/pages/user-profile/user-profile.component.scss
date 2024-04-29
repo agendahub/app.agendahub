@@ -36,4 +36,9 @@
   input:hover {
     border-bottom: 0.1rem solid #380e76;
   }
+
+  .smooth-hover {
+    transition: all 0.3s ease;
+  }
+  
   

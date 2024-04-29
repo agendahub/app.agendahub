@@ -145,11 +145,10 @@
             <span class="capitalize"> {{ user.surname }}</span>
           </h1>
           <div>
-            <i
-              *ngIf="!isEditing"
-              class="fas fa-user-edit text-2xl cursor-pointer"
-              (click)="toggleEdit()"
-            ></i>
+            <i *ngIf="!isEditing"
+            class="fas fa-user-edit text-2xl cursor-pointer hover:text-3xl smooth-hover"
+            (click)="toggleEdit()"
+          ></i>
             <i
               *ngIf="isEditing"
               class="fas fa-save text-2xl cursor-pointer"
@@ -226,7 +225,7 @@
             <span class="custom-marker shadow-2" [style.backgroundColor]="event.color">
               <i [ngClass]="event.icon"></i>
             </span>
-            <p-card [header]="event.status" [subheader]="event.date">
+            <p-card [header]="event.status" [subheader]="event.date" class="bg-primary">
               <img
                 *ngIf="event.image"
                 [src]="
@@ -237,7 +236,7 @@
                 width="200"
                 class="shadow-2"
               />
-              <h1 class="text-2xl	">{{ event.customer.name }}</h1>
+              <h1 class="text-2xl	font-semibold">{{ event.customer.name }}</h1>
               <p>
                 
                 {{ event.schedule.finishDateTime | date : "dd/MM/yyyy" }}
@@ -249,3 +248,4 @@
     </div>
   </div>
 </div>
+
