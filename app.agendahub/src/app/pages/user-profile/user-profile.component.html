@@ -1,114 +1,24 @@
-<!-- <div class="min-h-screen flex items-center justify-center">
-  <div class="max-w-6xl w-full p-8 rounded-lg shadow-md bg-secondary text-gray-200">
-    <div class="flex flex-wrap">
-      <div class="w-full md:w-1/2 pr-4 mb-8">
-        <div class="flex items-center justify-between mb-10">
-          <div class="flex items-center relative">
-            <label
-              for="profileImage"
-              class="w-20 h-20 rounded-full transition duration-300 ease-in-out transform bg-gray-700 flex items-center justify-center cursor-pointer relative"
+  <!-- <p-card
+              [header]="event.status"
+              [subheader]="event.date"
+              class="bg-primary"
             >
-              <div
-                class="w-14 h-14 rounded-full border bg-secondary flex items-center justify-center absolute bottom-0 right-0 -mb-4 -mr-4 transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-110"
-              >
-                <i
-                  class="w-12 h-12 text-gray-200 fas fa-camera flex justify-center items-center"
-                ></i>
-              </div>
-              <input
-                type="file"
-                id="profileImage"
-                class="hidden"
-                accept="image/*"
+              <img
+                *ngIf="event.image"
+                [src]="
+                  'https://primefaces.org/cdn/primeng/images/demo/product/' +
+                  event.image
+                "
+                [alt]="event.name"
+                width="200"
+                class="shadow-2"
               />
-            </label>
-          </div>
-          <div>
-            <i
-            *ngIf="!isEditing"
-              class="fas fa-user-edit text-2xl cursor-pointer"
-              (click)="toggleEdit()"
-            ></i>
-            <i
-              *ngIf="isEditing"
-              class="fas fa-save text-2xl cursor-pointer"
-              (click)="saveUserInfo()">
-            </i>
+              <h1 class="text-2xl font-semibold">{{ event.customer.name }}</h1>
+              <p>
+                {{ event.schedule.finishDateTime | date : "dd/MM/yyyy" }}
+              </p>
+            </p-card> -->
 
-          </div>
-        </div>
-        <div class="mb-4 flex items-center">
-          <h1 class="text-4xl font-semibold">
-            <span>{{ user.name }}</span>
-          </h1>
-        </div>
-        <div class="mb-4">
-          <div class="mb-2 flex items-center">
-            <i class="fas fa-envelope text-gray-300 mr-2"></i>
-            <span class="text-gray-300 font-medium">E-mail</span>
-          </div>
-          <div class="rounded-lg bg-primary p-2">
-              <p *ngIf="!isEditing">{{ user.email }}</p>
-              <input
-                *ngIf="isEditing"
-                [(ngModel)]="user.email"
-                class="input w-full"
-                autocomplete="current-password"
-              />
-          </div>
-        </div>
-        <div class="mb-4">
-          <div class="mb-2 flex items-center">
-            <i class="fas fa-birthday-cake text-gray-300 mr-2"></i>
-            <span class="text-gray-300 font-medium">Data de Nascimento</span>
-          </div>
-          <div class="rounded-lg bg-primary p-2">
-            <p *ngIf="!isEditing">{{ user.dateBirth | date: 'dd/MM/yyyy' }}</p>
-            <input
-              *ngIf="isEditing"
-              
-              [(ngModel)]="user.dateBirth"
-              class="input w-full"
-              autocomplete="current-password"
-            />
-          </div>
-        </div>
-        <div class="mb-4">
-          <div class="mb-2 flex items-center">
-            <i class="fas fa-phone text-gray-300 mr-2"></i>
-            <span class="text-gray-300 font-medium">Telefone</span>
-          </div>
-          <div class="rounded-lg bg-primary p-2">
-            <p *ngIf="!isEditing">{{ user.phone }}</p>
-            <input
-              *ngIf="isEditing"
-              [(ngModel)]="user.phone"
-              class="input w-full"
-              autocomplete="current-password"
-            />
-          </div>
-        </div>
-      </div>
-      <div class="w-full md:w-1/2 pl-4">
-        <div>
-          <h2 class="text-3xl text-center font-semibold mb-8 mt-8">
-            Histórico de Compromissos
-          </h2>
-          <p-timeline
-            [value]="events"
-            class="w-full md:w-20rem"
-            align="alternate"
-          >
-            <ng-template pTemplate="content" let-event>
-              {{ event.customer.name }} | {{ event.schedule.finishDateTime | date: 'dd/MM/yyyy'}}
-            </ng-template>
-          </p-timeline>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
- -->
 <div class="px-4 pt-4 pb-2 w-full">
   <div class="grid sm:grid-cols-3 grid-cols-1 gap-4 w-full text-white">
     <div
@@ -145,10 +55,11 @@
             <span class="capitalize"> {{ user.surname }}</span>
           </h1>
           <div>
-            <i *ngIf="!isEditing"
-            class="fas fa-user-edit text-2xl cursor-pointer hover:text-3xl smooth-hover"
-            (click)="toggleEdit()"
-          ></i>
+            <i
+              *ngIf="!isEditing"
+              class="fas fa-user-edit text-2xl cursor-pointer hover:text-3xl smooth-hover"
+              (click)="toggleEdit()"
+            ></i>
             <i
               *ngIf="isEditing"
               class="fas fa-save text-2xl cursor-pointer"
@@ -215,37 +126,42 @@
           styleClass="customized-timeline"
         >
           <ng-template pTemplate="content" let-event>
-            <span
-              class="custom-marker shadow-2"
-            >
+            <span class="custom-marker shadow-2">
               <i [ngClass]="event.icon"></i>
             </span>
           </ng-template>
           <ng-template pTemplate="content" let-event>
-            <span class="custom-marker shadow-2" [style.backgroundColor]="event.color">
-              <i [ngClass]="event.icon"></i>
-            </span>
-            <p-card [header]="event.status" [subheader]="event.date" class="bg-primary">
-              <img
-                *ngIf="event.image"
-                [src]="
-                  'https://primefaces.org/cdn/primeng/images/demo/product/' +
-                  event.image
-                "
-                [alt]="event.name"
-                width="200"
-                class="shadow-2"
-              />
-              <h1 class="text-2xl	font-semibold">{{ event.customer.name }}</h1>
-              <p>
-                
+            <div
+              class=" p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-primary dark:border-gray-700"
+            >
+              <svg
+                class="w-7 h-7 text-gray-500 dark:text-gray-400 mb-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  d="M18 5h-.7c.229-.467.349-.98.351-1.5a3.5 3.5 0 0 0-3.5-3.5c-1.717 0-3.215 1.2-4.331 2.481C8.4.842 6.949 0 5.5 0A3.5 3.5 0 0 0 2 3.5c.003.52.123 1.033.351 1.5H2a2 2 0 0 0-2 2v3a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V7a2 2 0 0 0-2-2ZM8.058 5H5.5a1.5 1.5 0 0 1 0-3c.9 0 2 .754 3.092 2.122-.219.337-.392.635-.534.878Zm6.1 0h-3.742c.933-1.368 2.371-3 3.739-3a1.5 1.5 0 0 1 0 3h.003ZM11 13H9v7h2v-7Zm-4 0H2v5a2 2 0 0 0 2 2h3v-7Zm6 0v7h3a2 2 0 0 0 2-2v-5h-5Z"
+                />
+              </svg>
+              <a href="#">
+                <h5
+                  class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white"
+                >
+                {{ event.customer.name }}
+                </h5>
+              </a>
+              <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
                 {{ event.schedule.finishDateTime | date : "dd/MM/yyyy" }}
               </p>
-            </p-card>
+              
+            </div>
+
+          
           </ng-template>
         </p-timeline>
       </div>
     </div>
   </div>
 </div>
-
