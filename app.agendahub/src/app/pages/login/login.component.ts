@@ -2,6 +2,7 @@ import { Platform } from "@angular/cdk/platform";
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MessageService } from "primeng/api";
+import { environment } from "../../../environments/environment.development";
 import { AuthService } from "../../auth/auth-service.service";
 import { getRandomImage, notNull } from "../../utils/util";
 
@@ -25,6 +26,9 @@ export class LoginComponent implements OnInit {
   eyes = {
     pass: false,
   };
+
+  isDevelopment = !environment.production;
+  company!: string;
 
   constructor(private authService: AuthService, private formBuilder: FormBuilder, private messageService: MessageService, private platform: Platform) {
     localStorage.clear();
@@ -50,7 +54,11 @@ export class LoginComponent implements OnInit {
   login() {
     const form = structuredClone(this.loginForm.value);
 
-    this.authService.login(form.login, form.password, { isMobile: this.isMobile }).subscribe({
+    let params = {
+      isMobile: this.isMobile,
+    };
+
+    this.authService.login(form.login, form.password, this.company, params).subscribe({
       next: (result: any) => {
         console.log(result);
 

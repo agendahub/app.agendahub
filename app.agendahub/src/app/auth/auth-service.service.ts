@@ -79,10 +79,11 @@ export class AuthService {
     return this.TokenData?.role;
   }
 
-  public login(login: string, password: string, extras?: Record<string, any>) {
+  public login(login: string, password: string, domain?: string, extras?: Record<string, any>) {
     const loginModel = {
       login: login,
       password: password,
+      domain: domain,
     };
 
     this.loader.show();
