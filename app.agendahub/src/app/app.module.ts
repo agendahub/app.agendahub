@@ -32,6 +32,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { SidebarModule } from 'primeng/sidebar';
 import { TimelineModule } from 'primeng/timeline';
 import { JwtModule } from "@auth0/angular-jwt"
+import { CardModule } from 'primeng/card';
 
 import { SchedulerComponent } from './pages/scheduler/scheduler.component';
 import { LoginComponent } from './pages/login/login.component';
@@ -87,6 +88,7 @@ import { UserProfileComponent } from './pages/user-profile/user-profile.componen
     CalendarModule,
     CheckboxModule,
     InputTextModule,
+    CardModule,
     SplitButtonModule,
     AutoCompleteModule,
     OverlayPanelModule,
