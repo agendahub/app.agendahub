@@ -85,7 +85,8 @@ export class AuthService {
   public login(login: string, password: string, extras?: Record<string, any>) {
     const loginModel = {
       login: login,
-      password: password
+      password: password,
+      domain: "dev"
     }
 
     this.loader.show()
