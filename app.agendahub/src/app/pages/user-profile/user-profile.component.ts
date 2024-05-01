@@ -23,7 +23,6 @@ export class UserProfileComponent {
   searchClient: string = '';
   schedulingList: GetTableSchedulingListDto[] = [];
   filteredSchedulingList: GetTableSchedulingListDto[] = [];
-
   constructor(private authService: AuthService, private apiService: ApiService, private eventService: EventService, private messageService: MessageService) { }
 
     
@@ -47,12 +46,16 @@ export class UserProfileComponent {
   }
 
 
+
   toggleEdit() {
     this.isEditing = !this.isEditing;
   }
 
   saveUserInfo() {
-    this.isEditing = false;
+    this.apiService.sendToApi('user/EditUserProfile', this.user).subscribe(x => {
+      this.messageService.add({ severity: 'success', summary: 'Sucesso', detail: 'Dados salvos com sucesso!' });
+      this.isEditing = false;
+    });
   }
 
 }
