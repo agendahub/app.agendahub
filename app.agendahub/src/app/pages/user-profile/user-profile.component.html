@@ -39,12 +39,13 @@
                 class="w-8 h-8 fas fa-camera flex justify-center items-center"
               ></i>
             </div>
-            <input
+            <input id="profileImage" type="file" class="invisible" max="1" multiple (change)="upload($event)"/>
+            <!-- <input
               type="file"
               id="profileImage"
               class="hidden"
               accept="image/*"
-            />
+            /> -->
           </label>
         </div>
       </div>

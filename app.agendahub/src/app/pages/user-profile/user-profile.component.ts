@@ -58,4 +58,25 @@ export class UserProfileComponent {
     });
   }
 
+  
+  public upload(event: any) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    console.log(event.target.files);
+    
+    if (event.target.files) {
+        const formData = new FormData();
+
+        for (let i = 0; i < event.target.files.length || i == 5; i++) {
+            formData.append("file", event.target.files[i]);
+        }
+
+        this.apiService.sendToApi('user/UploadFile', formData).subscribe(x => {
+           console.log(x);
+        });
+    }
+    
+}
+
 }
