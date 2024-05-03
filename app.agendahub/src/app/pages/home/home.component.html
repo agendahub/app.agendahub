@@ -10,7 +10,7 @@
     >
       <div
         class="flex flex-col gap-6 items-start w-full lg:w-3/12"
-        *ngIf="events.length"
+        *ngIf="events.length; else noEvents"
       >
         <div
           *ngFor="let event of events; let i = index"
@@ -56,6 +56,17 @@
           </div>
         </div>
       </div>
+
+      <ng-template #noEvents>
+        <div class="w-full lg:w-3/12">
+          <div
+            class="flex items-center justify-center h-[100px] sm:h-[160px] gap-6 2xl:gap-10 dark:bg-primary bg-clean w-full rounded-xl dark:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] shadow-[6px_6px_0px_0px_rgba(207,207,207,1)]"
+          >
+            <p class="font-semibold text-sm sm:text-base">Nenhum evento</p>
+          </div>
+        </div>
+      </ng-template>
+
       <div
         class="flex flex-col-reverse md:flex-row justify-end w-full lg:w-9/12 gap-2 sm:gap-4"
       >
@@ -136,6 +147,15 @@
     ></div>
   </div> -->
 </div>
+
+<app-calendar-preview
+  #calendar
+  [editable]="enableEdit"
+  [addEvent]="addEvent"
+  [options]="true"
+  (OnViewChange)="onViewChange($event)"
+>
+</app-calendar-preview>
 
 <!-- <div
   class="bg-blend-hue dark:text-white text-gray-800 mx-auto max-w-6xl sm:px-8 lg:px-12 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none h-full flex flex-col justify-between"

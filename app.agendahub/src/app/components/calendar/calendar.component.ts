@@ -323,7 +323,7 @@ export class CalendarComponent
         );
         this.Calendar.setOption(
           "slotMaxTime",
-          moment(this.settings.closeTime).add(1, "h").format("HH:mm:ss")
+          moment(this.settings.closeTime).format("HH:mm:ss")
         );
       }
     }, 100);

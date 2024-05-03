@@ -94,7 +94,7 @@ export class CalendarPreviewComponent
   ]);
   public calendarOptions: CalendarOptions = {
     locale: "pt-br",
-    height: "auto",
+    height: "calc(100vh - 4.5rem - 64px)",
     aspectRatio: 0.8,
     headerToolbar: false,
     themeSystem: "bootstrap",
@@ -223,7 +223,7 @@ export class CalendarPreviewComponent
         );
 
         const currentTime = moment().startOf("hour");
-        let endTime = moment().add(3, "hours").startOf("hour");
+        let endTime = moment().add(4, "hours").startOf("hour");
 
         if (endTime.isBefore(closeTime)) {
           endTime = closeTime;
@@ -243,10 +243,7 @@ export class CalendarPreviewComponent
           days: this.settings.days.length,
         });
         this.Calendar.setOption("slotMinTime", currentTime.format("HH:mm:ss"));
-        this.Calendar.setOption(
-          "slotMaxTime",
-          endTime.add(1, "h").format("HH:mm:ss")
-        );
+        this.Calendar.setOption("slotMaxTime", closeTime.format("HH:mm:ss"));
       }
     }, 100);
   }
