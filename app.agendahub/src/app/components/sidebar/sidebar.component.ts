@@ -1,10 +1,8 @@
-import { CommonModule, DOCUMENT } from "@angular/common";
-import { Component, Host, HostListener, Inject, Input, OnInit } from "@angular/core";
-import { Router, RouterModule, NavigationEnd } from "@angular/router";
-import { getTheme } from "../../utils/util";
+import { DOCUMENT } from "@angular/common";
+import { Component, HostListener, Inject, Input, OnInit } from "@angular/core";
+import { NavigationEnd, Router } from "@angular/router";
 import { AuthService } from "../../auth/auth-service.service";
-import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
-import { MenuItem } from "primeng/api";
+import { getTheme } from "../../utils/util";
 
 @Component({
   selector: "sidebar",
@@ -238,10 +236,11 @@ export class SidebarComponent implements OnInit {
   public open = false || this.fixedSidebar;
   private sidebar!: HTMLElement;
   public fixed = false;
+  showCrudLink = false;
+  showUserOptions = false;
 
   constructor(@Inject(DOCUMENT) private document: Document, private router: Router, private authService: AuthService) {
     router.events.subscribe((x) => {
-      this.sidebarOpen = false;
       this.showCrudLink = false;
       this.showUserOptions = false;
     });
@@ -263,7 +262,7 @@ export class SidebarComponent implements OnInit {
     this.toggleHandler();
     this.sidebar = this.document.getElementById("default-sidebar")!;
 
-    if (this.ANDROID || this.IOS) {
+    if (this.mobile) {
       this.open = false;
       this.setFixed(false);
     }
@@ -271,10 +270,6 @@ export class SidebarComponent implements OnInit {
     if (this.fixedSidebar) {
       this.setFixed(true);
     }
-  }
-
-  isCurrent(path: string) {
-    return location.pathname.includes(path);
   }
 
   clickHandler(event: Event) {
@@ -298,7 +293,7 @@ export class SidebarComponent implements OnInit {
   }
 
   get blockScroll() {
-    const block = this.open && (this.ANDROID || this.IOS);
+    const block = this.open && this.mobile;
     const container = this.document.querySelector("#app-container")! as HTMLElement;
     container.style.overflow = block ? "hidden" : "auto";
     return block;
@@ -310,10 +305,6 @@ export class SidebarComponent implements OnInit {
 
   get theme() {
     return getTheme();
-  }
-
-  get largeImage() {
-    return getTheme().light ? "assets/logo/logo_texto_imagem_dark_mode.png" : "assets/logo/logo_texto_imagem.png";
   }
 
   get icon() {
@@ -330,23 +321,14 @@ export class SidebarComponent implements OnInit {
     return getTheme().light ? "assets/logo/logo_imagem_dark_mode.png" : "assets/icons/icon-144x144.png";
   }
 
-  get IOS() {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window);
-  }
-
-  get ANDROID() {
-    return /android/i.test(navigator.userAgent);
-  }
-
   get mobile() {
-    return this.ANDROID || this.IOS;
+    return /android/i.test(navigator.userAgent) || (/iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window));
   }
 
   toggleHandler() {
     var themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon")!;
     var themeToggleLightIcon = document.getElementById("theme-toggle-light-icon")!;
 
-    // Change the icons inside the button based on previous settings
     if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
       themeToggleLightIcon.classList.remove("hidden");
     } else {
@@ -356,13 +338,9 @@ export class SidebarComponent implements OnInit {
     var themeToggleBtn = document.getElementById("theme-toggle")!;
 
     themeToggleBtn.addEventListener("click", function () {
-      console.log(this);
-
-      // toggle icons inside button
       themeToggleDarkIcon.classList.toggle("hidden");
       themeToggleLightIcon.classList.toggle("hidden");
 
-      // if set via local storage previously
       if (localStorage.getItem("color-theme")) {
         if (localStorage.getItem("color-theme") === "light") {
           document.documentElement.classList.add("dark");
@@ -371,8 +349,6 @@ export class SidebarComponent implements OnInit {
           document.documentElement.classList.remove("dark");
           localStorage.setItem("color-theme", "light");
         }
-
-        // if NOT set via local storage previously
       } else {
         if (document.documentElement.classList.contains("dark")) {
           document.documentElement.classList.remove("dark");
@@ -384,12 +360,6 @@ export class SidebarComponent implements OnInit {
       }
     });
   }
-
-  sidebarOpen = false;
-  faArrowDown = faArrowCircleDown;
-
-  showCrudLink = false;
-  showUserOptions = false;
 
   get userRole() {
     return this.authService.TokenData?.role;

@@ -1,3 +1,5 @@
+import { Selectable } from "../../core/selectable";
+
 interface IIdentifiable<T> {
   id: T;
 }
@@ -8,7 +10,7 @@ export class UserType implements IIdentifiable<number> {
   description!: string;
 }
 
-export class User implements IIdentifiable<number> {
+export class User extends Selectable implements IIdentifiable<number> {
   id!: number;
   name!: string;
   surname!: string;
@@ -27,7 +29,7 @@ export class ServiceType implements IIdentifiable<number> {
   description!: string;
 }
 
-export class Service implements IIdentifiable<number> {
+export class Service extends Selectable implements IIdentifiable<number> {
   id!: number;
   code!: string;
   description!: string;

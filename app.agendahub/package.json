@@ -48,6 +48,7 @@
     "@angular-devkit/build-angular": "^16.1.4",
     "@angular/cli": "~16.1.4",
     "@angular/compiler-cli": "^16.1.0",
+    "@angular/localize": "^16.1.4",
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.25",
     "postcss-scss": "^4.0.6",

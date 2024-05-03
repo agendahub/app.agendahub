@@ -23,6 +23,7 @@ import { ReadMoreComponent } from "./read-more/read-more.component";
 import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
 import { SpeedDialModule } from "primeng/speeddial";
 import { AlertComponent } from './alert/alert.component';
+import { UserNavComponent } from './user-nav/user-nav.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { AlertComponent } from './alert/alert.component';
     ReadMoreComponent,
     BreadcrumbComponent,
     AlertComponent,
+    UserNavComponent,
   ],
   exports: [
     AlertComponent,
