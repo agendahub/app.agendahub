@@ -17,6 +17,7 @@ import { ProgressSpinnerModule } from "primeng/progressspinner";
 import { SpeedDialModule } from "primeng/speeddial";
 import { AlertComponent } from "./alert/alert.component";
 import { BreadcrumbComponent } from "./breadcrumb/breadcrumb.component";
+import { CalendarPreviewComponent } from "./calendar-preview/calendar-preview.component";
 import { CalendarComponent } from "./calendar/calendar.component";
 import { LoaderComponent } from "./loader/loader.component";
 import { NavComponent } from "./nav/nav.component";
@@ -34,6 +35,7 @@ import { SidebarComponent } from "./sidebar/sidebar.component";
     ReadMoreComponent,
     BreadcrumbComponent,
     AlertComponent,
+    CalendarPreviewComponent,
   ],
   exports: [
     NavComponent,
@@ -42,6 +44,7 @@ import { SidebarComponent } from "./sidebar/sidebar.component";
     SidebarComponent,
     CalendarComponent,
     NotificationComponent,
+    CalendarPreviewComponent,
   ],
   imports: [
     ProgressSpinnerModule,

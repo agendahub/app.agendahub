@@ -1,21 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../../services/api-service.service';
-import { MessageService } from 'primeng/api';
-import { GetTableSchedulingListDto } from '../../../models/dtos/dtos';
-import * as moment from 'moment';
+import { Component, OnInit } from "@angular/core";
+import { ApiService } from "../../../services/api-service.service";
+import { MessageService } from "primeng/api";
+import { GetTableSchedulingListDto } from "../../../models/dtos/dtos";
+import * as moment from "moment";
 
 @Component({
-  selector: 'app-scheduling',
-  templateUrl: './scheduling.component.html',
-  styleUrls: ['./scheduling.component.scss']
+  selector: "app-scheduling",
+  templateUrl: "./scheduling.component.html",
+  styleUrls: ["./scheduling.component.scss"],
 })
 export class SchedulingComponent implements OnInit {
   rangeDates: Date[] | undefined;
-  searchClient: string = '';
+  searchClient: string = "";
   schedulingList: GetTableSchedulingListDto[] = [];
   filteredSchedulingList: GetTableSchedulingListDto[] = [];
 
-  constructor(private apiService: ApiService, private messageService: MessageService) { }
+  constructor(
+    private apiService: ApiService,
+    private messageService: MessageService
+  ) {}
 
   ngOnInit() {
     this.setDefaultDateRange();
@@ -24,7 +27,7 @@ export class SchedulingComponent implements OnInit {
 
   setDefaultDateRange() {
     const endDate = moment().toDate(); // Data atual
-    const startDate = moment().subtract(30, 'days').toDate(); // Data de 30 dias atrás
+    const startDate = moment().subtract(30, "days").toDate(); // Data de 30 dias atrás
 
     this.rangeDates = [startDate, endDate];
   }
@@ -35,9 +38,13 @@ export class SchedulingComponent implements OnInit {
     }
 
     const startDate = this.rangeDates[0].toISOString();
-    const endDate = this.rangeDates[1].toISOString();
+    const endDate = moment(this.rangeDates[1]).add(1, "day").toISOString();
 
-    this.apiService.requestFromApi<any>('Schedule/GetTableSchedulingList', { startDate, endDate })
+    this.apiService
+      .requestFromApi<any>("Schedule/GetTableSchedulingList", {
+        startDate,
+        endDate,
+      })
       .subscribe({
         next: (response: any) => {
           if (response && response.length > 0) {
@@ -45,7 +52,7 @@ export class SchedulingComponent implements OnInit {
               name: item.customerName,
               startDate: item.startDate,
               finishDate: item.endDate,
-              appointmentCount: item.total
+              appointmentCount: item.total,
             }));
             this.filteredSchedulingList = [...this.schedulingList];
             this.filterSchedulingList();
@@ -55,8 +62,8 @@ export class SchedulingComponent implements OnInit {
           }
         },
         error: (error: any) => {
-          console.error('Error fetching scheduling list:', error);
-        }
+          console.error("Error fetching scheduling list:", error);
+        },
       });
   }
 
