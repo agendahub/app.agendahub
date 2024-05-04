@@ -222,7 +222,7 @@ export class CalendarPreviewComponent
           "hour"
         );
 
-        const currentTime = moment().startOf("hour");
+        const currentTime = moment().startOf("hour").subtract("1", "hour");
         let endTime = moment().add(4, "hours").startOf("hour");
 
         if (endTime.isBefore(closeTime)) {

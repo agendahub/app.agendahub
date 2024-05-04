@@ -13,6 +13,7 @@ import { ScreenHelperService } from "../../services/screen-helper.service";
 import * as moment from "moment";
 import { Subject } from "rxjs";
 import { ApiService } from "../../services/api-service.service";
+import { GetTableSchedulingListDto } from "../../models/dtos/dtos";
 
 @Component({
   selector: "app-home",
@@ -49,6 +50,8 @@ export class HomeComponent implements OnInit {
     end: Date;
   };
 
+  schedulingList: any[] = [];
+
   constructor(
     private api: ApiService,
     private eventService: EventService,
@@ -64,6 +67,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getEvents();
+    this.getSchedulingList();
+
+    console.log(this.schedulingList);
   }
 
   onViewChange(
@@ -91,8 +97,6 @@ export class HomeComponent implements OnInit {
     this.api
       .requestFromApi<UserSchedule[]>(endpoint, params)
       ?.subscribe((x) => {
-        console.log(x);
-
         this.schedules.push(...x);
         this.nextEvents = mapScheduleToEvent(this.events);
         this.addEvent.next(this.nextEvents);
@@ -125,7 +129,6 @@ export class HomeComponent implements OnInit {
         this.concluded = events.filter((event) => {
           return new Date(event.schedule.finishDateTime) < new Date();
         }).length;
-        console.log(this.concluded);
       });
   }
 
@@ -162,6 +165,26 @@ export class HomeComponent implements OnInit {
       setTimeout(() => {
         this.calendarOpen = true;
         this.eventsCalendar = mapScheduleToEvent([schedule]);
+      });
+  }
+
+  getSchedulingList() {
+    const startDate = moment().startOf("month").toDate().toISOString();
+    const endDate = moment().add(1, "day").toDate().toISOString();
+
+    this.api
+      .requestFromApi<any>("Schedule/GetTableSchedulingList", {
+        startDate,
+        endDate,
+      })
+      .subscribe({
+        next: (response: any) => {
+          this.schedulingList = response;
+          console.log(this.schedulingList); // Verifica os dados recebidos antes de atribuir à schedulingList
+        },
+        error: (error: any) => {
+          console.error("Error fetching scheduling list:", error);
+        },
       });
   }
 }

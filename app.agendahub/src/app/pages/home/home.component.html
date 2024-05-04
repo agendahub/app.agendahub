@@ -1,5 +1,5 @@
 <div
-  class="w-full dark:text-white text-primary flex flex-col items-center gap-4 justify-center px-2 py-2 sm:px-4 sm:py-4 bg-clean dark:bg-primary"
+  class="w-full dark:text-white text-primary flex flex-col items-center gap-2 md:gap-4 justify-center px-2 py-2 sm:px-4 sm:py-4 bg-clean dark:bg-primary"
 >
   <div
     class="w-full h-auto lg:h-[500px] dark:bg-secondary bg-very-clean rounded-xl p-8"
@@ -60,9 +60,11 @@
       <ng-template #noEvents>
         <div class="w-full lg:w-3/12">
           <div
-            class="flex items-center justify-center h-[100px] sm:h-[160px] gap-6 2xl:gap-10 dark:bg-primary bg-clean w-full rounded-xl dark:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] shadow-[6px_6px_0px_0px_rgba(207,207,207,1)]"
+            class="flex items-center justify-center h-[330px] sm:h-[360px] gap-6 2xl:gap-10 dark:bg-primary bg-clean w-full rounded-xl dark:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] shadow-[6px_6px_0px_0px_rgba(207,207,207,1)]"
           >
-            <p class="font-semibold text-sm sm:text-base">Nenhum evento</p>
+            <p class="font-semibold text-sm sm:text-base">
+              Nenhum evento para hoje
+            </p>
           </div>
         </div>
       </ng-template>
@@ -123,12 +125,81 @@
     </div>
   </div>
 
-  <div class="w-full h-[330px] flex gap-4">
+  <div
+    class="w-full h-auto md:h-[330px] flex flex-col md:flex-row gap-2 md:gap-4"
+  >
     <div
-      class="w-8/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
-    ></div>
+      class="w-full md:w-8/12 h-auto dark:bg-secondary bg-very-clean rounded-xl overflow-hidden"
+    >
+      <div
+        class="relative overflow-x-auto overflow-y-auto sm:rounded-lg h-[300px] md:h-full p-4"
+      >
+        <table
+          class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
+        >
+          <thead
+            class="text-xs text-primary uppercase bg-very-clean dark:bg-secondary dark:text-very-clean"
+          >
+            <tr>
+              <th scope="col" class="px-6 py-3">
+                <a routerLink="/general/scheduling">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    class="w-6 h-6 dark:hover:text-primary hover:text-secondary"
+                  >
+                    <path
+                      d="M19.5 21a3 3 0 0 0 3-3v-4.5a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h15ZM1.5 10.146V6a3 3 0 0 1 3-3h5.379a2.25 2.25 0 0 1 1.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 0 1 3 3v1.146A4.483 4.483 0 0 0 19.5 9h-15a4.483 4.483 0 0 0-3 1.146Z"
+                    />
+                  </svg>
+                </a>
+              </th>
+              <th scope="col" class="px-6 py-3">Nome</th>
+              <th scope="col" class="px-6 py-3">Primeiro Atendimento</th>
+              <th scope="col" class="px-6 py-3">Últimos atendimentos</th>
+              <th scope="col" class="px-6 py-3">Número de atendimentos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let item of schedulingList"
+              class="bg-very-clean dark:bg-secondary hover:bg-primary dark:hover:bg-clean group"
+            >
+              <td></td>
+              <td
+                scope="row"
+                class="flex items-center px-6 py-4 text-primary whitespace-nowrap dark:text-very-clean group-hover:text-very-clean dark:group-hover:text-primary"
+              >
+                <div>
+                  <div class="text-base font-semibold">
+                    {{ item.customerName }}
+                  </div>
+                </div>
+              </td>
+              <td
+                class="px-6 py-4 group-hover:text-clean dark:group-hover:text-secondary"
+              >
+                {{ item.endDate | date : "dd/MM/yyyy" }}
+              </td>
+              <td
+                class="px-6 py-4 group-hover:text-clean dark:group-hover:text-secondary"
+              >
+                {{ item.startDate | date : "dd/MM/yyyy" }}
+              </td>
+              <td
+                class="px-6 py-4 group-hover:text-clean dark:group-hover:text-secondary"
+              >
+                {{ item.total }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
     <div
-      class="w-4/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
+      class="w-full h-[300px] md:w-4/12 md:h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
     ></div>
   </div>
 
