@@ -13,7 +13,7 @@
                 width="200"
                 class="shadow-2"
               />
-              <h1 class="text-2xl font-semibold">{{ event.customer.name }}</h1>
+              <h1 class="text-2xl">{{ event.customer.name }}</h1>
               <p>
                 {{ event.schedule.finishDateTime | date : "dd/MM/yyyy" }}
               </p>
@@ -28,30 +28,42 @@
         class="head bg-gradient-to-r from-blue-800 to-indigo-900 px-8 rounded-t-lg relative w-full"
       >
         <div class="flex justify-center w-full relative -bottom-10">
-          <label
-            for="profileImage"
-            class="w-24 h-24 rounded-full transition duration-300 ease-in-out transform bg-gray-700 flex items-center justify-center cursor-pointer relative"
-          >
-            <div
-              class="w-12 h-12 rounded-full border bg-secondary flex items-center justify-center absolute bottom-0 right-0 -mb-4 -mr-4 transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-110 hover:border-none"
+          <ng-container>
+            <label
+              for="profileImage"
+              class="w-32 h-32 rounded-full transition duration-300 ease-in-out transform bg-gray-700 flex items-center justify-center cursor-pointer relative"
             >
-              <i
-                class="w-8 h-8 fas fa-camera flex justify-center items-center"
-              ></i>
-            </div>
-            <input id="profileImage" type="file" class="invisible" max="1" multiple (change)="upload($event)"/>
-            <!-- <input
-              type="file"
-              id="profileImage"
-              class="hidden"
-              accept="image/*"
-            /> -->
-          </label>
+              <div
+                *ngIf="!imageReady"
+                class="w-12 h-12 rounded-full border bg-secondary flex items-center justify-center absolute bottom-0 right-0 -mb-4 -mr-4 transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-110 hover:border-none"
+              >
+                <i
+                  class="w-8 h-8 fas fa-camera flex justify-center items-center"
+                ></i>
+              </div>
+              <img
+                loading="eager"
+                *ngIf="user.imageUrl"
+                [src]="user.imageUrl"
+                alt="profile image"
+                class="w-32 h-32 object-cover rounded-full transition duration-300 ease-in-out transform bg-gray-700 flex items-center justify-center cursor-pointer relative"
+              />
+              <input
+                id="profileImage"
+                type="file"
+                class="invisible"
+                max="1"
+                accept=".png,.jpeg.jpg,.gif"
+                multiple
+                (change)="upload($event)"
+              />
+            </label>
+          </ng-container>
         </div>
       </div>
       <div class="body px-8 pb-8">
         <div class="flex items-center justify-between">
-          <h1 class="text-4xl font-semibold">
+          <h1 class="text-4xl">
             <span class="capitalize">{{ user.name }} </span>
             <span class="capitalize"> {{ user.surname }}</span>
           </h1>
@@ -74,7 +86,7 @@
             <i class="fas fa-envelope mr-2"></i>
             <span class="font-medium">E-mail</span>
           </div>
-          <div class="rounded-lg  p-2">
+          <div class="rounded-lg p-2">
             <p *ngIf="!isEditing">{{ user.email }}</p>
             <input
               *ngIf="isEditing"
@@ -89,7 +101,7 @@
             <i class="fas fa-birthday-cake mr-2"></i>
             <span class="font-medium">Data de Nascimento</span>
           </div>
-          <div class="rounded-lg  p-2">
+          <div class="rounded-lg p-2">
             <p *ngIf="!isEditing">{{ user.dateBirth | date : "dd/MM/yyyy" }}</p>
             <input
               *ngIf="isEditing"
@@ -116,53 +128,87 @@
         </div>
       </div>
     </div>
-    <div class="col-span-2 p-8 rounded-lg shadow-md bg-secondary">
+    <div class="sm:col-span-2 col-span-1 p-8 rounded-lg shadow-md bg-secondary">
       <div>
-        <h2 class="text-3xl text-center font-semibold mb-8 mt-8">
+        <h2 class="text-3xl text-center mb-8 mt-8">
           Histórico de Compromissos
         </h2>
-        <p-timeline
-          [value]="events"
-          align="alternate"
-          styleClass="customized-timeline"
-        >
-          <ng-template pTemplate="content" let-event>
-            <span class="custom-marker shadow-2">
-              <i [ngClass]="event.icon"></i>
-            </span>
-          </ng-template>
-          <ng-template pTemplate="content" let-event>
-            <div
-              class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-primary dark:border-gray-700"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-6 h-6"
+        <div class="sm:block hidden">
+          <p-timeline
+            [value]="events"
+            align="alternate"
+            styleClass="customized-timeline"
+          >
+            <ng-template pTemplate="content" let-event>
+              <span class="custom-marker shadow-2">
+                <i [ngClass]="event.icon"></i>
+              </span>
+            </ng-template>
+            <ng-template pTemplate="content" let-event>
+              <div
+                class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-primary dark:border-gray-700"
               >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
-                />
-              </svg>
-
-              <a href="#">
-                <h5
-                  class="mb-2 text-2xl font-semibold tracking-tight text-gray-900 dark:text-white"
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  class="w-6 h-6"
                 >
-                  {{ event.customer.name }}
-                </h5>
-              </a>
-              <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
-                {{ event.schedule.finishDateTime | date : "dd/MM/yyyy" }}
-              </p>
-            </div>
-          </ng-template>
-        </p-timeline>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+                  />
+                </svg>
+
+                <a href="#">
+                  <h5
+                    class="mb-2 text-2xl tracking-tight text-gray-900 dark:text-white"
+                  >
+                    {{ event.customer.name }}
+                  </h5>
+                </a>
+                <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
+                  {{ event.schedule.finishDateTime | date : "dd/MM/yyyy" }}
+                </p>
+              </div>
+            </ng-template>
+          </p-timeline>
+        </div>
+        <div class="sm:hidden block">
+          <div
+            *ngFor="let event of events"
+            class="p-6 bg-white border border-gray-200 rounded-lg shadow dark:bg-primary dark:border-gray-700 my-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
+              />
+            </svg>
+
+            <a href="#">
+              <h5
+                class="mb-2 text-2xl tracking-tight text-gray-900 dark:text-white"
+              >
+                {{ event.customer.name }}
+              </h5>
+            </a>
+            <p class="mb-3 font-normal text-gray-500 dark:text-gray-400">
+              {{ event.schedule.finishDateTime | date : "dd/MM/yyyy" }}
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
