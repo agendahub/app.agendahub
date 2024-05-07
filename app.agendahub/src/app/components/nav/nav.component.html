@@ -10,6 +10,9 @@
     <notifications></notifications>
     <p-avatar
       [image]="auth.TokenData.imageUrl"
+      [label]="
+        auth.TokenData.imageUrl ? null : auth.TokenData.name[0].toUpperCapital()
+      "
       shape="circle"
       size="normal"
     ></p-avatar>

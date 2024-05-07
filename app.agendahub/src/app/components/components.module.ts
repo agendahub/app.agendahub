@@ -19,6 +19,7 @@ import { AlertComponent } from "./alert/alert.component";
 import { BreadcrumbComponent } from "./breadcrumb/breadcrumb.component";
 import { CalendarPreviewComponent } from "./calendar-preview/calendar-preview.component";
 import { CalendarComponent } from "./calendar/calendar.component";
+import { FileUploadComponent } from "./inputs/file-upload/file-upload.component";
 import { LoaderComponent } from "./loader/loader.component";
 import { NavComponent } from "./nav/nav.component";
 import { NotificationComponent } from "./notification/notification.component";
@@ -36,6 +37,7 @@ import { SidebarComponent } from "./sidebar/sidebar.component";
     BreadcrumbComponent,
     AlertComponent,
     CalendarPreviewComponent,
+    FileUploadComponent,
   ],
   exports: [
     NavComponent,
@@ -43,6 +45,7 @@ import { SidebarComponent } from "./sidebar/sidebar.component";
     LoaderComponent,
     SidebarComponent,
     CalendarComponent,
+    FileUploadComponent,
     NotificationComponent,
     CalendarPreviewComponent,
   ],

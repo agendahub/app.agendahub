@@ -1,4 +1,4 @@
-<div #ref >
+<div #ref class="h-full flex items-center">
   <i
     class="relative inline-flex items-center"
     role="button"
@@ -10,7 +10,7 @@
       viewBox="0 0 24 24"
       stroke-width="1.5"
       stroke="currentColor"
-      class="w-6 h-6 text-primary dark:text-clean"
+      class="sm:w-7 w-6 sm:h-7 h-6 text-primary dark:text-clean"
     >
       <path
         stroke-linecap="round"
@@ -35,8 +35,19 @@
     <div class="px-3 py-2 w-full dark:text-slate-50">
       <div class="flex justify-start gap-4 py-2 items-center">
         <span role="button" class="sm:hidden block" (click)="open = false">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-6 h-6"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+            />
           </svg>
         </span>
         <span class="text-xl font-light leading-5 -tracking-wide">
@@ -140,7 +151,8 @@
 
 <ng-template #message let-item="item" let-temp="temporal">
   <div
-    class="rounded-md hover:dark:bg-primary hover:bg-very-clean  px-2 py-1 min-h-16" (mouseleave)="read(item)"
+    class="rounded-md hover:dark:bg-primary hover:bg-very-clean px-2 py-1 min-h-16"
+    (mouseleave)="read(item)"
   >
     <div class="flex gap-2 h-full">
       <div class="flex items-start justify-center">

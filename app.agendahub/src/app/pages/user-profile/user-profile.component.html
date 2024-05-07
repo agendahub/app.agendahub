@@ -1,64 +1,43 @@
-<!-- <p-card
-              [header]="event.status"
-              [subheader]="event.date"
-              class="bg-primary"
-            >
-              <img
-                *ngIf="event.image"
-                [src]="
-                  'https://primefaces.org/cdn/primeng/images/demo/product/' +
-                  event.image
-                "
-                [alt]="event.name"
-                width="200"
-                class="shadow-2"
-              />
-              <h1 class="text-2xl">{{ event.customer.name }}</h1>
-              <p>
-                {{ event.schedule.finishDateTime | date : "dd/MM/yyyy" }}
-              </p>
-            </p-card> -->
-
 <div class="px-4 pt-4 pb-2 w-full">
   <div class="grid sm:grid-cols-3 grid-cols-1 gap-4 w-full text-white">
     <div
       class="col-span-1 rounded-lg shadow-md bg-secondary flex flex-col gap-12"
     >
       <div
-        class="head bg-gradient-to-r from-blue-800 to-indigo-900 px-8 rounded-t-lg relative w-full"
+        class="head bg-gradient-to-r from-secondary via-primary to-secondary px-8 rounded-t-lg relative w-full"
       >
         <div class="flex justify-center w-full relative -bottom-10">
-          <ng-container>
-            <label
-              for="profileImage"
-              class="w-32 h-32 rounded-full transition duration-300 ease-in-out transform bg-gray-700 flex items-center justify-center cursor-pointer relative"
+          <div class="absolute w-32 h-32 flex justify-end items-end z-30">
+            <div
+              class="rounded-full p-3 bg-neutral-900 text-white flex justify-center items-center"
             >
-              <div
-                *ngIf="!imageReady"
-                class="w-12 h-12 rounded-full border bg-secondary flex items-center justify-center absolute bottom-0 right-0 -mb-4 -mr-4 transition duration-300 ease-in-out transform hover:bg-blue-500 hover:scale-110 hover:border-none"
-              >
-                <i
-                  class="w-8 h-8 fas fa-camera flex justify-center items-center"
-                ></i>
-              </div>
-              <img
-                loading="eager"
-                *ngIf="user.imageUrl"
-                [src]="user.imageUrl"
-                alt="profile image"
-                class="w-32 h-32 object-cover rounded-full transition duration-300 ease-in-out transform bg-gray-700 flex items-center justify-center cursor-pointer relative"
-              />
-              <input
-                id="profileImage"
-                type="file"
-                class="invisible"
-                max="1"
-                accept=".png,.jpeg.jpg,.gif"
-                multiple
-                (change)="upload($event)"
-              />
-            </label>
-          </ng-container>
+              <i
+                role="button"
+                class="fas fa-bars"
+                (click)="menu.toggle($event)"
+              ></i>
+            </div>
+            <p-tieredMenu
+              #menu
+              [popup]="true"
+              [model]="items"
+              appendTo="body"
+            ></p-tieredMenu>
+          </div>
+
+          <img
+            loading="eager"
+            alt="profile image"
+            [src]="
+              user && user.imageUrl
+                ? user.imageUrl
+                : 'assets/images/default_avatar.png'
+            "
+            class="w-32 h-32 object-cover rounded-full transition duration-300 ease-in-out transform flex items-center justify-center cursor-pointer relative"
+            [ngClass]="{
+              'animate-pulse bg-gray-200 dark:bg-gray-700': !imageReady
+            }"
+          />
         </div>
       </div>
       <div class="body px-8 pb-8">
@@ -67,6 +46,7 @@
             <span class="capitalize">{{ user.name }} </span>
             <span class="capitalize"> {{ user.surname }}</span>
           </h1>
+
           <div>
             <i
               *ngIf="!isEditing"
@@ -81,12 +61,16 @@
             </i>
           </div>
         </div>
-        <div class="mb-4">
+        <div class="mb-4 mt-2">
           <div class="mb-2 flex items-center">
             <i class="fas fa-envelope mr-2"></i>
             <span class="font-medium">E-mail</span>
           </div>
           <div class="rounded-lg p-2">
+            <div
+              class="animate-pulse h-4 bg-gray-200 rounded dark:bg-gray-700 max-w-[330px] mb-2.5"
+              [ngClass]="{ hidden: user != undefined }"
+            ></div>
             <p *ngIf="!isEditing">{{ user.email }}</p>
             <input
               *ngIf="isEditing"
@@ -102,6 +86,10 @@
             <span class="font-medium">Data de Nascimento</span>
           </div>
           <div class="rounded-lg p-2">
+            <div
+              class="animate-pulse h-4 bg-gray-200 rounded dark:bg-gray-700 max-w-[330px] mb-2.5"
+              [ngClass]="{ hidden: user != undefined }"
+            ></div>
             <p *ngIf="!isEditing">{{ user.dateBirth | date : "dd/MM/yyyy" }}</p>
             <input
               *ngIf="isEditing"
@@ -117,6 +105,10 @@
             <span class="font-medium">Telefone</span>
           </div>
           <div class="rounded-lg p-2">
+            <div
+              class="animate-pulse h-4 bg-gray-200 rounded dark:bg-gray-700 max-w-[330px] mb-2.5"
+              [ngClass]="{ hidden: user != undefined }"
+            ></div>
             <p *ngIf="!isEditing">{{ user.phone }}</p>
             <input
               *ngIf="isEditing"

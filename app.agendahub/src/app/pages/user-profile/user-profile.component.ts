@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { MessageService } from "primeng/api";
+import { defer } from "../../decorators/defer";
 import { User } from "../../models/core/entities";
 import { GetTableSchedulingListDto } from "../../models/dtos/dtos";
 import { ApiService } from "../../services/api-service.service";
@@ -16,6 +17,7 @@ export class UserProfileComponent {
   events: any[] = [];
   isEditing: boolean = false;
 
+  items = [] as any[];
   user!: User;
   imageReady: boolean = false;
 
@@ -32,8 +34,27 @@ export class UserProfileComponent {
   ) {}
 
   ngOnInit(): void {
+    console.log(this.user);
+
     this.getEvents();
     this.getInfoUser();
+
+    this.items = [
+      {
+        label: "Trocar foto",
+        icon: "fa-solid fa-camera",
+        command: () => {
+          this.upload();
+        },
+      },
+      {
+        label: "Remover",
+        icon: "fa-solid fa-trash",
+        command: () => {
+          this.deleteImage();
+        },
+      },
+    ];
   }
 
   private getEvents() {
@@ -42,6 +63,7 @@ export class UserProfileComponent {
     });
   }
 
+  @defer(3_3_3)
   public getInfoUser() {
     let info = this.authService.getUserData();
     this.apiService
@@ -50,7 +72,11 @@ export class UserProfileComponent {
         this.user = x;
         this.user.imageUrl = this.authService.getUserData().imageUrl;
 
-        this.user.imageUrl && this.loadImage();
+        if (this.user.imageUrl) {
+          this.loadImage();
+        } else {
+          this.imageReady = true;
+        }
       });
   }
 
@@ -78,20 +104,38 @@ export class UserProfileComponent {
       });
   }
 
-  public upload(event: any) {
-    event.preventDefault();
-    event.stopPropagation();
+  deleteImage() {
+    this.apiService.deleteFromApi("user/DeleteProfileImage").subscribe((x) => {
+      this.user.imageUrl = undefined;
+      this.authService.tryRefreshToken();
+    });
+  }
 
-    if (event.target.files) {
-      const formData = new FormData();
-      formData.append("file", event.target.files[0]);
+  async upload() {
+    const cc = async () => {
+      var inp = document.createElement("input");
 
-      this.apiService
-        .sendToApi("user/UploadProfileImage", formData)
-        .subscribe((x) => {
-          this.user.imageUrl = x.data;
-          this.authService.tryRefreshToken();
-        });
+      inp.type = "file";
+      inp.click();
+
+      return await new Promise<any>((re, rj) => {
+        inp.onchange = (x) => {
+          return re(x);
+        };
+        inp.remove();
+      });
+    };
+
+    const formData = new FormData();
+    for (let file of (await cc()).currentTarget?.files) {
+      formData.append("file", file);
     }
+
+    this.apiService
+      .sendToApi("user/UploadProfileImage", formData)
+      .subscribe((x) => {
+        this.user.imageUrl = x.data;
+        this.authService.tryRefreshToken();
+      });
   }
 }
