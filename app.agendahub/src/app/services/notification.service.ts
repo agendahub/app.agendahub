@@ -1,104 +1,124 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable, signal } from "@angular/core";
+import { HostListener, Injectable, OnDestroy, signal } from "@angular/core";
+import { EventSourceMessage, fetchEventSource } from "@microsoft/fetch-event-source";
 import { BehaviorSubject, map, of } from "rxjs";
-import { Notification, NotificationStatus } from "../models/core/notification";
 import { environment } from "../../environments/environment.development";
-import { ApiService } from "./api-service.service";
 import { AuthService } from "../auth/auth-service.service";
+import { Notification, NotificationStatus } from "../models/core/notification";
 type BrowserNotification = Notification;
 
 @Injectable({
   providedIn: "root",
 })
-export class NotificationService {
-  private $notifications = new BehaviorSubject<Notification[]>([]);
+export class NotificationService implements OnDestroy {
+  private $notify = new BehaviorSubject<Notification[]>([]);
 
-  notifications = this.$notifications.asObservable();
+  upcoming = this.$notify.asObservable();
 
   error = signal<{ message: string } | null>(null);
   connected = signal<boolean>(false);
   unread = signal<number>(0);
 
+  private control!: AbortController;
+
   constructor(private http: HttpClient, private auth: AuthService) {
-    // this.listen();
+    console.log("Notification service created");
+    if (this.auth.isLogged) {
+      this.listen();
+    }
+  }
+
+  @HostListener("window:beforeunload")
+  async ngOnDestroy() {
+    console.log("Disconnecting from notifications server");
+
+    if (this.control) {
+      this.control.abort(0);
+    }
   }
 
   preview() {
-
     if (!this.auth.isLogged) {
-      return of([])
+      return of([]);
     }
 
-    return this.http
-      .get<Notification[]>(environment.apiUrl + "Notification/GetPreview")
-      .pipe(
-        map((notifications) => {
-          this.unread.set(
-            notifications.filter((n) => n.status === NotificationStatus.Unread)
-              .length
-          );
-          return notifications;
-        })
-      );
+    return this.http.get<Notification[]>(environment.apiUrl + "Notification/GetPreview").pipe(
+      map((notifications) => {
+        this.unread.set(notifications.filter((n) => n.status === NotificationStatus.Unread).length);
+        return notifications;
+      }),
+    );
   }
 
   getNotifications() {
-    return this.http
-      .get<Notification[]>(environment.apiUrl + "Notification/GetAll")
-      .pipe(
-        map((notifications) => {
-          this.unread.set(
-            notifications.filter((n) => n.status === NotificationStatus.Unread)
-              .length
-          );
-          return notifications;
-        })
-      );
+    return this.http.get<Notification[]>(environment.apiUrl + "Notification/GetAll").pipe(
+      map((notifications) => {
+        this.unread.set(notifications.filter((n) => n.status === NotificationStatus.Unread).length);
+        return notifications;
+      }),
+    );
   }
 
   read(id: number) {
-    return this.http
-      .put(environment.apiUrl + "Notification/Read/" + id, null)
-      .pipe(
-        map((x) => {
-          this.unread.update((unread) => unread - 1);
-          return x;
-        })
-      );
+    return this.http.put(environment.apiUrl + "Notification/Read/" + id, null).pipe(
+      map((x) => {
+        this.unread.update((unread) => unread - 1);
+        return x;
+      }),
+    );
   }
 
   readAll() {
-    return this.http
-      .put(environment.apiUrl + "Notification/ReadAll", null)
-      .pipe(
-        map((x) => {
-          this.unread.set(0);
-          return x;
-        })
-      );
+    return this.http.put(environment.apiUrl + "Notification/ReadAll", null).pipe(
+      map((x) => {
+        this.unread.set(0);
+        return x;
+      }),
+    );
   }
 
-  private listen() {
-    const event = new EventSource(environment.apiUrl + "notifications");
+  private async listen() {
+    this.control = new AbortController();
+    await fetchEventSource(environment.apiUrl + "sse/connect", {
+      signal: this.control.signal,
+      headers: {
+        Authorization: `Bearer ${this.auth.Token}`,
+      },
+      onopen: async (x) => {
+        console.log("Connected to notifications server");
+        this.connected.set(true);
+      },
+      onmessage: async (event) => this.handleMessage(event),
+      onclose: () => {
+        this.control.abort();
+        throw new Error();
+      },
+      onerror: (error) => {
+        this.control.abort();
+        console.log("Failed to connect to notifications server", error);
+        this.error.set({
+          message: "Não foi possível conectar ao servidor de notificações",
+        });
+      },
+    });
+  }
 
-    event.onopen = () => {
-      console.log("Connected to notifications server");
+  private handleMessage(event: EventSourceMessage) {
+    console.log("Received notification \n", event);
+    const data = JSON.parse(event.data);
+    console.log(data);
 
-      this.connected.set(true);
-    };
+    if (!("clientId" in data)) {
+      let notification: Notification[];
 
-    event.onmessage = (event) => {
-      const notification: Notification[] = Array.from([JSON.parse(event.data)]);
-      this.unread.update((unread) => unread + 1);
-      this.$notifications.next(this.$notifications.value.concat(notification));
-    };
+      if (Array.isArray(data)) {
+        notification = data;
+      } else {
+        notification = [data];
+      }
 
-    event.onerror = (error) => {
-      console.log("Failed to connect to notifications server", error);
-
-      this.error.set({
-        message: "Não foi possível conectar ao servidor de notificações",
-      });
-    };
+      this.unread.update((unread) => unread + notification.length);
+      this.$notify.next(notification);
+    }
   }
 }

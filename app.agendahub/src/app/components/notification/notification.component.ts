@@ -2,7 +2,7 @@ import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { TemplatePortal } from "@angular/cdk/portal";
 import { Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import * as moment from "moment";
-import { Subscription } from "rxjs";
+import { Subscription, firstValueFrom } from "rxjs";
 import { Forgetable } from "../../core/forgetable";
 import { Notification, NotificationStatus } from "../../models/core/notification";
 import { NotificationService } from "../../services/notification.service";
@@ -53,8 +53,12 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
   ngOnInit(): void {
     this.set(NotificationStatus.Unread);
 
-    this.notify.preview().subscribe((notifications) => {
+    firstValueFrom(this.notify.preview()).then((notifications) => {
       this.messages = notifications;
+      this.set(this.tab);
+    });
+    this.subscription = this.notify.upcoming.subscribe((notifications) => {
+      this.messages = Array.from(new Set([...notifications, ...this.messages]).values());
       this.set(this.tab);
     });
   }
