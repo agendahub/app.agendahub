@@ -50,7 +50,10 @@
             <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18" />
           </svg>
         </span>
-        <span class="text-xl font-light leading-5 -tracking-wide"> Notificações </span>
+        <div class="flex gap-3 items-center">
+          <span class="rounded-full w-3 h-3 shadow-md" [ngClass]="{ 'bg-green-500': connected(), 'bg-gray-400': !connected() }"></span>
+          <span class="text-xl font-light leading-5 -tracking-wide"> Notificações </span>
+        </div>
       </div>
       <div class="bg-slate-950 flex w-full h-full justify-between rounded-md p-[3px] select-none font-extralight gap-1">
         <div

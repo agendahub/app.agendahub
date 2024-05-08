@@ -5,6 +5,7 @@ import { BehaviorSubject, map, of } from "rxjs";
 import { environment } from "../../environments/environment.development";
 import { AuthService } from "../auth/auth-service.service";
 import { Notification, NotificationStatus } from "../models/core/notification";
+import { defer } from "../types/typing";
 type BrowserNotification = Notification;
 
 @Injectable({
@@ -20,9 +21,12 @@ export class NotificationService implements OnDestroy {
   unread = signal<number>(0);
 
   private control!: AbortController;
+  private flow = {
+    TIMEOUT: 1000,
+    MAX_RETRIES: 10,
+  };
 
   constructor(private http: HttpClient, private auth: AuthService) {
-    console.log("Notification service created");
     if (this.auth.isLogged) {
       this.listen();
     }
@@ -30,8 +34,6 @@ export class NotificationService implements OnDestroy {
 
   @HostListener("window:beforeunload")
   async ngOnDestroy() {
-    console.log("Disconnecting from notifications server");
-
     if (this.control) {
       this.control.abort(0);
     }
@@ -81,6 +83,7 @@ export class NotificationService implements OnDestroy {
     this.control = new AbortController();
     await fetchEventSource(environment.apiUrl + "sse/connect", {
       signal: this.control.signal,
+      openWhenHidden: true,
       headers: {
         Authorization: `Bearer ${this.auth.Token}`,
       },
@@ -90,23 +93,31 @@ export class NotificationService implements OnDestroy {
       },
       onmessage: async (event) => this.handleMessage(event),
       onclose: () => {
+        this.connected.set(false);
         this.control.abort();
-        throw new Error();
       },
       onerror: (error) => {
         this.control.abort();
-        console.log("Failed to connect to notifications server", error);
+        this.connected.set(false);
         this.error.set({
           message: "Não foi possível conectar ao servidor de notificações",
         });
+
+        defer(() => {
+          if (this.flow.MAX_RETRIES > 0) {
+            this.flow.MAX_RETRIES--;
+            this.listen();
+          }
+        }, this.flow.TIMEOUT);
+
+        throw new Error(error);
       },
     });
   }
 
   private handleMessage(event: EventSourceMessage) {
-    console.log("Received notification \n", event);
+    console.info("Received notification \n", event);
     const data = JSON.parse(event.data);
-    console.log(data);
 
     if (!("clientId" in data)) {
       let notification: Notification[];

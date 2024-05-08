@@ -1,6 +1,6 @@
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { TemplatePortal } from "@angular/cdk/portal";
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, Signal, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import * as moment from "moment";
 import { Subscription, firstValueFrom } from "rxjs";
 import { Forgetable } from "../../core/forgetable";
@@ -30,6 +30,7 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
   private mobileOverlay!: OverlayRef;
 
   saving: boolean = false;
+  connected!: Signal<boolean>;
 
   @ViewChild("ref") elementRef!: TemplateRef<any>;
   @ViewChild("wrapper") wrapperRef!: ElementRef<HTMLDivElement>;
@@ -61,6 +62,8 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
       this.messages = Array.from(new Set([...notifications, ...this.messages]).values());
       this.set(this.tab);
     });
+
+    this.connected = this.notify.connected;
   }
 
   ngOnDestroy(): void {
