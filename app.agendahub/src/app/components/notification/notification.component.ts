@@ -6,6 +6,7 @@ import { Subscription, firstValueFrom } from "rxjs";
 import { Forgetable } from "../../core/forgetable";
 import { Notification, NotificationStatus } from "../../models/core/notification";
 import { NotificationService } from "../../services/notification.service";
+import { PushNotificationService } from "../../services/push-notification.service";
 import { ScreenHelperService } from "../../services/screen-helper.service";
 
 @Component({
@@ -35,7 +36,13 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
   @ViewChild("ref") elementRef!: TemplateRef<any>;
   @ViewChild("wrapper") wrapperRef!: ElementRef<HTMLDivElement>;
 
-  constructor(public notify: NotificationService, private overlay: Overlay, private view: ViewContainerRef, public help: ScreenHelperService) {
+  constructor(
+    public notify: NotificationService,
+    private overlay: Overlay,
+    private view: ViewContainerRef,
+    public help: ScreenHelperService,
+    private webPush: PushNotificationService,
+  ) {
     super();
     moment.locale("pt-br");
   }
@@ -149,5 +156,9 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
     }
 
     this.opened = false;
+  }
+
+  webpush() {
+    this.webPush.subscribeToNotifications();
   }
 }
