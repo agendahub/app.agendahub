@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 
 import { MessageService } from "primeng/api";
 import { Subject, catchError, finalize, map, take } from "rxjs";
-import { environment } from "../../environments/environment.development";
 import { AuthService } from "../auth/auth-service.service";
 import { ErrorHandler } from "../utils/error";
 import { LoaderService } from "./loader.service";
@@ -13,7 +12,7 @@ export type QueryParams = Record<string, string | number | boolean | ReadonlyArr
 
 @Injectable({ providedIn: "root" })
 export class ApiService {
-  private baseUrl = environment.apiUrl;
+  private baseUrl = "http://localhost:5001/";
   private cache!: Map<string, any>;
   private offline = new Subject();
 

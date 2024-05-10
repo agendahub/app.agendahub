@@ -1,11 +1,10 @@
 import { Component, OnInit } from "@angular/core";
-import { ApiService } from "../../../services/api-service.service";
-import { MenuItem } from "primeng/api";
-import { SettingsService } from "../services/settings.service";
-import { AuthService } from "../../../auth/auth-service.service";
-import { Access } from "../../../auth/acess";
-import { defer } from "../../../types/typing";
 import { Router } from "@angular/router";
+import { MenuItem } from "primeng/api";
+import { Access } from "../../../auth/acess";
+import { AuthService } from "../../../auth/auth-service.service";
+import { defer } from "../../../types/typing";
+import { SettingsService } from "../services/settings.service";
 
 @Component({
   selector: "app-settings",
@@ -34,7 +33,7 @@ export class SettingsComponent implements OnInit {
   private mountItems() {
     this.items = [
       // { label: 'Gerais', icon: 'fa-solid fa-globe mr-1', routerLink: 'general', replaceUrl: false, id: 'General'},
-      // { label: 'Notificações', icon: 'fa-solid fa-bell mr-1', routerLink: 'notifications', replaceUrl: false, id: 'Notifications'},
+      { label: "Notificações", icon: "fa-solid fa-bell mr-1", routerLink: "notifications", replaceUrl: false, id: "Notifications" },
       {
         label: "Agendamentos",
         icon: "fa-solid fa-clock mr-1",

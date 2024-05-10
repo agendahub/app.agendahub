@@ -8,8 +8,8 @@ import { LocalStorageService } from "./local-storage.service";
   providedIn: "root",
 })
 export class PushNotificationService {
+  private key = "BAwfgA_E-bbitMvcqqTcLNdnuf791ao155OSQwIRWjgjC-tudLhN7MgdFXpcxqk2czp27DvqwkQ5qguX6gaoDiE";
   swPushpayload: any;
-  key = "BAwfgA_E-bbitMvcqqTcLNdnuf791ao155OSQwIRWjgjC-tudLhN7MgdFXpcxqk2czp27DvqwkQ5qguX6gaoDiE";
 
   constructor(private swPush: SwPush, private api: ApiService, private localSS: LocalStorageService) {}
 
@@ -51,7 +51,7 @@ export class PushNotificationService {
     // Send the subscription object to your server for storing
     // You can make an HTTP request or use any other method to send the subscription data to your server
     console.log(this.retrievePushObject(sub));
-    await firstValueFrom(this.api.raw().post("http://localhost:5001/Notification/Push", this.retrievePushObject(sub)));
+    await firstValueFrom(this.api.sendToApi("Notification/Subscribe", this.retrievePushObject(sub)));
   }
 
   private storeSubscription(sub: PushSubscription): void {

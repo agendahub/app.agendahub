@@ -87,9 +87,11 @@ export class NotificationService implements OnDestroy {
       headers: {
         Authorization: `Bearer ${this.auth.Token}`,
       },
-      onopen: async (x) => {
-        console.log("Connected to notifications server");
-        this.connected.set(true);
+      onopen: async (response) => {
+        if (response.ok) {
+          console.log("Connected to notifications server");
+          this.connected.set(true);
+        }
       },
       onmessage: async (event) => this.handleMessage(event),
       onclose: () => {

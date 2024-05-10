@@ -113,7 +113,7 @@ import { loadTypes } from "./types/typing";
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: [environment.getApiDomain()],
+        allowedDomains: [environment.getApiDomain(), "localhost:5001"],
         disallowedRoutes: [environment.getApiDomain() + "/auth/login"],
       },
     }),
