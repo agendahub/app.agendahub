@@ -38,6 +38,7 @@
     "@fullcalendar/scrollgrid": "^6.1.8",
     "@fullcalendar/timegrid": "^6.1.8",
     "@microsoft/fetch-event-source": "^2.0.1",
+    "@vercel/analytics": "^1.2.2",
     "moment": "^2.29.4",
     "ngx-ui-loader": "^13.0.0",
     "primeng": "^16.0.2",
