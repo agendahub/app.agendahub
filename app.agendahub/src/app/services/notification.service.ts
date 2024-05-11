@@ -67,6 +67,7 @@ export class NotificationService implements OnDestroy {
     return this.http.put(environment.apiUrl + "Notification/Read/" + id, null).pipe(
       map((x) => {
         this.unread.update((unread) => unread - 1);
+        this.setAppBadge();
         return x;
       }),
     );
@@ -76,6 +77,7 @@ export class NotificationService implements OnDestroy {
     return this.http.put(environment.apiUrl + "Notification/ReadAll", null).pipe(
       map((x) => {
         this.unread.set(0);
+        this.setAppBadge();
         return x;
       }),
     );
