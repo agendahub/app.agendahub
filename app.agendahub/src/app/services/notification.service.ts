@@ -139,6 +139,7 @@ export class NotificationService implements OnDestroy {
 
       this.unread.update((unread) => unread + notification.length);
       this.$notify.next(notification);
+      this.setAppBadge();
     }
   }
 
