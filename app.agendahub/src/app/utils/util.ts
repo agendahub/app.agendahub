@@ -2,12 +2,27 @@ import { EventInput } from "@fullcalendar/core"
 import { UserSchedule } from "../models/core/entities"
 import { SortEvent } from "primeng/api"
 import { environment } from "../../environments/environment.development";
+import { defer } from "../types/typing";
 
 export function getRandomImage(el: string = "#login_page") {
   const thisPage = document.querySelector(el) as HTMLElement;
   const [width, height] = [thisPage.clientWidth - 200, thisPage.clientHeight];
-  
-  return `https://source.unsplash.com/random/${height}x${width}/?landscape?grayscale`;
+  const url = `https://source.unsplash.com/random/${height}x${width}/?landscape?grayscale`;
+
+  defer(async () => {
+
+    if (await caches.has(url)) {
+      return;
+    }
+
+    caches.open("auth").then(cache => {      
+      cache.add(url).then(() => {
+        console.log("Image cached " + url);
+      });
+    });
+  })
+
+  return url;
 }
 
 export function mapScheduleToEvent(schedules: UserSchedule[], filter: (x: UserSchedule) => boolean = () => true) {

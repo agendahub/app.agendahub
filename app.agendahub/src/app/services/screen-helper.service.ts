@@ -1,29 +1,28 @@
-import { Platform } from '@angular/cdk/platform';
-import { DOCUMENT } from '@angular/common';
-import { HostListener, Inject, Injectable, OnInit, inject } from '@angular/core';
+import { Platform } from "@angular/cdk/platform";
+import { DOCUMENT } from "@angular/common";
+import { HostListener, Inject, Injectable, OnInit, inject } from "@angular/core";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class ScreenHelperService {
-
-  private platform = inject(Platform)
+  private platform = inject(Platform);
 
   public specs: DeviceSpec = {
     isMobile: null,
     isDesktop: null,
-    isMid: null
+    isMid: null,
+  };
+
+  public get isMobile(): boolean | null {
+    return this.specs.isMobile;
   }
 
-  private get isMobile() : boolean | null {
-    return this.specs.isMobile
+  public get isDesktop(): boolean | null {
+    return this.specs.isDesktop;
   }
 
-  private get isDesktop() : boolean | null {
-    return this.specs.isDesktop
-  }
-  
-  private get isMid() : boolean | null {
+  public get isMid(): boolean | null {
     return this.specs.isMid;
   }
 
@@ -45,7 +44,7 @@ export class ScreenHelperService {
   }
 
   @HostListener("window:resize") checkChanges() {
-    this.checkSize()
+    this.checkSize();
   }
 
   checkSize() {
@@ -55,14 +54,17 @@ export class ScreenHelperService {
   }
 
   currentDevice() {
-    if (this.specs.isDesktop || this.platform.isBrowser && !this.platform.IOS && !this.platform.ANDROID) {
-      return 0
+    if (this.specs.isDesktop || (this.platform.isBrowser && !this.platform.IOS && !this.platform.ANDROID)) {
+      return 0;
     } else if (this.specs.isMid) {
-      return 1
-    } else return 2
+      return 1;
+    } else return 2;
   }
-
 }
 
-export type DeviceSpec = {isMobile: boolean | null, isDesktop: boolean | null, isMid: boolean | null}
-export enum DeviceEnum { Desktop, Mid, Mobile }
+export type DeviceSpec = { isMobile: boolean | null; isDesktop: boolean | null; isMid: boolean | null };
+export enum DeviceEnum {
+  Desktop,
+  Mid,
+  Mobile,
+}

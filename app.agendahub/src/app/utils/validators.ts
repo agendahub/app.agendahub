@@ -22,6 +22,27 @@ export class CustomValidators {
         };
     }
 
+    static equalsTo<T, S>(compare: string, comparator: (o: T, c: S) => boolean = (o: unknown, c: unknown) => o == c, message?: string) {
+        return (control: AbstractControl) => {
+            if (control.value === null || control.value.length === 0) {
+                return null;
+            }
+            const originValue = control.value;
+            const comparer = control.root.get(compare);
+            const compareValue = comparer?.value;
+
+            if (!notNull(originValue) && !notNull(compareValue)) {
+                return null
+            }
+            
+            if (notNull(originValue) && notNull(compareValue) && comparator(originValue, compareValue)) {
+                return null;
+            }
+
+            return { equalTo: message ?? true };
+        };
+    }
+
     static dateRange() {
         return (control: AbstractControl) => {
             const value = control.value;

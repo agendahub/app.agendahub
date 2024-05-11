@@ -12,24 +12,13 @@ import { CheckboxModule } from "primeng/checkbox";
 import { CalendarModule } from "primeng/calendar";
 import { MultiSelectModule } from "primeng/multiselect";
 import { TooltipModule } from "primeng/tooltip";
+import { SecurityComponent } from "./tabs/security/security.component";
+import { InputTextModule } from "primeng/inputtext";
+import { PasswordModule } from "primeng/password";
 
 @NgModule({
-  declarations: [
-    SettingsComponent,
-    GeneralComponent,
-    NotificationsComponent,
-    AppointmentsComponent,
-  ],
-  imports: [
-    SharedModule,
-    SettingsRoutingModule,
-
-    TooltipModule,
-    MultiSelectModule,
-    CalendarModule,
-    TabMenuModule,
-    CheckboxModule,
-  ],
+  declarations: [SettingsComponent, GeneralComponent, NotificationsComponent, AppointmentsComponent, SecurityComponent],
+  imports: [SharedModule, SettingsRoutingModule, InputTextModule, TooltipModule, MultiSelectModule, CalendarModule, TabMenuModule, CheckboxModule, PasswordModule],
   exports: [SettingsRoutingModule],
   providers: [SettingsService],
 })
