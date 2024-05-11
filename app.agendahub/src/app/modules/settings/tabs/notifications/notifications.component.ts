@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { ConfirmationService } from "primeng/api";
+import { firstValueFrom } from "rxjs";
 import { ApiService } from "../../../../services/api-service.service";
 import { PushNotificationService } from "../../../../services/push-notification.service";
 import { SettingsService } from "../../services/settings.service";
@@ -12,18 +13,20 @@ import { SettingsService } from "../../services/settings.service";
 })
 export class NotificationsComponent {
   form!: FormGroup;
+  state: any;
 
   constructor(private settings: SettingsService, private fb: FormBuilder, private confirm: ConfirmationService, private api: ApiService, private push: PushNotificationService) {}
 
-  ngOnInit(): void {
-    this.settings.state("Notifications");
+  async ngOnInit() {
     this.buildForm();
+    this.state = await this.settings.state("Notifications");
+    this.form.patchValue(this.state);
   }
 
   buildForm() {
     this.form = this.fb.group({
-      email: [],
-      push: [],
+      emailNotifications: [],
+      pushNotifications: [],
     });
   }
 
@@ -36,11 +39,14 @@ export class NotificationsComponent {
         this.push.subscribeToNotifications();
       },
       reject: () => {
-        this.push.unsubscribeFromPushNotifications();
         console.log("Reject");
+        // this.push.unsubscribeFromPushNotifications();
       },
     });
   }
 
-  save() {}
+  async save() {
+    const data = { ...this.form.value, id: this.state.id, userId: this.state.userId };
+    await firstValueFrom(this.api.updateToApi("User/UpdatePreferences", data));
+  }
 }

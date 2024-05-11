@@ -9,20 +9,17 @@ import { LocalStorageService } from "./local-storage.service";
 })
 export class PushNotificationService {
   private key = "BAwfgA_E-bbitMvcqqTcLNdnuf791ao155OSQwIRWjgjC-tudLhN7MgdFXpcxqk2czp27DvqwkQ5qguX6gaoDiE";
-  swPushpayload: any;
 
   constructor(private swPush: SwPush, private api: ApiService, private localSS: LocalStorageService) {}
 
-  subscribeToNotifications(): void {
+  subscribeToNotifications(refresh = false): void {
     if (this.swPush.isEnabled) {
-      console.log(this.key);
-
       this.swPush
         .requestSubscription({
           serverPublicKey: this.key,
         })
         .then((sub: PushSubscription) => {
-          this.saveSubscription(sub);
+          this.saveSubscription(sub, refresh);
           this.storeSubscription(sub);
           this.subscribeMessage();
         })
@@ -47,15 +44,12 @@ export class PushNotificationService {
     });
   }
 
-  private async saveSubscription(sub: PushSubscription): Promise<void> {
-    // Send the subscription object to your server for storing
-    // You can make an HTTP request or use any other method to send the subscription data to your server
+  private async saveSubscription(sub: PushSubscription, refresh = false): Promise<void> {
     console.log(this.retrievePushObject(sub));
-    await firstValueFrom(this.api.sendToApi("Notification/Subscribe", this.retrievePushObject(sub)));
+    await firstValueFrom(this.api.sendToApi("Notification/Subscribe", this.retrievePushObject(sub), false));
   }
 
   private storeSubscription(sub: PushSubscription): void {
-    // Store the subscription in local storage or any other storage mechanism
     this.localSS.set("push-subscription", this.retrievePushObject(sub));
   }
 

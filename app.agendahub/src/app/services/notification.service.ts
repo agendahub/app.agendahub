@@ -6,6 +6,7 @@ import { environment } from "../../environments/environment.development";
 import { AuthService } from "../auth/auth-service.service";
 import { Notification, NotificationStatus } from "../models/core/notification";
 import { defer } from "../types/typing";
+import { PushNotificationService } from "./push-notification.service";
 type BrowserNotification = Notification;
 
 @Injectable({
@@ -26,7 +27,7 @@ export class NotificationService implements OnDestroy {
     MAX_RETRIES: 10,
   };
 
-  constructor(private http: HttpClient, private auth: AuthService) {
+  constructor(private http: HttpClient, private auth: AuthService, private push: PushNotificationService) {
     if (this.auth.isLogged) {
       this.listen();
     }
@@ -118,8 +119,13 @@ export class NotificationService implements OnDestroy {
   }
 
   private handleMessage(event: EventSourceMessage) {
-    console.info("Received notification \n", event);
     const data = JSON.parse(event.data);
+
+    console.log(data);
+
+    if ("refreshPush" in data) {
+      return this.push.subscribeToNotifications();
+    }
 
     if (!("clientId" in data)) {
       let notification: Notification[];
