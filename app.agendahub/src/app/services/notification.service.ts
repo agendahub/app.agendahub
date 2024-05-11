@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { HostListener, Injectable, OnDestroy, signal } from "@angular/core";
+import { Title } from "@angular/platform-browser";
 import { EventSourceMessage, fetchEventSource } from "@microsoft/fetch-event-source";
 import { BehaviorSubject, map, of } from "rxjs";
 import { environment } from "../../environments/environment.development";
@@ -27,7 +28,7 @@ export class NotificationService implements OnDestroy {
     MAX_RETRIES: 10,
   };
 
-  constructor(private http: HttpClient, private auth: AuthService, private push: PushNotificationService) {
+  constructor(private http: HttpClient, private title: Title, private auth: AuthService, private push: PushNotificationService) {
     if (this.auth.isLogged) {
       this.listen();
     }
@@ -138,6 +139,18 @@ export class NotificationService implements OnDestroy {
 
       this.unread.update((unread) => unread + notification.length);
       this.$notify.next(notification);
+    }
+  }
+
+  private setAppBadge() {
+    if (this.unread() > 0) {
+      this.title.setTitle(`(${this.unread()}) ${this.title.getTitle()}`);
+
+      if ("setAppBadge" in navigator) {
+        navigator.setAppBadge(this.unread());
+      }
+    } else {
+      this.title.setTitle(this.title.getTitle().replace(/^\(\d+\)\s/, ""));
     }
   }
 }
