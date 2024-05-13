@@ -25,7 +25,7 @@ export class AuthService {
     private httpClient: HttpClient,
     private platform: Platform,
     private messageService: MessageService,
-    private localStorage: LocalStorageService
+    private localStorage: LocalStorageService,
   ) {
     if (localStorage.get("interval")) {
       this.checkToken();
@@ -154,7 +154,6 @@ export class AuthService {
     }
   }
 
-
   public back(navigate?: NavigateOptions) {
     if (navigate && navigate.beforeNavigate) {
       navigate.beforeNavigate();
@@ -211,8 +210,7 @@ export class AuthService {
         this.intervalRunning = false;
       }
 
-      const isNeedRefresh =
-        Math.abs(timeRemaining?.getTime()! - now) / 1000 < 100;
+      const isNeedRefresh = Math.abs(timeRemaining?.getTime()! - now) / 1000 < 100;
 
       if (this.isLogged && isNeedRefresh) {
         clearInterval(this.interval);
@@ -227,7 +225,7 @@ export class AuthService {
     }, 1000);
   }
 
-  private tryRefreshToken() {
+  public tryRefreshToken() {
     this.httpClient.get(this.baseUrl + "Auth/Refresh").subscribe(
       (x: any) => {
         if (x && x.token) {
@@ -244,7 +242,7 @@ export class AuthService {
               detail: err,
             }),
         });
-      }
+      },
     );
   }
 }
