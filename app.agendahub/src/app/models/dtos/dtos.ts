@@ -41,3 +41,10 @@ export class GetTableSchedulingListDto{
     public EndDate!: Date
     public Total!: number
 }
+
+
+export class EditUserDto{
+    public Email!: string
+    public Phone!: string
+    public DateBirth!: Date
+}

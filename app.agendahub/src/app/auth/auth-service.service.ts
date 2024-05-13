@@ -225,7 +225,7 @@ export class AuthService {
     }, 1000);
   }
 
-  private tryRefreshToken() {
+  public tryRefreshToken() {
     this.httpClient.get(this.baseUrl + "Auth/Refresh").subscribe(
       (x: any) => {
         if (x && x.token) {
@@ -234,7 +234,14 @@ export class AuthService {
         }
       },
       (err) => {
-        this.back({ beforeNavigate: () => this.messageService.add({ severity: "warning", summary: "Erro ao atualizar token", detail: err }) });
+        this.back({
+          beforeNavigate: () =>
+            this.messageService.add({
+              severity: "warning",
+              summary: "Erro ao atualizar token",
+              detail: err,
+            }),
+        });
       },
     );
   }
