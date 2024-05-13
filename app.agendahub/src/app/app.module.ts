@@ -35,11 +35,13 @@ import { SplitButtonModule } from "primeng/splitbutton";
 import { TimelineModule } from "primeng/timeline";
 import { ToastModule } from "primeng/toast";
 
+import { NgOptimizedImage } from "@angular/common";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MessageService } from "primeng/api";
 import { MegaMenuModule } from "primeng/megamenu";
 import { TableModule } from "primeng/table";
 import { TieredMenuModule } from "primeng/tieredmenu";
+
 import { environment } from "../environments/environment.development";
 import { AuthService } from "./auth/auth-service.service";
 import { tokenGetter } from "./auth/auth-utils";
@@ -50,6 +52,9 @@ import { ManagerModule } from "./modules/manager/manager.module";
 import { HomeComponent } from "./pages/home/home.component";
 import { LinksComponent } from "./pages/links/links.component";
 import { LoginComponent } from "./pages/login/login.component";
+
+import { ResetPasswordComponent } from "./pages/reset-password/reset-password.component";
+
 import { ScheduleLinkViewComponent } from "./pages/schedule-link-view/schedule-link-view.component";
 import { SchedulerComponent } from "./pages/scheduler/scheduler.component";
 import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
@@ -66,6 +71,7 @@ import { loadTypes } from "./types/typing";
     UserProfileComponent,
     LinksComponent,
     ScheduleLinkViewComponent,
+    ResetPasswordComponent,
   ],
   imports: [
     FormsModule,
@@ -75,6 +81,7 @@ import { loadTypes } from "./types/typing";
     AppRoutingModule,
     ReactiveFormsModule,
     BrowserAnimationsModule,
+    NgOptimizedImage,
 
     FontAwesomeModule,
     ManagerRoutingModule,

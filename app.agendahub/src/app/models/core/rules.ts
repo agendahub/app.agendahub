@@ -4,5 +4,5 @@ export const rules = {
 }
 
 export const skipRoutes = [
-    "schedule-link", "login", "teste"
+    "schedule-link", "login", "reset-password/*"
 ]

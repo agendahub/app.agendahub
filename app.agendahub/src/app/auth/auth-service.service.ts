@@ -4,7 +4,7 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { JwtHelperService } from "@auth0/angular-jwt";
 import { MessageService } from "primeng/api";
-import { Subject, finalize, map } from "rxjs";
+import { Subject, finalize, firstValueFrom, map } from "rxjs";
 import { environment } from "../../environments/environment.development";
 import { LoaderService } from "../services/loader.service";
 import { LocalStorageService } from "../services/local-storage.service";
@@ -79,22 +79,17 @@ export class AuthService {
     return this.TokenData?.role;
   }
 
-  public login(login: string, password: string, extras?: Record<string, any>) {
+  public login(login: string, password: string, domain?: string, extras?: Record<string, any>) {
     const loginModel = {
       login: login,
       password: password,
-      domain: "dev",
+      domain: domain,
     };
 
     this.loader.show();
-    console.log(extras);
 
     return this.httpClient
-      .post(
-        this.baseUrl + "Auth/Login",
-        loginModel,
-        extras ? { params: extras } : undefined
-      )
+      .post(this.baseUrl + "Auth/Login", loginModel, extras ? { params: extras } : undefined)
       .pipe(finalize(() => this.loader.hide()))
       .pipe(
         map((r: any) => {
@@ -105,21 +100,60 @@ export class AuthService {
           }
 
           return r;
-        })
+        }),
       );
   }
 
-  public logout(
-    fnLogout = () =>
-      this.messageService.add({ severity: "info", summary: "Até breve..." })
-  ) {
-    this.Token = null;
-
+  public logout(fnLogout = () => this.messageService.add({ severity: "info", summary: "Até breve..." })) {
     this.back({
       beforeNavigate: fnLogout,
+      afterNavigate: () => (this.Token = null),
       timeout: 1000,
     });
   }
+
+  public async canAccess(role: Access) {
+    const userRole = this.getUserAccess();
+    if (userRole === role) {
+      return true;
+    }
+
+    return false;
+  }
+
+  public async updatePassword(change: { oldPassword: string; newPassword: string; confirmPassword: string }) {
+    this.loader.show();
+    try {
+      return await firstValueFrom(this.httpClient.post(this.baseUrl + "Auth/UpdatePassword", change));
+    } catch (error) {
+      return error;
+    } finally {
+      this.loader.hide();
+    }
+  }
+
+  public async resetPassword(token: string, password: string, email: string) {
+    this.loader.show();
+    try {
+      return await firstValueFrom(this.httpClient.post(this.baseUrl + "Auth/ResetPassword", { token, password, email }));
+    } catch (error) {
+      return error;
+    } finally {
+      this.loader.hide();
+    }
+  }
+
+  public async forgotPassword(email: string) {
+    this.loader.show();
+    try {
+      return await firstValueFrom(this.httpClient.post(this.baseUrl + "Auth/RecoverPassword", { email }));
+    } catch (error) {
+      return error;
+    } finally {
+      this.loader.hide();
+    }
+  }
+
 
   public back(navigate?: NavigateOptions) {
     if (navigate && navigate.beforeNavigate) {
@@ -133,7 +167,7 @@ export class AuthService {
           navigate.afterNavigate();
         }
       },
-      navigate ? navigate.timeout : 456
+      navigate ? navigate.timeout : 456,
     );
 
     return false;
@@ -193,7 +227,7 @@ export class AuthService {
     }, 1000);
   }
 
-  public tryRefreshToken() {
+  private tryRefreshToken() {
     this.httpClient.get(this.baseUrl + "Auth/Refresh").subscribe(
       (x: any) => {
         if (x && x.token) {

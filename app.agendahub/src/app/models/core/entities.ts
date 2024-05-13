@@ -13,12 +13,14 @@ export class User implements IIdentifiable<number> {
   name!: string;
   surname!: string;
   color?: string | undefined;
+  isActive!: boolean;
   email!: string;
   phone!: string;
   password!: string;
   dateBirth!: Date;
   userType!: UserType;
   imageUrl?: string;
+
 }
 
 export class ServiceType implements IIdentifiable<number> {

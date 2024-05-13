@@ -6,7 +6,7 @@
     "host": "ng serve --host 0.0.0.0 --port 3333",
     "start": "ng serve",
     "build": "ng build",
-    "watch": "ng build --watch --configuration development",
+    "watch": "ng build --watch --configuration production",
     "test-prod": "node test.production.js"
   },
   "private": true,
@@ -37,6 +37,7 @@
     "@fullcalendar/moment": "^6.1.8",
     "@fullcalendar/scrollgrid": "^6.1.8",
     "@fullcalendar/timegrid": "^6.1.8",
+    "@microsoft/fetch-event-source": "^2.0.1",
     "moment": "^2.29.4",
     "ngx-ui-loader": "^13.0.0",
     "primeng": "^16.0.2",

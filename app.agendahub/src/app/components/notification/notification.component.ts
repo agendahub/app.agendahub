@@ -1,28 +1,13 @@
-import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  Host,
-  HostListener,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-  SimpleChanges,
-  ViewChild,
-  effect,
-  signal,
-} from "@angular/core";
-import { NotificationService } from "../../services/notification.service";
-import {
-  Notification,
-  NotificationStatus,
-  NotificationType,
-} from "../../models/core/notification";
-import { Subscription } from "rxjs";
+import { Overlay, OverlayRef } from "@angular/cdk/overlay";
+import { TemplatePortal } from "@angular/cdk/portal";
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, Signal, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import * as moment from "moment";
+import { Subscription, firstValueFrom } from "rxjs";
 import { Forgetable } from "../../core/forgetable";
+import { Notification, NotificationStatus } from "../../models/core/notification";
+import { NotificationService } from "../../services/notification.service";
+import { PushNotificationService } from "../../services/push-notification.service";
+import { ScreenHelperService } from "../../services/screen-helper.service";
 
 @Component({
   selector: "notifications",
@@ -31,7 +16,7 @@ import { Forgetable } from "../../core/forgetable";
 })
 export class NotificationComponent extends Forgetable implements OnInit, OnDestroy {
   forkM = moment;
-  open: boolean = false;
+  opened: boolean = false;
   messages: Notification[] = [];
 
   tab!: NotificationStatus | number;
@@ -43,34 +28,49 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
   }>;
 
   private subscription!: Subscription;
+  private mobileOverlay!: OverlayRef;
 
   saving: boolean = false;
+  connected!: Signal<boolean>;
 
-  @ViewChild("ref") elementRef!: ElementRef<HTMLDivElement>;
+  @ViewChild("ref") elementRef!: TemplateRef<any>;
+  @ViewChild("wrapper") wrapperRef!: ElementRef<HTMLDivElement>;
 
-  constructor(public notify: NotificationService,) {
-    super()
+  constructor(
+    public notify: NotificationService,
+    private overlay: Overlay,
+    private view: ViewContainerRef,
+    public help: ScreenHelperService,
+    private webPush: PushNotificationService,
+  ) {
+    super();
     moment.locale("pt-br");
   }
 
   public override forget(): void {
-    this.open = false;
+    this.opened = false;
   }
 
   @HostListener("document:click", ["$event"])
   clickout(event: MouseEvent) {
-    if (!this.elementRef.nativeElement.contains(event.target as Node)) {
-      this.open = false;
+    if (!this.wrapperRef.nativeElement.contains(event.target as Node) && !this.mobileOverlay) {
+      this.opened = false;
     }
   }
 
   ngOnInit(): void {
     this.set(NotificationStatus.Unread);
 
-    this.notify.preview().subscribe((notifications) => {
+    firstValueFrom(this.notify.preview()).then((notifications) => {
       this.messages = notifications;
       this.set(this.tab);
     });
+    this.subscription = this.notify.upcoming.subscribe((notifications) => {
+      this.messages = Array.from(new Set([...notifications, ...this.messages]).values());
+      this.set(this.tab);
+    });
+
+    this.connected = this.notify.connected;
   }
 
   ngOnDestroy(): void {
@@ -110,22 +110,14 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
       } else if (today.diff(date, "days") <= 7) {
         checkExists("thisWeek", "Essa semana", m);
       } else {
-        checkExists(
-          date.format("MMMM"),
-          date.format("MMMM").toUpperCapital(),
-          m
-        );
+        checkExists(date.format("MMMM"), date.format("MMMM").toUpperCapital(), m);
       }
     });
   }
 
   readAll() {
     this.notify.readAll().subscribe(() => {
-      this.messages = this.messages.map((m) =>
-        m.status == NotificationStatus.Unread
-          ? { ...m, status: NotificationStatus.Read }
-          : m
-      );
+      this.messages = this.messages.map((m) => (m.status == NotificationStatus.Unread ? { ...m, status: NotificationStatus.Read } : m));
       this.set(NotificationStatus.Read);
     });
   }
@@ -134,14 +126,39 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
     if (notification.status === NotificationStatus.Unread && !this.saving) {
       this.saving = true;
       this.notify.read(notification.id).subscribe(() => {
-        this.messages = this.messages.map((m) =>
-          m.id === notification.id
-            ? { ...m, status: NotificationStatus.Read }
-            : m
-        );
+        this.messages = this.messages.map((m) => (m.id === notification.id ? { ...m, status: NotificationStatus.Read } : m));
         this.set(this.tab);
         this.saving = false;
       });
     }
+  }
+
+  open(event: MouseEvent) {
+    event.stopPropagation();
+
+    if (this.opened) {
+      this.close();
+      return;
+    }
+
+    if (this.help.isMobile) {
+      this.mobileOverlay = this.overlay.create({ width: "100vw", height: "100vh", scrollStrategy: this.overlay.scrollStrategies.block() });
+      let portal = new TemplatePortal(this.elementRef, this.view);
+      this.mobileOverlay.attach(portal);
+    }
+
+    this.opened = true;
+  }
+
+  close() {
+    if (this.help.isMobile) {
+      this.mobileOverlay.detach();
+    }
+
+    this.opened = false;
+  }
+
+  webpush() {
+    this.webPush.subscribeToNotifications();
   }
 }
