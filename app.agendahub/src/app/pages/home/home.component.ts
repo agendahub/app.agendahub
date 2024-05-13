@@ -106,13 +106,14 @@ export class HomeComponent implements OnInit {
   private getEvents() {
     this.eventService
       .getCurrentEvents(this.dateRange.value.index, 3)
-      ?.subscribe((x) => {
-        this.events = x;
-      });
-
-    this.eventService
-      .getCurrentEvents(this.dateRange.value.index, 0)
       ?.subscribe((events: UserSchedule[]) => {
+        this.events = events;
+        
+    // });
+    // this.eventService
+    //   .getCurrentEvents(this.dateRange.value.index, 0)
+    //   ?.subscribe((events: UserSchedule[]) => {
+        
         const eventsToday = events.filter((event) => {
           const today = moment().startOf("day");
           const tomorrow = moment().endOf("day");
