@@ -20,9 +20,10 @@ import { OverlayModule } from "primeng/overlay";
 import { BadgeModule } from "primeng/badge";
 import { NotificationComponent } from "./notification/notification.component";
 import { ReadMoreComponent } from "./read-more/read-more.component";
-import { BreadcrumbComponent } from './breadcrumb/breadcrumb.component';
+import { BreadcrumbComponent } from "./breadcrumb/breadcrumb.component";
 import { SpeedDialModule } from "primeng/speeddial";
-import { AlertComponent } from './alert/alert.component';
+import { AlertComponent } from "./alert/alert.component";
+import { CalendarPreviewComponent } from "./calendar-preview/calendar-preview.component";
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { AlertComponent } from './alert/alert.component';
     ReadMoreComponent,
     BreadcrumbComponent,
     AlertComponent,
+    CalendarPreviewComponent,
   ],
   exports: [
     AlertComponent,
@@ -41,7 +43,8 @@ import { AlertComponent } from './alert/alert.component';
     LoaderComponent,
     SidebarComponent,
     CalendarComponent,
-    NotificationComponent
+    NotificationComponent,
+    CalendarPreviewComponent,
   ],
   imports: [
     ProgressSpinnerModule,
@@ -60,7 +63,7 @@ import { AlertComponent } from './alert/alert.component';
     ButtonModule,
     MenuModule,
     BadgeModule,
-    SpeedDialModule
+    SpeedDialModule,
   ],
 })
 export class ComponentsModule {}
