@@ -4,17 +4,14 @@
   <div class="dark:text-white">
     <breadcrumb></breadcrumb>
   </div>
-  <div
-    class="flex justify-between gap-4 text-primary dark:text-very-clean px-4"
-  >
+  <div class="flex justify-between items-center gap-2 text-primary dark:text-very-clean px-4">
     <notifications></notifications>
     <p-avatar
-      [image]="auth.TokenData.imageUrl"
-      [label]="
-        auth.TokenData.imageUrl ? null : auth.TokenData.name[0].toUpperCapital()
-      "
-      shape="circle"
       size="normal"
+      shape="circle"
+      [style]="{ display: 'flex' }"
+      [image]="auth.TokenData.imageUrl"
+      [label]="auth.TokenData.imageUrl ? null : auth.TokenData.name[0].toUpperCapital()"
     ></p-avatar>
   </div>
 </div>

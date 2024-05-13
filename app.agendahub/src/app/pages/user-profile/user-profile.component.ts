@@ -18,7 +18,7 @@ export class UserProfileComponent {
   isEditing: boolean = false;
 
   items = [] as any[];
-  user!: User;
+  user: User = {} as User;
   imageReady: boolean = false;
 
   rangeDates: Date[] | undefined;
@@ -30,18 +30,17 @@ export class UserProfileComponent {
     private authService: AuthService,
     private eventService: EventService,
     private messageService: MessageService,
-    public helper: ScreenHelperService
+    public helper: ScreenHelperService,
   ) {}
 
   ngOnInit(): void {
-    console.log(this.user);
-
+    const hasPhoto = this.authService.getUserData().imageUrl;
     this.getEvents();
     this.getInfoUser();
 
     this.items = [
       {
-        label: "Trocar foto",
+        label: hasPhoto ? "Trocar foto" : "Adicionar foto",
         icon: "fa-solid fa-camera",
         command: () => {
           this.upload();
@@ -66,18 +65,16 @@ export class UserProfileComponent {
   @defer(3_3_3)
   public getInfoUser() {
     let info = this.authService.getUserData();
-    this.apiService
-      .requestFromApi("user/" + info.nameid)
-      .subscribe((x: User) => {
-        this.user = x;
-        this.user.imageUrl = this.authService.getUserData().imageUrl;
+    this.apiService.requestFromApi("user/" + info.nameid).subscribe((x: User) => {
+      this.user = x;
+      this.user.imageUrl = this.authService.getUserData().imageUrl;
 
-        if (this.user.imageUrl) {
-          this.loadImage();
-        } else {
-          this.imageReady = true;
-        }
-      });
+      if (this.user.imageUrl) {
+        this.loadImage();
+      } else {
+        this.imageReady = true;
+      }
+    });
   }
 
   loadImage() {
@@ -91,17 +88,15 @@ export class UserProfileComponent {
   }
 
   saveUserInfo() {
-    this.apiService
-      .sendToApi("user/EditUserProfile", this.user)
-      .subscribe((x) => {
-        this.messageService.add({
-          severity: "success",
-          summary: "Sucesso",
-          detail: "Dados salvos com sucesso!",
-        });
-        this.isEditing = false;
-        this.authService.tryRefreshToken();
+    this.apiService.sendToApi("user/EditUserProfile", this.user).subscribe((x) => {
+      this.messageService.add({
+        severity: "success",
+        summary: "Sucesso",
+        detail: "Dados salvos com sucesso!",
       });
+      this.isEditing = false;
+      this.authService.tryRefreshToken();
+    });
   }
 
   deleteImage() {
@@ -131,11 +126,9 @@ export class UserProfileComponent {
       formData.append("file", file);
     }
 
-    this.apiService
-      .sendToApi("user/UploadProfileImage", formData)
-      .subscribe((x) => {
-        this.user.imageUrl = x.data;
-        this.authService.tryRefreshToken();
-      });
+    this.apiService.sendToApi("user/UploadProfileImage", formData).subscribe((x) => {
+      this.user.imageUrl = x.data;
+      this.authService.tryRefreshToken();
+    });
   }
 }
