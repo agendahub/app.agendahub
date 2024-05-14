@@ -1,0 +1,55 @@
+<div class="sm:px-8 px-2 py-4 h-full">
+  <div class="sm:p-0 px-2 flex flex-col justify-center text-primary dark:text-very-clean">
+    <h2 class="text-2xl font-bold leading-7 -tracking-wide sm:truncate sm:text-3xl sm:tracking-tight">Aniversariantes</h2>
+    <small class="font-extralight tracking-wider">Visualize os aniversariantes, mande um brinde, parabéns, <b>fidelize!</b></small>
+  </div>
+
+  <hr class="my-6 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
+
+  <div class="mt-4 w-full h-full">
+    <p-carousel [value]="birthdayList" [numVisible]="3" [numScroll]="3" [circular]="true" [responsiveOptions]="responsiveOptions">
+      <ng-template let-birthday pTemplate="item">
+        <div class="border border-gray-300 dark:border-gray-600 shadow rounded-md m-2 p-3 dark:text-white hover:shadow-lg min-h-[14rem]">
+          <div class="flex items-center justify-between mb-3">
+            <div class="font-semibold text-2xl capitalize">{{ birthday.name }} {{ birthday.surName }}</div>
+            <p class="tracking-wide leading-relaxed">{{ birthday.dateBirth | date : "dd/MM" }}</p>
+          </div>
+
+          <div class="mb-3 text-lg">
+            <p>Telefone: {{ birthday.phone }}</p>
+            <p>Email: {{ birthday.email }}</p>
+          </div>
+
+          <ng-container *ngIf="birthday.totalSchedules > 0; else empty">
+            <div class="flex justify-between items-start">
+              <div class="relative">
+                <p class="text-lg tracking-tight mb-1">Último agendamento</p>
+                <p-tag value="{{ birthday.lastSchedule?.schedule?.finishDateTime | date : 'dd/MM' }}" [severity]="getSeverity(birthday)" />
+              </div>
+              <div class="relative">
+                <p class="text-lg tracking-tight mb-1 text-right">Total gasto</p>
+                <div class="mt-0 font-semibold text-xl">{{ birthday.totalAmount | currency : "BRL" : "symbol-narrow" : "1.2-2" }}</div>
+              </div>
+            </div>
+            <div class="text-sm flex justify-between">
+              <p>Total agendamentos: {{ birthday.totalSchedules }}</p>
+              <p>Média gasto: {{ birthday.totalAmount / birthday.totalSchedules | currency : "BRL" : "symbol-narrow" : "1.2-2" }}</p>
+            </div>
+          </ng-container>
+          <ng-template #empty>
+            <div class="flex flex-col justify-center items-center mt-6 w-full">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M15.182 16.318A4.486 4.486 0 0 0 12.016 15a4.486 4.486 0 0 0-3.198 1.318M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z"
+                />
+              </svg>
+              <span class="text-base font-semibold">Esse cliente não possui nenhum agendamento</span>
+            </div>
+          </ng-template>
+        </div>
+      </ng-template>
+    </p-carousel>
+  </div>
+</div>
