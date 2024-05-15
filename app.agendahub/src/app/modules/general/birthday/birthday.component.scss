@@ -1,0 +1,20 @@
+.button-cta {
+  @apply w-full py-2 px-4 border border-transparent transition-colors duration-150 bg-primary text-white dark:bg-white dark:text-primary font-semibold rounded-md hover:bg-white hover:text-primary hover:border-primary dark:hover:bg-primary dark:hover:text-white dark:hover:border-white;
+}
+
+::ng-deep {
+  .p-dialog-header,
+  .p-dialog-footer {
+    padding: 1rem !important;
+  }
+
+  .p-dialog-content {
+    padding-bottom: 0 !important;
+  }
+
+  .p-dialog-header,
+  .p-dialog-content,
+  .p-dialog-footer {
+    background-color: #e6e5e3 !important;
+  }
+}
