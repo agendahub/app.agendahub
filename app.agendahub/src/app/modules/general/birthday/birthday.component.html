@@ -38,7 +38,7 @@
             <div class="w-full h-full border dark:border-neutral-800 border-neutral-200 p-1 rounded">
               <apx-chart
                 [series]="birthday.series"
-                [tooltip]="{ enabled: false }"
+                [theme]="{ mode: theme.dark ? 'dark' : 'light' }"
                 [chart]="commonAreaSparlineOptions.chart"
                 [stroke]="commonAreaSparlineOptions.stroke"
                 [yaxis]="commonAreaSparlineOptions.yaxis"

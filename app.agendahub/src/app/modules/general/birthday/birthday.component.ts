@@ -3,6 +3,7 @@ import * as moment from "moment";
 import { ApexChart } from "ng-apexcharts";
 import { firstValueFrom } from "rxjs";
 import { ApiService } from "../../../services/api-service.service";
+import { getTheme } from "../../../utils/util";
 
 export type ChartOptions = {
   chart: ApexChart;
@@ -23,6 +24,9 @@ export class BirthdayComponent implements OnInit {
   modalOpened = false;
   phoneInvalid = false;
   birthSelected = null as any;
+  get theme() {
+    return getTheme();
+  }
 
   public commonAreaSparlineOptions = {
     chart: {
@@ -39,7 +43,11 @@ export class BirthdayComponent implements OnInit {
       opacity: 0.3,
     },
     yaxis: {
-      min: 0,
+      labels: {
+        formatter: function (val) {
+          return val.toFixed(0);
+        },
+      },
     },
   } as any;
 
@@ -85,7 +93,7 @@ export class BirthdayComponent implements OnInit {
       const data = await firstValueFrom(this.api.requestFromApi("User/BirthDays", null, true));
       this.birthdayList = data.map((item: any) => ({
         ...item,
-        series: [{ name: "spark", color: "#ddd", data: item.series.map((s: any) => s.value) }],
+        series: [{ name: item.name, color: "#ddd", data: item.series.map((s: any) => s.value) }],
       }));
       console.log(this.birthdayList);
     } catch (error) {
