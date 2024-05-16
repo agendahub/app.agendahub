@@ -1,8 +1,12 @@
-import { HttpHeaders } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import * as moment from "moment";
+import { ApexChart } from "ng-apexcharts";
 import { firstValueFrom } from "rxjs";
 import { ApiService } from "../../../services/api-service.service";
+
+export type ChartOptions = {
+  chart: ApexChart;
+};
 
 @Component({
   selector: "app-birthday",
@@ -19,6 +23,25 @@ export class BirthdayComponent implements OnInit {
   modalOpened = false;
   phoneInvalid = false;
   birthSelected = null as any;
+
+  public commonAreaSparlineOptions = {
+    chart: {
+      type: "area",
+      height: 160,
+      sparkline: {
+        enabled: true,
+      },
+    },
+    stroke: {
+      curve: "straight",
+    },
+    fill: {
+      opacity: 0.3,
+    },
+    yaxis: {
+      min: 0,
+    },
+  } as any;
 
   constructor(private api: ApiService) {}
 
@@ -59,10 +82,12 @@ export class BirthdayComponent implements OnInit {
 
   async getData() {
     try {
-      const headers = new HttpHeaders({
-        "Cache-Control": "max-age=120",
-      });
-      this.birthdayList = await firstValueFrom(this.api.requestFromApi("User/BirthDays", null, true, headers));
+      const data = await firstValueFrom(this.api.requestFromApi("User/BirthDays", null, true));
+      this.birthdayList = data.map((item: any) => ({
+        ...item,
+        series: [{ name: "spark", color: "#ddd", data: item.series.map((s: any) => s.value) }],
+      }));
+      console.log(this.birthdayList);
     } catch (error) {
       console.error(error);
     }

@@ -34,18 +34,18 @@
             </div>
           </div>
 
-          <div class="body relative" *ngIf="birthday.totalSchedules > 0; else empty">
-            <ngx-charts-line-chart
-              [xAxis]="true"
-              [yAxis]="true"
-              [timeline]="true"
-              [autoScale]="true"
-              style="fill: grey"
-              [showGridLines]="true"
-              title="Últimos agendamentos / mês"
-              [results]="[{ name: birthday.name, series: birthday.series }]"
-            ></ngx-charts-line-chart>
-            <div class="w-full absolute bottom-3">
+          <div class="body flex flex-col gap-2 py-1" *ngIf="birthday.totalSchedules > 0; else empty">
+            <div class="w-full h-full border dark:border-neutral-800 border-neutral-200 p-1 rounded">
+              <apx-chart
+                [series]="birthday.series"
+                [tooltip]="{ enabled: false }"
+                [chart]="commonAreaSparlineOptions.chart"
+                [stroke]="commonAreaSparlineOptions.stroke"
+                [yaxis]="commonAreaSparlineOptions.yaxis"
+                [fill]="commonAreaSparlineOptions.fill"
+              ></apx-chart>
+            </div>
+            <div class="w-full">
               <p class="text-sm font-light">Serviço mais frequente: {{ birthday.serviceMostUsed?.description }}</p>
             </div>
           </div>

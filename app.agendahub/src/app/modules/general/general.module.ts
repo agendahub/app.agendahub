@@ -2,7 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 
 import { FormsModule } from "@angular/forms";
-import { NgxChartsModule } from "@swimlane/ngx-charts";
+import { NgApexchartsModule } from "ng-apexcharts";
 import { CalendarModule } from "primeng/calendar";
 import { CarouselModule } from "primeng/carousel";
 import { DialogModule } from "primeng/dialog";
@@ -28,7 +28,7 @@ import { SchedulingComponent } from "./scheduling/scheduling.component";
     TagModule,
     CalendarModule,
     DialogModule,
-    NgxChartsModule,
+    NgApexchartsModule,
   ],
 })
 export class GeneralModule {}
