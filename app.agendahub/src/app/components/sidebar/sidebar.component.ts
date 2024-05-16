@@ -1,10 +1,9 @@
-import { CommonModule, DOCUMENT } from "@angular/common";
-import { Component, Host, HostListener, Inject, Input, OnInit } from "@angular/core";
-import { Router, RouterModule, NavigationEnd } from "@angular/router";
-import { getTheme } from "../../utils/util";
-import { AuthService } from "../../auth/auth-service.service";
+import { DOCUMENT } from "@angular/common";
+import { Component, HostListener, Inject, Input, OnInit } from "@angular/core";
+import { NavigationEnd, Router } from "@angular/router";
 import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
-import { MenuItem } from "primeng/api";
+import { AuthService } from "../../auth/auth-service.service";
+import { getTheme } from "../../utils/util";
 
 @Component({
   selector: "sidebar",
@@ -93,7 +92,14 @@ import { MenuItem } from "primeng/api";
                 class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{ 'justify-center': !open }"
               >
-                <i class="fa-solid fa-home w-5 transition duration-75"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                  />
+                </svg>
+
                 <span class="ms-3 select-none" *ngIf="open">Inicio</span>
               </a>
               <hr *ngIf="open" class="w-full h-0.5 border-t-0 -mt-1 bg-gray-200 dark:bg-white/10" />
@@ -104,7 +110,14 @@ import { MenuItem } from "primeng/api";
                 class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{ 'justify-center': !open }"
               >
-                <i class="fa-solid fa-calendar-days w-5"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5m-9-6h.008v.008H12v-.008ZM12 15h.008v.008H12V15Zm0 2.25h.008v.008H12v-.008ZM9.75 15h.008v.008H9.75V15Zm0 2.25h.008v.008H9.75v-.008ZM7.5 15h.008v.008H7.5V15Zm0 2.25h.008v.008H7.5v-.008Zm6.75-4.5h.008v.008h-.008v-.008Zm0 2.25h.008v.008h-.008V15Zm0 2.25h.008v.008h-.008v-.008Zm2.25-4.5h.008v.008H16.5v-.008Zm0 2.25h.008v.008H16.5V15Z"
+                  />
+                </svg>
+
                 <span class="ms-3 select-none" *ngIf="open">Agenda</span>
               </a>
             </li>
@@ -123,7 +136,14 @@ import { MenuItem } from "primeng/api";
                 }"
               >
                 <a class="flex items-center" [ngClass]="{ 'text-primary': showCrudLink && open }">
-                  <i class="fa-solid fa-briefcase w-5 duration-75"></i>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z"
+                    />
+                  </svg>
+
                   <span class="ms-3 select-none" *ngIf="open">Gestão</span>
                 </a>
                 <span
@@ -158,6 +178,23 @@ import { MenuItem } from "primeng/api";
                 </svg>
 
                 <span class="ms-3 select-none" *ngIf="open">Atendimentos</span>
+              </a>
+            </li>
+            <li>
+              <a
+                [routerLink]="['/general/birthdays']"
+                class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
+                [ngClass]="{ 'justify-center': !open }"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 8.25v-1.5m0 1.5c-1.355 0-2.697.056-4.024.166C6.845 8.51 6 9.473 6 10.608v2.513m6-4.871c1.355 0 2.697.056 4.024.166C17.155 8.51 18 9.473 18 10.608v2.513M15 8.25v-1.5m-6 1.5v-1.5m12 9.75-1.5.75a3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0 3.354 3.354 0 0 0-3 0 3.354 3.354 0 0 1-3 0L3 16.5m15-3.379a48.474 48.474 0 0 0-6-.371c-2.032 0-4.034.126-6 .371m12 0c.39.049.777.102 1.163.16 1.07.16 1.837 1.094 1.837 2.175v5.169c0 .621-.504 1.125-1.125 1.125H4.125A1.125 1.125 0 0 1 3 20.625v-5.17c0-1.08.768-2.014 1.837-2.174A47.78 47.78 0 0 1 6 13.12M12.265 3.11a.375.375 0 1 1-.53 0L12 2.845l.265.265Zm-3 0a.375.375 0 1 1-.53 0L9 2.845l.265.265Zm6 0a.375.375 0 1 1-.53 0L15 2.845l.265.265Z"
+                  />
+                </svg>
+
+                <span class="ms-3 select-none" *ngIf="open">Aniversariantes</span>
               </a>
             </li>
           </ul>

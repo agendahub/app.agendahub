@@ -50,12 +50,20 @@ export class ApiService {
     return this.httpClient;
   }
 
-  public requestFromApi<T = any>(endpoint: string, params: QueryParams | null = null, load = true) {
+  public requestFromApi<T = any>(endpoint: string, params: QueryParams | null = null, load = true, headers?: any) {
     let apiUrl = this.baseUrl + `${endpoint}`;
     load && this.loader.show();
+    const config =
+      headers || params
+        ? {
+            headers: headers ? headers : undefined,
+            params: params ? params : undefined,
+          }
+        : undefined;
+    console.log(config);
 
     return this.httpClient
-      .get<T>(apiUrl, params ? { params: params } : undefined)
+      .get<T>(apiUrl, config)
       .pipe(finalize(() => this.loader.hide()))
       .pipe(
         map((result) => {

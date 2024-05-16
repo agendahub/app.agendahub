@@ -1,0 +1,10 @@
+::ng-deep {
+  .p-dialog-header,
+  .p-dialog-footer {
+    padding: 1rem !important;
+  }
+
+  .p-dialog-content {
+    padding-bottom: 0 !important;
+  }
+}
