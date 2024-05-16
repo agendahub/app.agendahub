@@ -82,7 +82,7 @@ export class BirthdayComponent implements OnInit {
   redirectWhatsAppMessage() {
     const message = this.message.trim();
     const phone = (this.birthSelected!.phone as string).replaceAll(/[\s()-.]/g, "");
-    const redirectUrl = encodeURI(`https://wa.me/55${phone}${message.length > 1 ? "text=" + message : ""}`);
+    const redirectUrl = encodeURI(`https://wa.me/55${phone}${message.length > 1 ? "?text=" + message : ""}`);
 
     window.open(redirectUrl, "_blank");
   }
@@ -90,8 +90,4 @@ export class BirthdayComponent implements OnInit {
   getProductsData() {
     return [];
   }
-
-  colorScheme = {
-    domain: ["#5AA454", "#E44D25", "#CFC0BB", "#7aa3e5", "#a8385d", "#aae3f5"],
-  } as any;
 }
