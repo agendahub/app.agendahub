@@ -2,7 +2,6 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 
 import { FormsModule } from "@angular/forms";
-import { NgApexchartsModule } from "ng-apexcharts";
 import { CalendarModule } from "primeng/calendar";
 import { CarouselModule } from "primeng/carousel";
 import { DialogModule } from "primeng/dialog";
@@ -17,18 +16,6 @@ import { SchedulingComponent } from "./scheduling/scheduling.component";
 
 @NgModule({
   declarations: [SchedulingComponent, NotificationsComponent, BirthdayComponent],
-  imports: [
-    CommonModule,
-    ComponentsModule,
-    GeneralRoutingModule,
-    TableModule,
-    InputTextModule,
-    FormsModule,
-    CarouselModule,
-    TagModule,
-    CalendarModule,
-    DialogModule,
-    NgApexchartsModule,
-  ],
+  imports: [CommonModule, ComponentsModule, GeneralRoutingModule, TableModule, InputTextModule, FormsModule, CarouselModule, TagModule, CalendarModule, DialogModule],
 })
 export class GeneralModule {}

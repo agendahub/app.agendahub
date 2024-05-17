@@ -41,7 +41,6 @@
     "@vercel/analytics": "^1.2.2",
     "@vercel/speed-insights": "^1.0.10",
     "moment": "^2.29.4",
-    "ng-apexcharts": "^1.8.0",
     "ngx-ui-loader": "^13.0.0",
     "primeng": "^16.0.2",
     "rxjs": "~7.8.0",

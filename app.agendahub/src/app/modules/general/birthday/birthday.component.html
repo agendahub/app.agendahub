@@ -36,14 +36,14 @@
 
           <div class="body flex flex-col gap-2 py-1" *ngIf="birthday.totalSchedules > 0; else empty">
             <div class="w-full h-full border dark:border-neutral-800 border-neutral-200 p-1 rounded">
-              <apx-chart
+              <!-- <apx-chart
                 [series]="birthday.series"
                 [theme]="{ mode: theme.dark ? 'dark' : 'light' }"
                 [chart]="commonAreaSparlineOptions.chart"
                 [stroke]="commonAreaSparlineOptions.stroke"
                 [yaxis]="commonAreaSparlineOptions.yaxis"
                 [fill]="commonAreaSparlineOptions.fill"
-              ></apx-chart>
+              ></apx-chart> -->
             </div>
             <div class="w-full">
               <p class="text-sm font-light">Serviço mais frequente: {{ birthday.serviceMostUsed?.description }}</p>
