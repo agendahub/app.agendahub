@@ -1,11 +1,17 @@
-<div class="py-2 px-4 shadow dark:shadow-xl w-full border border-t-0 dark:border-secondary border-x-0 border-clean bg-very-clean dark:bg-primary bg-blend-darken h-16 flex justify-between items-center">
+<div
+  class="py-2 px-4 shadow dark:shadow-xl w-full border border-t-0 dark:border-secondary border-x-0 border-clean bg-very-clean dark:bg-primary bg-blend-darken h-16 flex justify-between items-center"
+>
   <div class="dark:text-white">
     <breadcrumb></breadcrumb>
   </div>
-  <div class="flex justify-between gap-4 text-primary dark:text-very-clean px-4">
-    <notifications></notifications>      
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M17.982 18.725A7.488 7.488 0 0 0 12 15.75a7.488 7.488 0 0 0-5.982 2.975m11.963 0a9 9 0 1 0-11.963 0m11.963 0A8.966 8.966 0 0 1 12 21a8.966 8.966 0 0 1-5.982-2.275M15 9.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-    </svg>      
+  <div class="flex justify-between items-center gap-2 text-primary dark:text-very-clean px-4">
+    <notifications></notifications>
+    <p-avatar
+      size="normal"
+      shape="circle"
+      [style]="{ display: 'flex' }"
+      [image]="auth.TokenData.imageUrl"
+      [label]="auth.TokenData.imageUrl ? null : auth.TokenData.name[0].toUpperCapital()"
+    ></p-avatar>
   </div>
 </div>

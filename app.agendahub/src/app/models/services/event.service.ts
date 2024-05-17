@@ -47,9 +47,23 @@ export class EventService {
       startDate: startDate.toISOString(),
       endDate: today.toISOString(),
       onlyMine: true,
-      quantity: 5
-    }
+      quantity: 5,
+    };
 
-    return this.apiService.requestFromApi(query, params)
+    return this.apiService.requestFromApi(query, params);
+  }
+
+  public getCompletedDayEvents() {
+    let query = "Schedule/ScheduleDay";
+    let now = this.today.clone();
+    let startOfDay = now.clone().startOf("day");
+    let endOfNow = now.clone().endOf("day");
+    let params = {
+      startDate: startOfDay.toISOString(),
+      endDate: endOfNow.toISOString(),
+      onlyMine: true,
+    };
+
+    return this.apiService.requestFromApi(query, params);
   }
 }

@@ -19,6 +19,7 @@ export class User implements IIdentifiable<number> {
   password!: string;
   dateBirth!: Date;
   userType!: UserType;
+  imageUrl?: string;
 }
 
 export class ServiceType implements IIdentifiable<number> {

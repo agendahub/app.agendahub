@@ -18,6 +18,7 @@ import { JwtModule } from "@auth0/angular-jwt";
 import { AutoCompleteModule } from "primeng/autocomplete";
 import { ButtonModule } from "primeng/button";
 import { CalendarModule } from "primeng/calendar";
+import { CardModule } from "primeng/card";
 import { CheckboxModule } from "primeng/checkbox";
 import { DialogModule } from "primeng/dialog";
 import { DropdownModule } from "primeng/dropdown";
@@ -29,6 +30,7 @@ import { MessageModule } from "primeng/message";
 import { MultiSelectModule } from "primeng/multiselect";
 import { OverlayPanelModule } from "primeng/overlaypanel";
 import { SidebarModule } from "primeng/sidebar";
+import { SkeletonModule } from "primeng/skeleton";
 import { SplitButtonModule } from "primeng/splitbutton";
 import { TimelineModule } from "primeng/timeline";
 import { ToastModule } from "primeng/toast";
@@ -38,6 +40,8 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MessageService } from "primeng/api";
 import { MegaMenuModule } from "primeng/megamenu";
 import { TableModule } from "primeng/table";
+import { TieredMenuModule } from "primeng/tieredmenu";
+
 import { environment } from "../environments/environment.development";
 import { AuthService } from "./auth/auth-service.service";
 import { tokenGetter } from "./auth/auth-utils";
@@ -48,7 +52,9 @@ import { ManagerModule } from "./modules/manager/manager.module";
 import { HomeComponent } from "./pages/home/home.component";
 import { LinksComponent } from "./pages/links/links.component";
 import { LoginComponent } from "./pages/login/login.component";
+
 import { ResetPasswordComponent } from "./pages/reset-password/reset-password.component";
+
 import { ScheduleLinkViewComponent } from "./pages/schedule-link-view/schedule-link-view.component";
 import { SchedulerComponent } from "./pages/scheduler/scheduler.component";
 import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
@@ -81,7 +87,9 @@ import { loadTypes } from "./types/typing";
     ManagerRoutingModule,
     GeneralModule,
     MatSnackBarModule,
+    SkeletonModule,
 
+    TieredMenuModule,
     ListboxModule,
     ToastModule,
     DialogModule,
@@ -91,6 +99,7 @@ import { loadTypes } from "./types/typing";
     CalendarModule,
     CheckboxModule,
     InputTextModule,
+    CardModule,
     SplitButtonModule,
     AutoCompleteModule,
     OverlayPanelModule,
@@ -121,7 +130,13 @@ import { loadTypes } from "./types/typing";
     ComponentsModule,
     ManagerModule,
   ],
-  providers: [HttpClient, ApiService, AuthService, MessageService, AuthGuardService],
+  providers: [
+    HttpClient,
+    ApiService,
+    AuthService,
+    MessageService,
+    AuthGuardService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {
