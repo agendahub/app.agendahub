@@ -54,7 +54,7 @@
               "node_modules/primeng/resources/themes/tailwind-light/theme.css",
               "node_modules/primeng/resources/primeng.min.css"
             ],
-            "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js"],
+            "scripts": [],
             "serviceWorker": true,
             "ngswConfigPath": "ngsw-config.json"
           },
