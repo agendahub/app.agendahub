@@ -1,10 +1,9 @@
-import { CommonModule, DOCUMENT } from "@angular/common";
-import { Component, Host, HostListener, Inject, Input, OnInit } from "@angular/core";
-import { Router, RouterModule, NavigationEnd } from "@angular/router";
-import { getTheme } from "../../utils/util";
-import { AuthService } from "../../auth/auth-service.service";
+import { DOCUMENT } from "@angular/common";
+import { Component, HostListener, Inject, Input, OnInit } from "@angular/core";
+import { NavigationEnd, Router } from "@angular/router";
 import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
-import { MenuItem } from "primeng/api";
+import { AuthService } from "../../auth/auth-service.service";
+import { getTheme } from "../../utils/util";
 
 @Component({
   selector: "sidebar",
@@ -14,7 +13,7 @@ import { MenuItem } from "primeng/api";
         <img class="w-auto" [ngClass]="{ 'h-8': open, 'h-12': !open }" [src]="iconMobile" alt="logotipo AgendaHub" />
       </div>
       <div class="flex justify-end items-center gap-1">
-        <span class="mt-1">
+        <span class="sm:mt-1 m-0">
           <notifications *ngIf="mobile"></notifications>
         </span>
         <button
