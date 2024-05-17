@@ -44,7 +44,7 @@ export class BirthdayComponent implements OnInit {
     },
     yaxis: {
       labels: {
-        formatter: function (val) {
+        formatter: function (val: any) {
           return val.toFixed(0);
         },
       },
