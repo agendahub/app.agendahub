@@ -11,6 +11,7 @@ export type AlertType = "success" | "info" | "warning" | "danger";
 export class AlertComponent implements OnInit {
   @Input() size: "xsmall" | "small" | "medium" | "large" | "xlarge" = "medium";
   @Input() type: AlertType = "info";
+  @Input() animated: boolean = true;
   @Input() message: string = "";
   @Input() title: string = "";
   colors!: string;

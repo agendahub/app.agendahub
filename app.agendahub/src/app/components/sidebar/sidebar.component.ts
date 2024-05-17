@@ -13,7 +13,7 @@ import { getTheme } from "../../utils/util";
         <img class="w-auto" [ngClass]="{ 'h-8': open, 'h-12': !open }" [src]="iconMobile" alt="logotipo AgendaHub" />
       </div>
       <div class="flex justify-end items-center gap-1">
-        <span class="mt-1">
+        <span class="sm:mt-1 m-0">
           <notifications *ngIf="mobile"></notifications>
         </span>
         <button

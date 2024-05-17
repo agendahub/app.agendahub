@@ -1,0 +1,11 @@
+::ng-deep {
+  .p-dialog.p-confirm-dialog .p-confirm-dialog-message {
+    margin-left: 0 !important;
+  }
+
+  .p-dialog-header,
+  .p-dialog-content,
+  .p-dialog-footer {
+    padding: 0.77rem !important;
+  }
+}

@@ -1,11 +1,13 @@
 import { HttpClient } from "@angular/common/http";
 import { HostListener, Injectable, OnDestroy, signal } from "@angular/core";
+import { Title } from "@angular/platform-browser";
 import { EventSourceMessage, fetchEventSource } from "@microsoft/fetch-event-source";
 import { BehaviorSubject, map, of } from "rxjs";
 import { environment } from "../../environments/environment.development";
 import { AuthService } from "../auth/auth-service.service";
 import { Notification, NotificationStatus } from "../models/core/notification";
 import { defer } from "../types/typing";
+import { PushNotificationService } from "./push-notification.service";
 type BrowserNotification = Notification;
 
 @Injectable({
@@ -26,7 +28,7 @@ export class NotificationService implements OnDestroy {
     MAX_RETRIES: 10,
   };
 
-  constructor(private http: HttpClient, private auth: AuthService) {
+  constructor(private http: HttpClient, private title: Title, private auth: AuthService, private push: PushNotificationService) {
     if (this.auth.isLogged) {
       this.listen();
     }
@@ -65,6 +67,7 @@ export class NotificationService implements OnDestroy {
     return this.http.put(environment.apiUrl + "Notification/Read/" + id, null).pipe(
       map((x) => {
         this.unread.update((unread) => unread - 1);
+        this.setAppBadge();
         return x;
       }),
     );
@@ -74,6 +77,7 @@ export class NotificationService implements OnDestroy {
     return this.http.put(environment.apiUrl + "Notification/ReadAll", null).pipe(
       map((x) => {
         this.unread.set(0);
+        this.setAppBadge();
         return x;
       }),
     );
@@ -87,9 +91,11 @@ export class NotificationService implements OnDestroy {
       headers: {
         Authorization: `Bearer ${this.auth.Token}`,
       },
-      onopen: async (x) => {
-        console.log("Connected to notifications server");
-        this.connected.set(true);
+      onopen: async (response) => {
+        if (response.ok) {
+          console.log("Connected to notifications server");
+          this.connected.set(true);
+        }
       },
       onmessage: async (event) => this.handleMessage(event),
       onclose: () => {
@@ -113,23 +119,49 @@ export class NotificationService implements OnDestroy {
         throw new Error(error);
       },
     });
+
+    this.push.messageReceived.subscribe((message) => {
+      if (message) {
+        this.addMessage(message);
+      }
+    });
   }
 
   private handleMessage(event: EventSourceMessage) {
-    console.info("Received notification \n", event);
     const data = JSON.parse(event.data);
 
+    if ("refreshPush" in data) {
+      return this.push.subscribeToNotifications();
+    }
+
     if (!("clientId" in data)) {
-      let notification: Notification[];
+      return this.addMessage(data);
+    }
+  }
 
-      if (Array.isArray(data)) {
-        notification = data;
-      } else {
-        notification = [data];
+  private addMessage(data: any) {
+    let notification: Notification[];
+
+    if (Array.isArray(data)) {
+      notification = data;
+    } else {
+      notification = [data];
+    }
+
+    this.unread.update((unread) => unread + notification.length);
+    this.$notify.next(notification);
+    this.setAppBadge();
+  }
+
+  private setAppBadge() {
+    if (this.unread() > 0) {
+      this.title.setTitle(`(${this.unread()}) ${this.title.getTitle()}`);
+
+      if ("setAppBadge" in navigator) {
+        navigator.setAppBadge(this.unread());
       }
-
-      this.unread.update((unread) => unread + notification.length);
-      this.$notify.next(notification);
+    } else {
+      this.title.setTitle(this.title.getTitle().replace(/^\(\d+\)\s/, ""));
     }
   }
 }

@@ -11,7 +11,8 @@ import { Subject } from "rxjs";
 import { SettingsApp } from "../../modules/settings/models/settingsApp";
 import { SettingsService } from "../../modules/settings/services/settings.service";
 import { LocalStorageService } from "../../services/local-storage.service";
-import { hexToRgbA, rgbToRgba, rgbaToRgb } from "../../utils/util";
+import { futureIf } from "../../utils/async";
+import { hexToRgbA, notNull, rgbToRgba, rgbaToRgb } from "../../utils/util";
 import { CalendarNavigator } from "./calendar-navigator";
 
 var self: CalendarComponent;
@@ -226,21 +227,23 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   }
 
   private handleAddEvent(event: EventInput | EventInput[]) {
-    const checkEvent = (e: EventInput) => {
-      var enable = this.isEditable && (this.settings.changeOld || moment(e.end).isAfter(moment()));
-      e.durationEditable = enable;
-      e.startEditable = enable;
-      e.interactive = enable;
-      e.editable = enable;
-    };
+    futureIf(notNull(this.settings), () => {
+      const checkEvent = (e: EventInput) => {
+        var enable = this.isEditable && (this.settings.changeOld || moment(e.end).isAfter(moment()));
+        e.durationEditable = enable;
+        e.startEditable = enable;
+        e.interactive = enable;
+        e.editable = enable;
+      };
 
-    if (event instanceof Array) {
-      event.forEach((e) => checkEvent(e));
-      this.Calendar.addEventSource(event);
-    } else {
-      checkEvent(event);
-      this.Calendar.addEvent(event);
-    }
+      if (event instanceof Array) {
+        event.forEach((e) => checkEvent(e));
+        this.Calendar.addEventSource(event);
+      } else {
+        checkEvent(event);
+        this.Calendar.addEvent(event);
+      }
+    });
   }
 
   private handleRemoveEvent(event: EventInput | EventInput[] | undefined) {

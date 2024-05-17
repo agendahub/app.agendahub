@@ -1,13 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import * as moment from "moment";
-import { ApexChart } from "ng-apexcharts";
 import { firstValueFrom } from "rxjs";
 import { ApiService } from "../../../services/api-service.service";
-import { getTheme } from "../../../utils/util";
-
-export type ChartOptions = {
-  chart: ApexChart;
-};
 
 @Component({
   selector: "app-birthday",
@@ -24,32 +18,6 @@ export class BirthdayComponent implements OnInit {
   modalOpened = false;
   phoneInvalid = false;
   birthSelected = null as any;
-  get theme() {
-    return getTheme();
-  }
-
-  public commonAreaSparlineOptions = {
-    chart: {
-      type: "area",
-      height: 160,
-      sparkline: {
-        enabled: true,
-      },
-    },
-    stroke: {
-      curve: "straight",
-    },
-    fill: {
-      opacity: 0.3,
-    },
-    yaxis: {
-      labels: {
-        formatter: function (val) {
-          return val.toFixed(0);
-        },
-      },
-    },
-  } as any;
 
   constructor(private api: ApiService) {}
 
@@ -73,7 +41,6 @@ export class BirthdayComponent implements OnInit {
     ];
 
     this.getData();
-    // this.birthdayList = this.getProductsData();
   }
 
   getSeverity(birthday: any) {
@@ -91,10 +58,11 @@ export class BirthdayComponent implements OnInit {
   async getData() {
     try {
       const data = await firstValueFrom(this.api.requestFromApi("User/BirthDays", null, true));
-      this.birthdayList = data.map((item: any) => ({
-        ...item,
-        series: [{ name: item.name, color: "#ddd", data: item.series.map((s: any) => s.value) }],
-      }));
+      this.birthdayList = data;
+      // .map((item: any) => ({
+      //   ...item,
+      //   series: [{ name: item.name, color: "#ddd", data: item.series.map((s: any) => s.value) }],
+      // }));
       console.log(this.birthdayList);
     } catch (error) {
       console.error(error);
@@ -118,9 +86,5 @@ export class BirthdayComponent implements OnInit {
     const redirectUrl = encodeURI(`https://wa.me/55${phone}${message.length > 1 ? "?text=" + message : ""}`);
 
     window.open(redirectUrl, "_blank");
-  }
-
-  getProductsData() {
-    return [];
   }
 }

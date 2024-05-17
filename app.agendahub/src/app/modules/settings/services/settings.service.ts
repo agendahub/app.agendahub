@@ -7,7 +7,7 @@ export type SettingsState = "General" | "Notifications" | "Appointments" | "Secu
 
 export const SettingsEndpoints: Record<SettingsState, string> = {
   General: "api/CompanyParameter/",
-  Notifications: "api/CompanyParameter/",
+  Notifications: "User/GetPreferences/",
   Appointments: "api/CompanyParameter/",
   Security: "api/CompanyParameter/",
 };

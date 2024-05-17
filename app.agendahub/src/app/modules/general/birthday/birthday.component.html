@@ -1,10 +1,12 @@
-<div class="sm:px-8 px-2 py-4 h-full">
-  <div class="sm:p-0 px-2 flex flex-col justify-center text-primary dark:text-very-clean">
+<div class="sm:px-8 px-0 py-4 h-full">
+  <div class="sm:p-0 px-4 flex flex-col justify-center text-primary dark:text-very-clean">
     <h2 class="text-2xl font-bold leading-7 -tracking-wide sm:truncate sm:text-3xl sm:tracking-tight">Aniversariantes</h2>
     <small class="font-extralight tracking-wider">Visualize os aniversariantes, mande um brinde, parabéns, <b>fidelize!</b></small>
   </div>
 
-  <hr class="my-6 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
+  <div class="sm:p-0 px-4">
+    <hr class="my-6 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
+  </div>
 
   <div class="mt-4 w-full h-full">
     <p-carousel
@@ -17,7 +19,7 @@
     >
       <ng-template let-birthday pTemplate="item">
         <div
-          class="relative flex flex-col justify-between border border-gray-300 dark:border-gray-600 shadow rounded-md mx-2 my-4 p-3 dark:text-white hover:shadow-lg min-h-[40vh] sm:max-w-[26rem] max-w-[75vw]"
+          class="relative flex flex-col justify-between border border-gray-300 dark:border-gray-600 shadow rounded-md mx-2 my-4 p-3 dark:text-white hover:shadow-lg min-h-[40vh] sm:max-w-[26rem] max-w-[69vw]"
         >
           <div class="absolute -top-4 z-40 flex gap-2" *ngIf="birthday.totalSchedules > 0">
             <p-tag value="{{ birthday.lastSchedule?.dateTime | date : 'dd/MM' }}" [severity]="getSeverity(birthday)" />
@@ -36,14 +38,14 @@
 
           <div class="body flex flex-col gap-2 py-1" *ngIf="birthday.totalSchedules > 0; else empty">
             <div class="w-full h-full border dark:border-neutral-800 border-neutral-200 p-1 rounded">
-              <apx-chart
-                [series]="birthday.series"
-                [theme]="{ mode: theme.dark ? 'dark' : 'light' }"
-                [chart]="commonAreaSparlineOptions.chart"
-                [stroke]="commonAreaSparlineOptions.stroke"
-                [yaxis]="commonAreaSparlineOptions.yaxis"
-                [fill]="commonAreaSparlineOptions.fill"
-              ></apx-chart>
+              <ngx-charts-line-chart
+                [xAxis]="true"
+                [yAxis]="true"
+                [autoScale]="true"
+                style="fill: grey"
+                title="Últimos agendamentos / mês"
+                [results]="[{ name: birthday.name, series: birthday.series }]"
+              ></ngx-charts-line-chart>
             </div>
             <div class="w-full">
               <p class="text-sm font-light">Serviço mais frequente: {{ birthday.serviceMostUsed?.description }}</p>
@@ -116,7 +118,7 @@
         class="resize-none block p-2.5 w-full text-sm rounded-lg border"
         placeholder="Escreva uma mensagem de parabéns.."
       ></textarea>
-      <div class="flex justify-end p-2">
+      <!-- <div class="flex justify-end p-2">
         <span
           role="button"
           class="inline-flex items-center bg-violet-100 text-violet-800 hover:text-violet-950 text-sm font-medium px-2.5 py-0.5 rounded-full dark:bg-violet-900 dark:text-violet-300 dark:hover:text-violet-50"
@@ -124,7 +126,7 @@
           <span class="w-2 h-2 me-1 bg-violet-300 rounded-full"></span>
           Sugerir texto
         </span>
-      </div>
+      </div> -->
     </div>
     <ng-template #noContact>
       <div class="w-full">

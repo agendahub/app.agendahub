@@ -1,8 +1,55 @@
-<div class="w-full h-full bg-opacity-40 sm:px-6 sm:py-4 p-2">
-    <div class="indent-2 flex flex-col justify-center text-primary dark:text-very-clean">
-        <h2 class="text-lg leading-7 font-light -tracking-wide sm:truncate sm:text-2xl sm:tracking-tight">
-            Configure como deseja ser notificado
-        </h2>
+<p-confirmDialog #cd [position]="'top'" key="notificationDialog" appendTo="body" [baseZIndex]="1000">
+  <ng-template pTemplate="header">
+    <div class="flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5"
+        />
+      </svg>
+      Notificações
     </div>
+  </ng-template>
+  <ng-template pTemplate="message" let-message>
+    <p class="text-primary">{{ message }}</p>
+  </ng-template>
+  <ng-template pTemplate="footer">
+    <button class="text-sm bg-transparent border border-gray-500 text-gray-500 rounded-md px-2 py-1" (click)="cd.reject()">Recusar</button>
+    <button class="text-sm bg-success text-white rounded-md px-2 py-1" (click)="cd.accept()">Aceitar</button>
+  </ng-template>
+</p-confirmDialog>
 
+<div class="w-full h-full bg-opacity-40 sm:px-6 sm:py-4 p-2">
+  <div class="indent-2 flex flex-col justify-center text-primary dark:text-very-clean">
+    <h2 class="text-lg leading-7 font-light -tracking-wide sm:truncate sm:text-2xl sm:tracking-tight">Configure como deseja ser notificado</h2>
+  </div>
+
+  <hr class="my-6 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
+
+  <div class="mt-2">
+    <form [formGroup]="form" class="flex flex-col space-y-4 max-w-2xl dark:text-white text-primary">
+      <div class="w-full relative flex flex-col gap-3">
+        <div class="flex items-center gap-2">
+          <p-inputSwitch inputId="emailNotifications" formControlName="emailNotifications"></p-inputSwitch>
+          <label class="mb-1" for="emailNotifications">Email</label>
+        </div>
+        <div class="flex items-center gap-2">
+          <p-inputSwitch inputId="pushNotifications" formControlName="pushNotifications"></p-inputSwitch>
+          <label class="mb-1" for="pushNotifications">Push</label>
+        </div>
+        <div
+          class="w-fit transition-all"
+          [ngClass]="{ 'opacity-100 translate-y-0': form.get('pushNotifications')?.value, '-z-20 bottom-0 opacity-0 translate-y-10': !form.get('pushNotifications')?.value }"
+        >
+          <alert [animated]="false" [message]="'Para conseguirmos enviar notificações para seu dispositivo, aceite a solicitação de receber notificações'" [type]="'info'">
+            <div class="flex justify-end w-full">
+              <button (click)="requestPermission()" class="underline hover:text-primary hover:font-semibold">Receber notificações</button>
+            </div>
+          </alert>
+        </div>
+      </div>
+      <button type="submit" class="bg-success disabled:opacity-50 text-white rounded-md p-2" (click)="save()">Salvar</button>
+    </form>
+  </div>
 </div>
