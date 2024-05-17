@@ -2,6 +2,7 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 
 import { FormsModule } from "@angular/forms";
+import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { CalendarModule } from "primeng/calendar";
 import { CarouselModule } from "primeng/carousel";
 import { DialogModule } from "primeng/dialog";
@@ -16,6 +17,18 @@ import { SchedulingComponent } from "./scheduling/scheduling.component";
 
 @NgModule({
   declarations: [SchedulingComponent, NotificationsComponent, BirthdayComponent],
-  imports: [CommonModule, ComponentsModule, GeneralRoutingModule, TableModule, InputTextModule, FormsModule, CarouselModule, TagModule, CalendarModule, DialogModule],
+  imports: [
+    CommonModule,
+    ComponentsModule,
+    GeneralRoutingModule,
+    TableModule,
+    InputTextModule,
+    FormsModule,
+    CarouselModule,
+    TagModule,
+    CalendarModule,
+    DialogModule,
+    NgxChartsModule,
+  ],
 })
 export class GeneralModule {}
