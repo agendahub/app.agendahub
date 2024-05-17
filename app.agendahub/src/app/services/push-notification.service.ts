@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { SwPush } from "@angular/service-worker";
-import { firstValueFrom } from "rxjs";
+import { BehaviorSubject, firstValueFrom } from "rxjs";
 import { ApiService } from "./api-service.service";
 import { LocalStorageService } from "./local-storage.service";
 
@@ -9,6 +9,8 @@ import { LocalStorageService } from "./local-storage.service";
 })
 export class PushNotificationService {
   private key = "BAwfgA_E-bbitMvcqqTcLNdnuf791ao155OSQwIRWjgjC-tudLhN7MgdFXpcxqk2czp27DvqwkQ5qguX6gaoDiE";
+
+  private pushMessages = new BehaviorSubject<any>(null);
 
   constructor(private swPush: SwPush, private api: ApiService, private localSS: LocalStorageService) {}
 
@@ -38,9 +40,12 @@ export class PushNotificationService {
       });
   }
 
+  messageReceived = this.pushMessages.asObservable();
+
   subscribeMessage(): void {
     this.swPush.messages.subscribe((res: any) => {
       console.log("Received push notification", res);
+      this.pushMessages.next(res);
     });
   }
 

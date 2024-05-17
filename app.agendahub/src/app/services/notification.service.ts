@@ -119,30 +119,38 @@ export class NotificationService implements OnDestroy {
         throw new Error(error);
       },
     });
+
+    this.push.messageReceived.subscribe((message) => {
+      if (message) {
+        this.addMessage(message);
+      }
+    });
   }
 
   private handleMessage(event: EventSourceMessage) {
     const data = JSON.parse(event.data);
-
-    console.log(data);
 
     if ("refreshPush" in data) {
       return this.push.subscribeToNotifications();
     }
 
     if (!("clientId" in data)) {
-      let notification: Notification[];
-
-      if (Array.isArray(data)) {
-        notification = data;
-      } else {
-        notification = [data];
-      }
-
-      this.unread.update((unread) => unread + notification.length);
-      this.$notify.next(notification);
-      this.setAppBadge();
+      return this.addMessage(data);
     }
+  }
+
+  private addMessage(data: any) {
+    let notification: Notification[];
+
+    if (Array.isArray(data)) {
+      notification = data;
+    } else {
+      notification = [data];
+    }
+
+    this.unread.update((unread) => unread + notification.length);
+    this.$notify.next(notification);
+    this.setAppBadge();
   }
 
   private setAppBadge() {
