@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
+import { Title } from "@angular/platform-browser";
+import { NavigationEnd, Router } from "@angular/router";
 import * as moment from "moment";
 import { PrimeNGConfig } from "primeng/api";
-import { NavigationEnd, Router } from "@angular/router";
+import { AuthService } from "./auth/auth-service.service";
 import { skipRoutes } from "./models/core/rules";
-import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-root",
@@ -26,7 +27,7 @@ import { Title } from "@angular/platform-browser";
   styles: [],
 })
 export class AppComponent {
-  constructor(private primeNG: PrimeNGConfig, private router: Router, private title: Title) {
+  constructor(private primeNG: PrimeNGConfig, private router: Router, private title: Title, private auth: AuthService) {
     moment.locale("pt-br");
     this.configureTranslation();
 
@@ -40,6 +41,10 @@ export class AppComponent {
     this.router.events.forEach((x) => {
       if (x instanceof NavigationEnd) {
         this.evalueteRoute(location.pathname.substring(1));
+
+        if (!this.auth.isLogged && !this.hideNav) {
+          this.auth.logout();
+        }
       }
     });
   }

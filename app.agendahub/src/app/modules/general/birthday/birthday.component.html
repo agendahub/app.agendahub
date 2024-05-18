@@ -11,15 +11,15 @@
   <div class="mt-4 w-full h-full">
     <p-carousel
       *ngIf="birthdayList && birthdayList.length; else empty"
+      [responsiveOptions]="responsiveOptions"
       [value]="birthdayList"
       [numVisible]="4"
       [numScroll]="3"
       [circular]="true"
-      [responsiveOptions]="responsiveOptions"
     >
       <ng-template let-birthday pTemplate="item">
         <div
-          class="relative flex flex-col justify-between border border-gray-300 dark:border-gray-600 shadow rounded-md mx-2 my-4 p-3 dark:text-white hover:shadow-lg min-h-[40vh] sm:max-w-[26rem] max-w-[69vw]"
+          class="relative flex flex-col justify-between border border-gray-300 dark:border-gray-600 shadow rounded-md mx-2 my-4 p-3 dark:text-white hover:shadow-lg h-[50vh] sm:max-w-[26rem] max-w-[69vw]"
         >
           <div class="absolute -top-4 z-40 flex gap-2" *ngIf="birthday.totalSchedules > 0">
             <p-tag value="{{ birthday.lastSchedule?.dateTime | date : 'dd/MM' }}" [severity]="getSeverity(birthday)" />
@@ -130,7 +130,20 @@
     </div>
     <ng-template #noContact>
       <div class="w-full">
-        <alert [type]="'warning'" [message]="'Esse cliente não possui as informações de contato válidas cadastradas'"> </alert>
+        <alert [type]="'warning'" [animated]="false" [message]="'Esse cliente não possui as informações de contato válidas cadastradas'">
+          <div class="flex justify-end w-full">
+            <button *ngIf="this.canChangeCustomerData" [routerLink]="['/manager/users']" class="underline hover:text-primary hover:font-semibold flex gap-0.5 items-center">
+              <span> Atualizar cadastro </span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3 h-3">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+                />
+              </svg>
+            </button>
+          </div>
+        </alert>
       </div>
     </ng-template>
   </div>

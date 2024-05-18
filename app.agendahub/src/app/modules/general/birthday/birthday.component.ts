@@ -1,6 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import * as moment from "moment";
 import { firstValueFrom } from "rxjs";
+import { Access } from "../../../auth/acess";
+import { AuthService } from "../../../auth/auth-service.service";
 import { ApiService } from "../../../services/api-service.service";
 
 @Component({
@@ -18,8 +20,11 @@ export class BirthdayComponent implements OnInit {
   modalOpened = false;
   phoneInvalid = false;
   birthSelected = null as any;
+  canChangeCustomerData!: boolean;
 
-  constructor(private api: ApiService) {}
+  constructor(private api: ApiService, private auth: AuthService) {
+    this.canChangeCustomerData = this.auth.canAccess(Access.Admin);
+  }
 
   ngOnInit(): void {
     this.responsiveOptions = [

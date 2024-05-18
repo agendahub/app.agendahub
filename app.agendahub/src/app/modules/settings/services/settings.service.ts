@@ -63,7 +63,12 @@ export class SettingsService {
     return (await this.retrieveSettingsFromApi(state)) as T;
   }
 
-  public async save(state: SettingsState, settings: unknown) {
+  public async save(state: SettingsState, settings: unknown, updateLocal = false) {
+    if (updateLocal) {
+      this.states[state] = settings;
+      return settings;
+    }
+
     return await this.saveSettingsToApi(state, settings);
   }
 
