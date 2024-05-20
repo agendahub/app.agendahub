@@ -110,7 +110,7 @@ export class NotificationService implements OnDestroy {
         });
 
         defer(() => {
-          if (this.flow.MAX_RETRIES > 0) {
+          if (this.flow.MAX_RETRIES > 0 && this.auth.isLogged) {
             this.flow.MAX_RETRIES--;
             this.listen();
           }
