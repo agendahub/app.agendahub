@@ -58,7 +58,7 @@ import { getTheme } from "../../utils/util";
     </div>
 
     <aside
-      class="z-[2000] w-screen h-screen ease-in-out duration-300"
+      class="z-[2000] w-screen h-screen ease-in-out duration-300 select-none"
       aria-label="Sidebar"
       id="default-sidebar"
       [ngClass]="{
@@ -89,7 +89,7 @@ import { getTheme } from "../../utils/util";
             <li>
               <a
                 [routerLink]="['/home']"
-                class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
+                class="cursor-pointer flex items-center p-3 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{ 'justify-center': !open }"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -102,12 +102,11 @@ import { getTheme } from "../../utils/util";
 
                 <span class="ms-3 select-none" *ngIf="open">Inicio</span>
               </a>
-              <hr *ngIf="open" class="w-full h-0.5 border-t-0 -mt-1 bg-gray-200 dark:bg-white/10" />
             </li>
             <li>
               <a
                 [routerLink]="['/scheduler']"
-                class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
+                class="cursor-pointer flex items-center p-3 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{ 'justify-center': !open }"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -123,7 +122,8 @@ import { getTheme } from "../../utils/util";
             </li>
             <li *ngIf="userRole !== 'employee'" (click)="showCrudLink = !showCrudLink; clickHandler($event)">
               <div
-                class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group w-full"
+                role="button"
+                class="flex items-center p-3 rounded-lg text-primary dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{
                   'justify-between': open,
                   'justify-center': !open,
@@ -135,7 +135,7 @@ import { getTheme } from "../../utils/util";
                   'dark:text-primary': showCrudLink && open,
                 }"
               >
-                <a class="flex items-center" [ngClass]="{ 'text-primary': showCrudLink && open }">
+                <a class="flex items-center">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
                     <path
                       stroke-linecap="round"
@@ -150,23 +150,23 @@ import { getTheme } from "../../utils/util";
                   *ngIf="open"
                   class="flex items-center justify-center cursor-pointer duration-300"
                   [ngClass]="{
-                    'rotate-180': showCrudLink,
-                    'text-primary': showCrudLink
+                    'rotate-180': showCrudLink
                   }"
                 >
                   <i class="fa-solid fa-arrow-circle-down"></i>
                 </span>
               </div>
 
-              <div id="crud-link" class="w-full p-2 bg-slate-100 rounded-b-md shadow-md mt-0" *ngIf="showCrudLink && open">
-                <a routerLink="/manager/services" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary">Serviços</a>
-                <a routerLink="/manager/users" class="block rounded-lg p-3 text-sm font-semibold leading-7 hover:text-gray-50 hover:bg-secondary">Usuários</a>
+              <div id="crud-link" class="w-full p-2 bg-primary dark:bg-white rounded-b-md shadow-md mt-0" *ngIf="showCrudLink && open">
+                <a routerLink="/manager/users" class="block rounded-lg p-3 text-sm font-semibold leading-7 text-white dark:text-primary">Usuários</a>
+                <a routerLink="/manager/services" class="block rounded-lg p-3 text-sm font-semibold leading-7 text-white dark:text-primary">Serviços</a>
+                <a routerLink="/manager/reports" class="block rounded-lg p-3 text-sm font-semibold leading-7 text-white dark:text-primary">Relatórios</a>
               </div>
             </li>
             <li>
               <a
                 [routerLink]="['/general/scheduling']"
-                class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
+                class="cursor-pointer flex items-center p-3 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{ 'justify-center': !open }"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -183,7 +183,7 @@ import { getTheme } from "../../utils/util";
             <li>
               <a
                 [routerLink]="['/general/birthdays']"
-                class="cursor-pointer flex items-center p-4 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
+                class="cursor-pointer flex items-center p-3 text-primary rounded-lg dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
                 [ngClass]="{ 'justify-center': !open }"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
@@ -208,7 +208,8 @@ import { getTheme } from "../../utils/util";
           </div>
           <div class="flex flex-col gap-3 w-full">
             <div
-              class=" cursor-pointer text-primary rounded-lg hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group p-2 flex justify-between  "
+              role="button"
+              class="text-primary rounded-lg hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group p-2 flex justify-between  "
               (click)="showUserOptions = !showUserOptions; clickHandler($event)"
               [ngClass]="
               {
@@ -238,11 +239,7 @@ import { getTheme } from "../../utils/util";
 
                 <span *ngIf="open" class="ms-3">{{ userData.name }}</span>
               </span>
-              <button
-                class="text-primary dark:text-white hover:bg-secondary dark:hover-text-white group-hover:text-white dark:group-hover:text-primary dark:hover:bg-gray-200 focus:outline-none dark:focus:ring-gray-700 rounded-lg text-sm p-2.5"
-                id="theme-toggle"
-                type="button"
-              >
+              <button class="rounded-lg text-sm p-2.5" id="theme-toggle" type="button">
                 <svg id="theme-toggle-dark-icon" class="w-5 h-5 hidden" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
                   <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
                 </svg>
