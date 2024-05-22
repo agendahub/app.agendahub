@@ -123,12 +123,12 @@ import { getTheme } from "../../utils/util";
             <li *ngIf="userRole !== 'employee'" (click)="showCrudLink = !showCrudLink; clickHandler($event)">
               <div
                 role="button"
-                class="flex items-center p-3 rounded-lg text-primary dark:text-white hover:bg-primary hover:text-white dark:hover:bg-white dark:hover:text-primary group"
+                class="flex items-center p-3 rounded-lg hover:bg-primary hover:text-white hover:dark:bg-white hover:dark:text-primary group"
                 [ngClass]="{
                   'justify-between': open,
                   'justify-center': !open,
-                  'rounded-none': showCrudLink,
-                  'rounded-t-lg': showCrudLink,
+                  'rounded-none rounded-t-lg': showCrudLink,
+                  'text-primary dark:text-white': !showCrudLink,
                   'bg-primary': showCrudLink && open,
                   'text-white': showCrudLink && open,
                   'dark:bg-white': showCrudLink && open,
@@ -158,9 +158,21 @@ import { getTheme } from "../../utils/util";
               </div>
 
               <div id="crud-link" class="w-full p-2 bg-primary dark:bg-white rounded-b-md shadow-md mt-0" *ngIf="showCrudLink && open">
-                <a routerLink="/manager/users" class="block rounded-lg p-3 text-sm font-semibold leading-7 text-white dark:text-primary">Usuários</a>
-                <a routerLink="/manager/services" class="block rounded-lg p-3 text-sm font-semibold leading-7 text-white dark:text-primary">Serviços</a>
-                <a routerLink="/manager/reports" class="block rounded-lg p-3 text-sm font-semibold leading-7 text-white dark:text-primary">Relatórios</a>
+                <a
+                  routerLink="/manager/users"
+                  class="block rounded-lg p-3 text-sm font-semibold leading-7 text-white dark:text-primary hover:bg-white hover:text-primary  hover:dark:text-white hover:dark:bg-primary"
+                  >Usuários</a
+                >
+                <a
+                  routerLink="/manager/services"
+                  class="block rounded-lg p-3 text-sm font-semibold leading-7 text-white dark:text-primary hover:bg-white hover:text-primary  hover:dark:text-white hover:dark:bg-primary"
+                  >Serviços</a
+                >
+                <a
+                  routerLink="/manager/reports"
+                  class="block rounded-lg p-3 text-sm font-semibold leading-7 text-white dark:text-primary hover:bg-white hover:text-primary  hover:dark:text-white hover:dark:bg-primary"
+                  >Relatórios</a
+                >
               </div>
             </li>
             <li>
