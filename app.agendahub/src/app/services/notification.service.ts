@@ -154,14 +154,8 @@ export class NotificationService implements OnDestroy {
   }
 
   private setAppBadge() {
-    if (this.unread() > 0) {
-      this.title.setTitle(`(${this.unread()}) ${this.title.getTitle()}`);
-
-      if ("setAppBadge" in navigator) {
-        navigator.setAppBadge(this.unread());
-      }
-    } else {
-      this.title.setTitle(this.title.getTitle().replace(/^\(\d+\)\s/, ""));
+    if ("setAppBadge" in navigator) {
+      navigator.setAppBadge(this.unread());
     }
   }
 }
