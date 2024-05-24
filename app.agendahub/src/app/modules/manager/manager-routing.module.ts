@@ -7,7 +7,7 @@ import { UsersComponent } from "./users/users.component";
 
 const breadcrumb = {
   label: "Gestão",
-  icon: "fa-solid fa-cog",
+  icon: "fa-solid fa-suitcase",
 };
 const routes: Routes = [
   { path: "services", component: ServicesComponent, data: { breadcrumb: [breadcrumb, { label: "Serviços", icon: "fa-solid fa-tools" }] } },

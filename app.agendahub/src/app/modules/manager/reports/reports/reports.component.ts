@@ -1,7 +1,9 @@
 import { Component, OnInit } from "@angular/core";
+import { LegendPosition } from "@swimlane/ngx-charts";
 import { MenuItem, PrimeNGConfig } from "primeng/api";
 import { firstValueFrom } from "rxjs";
 import { ApiService } from "../../../../services/api-service.service";
+import { ScreenHelperService } from "../../../../services/screen-helper.service";
 
 @Component({
   selector: "app-reports",
@@ -20,8 +22,11 @@ export class ReportsComponent implements OnInit {
 
   preview: any = null;
   chartData = [] as any[];
+  legendPos = LegendPosition.Below;
+  legend: any = false;
 
-  constructor(private prime: PrimeNGConfig, private api: ApiService) {
+  constructor(private prime: PrimeNGConfig, private api: ApiService, private help: ScreenHelperService) {
+    this.legend = help.isMobile;
     prime.ripple = false;
   }
 
