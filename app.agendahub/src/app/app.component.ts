@@ -12,7 +12,11 @@ import { skipRoutes } from "./models/core/rules";
     <loader></loader>
     <p-toast [breakpoints]="{ '920px': { width: '85%', right: '5', left: '5' } }"></p-toast>
 
-    <div id="app-container" class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean" [ngClass]="{ flex: sidebarFixed }">
+    <div
+      id="app-container"
+      class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean transition-colors duration-200 ease-linear"
+      [ngClass]="{ flex: sidebarFixed }"
+    >
       <sidebar *ngIf="!hideNav"></sidebar>
       <div class="relative w-full overflow-auto" [ngClass]="{ 'sm:h-full h-fit': !hideNav, 'h-full': hideNav }" cdk-scrollable>
         <div *ngIf="!hideNav" class="sm:block hidden sticky right-0 top-0 z-10" [ngClass]="{ 'ml-0': !falsy(sidebarFixed), 'ml-16': falsy(sidebarFixed) }">

@@ -296,13 +296,13 @@ thead tr th .fc-scroller-harness .fc-scroller {
   }
   .p-tabmenu-nav {
     & {
-      @apply rounded-t-md dark:bg-gray-800 border-2 dark:border-primary;
+      @apply rounded-t-md dark:bg-primary border-2 dark:border-primary;
     }
 
     .p-tabmenuitem {
       &.p-highlight .p-menuitem-link {
         & {
-          @apply bg-gray-400 dark:bg-gray-800;
+          @apply bg-gray-400 dark:bg-primary;
           border-color: #401088 !important;
         }
 
@@ -312,13 +312,13 @@ thead tr th .fc-scroller-harness .fc-scroller {
       }
 
       .p-menuitem-link {
-        @apply bg-gray-400 dark:bg-gray-800 dark:border-primary font-medium;
+        @apply bg-gray-400 dark:bg-primary dark:border-primary font-medium;
         padding: 1rem !important;
         box-shadow: none !important;
       }
 
       &:not(.p-highlight):not(.p-disabled):hover .p-menuitem-link {
-        @apply bg-gray-300 dark:bg-gray-800;
+        @apply bg-gray-300 dark:bg-primary;
       }
     }
   }
