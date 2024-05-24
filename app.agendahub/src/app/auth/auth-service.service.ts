@@ -112,7 +112,7 @@ export class AuthService {
     });
   }
 
-  public async canAccess(role: Access) {
+  public canAccess(role: Access) {
     const userRole = this.getUserAccess();
     if (userRole === role) {
       return true;
@@ -212,6 +212,8 @@ export class AuthService {
 
       const isNeedRefresh = Math.abs(timeRemaining?.getTime()! - now) / 1000 < 100;
 
+      console.log("isNeedRefresh", isNeedRefresh);
+
       if (this.isLogged && isNeedRefresh) {
         clearInterval(this.interval);
         this.intervalRunning = false;
@@ -235,12 +237,14 @@ export class AuthService {
       },
       (err) => {
         this.back({
-          beforeNavigate: () =>
+          beforeNavigate: () => {
+            alert("Sua sessão expirou, por favor, faça login novamente.");
             this.messageService.add({
               severity: "warning",
               summary: "Erro ao atualizar token",
               detail: err,
-            }),
+            });
+          },
         });
       },
     );

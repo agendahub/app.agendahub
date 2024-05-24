@@ -110,7 +110,7 @@ export class NotificationService implements OnDestroy {
         });
 
         defer(() => {
-          if (this.flow.MAX_RETRIES > 0) {
+          if (this.flow.MAX_RETRIES > 0 && this.auth.isLogged) {
             this.flow.MAX_RETRIES--;
             this.listen();
           }
@@ -154,14 +154,8 @@ export class NotificationService implements OnDestroy {
   }
 
   private setAppBadge() {
-    if (this.unread() > 0) {
-      this.title.setTitle(`(${this.unread()}) ${this.title.getTitle()}`);
-
-      if ("setAppBadge" in navigator) {
-        navigator.setAppBadge(this.unread());
-      }
-    } else {
-      this.title.setTitle(this.title.getTitle().replace(/^\(\d+\)\s/, ""));
+    if ("setAppBadge" in navigator) {
+      navigator.setAppBadge(this.unread());
     }
   }
 }

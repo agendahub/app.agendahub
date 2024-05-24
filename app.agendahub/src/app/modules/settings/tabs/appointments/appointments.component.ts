@@ -39,6 +39,7 @@ export class AppointmentsComponent implements OnInit {
       this.fb.group({
         openTime: [{ value: "", disabled: !this.hasWriteAccess }, [Validators.required]],
         closeTime: [{ value: "", disabled: !this.hasWriteAccess }, [Validators.required]],
+        sendEmailToCustomerScheduleDay: [{ value: false, disabled: !this.hasWriteAccess }],
         days: [{ value: "", disabled: !this.hasWriteAccess }, [Validators.required]],
         isOpen: [{ value: true, disabled: !this.hasWriteAccess }],
         changeOld: [{ value: false, disabled: !this.hasWriteAccess }],

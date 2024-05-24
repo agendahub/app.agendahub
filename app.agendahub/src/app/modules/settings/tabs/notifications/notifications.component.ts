@@ -20,13 +20,18 @@ export class NotificationsComponent {
   async ngOnInit() {
     this.buildForm();
     this.state = await this.settings.state("Notifications");
+    console.log(this.state);
+
     this.form.patchValue(this.state);
   }
 
   buildForm() {
     this.form = this.fb.group({
       emailNotifications: [],
+      emailNewCustomerWithoutSchedule: [],
       pushNotifications: [],
+      pushScheduleChanges: [],
+      pushScheduleDay: [],
     });
   }
 
@@ -48,5 +53,6 @@ export class NotificationsComponent {
   async save() {
     const data = { ...this.form.value, id: this.state.id, userId: this.state.userId };
     await firstValueFrom(this.api.updateToApi("User/UpdatePreferences", data));
+    this.settings.save("Notifications", data, true);
   }
 }
