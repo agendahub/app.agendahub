@@ -152,7 +152,7 @@
 
 .fc-event {
   @apply border-none rounded-md mix-blend-darken p-1;
-  box-shadow: inset 0px 0px 400px 110px rgb(0 0 0 / 30%) !important;
+  box-shadow: inset 0px 0px 400px 110px rgb(0 0 0 / 20%) !important;
 }
 
 .fc-event:hover {
@@ -342,16 +342,4 @@ thead tr th .fc-scroller-harness .fc-scroller {
 
 .p-inputtext:enabled:focus {
   box-shadow: none !important;
-}
-
-.fc.fc-theme-standard .fc-view-harness .fc-scrollgrid {
-  @apply border-none;
-}
-
-.fc.fc-theme-standard .fc-view-harness th {
-  @apply bg-palette-50 dark:bg-secondary;
-}
-
-.fc-timegrid-slot .fc-timegrid-slot-label .fc-scrollgrid-shrink {
-  @apply dark:bg-tertiary;
 }

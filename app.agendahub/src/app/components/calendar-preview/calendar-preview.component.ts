@@ -1,43 +1,17 @@
-import {
-  AfterContentInit,
-  AfterViewInit,
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  OnInit,
-  Output,
-  ViewChild,
-} from "@angular/core";
-import { LocalStorageService } from "../../services/local-storage.service";
-import {
-  faCalendarCheck,
-  faCheckCircle,
-  faTimesCircle,
-} from "@fortawesome/free-regular-svg-icons";
-import {
-  faArrowCircleLeft,
-  faArrowCircleRight,
-  faL,
-} from "@fortawesome/free-solid-svg-icons";
-import { FullCalendarComponent } from "@fullcalendar/angular";
-import {
-  CalendarOptions,
-  Calendar,
-  EventClickArg,
-  EventChangeArg,
-  EventInput,
-  CalendarApi,
-} from "@fullcalendar/core";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin, { DateClickArg } from "@fullcalendar/interaction";
-import { Subject } from "rxjs";
-import * as moment from "moment";
 import { DOCUMENT } from "@angular/common";
-import { hexToRgbA, rgbToRgba, rgbaToRgb } from "../../utils/util";
-import { SettingsService } from "../../modules/settings/services/settings.service";
+import { AfterContentInit, AfterViewInit, Component, EventEmitter, Inject, Input, OnInit, Output, ViewChild, ViewEncapsulation } from "@angular/core";
+import { faCalendarCheck, faCheckCircle, faTimesCircle } from "@fortawesome/free-regular-svg-icons";
+import { FullCalendarComponent } from "@fullcalendar/angular";
+import { Calendar, CalendarOptions, EventChangeArg, EventClickArg, EventInput } from "@fullcalendar/core";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
+import timeGridPlugin from "@fullcalendar/timegrid";
+import * as moment from "moment";
+import { Subject } from "rxjs";
 import { SettingsApp } from "../../modules/settings/models/settingsApp";
+import { SettingsService } from "../../modules/settings/services/settings.service";
+import { LocalStorageService } from "../../services/local-storage.service";
+import { hexToRgbA, rgbToRgba, rgbaToRgb } from "../../utils/util";
 import { CalendarNavigator } from "../calendar/calendar-navigator";
 
 var self: CalendarPreviewComponent;
@@ -46,10 +20,9 @@ var self: CalendarPreviewComponent;
   selector: "app-calendar-preview",
   templateUrl: "./calendar-preview.component.html",
   styleUrls: ["./calendar-preview.component.scss"],
+  encapsulation: ViewEncapsulation.Emulated,
 })
-export class CalendarPreviewComponent
-  implements OnInit, AfterViewInit, AfterContentInit
-{
+export class CalendarPreviewComponent implements OnInit, AfterViewInit, AfterContentInit {
   @ViewChild("calendar")
   calendarComponent!: FullCalendarComponent;
 
@@ -89,9 +62,7 @@ export class CalendarPreviewComponent
     hexToRgba: hexToRgbA,
   };
 
-  public nav: CalendarNavigator = new CalendarNavigator(this.Calendar, [
-    this.dispatchViewChange.bind(this),
-  ]);
+  public nav: CalendarNavigator = new CalendarNavigator(this.Calendar, [this.dispatchViewChange.bind(this)]);
   public calendarOptions: CalendarOptions = {
     locale: "pt-br",
     height: "calc(100vh - 4.5rem - 64px)",
@@ -121,11 +92,7 @@ export class CalendarPreviewComponent
 
   private settings!: SettingsApp;
 
-  constructor(
-    private localStorageService: LocalStorageService,
-    private settingsService: SettingsService,
-    @Inject(DOCUMENT) private doc: Document
-  ) {
+  constructor(private localStorageService: LocalStorageService, private settingsService: SettingsService, @Inject(DOCUMENT) private doc: Document) {
     self = this;
     this.state = {};
     this.settingsService.state("Appointments").then((x) => {
@@ -182,9 +149,7 @@ export class CalendarPreviewComponent
 
   private get initView() {
     if (this.editable) {
-      return this.viewTranslate[
-        this.localStorageService.get("view") ?? this.views
-      ];
+      return this.viewTranslate[this.localStorageService.get("view") ?? this.views];
     } else {
       this.Calendar.changeView(this.views);
       return this.views;
@@ -218,9 +183,7 @@ export class CalendarPreviewComponent
       if (this.settings) {
         clearInterval(sync);
         const openTime = moment().startOf("hour");
-        const closeTime = moment(this.settings.closeTime, "HH:mm:ss").startOf(
-          "hour"
-        );
+        const closeTime = moment(this.settings.closeTime, "HH:mm:ss").startOf("hour");
 
         const currentTime = moment().startOf("hour").subtract("1", "hour");
         let endTime = moment().add(4, "hours").startOf("hour");
@@ -235,9 +198,7 @@ export class CalendarPreviewComponent
           endTime: closeTime.format("HH:mm:ss"),
         });
 
-        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter(
-          (x) => !this.settings.days.includes(x)
-        );
+        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter((x) => !this.settings.days.includes(x));
         this.Calendar.setOption("hiddenDays", hiddenDays);
         this.Calendar.setOption("duration", {
           days: this.settings.days.length,
@@ -261,20 +222,7 @@ export class CalendarPreviewComponent
   }
 
   public getMonthHeader(): string {
-    const months = [
-      "Janeiro",
-      "Fevereiro",
-      "Março",
-      "Abril",
-      "Maio",
-      "Junho",
-      "Julho",
-      "Agosto",
-      "Setembro",
-      "Outubro",
-      "Novembro",
-      "Dezembro",
-    ];
+    const months = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
     const currentDate = new Date();
     return `${currentDate.getDate()}/${months[currentDate.getMonth()]}`;
   }

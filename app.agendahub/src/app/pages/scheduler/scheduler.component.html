@@ -1,10 +1,10 @@
 <p-toast position="bottom-center" key="bc" [breakpoints]="{ '920px': { width: '85%', right: '5', left: '5' } }"></p-toast>
 <div class="relative overflow-x-hidden h-[calc(100vh-64px)]" [ngClass]="{ 'opacity-95': visible }">
-  <div class="flex justify-between h-full" #scheduler>
-    <div class="w-1/4 bg-very-clean dark:bg-secondary sm:block hidden">
+  <div class="flex justify-between h-full border-t relative border-gray-200 dark:border-white/10" #scheduler>
+    <div class="w-1/4 bg-very-clean dark:bg-primary sm:block hidden">
       <ng-template [ngTemplateOutlet]="options"></ng-template>
     </div>
-    <div class="h-full w-full flex flex-col bg-very-clean dark:bg-secondary">
+    <div class="h-full w-full flex flex-col bg-very-clean dark:bg-primary">
       <app-calendar
         #calendar
         [editable]="enableEdit"
@@ -240,7 +240,7 @@
         <div class="container flex flex-col gap-1 p-1 max-h-60 overflow-y-auto">
           <div
             *ngFor="let employee of this.employees"
-            class="px-2 py-1 rounded border border-gray-200 bg-very-clean dark:bg-primary dark:text-palette-50 dark:border-0 transition duration-150 ease-in-out transform"
+            class="px-2 py-1 rounded border border-gray-200 bg-very-clean dark:bg-secondary dark:text-palette-50 dark:border-0 transition duration-150 ease-in-out transform"
           >
             <div class="flex justify-between items-center gap-2">
               <div class="flex gap-2 items-center">
@@ -263,7 +263,7 @@
         <div class="container flex flex-col gap-1 p-1">
           <div
             *ngFor="let item of services"
-            class="p-2 rounded border border-gray-200 bg-very-clean dark:bg-primary dark:text-palette-50 dark:border-0 transition duration-150 ease-in-out transform"
+            class="p-2 rounded border border-gray-200 bg-very-clean dark:bg-secondary dark:text-palette-50 dark:border-0 transition duration-150 ease-in-out transform"
           >
             <div class="flex justify-between items-center gap-2">
               <span class="flex gap-2 flex-wrap">
