@@ -1,11 +1,12 @@
 import { Overlay, OverlayRef } from "@angular/cdk/overlay";
 import { TemplatePortal } from "@angular/cdk/portal";
-import { Component, ElementRef, HostListener, OnDestroy, OnInit, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, Signal, TemplateRef, ViewChild, ViewContainerRef } from "@angular/core";
 import * as moment from "moment";
-import { Subscription } from "rxjs";
+import { Subscription, firstValueFrom } from "rxjs";
 import { Forgetable } from "../../core/forgetable";
 import { Notification, NotificationStatus } from "../../models/core/notification";
 import { NotificationService } from "../../services/notification.service";
+import { PushNotificationService } from "../../services/push-notification.service";
 import { ScreenHelperService } from "../../services/screen-helper.service";
 
 @Component({
@@ -30,11 +31,18 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
   private mobileOverlay!: OverlayRef;
 
   saving: boolean = false;
+  connected!: Signal<boolean>;
 
   @ViewChild("ref") elementRef!: TemplateRef<any>;
   @ViewChild("wrapper") wrapperRef!: ElementRef<HTMLDivElement>;
 
-  constructor(public notify: NotificationService, private overlay: Overlay, private view: ViewContainerRef, public help: ScreenHelperService) {
+  constructor(
+    public notify: NotificationService,
+    private overlay: Overlay,
+    private view: ViewContainerRef,
+    public help: ScreenHelperService,
+    private webPush: PushNotificationService,
+  ) {
     super();
     moment.locale("pt-br");
   }
@@ -53,10 +61,16 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
   ngOnInit(): void {
     this.set(NotificationStatus.Unread);
 
-    this.notify.preview().subscribe((notifications) => {
+    firstValueFrom(this.notify.preview()).then((notifications) => {
       this.messages = notifications;
       this.set(this.tab);
     });
+    this.subscription = this.notify.upcoming.subscribe((notifications) => {
+      this.messages = Array.from(new Set([...notifications, ...this.messages]).values());
+      this.set(this.tab);
+    });
+
+    this.connected = this.notify.connected;
   }
 
   ngOnDestroy(): void {
@@ -142,5 +156,9 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
     }
 
     this.opened = false;
+  }
+
+  webpush() {
+    this.webPush.subscribeToNotifications();
   }
 }

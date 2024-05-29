@@ -1,9 +1,10 @@
 import { Component } from "@angular/core";
+import { Title } from "@angular/platform-browser";
+import { NavigationEnd, Router } from "@angular/router";
 import * as moment from "moment";
 import { PrimeNGConfig } from "primeng/api";
-import { NavigationEnd, Router } from "@angular/router";
+import { AuthService } from "./auth/auth-service.service";
 import { skipRoutes } from "./models/core/rules";
-import { Title } from "@angular/platform-browser";
 
 @Component({
   selector: "app-root",
@@ -11,7 +12,11 @@ import { Title } from "@angular/platform-browser";
     <loader></loader>
     <p-toast [breakpoints]="{ '920px': { width: '85%', right: '5', left: '5' } }"></p-toast>
 
-    <div id="app-container" class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean" [ngClass]="{ flex: sidebarFixed }">
+    <div
+      id="app-container"
+      class="w-screen h-screen overflow-auto dark:bg-primary backdrop-blur-lg bg-very-clean transition-colors duration-200 ease-linear"
+      [ngClass]="{ flex: sidebarFixed }"
+    >
       <sidebar *ngIf="!hideNav"></sidebar>
       <div class="relative w-full overflow-auto" [ngClass]="{ 'sm:h-full h-fit': !hideNav, 'h-full': hideNav }" cdk-scrollable>
         <div *ngIf="!hideNav" class="sm:block hidden sticky right-0 top-0 z-10" [ngClass]="{ 'ml-0': !falsy(sidebarFixed), 'ml-16': falsy(sidebarFixed) }">
@@ -26,7 +31,7 @@ import { Title } from "@angular/platform-browser";
   styles: [],
 })
 export class AppComponent {
-  constructor(private primeNG: PrimeNGConfig, private router: Router, private title: Title) {
+  constructor(private primeNG: PrimeNGConfig, private router: Router, private title: Title, private auth: AuthService) {
     moment.locale("pt-br");
     this.configureTranslation();
 
@@ -40,6 +45,10 @@ export class AppComponent {
     this.router.events.forEach((x) => {
       if (x instanceof NavigationEnd) {
         this.evalueteRoute(location.pathname.substring(1));
+
+        if (!this.auth.isLogged && !this.hideNav) {
+          this.auth.logout();
+        }
       }
     });
   }

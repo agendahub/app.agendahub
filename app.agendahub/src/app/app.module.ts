@@ -19,6 +19,7 @@ import { AutoCompleteModule } from "primeng/autocomplete";
 import { AvatarModule } from "primeng/avatar";
 import { ButtonModule } from "primeng/button";
 import { CalendarModule } from "primeng/calendar";
+import { CardModule } from "primeng/card";
 import { CheckboxModule } from "primeng/checkbox";
 import { DialogModule } from "primeng/dialog";
 import { DropdownModule } from "primeng/dropdown";
@@ -30,6 +31,7 @@ import { MessageModule } from "primeng/message";
 import { MultiSelectModule } from "primeng/multiselect";
 import { OverlayPanelModule } from "primeng/overlaypanel";
 import { SidebarModule } from "primeng/sidebar";
+import { SkeletonModule } from "primeng/skeleton";
 import { SplitButtonModule } from "primeng/splitbutton";
 import { TimelineModule } from "primeng/timeline";
 import { ToastModule } from "primeng/toast";
@@ -39,6 +41,8 @@ import { MatSnackBarModule } from "@angular/material/snack-bar";
 import { MessageService } from "primeng/api";
 import { MegaMenuModule } from "primeng/megamenu";
 import { TableModule } from "primeng/table";
+import { TieredMenuModule } from "primeng/tieredmenu";
+
 import { environment } from "../environments/environment.development";
 import { AuthService } from "./auth/auth-service.service";
 import { tokenGetter } from "./auth/auth-utils";
@@ -82,7 +86,9 @@ import { loadTypes } from "./types/typing";
     ManagerRoutingModule,
     GeneralModule,
     MatSnackBarModule,
+    SkeletonModule,
 
+    TieredMenuModule,
     ListboxModule,
     ToastModule,
     DialogModule,
@@ -92,6 +98,7 @@ import { loadTypes } from "./types/typing";
     CalendarModule,
     CheckboxModule,
     InputTextModule,
+    CardModule,
     SplitButtonModule,
     AutoCompleteModule,
     OverlayPanelModule,
@@ -115,7 +122,7 @@ import { loadTypes } from "./types/typing";
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: [environment.getApiDomain()],
+        allowedDomains: [environment.getApiDomain(), "localhost:5001"],
         disallowedRoutes: [environment.getApiDomain() + "/auth/login"],
       },
     }),
@@ -123,7 +130,13 @@ import { loadTypes } from "./types/typing";
     ComponentsModule,
     ManagerModule,
   ],
-  providers: [HttpClient, ApiService, AuthService, MessageService, AuthGuardService],
+  providers: [
+    HttpClient,
+    ApiService,
+    AuthService,
+    MessageService,
+    AuthGuardService,
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {

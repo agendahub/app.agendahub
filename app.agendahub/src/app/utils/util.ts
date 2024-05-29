@@ -46,7 +46,7 @@ export function customSort(event: SortEvent) {
   event.data?.sort((data1, data2) => {
     let value1 = data1[event.field ?? ""];
     let value2 = data2[event.field ?? ""];
-    let result = null;
+    let result = null as any;
 
     if (value1 == null && value2 != null) result = -1;
     else if (value1 != null && value2 == null) result = 1;

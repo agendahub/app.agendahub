@@ -1,17 +1,22 @@
-import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
+import { NgModule } from "@angular/core";
 
-import { GeneralRoutingModule } from "./general-routing.module";
-import { SchedulingComponent } from "./scheduling/scheduling.component";
-import { TableModule } from "primeng/table";
-import { InputTextModule } from "primeng/inputtext";
 import { FormsModule } from "@angular/forms";
+import { NgxChartsModule } from "@swimlane/ngx-charts";
 import { CalendarModule } from "primeng/calendar";
-import { NotificationsComponent } from "./notifications/notifications.component";
+import { CarouselModule } from "primeng/carousel";
+import { DialogModule } from "primeng/dialog";
+import { InputTextModule } from "primeng/inputtext";
+import { TableModule } from "primeng/table";
+import { TagModule } from "primeng/tag";
 import { ComponentsModule } from "../../components/components.module";
+import { BirthdayComponent } from "./birthday/birthday.component";
+import { GeneralRoutingModule } from "./general-routing.module";
+import { NotificationsComponent } from "./notifications/notifications.component";
+import { SchedulingComponent } from "./scheduling/scheduling.component";
 
 @NgModule({
-  declarations: [SchedulingComponent, NotificationsComponent],
+  declarations: [SchedulingComponent, NotificationsComponent, BirthdayComponent],
   imports: [
     CommonModule,
     ComponentsModule,
@@ -19,7 +24,11 @@ import { ComponentsModule } from "../../components/components.module";
     TableModule,
     InputTextModule,
     FormsModule,
+    CarouselModule,
+    TagModule,
     CalendarModule,
+    DialogModule,
+    NgxChartsModule,
   ],
 })
 export class GeneralModule {}

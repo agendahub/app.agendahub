@@ -7,7 +7,7 @@ export type SettingsState = "General" | "Notifications" | "Appointments" | "Secu
 
 export const SettingsEndpoints: Record<SettingsState, string> = {
   General: "api/CompanyParameter/",
-  Notifications: "api/CompanyParameter/",
+  Notifications: "User/GetPreferences/",
   Appointments: "api/CompanyParameter/",
   Security: "api/CompanyParameter/",
 };
@@ -63,7 +63,12 @@ export class SettingsService {
     return (await this.retrieveSettingsFromApi(state)) as T;
   }
 
-  public async save(state: SettingsState, settings: unknown) {
+  public async save(state: SettingsState, settings: unknown, updateLocal = false) {
+    if (updateLocal) {
+      this.states[state] = settings;
+      return settings;
+    }
+
     return await this.saveSettingsToApi(state, settings);
   }
 

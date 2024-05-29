@@ -34,4 +34,13 @@ export class ImageService {
     favicon.href = image
   }
 
+  public setProfileImg(image: string | ArrayBuffer | Blob) {
+    if (image instanceof ArrayBuffer) {
+      image = URL.createObjectURL(new Blob([image]))
+    } else if (image instanceof Blob) {
+      image = URL.createObjectURL(image)
+    }
+  }
+
+
 }

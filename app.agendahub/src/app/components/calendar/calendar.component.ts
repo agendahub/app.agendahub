@@ -11,7 +11,8 @@ import { Subject } from "rxjs";
 import { SettingsApp } from "../../modules/settings/models/settingsApp";
 import { SettingsService } from "../../modules/settings/services/settings.service";
 import { LocalStorageService } from "../../services/local-storage.service";
-import { hexToRgbA, rgbToRgba, rgbaToRgb } from "../../utils/util";
+import { futureIf } from "../../utils/async";
+import { hexToRgbA, notNull, rgbToRgba, rgbaToRgb } from "../../utils/util";
 import { CalendarNavigator } from "./calendar-navigator";
 
 var self: CalendarComponent;
@@ -226,21 +227,23 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
   }
 
   private handleAddEvent(event: EventInput | EventInput[]) {
-    const checkEvent = (e: EventInput) => {
-      var enable = this.isEditable && (this.settings.changeOld || moment(e.end).isAfter(moment()));
-      e.durationEditable = enable;
-      e.startEditable = enable;
-      e.interactive = enable;
-      e.editable = enable;
-    };
+    futureIf(notNull(this.settings), () => {
+      const checkEvent = (e: EventInput) => {
+        var enable = this.isEditable && (this.settings.changeOld || moment(e.end).isAfter(moment()));
+        e.durationEditable = enable;
+        e.startEditable = enable;
+        e.interactive = enable;
+        e.editable = enable;
+      };
 
-    if (event instanceof Array) {
-      event.forEach((e) => checkEvent(e));
-      this.Calendar.addEventSource(event);
-    } else {
-      checkEvent(event);
-      this.Calendar.addEvent(event);
-    }
+      if (event instanceof Array) {
+        event.forEach((e) => checkEvent(e));
+        this.Calendar.addEventSource(event);
+      } else {
+        checkEvent(event);
+        this.Calendar.addEvent(event);
+      }
+    });
   }
 
   private handleRemoveEvent(event: EventInput | EventInput[] | undefined) {
@@ -272,11 +275,21 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
           },
         });
 
-        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter((x) => !this.settings.days.includes(x));
+        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter(
+          (x) => !this.settings.days.includes(x)
+        );
         this.Calendar.setOption("hiddenDays", hiddenDays);
-        this.Calendar.setOption("duration", { days: this.settings.days.length });
-        this.Calendar.setOption("slotMinTime", moment(this.settings.openTime).format("HH:mm:ss"));
-        this.Calendar.setOption("slotMaxTime", moment(this.settings.closeTime).add(1, "h").format("HH:mm:ss"));
+        this.Calendar.setOption("duration", {
+          days: this.settings.days.length,
+        });
+        this.Calendar.setOption(
+          "slotMinTime",
+          moment(this.settings.openTime).format("HH:mm:ss")
+        );
+        this.Calendar.setOption(
+          "slotMaxTime",
+          moment(this.settings.closeTime).format("HH:mm:ss")
+        );
       }
     }, 100);
   }

@@ -1,25 +1,40 @@
 import { NgModule } from "@angular/core";
 
+import { ConfirmationService } from "primeng/api";
+import { CalendarModule } from "primeng/calendar";
+import { CheckboxModule } from "primeng/checkbox";
+import { ConfirmDialogModule } from "primeng/confirmdialog";
+import { InputSwitchModule } from "primeng/inputswitch";
+import { InputTextModule } from "primeng/inputtext";
+import { MultiSelectModule } from "primeng/multiselect";
+import { PasswordModule } from "primeng/password";
+import { TabMenuModule } from "primeng/tabmenu";
+import { TooltipModule } from "primeng/tooltip";
+import { SharedModule } from "../../shared/shared.module";
+import { SettingsService } from "./services/settings.service";
 import { SettingsRoutingModule } from "./settings-routing.module";
 import { SettingsComponent } from "./settings/settings.component";
-import { SharedModule } from "../../shared/shared.module";
-import { TabMenuModule } from "primeng/tabmenu";
+import { AppointmentsComponent } from "./tabs/appointments/appointments.component";
 import { GeneralComponent } from "./tabs/general/general.component";
 import { NotificationsComponent } from "./tabs/notifications/notifications.component";
-import { AppointmentsComponent } from "./tabs/appointments/appointments.component";
-import { SettingsService } from "./services/settings.service";
-import { CheckboxModule } from "primeng/checkbox";
-import { CalendarModule } from "primeng/calendar";
-import { MultiSelectModule } from "primeng/multiselect";
-import { TooltipModule } from "primeng/tooltip";
 import { SecurityComponent } from "./tabs/security/security.component";
-import { InputTextModule } from "primeng/inputtext";
-import { PasswordModule } from "primeng/password";
 
 @NgModule({
   declarations: [SettingsComponent, GeneralComponent, NotificationsComponent, AppointmentsComponent, SecurityComponent],
-  imports: [SharedModule, SettingsRoutingModule, InputTextModule, TooltipModule, MultiSelectModule, CalendarModule, TabMenuModule, CheckboxModule, PasswordModule],
+  imports: [
+    SharedModule,
+    SettingsRoutingModule,
+    InputTextModule,
+    InputSwitchModule,
+    TooltipModule,
+    MultiSelectModule,
+    CalendarModule,
+    TabMenuModule,
+    CheckboxModule,
+    PasswordModule,
+    ConfirmDialogModule,
+  ],
   exports: [SettingsRoutingModule],
-  providers: [SettingsService],
+  providers: [SettingsService, ConfirmationService],
 })
 export class SettingsModule {}

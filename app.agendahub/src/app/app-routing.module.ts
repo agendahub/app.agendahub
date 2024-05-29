@@ -1,14 +1,14 @@
+import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
-import { SchedulerComponent } from "./pages/scheduler/scheduler.component";
-import { LoginComponent } from "./pages/login/login.component";
-import { HomeComponent } from "./pages/home/home.component";
-import { CommonModule } from "@angular/common";
 import { AuthGuardService } from "./auth/auth.guard.service";
+import { HomeComponent } from "./pages/home/home.component";
 import { LinksComponent } from "./pages/links/links.component";
-import { ScheduleLinkViewComponent } from "./pages/schedule-link-view/schedule-link-view.component";
-import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
+import { LoginComponent } from "./pages/login/login.component";
 import { ResetPasswordComponent } from "./pages/reset-password/reset-password.component";
+import { ScheduleLinkViewComponent } from "./pages/schedule-link-view/schedule-link-view.component";
+import { SchedulerComponent } from "./pages/scheduler/scheduler.component";
+import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -36,7 +36,6 @@ const routes: Routes = [
   },
   {
     path: "general",
-    canActivateChild: [AuthGuardService],
     loadChildren: () => import("./modules/general/general-routing.module").then((r) => r.GeneralRoutingModule),
   },
   {

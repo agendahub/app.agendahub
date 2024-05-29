@@ -3,7 +3,7 @@
     <h2 class="text-lg leading-7 font-light -tracking-wide sm:truncate sm:text-2xl sm:tracking-tight">Configure seus horários e dias de funcionamento</h2>
   </div>
 
-  <hr class="my-6 w-full h-0.5 border-t-0 bg-white/50 dark:bg-white/10" />
+  <hr class="my-6 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
 
   <div class="mt-2">
     <div class="w-fit">
@@ -56,6 +56,7 @@
       <div class="w-full flex flex-col gap-3">
         <p-checkbox formControlName="isOpen" [binary]="true" label="Aberto"></p-checkbox>
         <p-checkbox formControlName="changeOld" [binary]="true" label="Permite alterar agendamentos passados"></p-checkbox>
+        <p-checkbox formControlName="sendEmailToCustomerScheduleDay" [binary]="true" label="Notificar clientes no dia do agendamento"></p-checkbox>
       </div>
       <button type="submit" [disabled]="futils.form.invalid || !hasWriteAccess" class="bg-success disabled:opacity-50 text-white rounded-md p-2" (click)="save()">Salvar</button>
     </form>
