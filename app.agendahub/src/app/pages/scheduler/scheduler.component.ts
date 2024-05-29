@@ -4,8 +4,10 @@ import { DateClickArg } from "@fullcalendar/interaction";
 import * as moment from "moment/moment";
 
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
 import { MessageService } from "primeng/api";
 import { Subject } from "rxjs";
+import { Access } from "../../auth/acess";
 import { AuthService } from "../../auth/auth-service.service";
 import { CalendarComponent } from "../../components/calendar/calendar.component";
 import { Schedule, Service, User, UserSchedule } from "../../models/core/entities";
@@ -30,7 +32,7 @@ export class SchedulerComponent implements OnInit {
   edit = false;
   visible = false;
   enableEdit = new Subject<boolean>();
-  isEditEnable = this.authService.TokenData?.role != "employee";
+  isEditEnable = this.authService.canAccess(Access.Admin);
 
   form!: FormGroup;
 
@@ -90,6 +92,7 @@ export class SchedulerComponent implements OnInit {
     private message: MessageService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
+    private activated: ActivatedRoute,
     private settingsService: SettingsService,
   ) {
     this.createForm();
@@ -98,6 +101,7 @@ export class SchedulerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUrlParams();
     this.settingsService.state("Appointments", true).then((x) => (this.settings = x));
   }
 
@@ -463,6 +467,11 @@ export class SchedulerComponent implements OnInit {
         },
       });
     }
+  }
+
+  private getUrlParams() {
+    const params = this.activated.snapshot.queryParams;
+    console.log(params);
   }
 
   onTa$k = signal(false);

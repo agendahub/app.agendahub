@@ -1,10 +1,10 @@
 <p-toast position="bottom-center" key="bc" [breakpoints]="{ '920px': { width: '85%', right: '5', left: '5' } }"></p-toast>
 <div class="relative overflow-x-hidden h-[calc(100vh-64px)]" [ngClass]="{ 'opacity-95': visible }">
   <div class="flex justify-between h-full" #scheduler>
-    <div class="w-1/4 bg-very-clean sm:block hidden">
+    <div class="w-1/4 bg-very-clean dark:bg-secondary sm:block hidden">
       <ng-template [ngTemplateOutlet]="options"></ng-template>
     </div>
-    <div class="h-full w-full flex flex-col bg-very-clean">
+    <div class="h-full w-full flex flex-col bg-very-clean dark:bg-secondary">
       <app-calendar
         #calendar
         [editable]="enableEdit"
@@ -169,7 +169,7 @@
   <ng-template pTemplate="footer">
     <div class="h-full flex items-end justify-end gap-2">
       <button
-        class="button-bezel w-full text-center py-2 px-6 rounded button-shadow text-red-800 border border-red-600 transition-colors hover:bg-red-600 hover:text-white disabled:opacity-50"
+        class="w-full rounded bg-red-100 text-red-600 p-2 shadow disabled:opacity-50"
         *ngIf="edit"
         (click)="tryDelete()"
         [disabled]="!isEditEnable || oldScheduleDisabled || onTa$k()"
@@ -177,7 +177,7 @@
         <span class="tracking-tight">Excluir</span>
       </button>
       <button
-        class="button-bezel w-full text-center py-2 px-6 rounded button-shadow text-very-clean bg-gradient-to-t from-palette-500 to-palette-600 disabled:opacity-50"
+        class="w-full rounded bg-gradient-to-r from-palette-400 to-palette-600 text-palette-50 p-2 shadow disabled:opacity-50"
         (click)="confirm()"
         [disabled]="form.invalid || !isEditEnable || oldScheduleDisabled || onTa$k()"
       >
@@ -188,9 +188,9 @@
 </p-sidebar>
 
 <ng-template #options>
-  <div class="h-16 border-b relative border-gray-300 flex px-2 justify-center items-center gap-3">
-    <span class="text-2xl font-semibold text-primary">Agendamentos</span>
-    <div role="button" class="flex items-center gap-2 rounded bg-action text-xs text-white px-2 py-1" (click)="addNewOne()">
+  <div class="h-16 border-b relative border-gray-200 dark:border-white/10 flex px-2 justify-center items-center gap-3">
+    <span class="text-2xl font-semibold text-primary dark:text-white">Agendamentos</span>
+    <div role="button" class="flex items-center gap-2 rounded bg-gradient-to-br from-palette-400 to-palette-600 text-xs text-white px-2 py-1 shadow" (click)="addNewOne()">
       <i class="fa-solid fa-plus"></i>
       <span>NOVO</span>
     </div>
@@ -200,24 +200,23 @@
       </svg>
     </div>
   </div>
-  <div class="h-[calc(100vh-8rem)] bg-purple-50 overflow-y-auto px-4 py-2">
-    <div class="transition-all duration-150 ease-linear" *ngIf="schedules && schedules.length">
+  <div class="h-[calc(100vh-8rem)] bg-transparent overflow-y-auto px-4 py-2 border-r border-gray-200 dark:border-white/10">
+    <div class="transition-all duration-150 ease-linear">
       <div class="mb-2">
         <span class="p-input-icon-left w-full">
           <i class="fa-solid fa-magnifying-glass"></i>
           <input type="text" [(ngModel)]="filter.value" class="p-inputtext-sm w-full" pInputText placeholder="Pesquise por palavra chave..." (keyup)="filter.search()" />
         </span>
-        <div *ngIf="filter.value.length && !filter.schedules.length" class="flex items-center justify-center gap-2 p-2">
-          <span class="text-sm">Nenhum agendamento encontrado</span>
-          <i class="fa-regular fa-face-surprise"></i>
+        <div *ngIf="(filter.value.length && !filter.schedules.length) || !schedules || !schedules.length" class="flex items-center justify-center gap-2 p-2">
+          <span class="text-sm dark:text-palette-50">Nenhum agendamento encontrado</span>
         </div>
       </div>
-      <div>
+      <div *ngIf="schedules && schedules.length">
         <div class="container flex flex-col gap-1 p-1 max-h-60 overflow-y-auto">
           <div
             *ngFor="let item of filter.schedules"
             (click)="openFormEdit(item)"
-            class="p-2 shadow-md rounded border border-gray-200 bg-very-clean transition duration-150 ease-in-out transform hover:scale-[1.01] hover:border-action hover:shadow-subaction hover:shadow-sm select-none cursor-pointer"
+            class="p-2 shadow-md rounded border border-gray-200 bg-very-clean dark:bg-primary dark:text-palette-50 dark:border-0 transition duration-200 ease-in-out transform hover:scale-[1.01] hover:border-palette-300 select-none cursor-pointer"
           >
             <div class="flex justify-between items-center gap-2">
               <span class="text-sm">{{ item.schedule.startDateTime | date : "dd/MM/yyyy HH:mm" }}</span>
@@ -230,42 +229,52 @@
           </div>
         </div>
       </div>
-      <hr class="w-full h-0.5 my-2 bg-clean border-0 rounded" />
+      <hr class="my-3 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
     </div>
-    <div>
-      <div class="flex justify-between items-center">
-        <h4 class="text-lg font-semibold text-primary">Funcionários</h4>
-      </div>
+    <ng-container *ngIf="isEditEnable">
+      <div>
+        <div class="flex justify-between items-center">
+          <h4 class="text-lg font-semibold text-primary dark:text-white">Funcionários</h4>
+        </div>
 
-      <div class="container flex flex-col gap-1 p-1 max-h-60 overflow-y-auto">
-        <div *ngFor="let employee of this.employees" class="px-2 py-1 rounded border border-gray-200 bg-very-clean transition duration-150 ease-in-out transform">
-          <!-- hover:scale-[1.01] hover:border-action hover:shadow-subaction hover:shadow-sm -->
-          <div class="flex justify-between items-center gap-2">
-            <span class="text-sm capitalize">{{ employee.name }} {{ employee.surname }}</span>
-            <p-avatar
-              [label]="employee.name.toUpperCapital()[0]"
-              styleClass="mr-2"
-              shape="circle"
-              [style]="{ background: employee.color && employee.color != '' ? employee.color : '#3788d8', color: '#ffffff' }"
-            ></p-avatar>
+        <div class="container flex flex-col gap-1 p-1 max-h-60 overflow-y-auto">
+          <div
+            *ngFor="let employee of this.employees"
+            class="px-2 py-1 rounded border border-gray-200 bg-very-clean dark:bg-primary dark:text-palette-50 dark:border-0 transition duration-150 ease-in-out transform"
+          >
+            <div class="flex justify-between items-center gap-2">
+              <div class="flex gap-2 items-center">
+                <div class="w-2 h-2 p-1 rounded-full" [style]="{ background: employee.color && employee.color != '' ? employee.color : '#3788d8', color: '#ffffff' }"></div>
+                <span class="text-sm capitalize">{{ employee.name }} {{ employee.surname }}</span>
+              </div>
+              <p-avatar
+                [label]="employee.imageUrl ? undefined : employee.name.toUpperCapital()[0]"
+                [image]="employee.imageUrl"
+                shape="circle"
+                [style]="{ background: employee.color && employee.color != '' ? employee.color : '#3788d8', color: '#ffffff', display: employee.imageUrl ? 'flex' : 'inline-flex' }"
+              ></p-avatar>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <hr class="w-full h-0.5 my-2 bg-clean border-0 rounded" />
-    <div>
-      <h4 class="text-lg font-semibold text-primary">Serviços</h4>
-      <div class="container flex flex-col gap-1 p-1">
-        <div *ngFor="let item of services" class="p-2 rounded border border-gray-200 bg-very-clean transition duration-150 ease-in-out transform">
-          <div class="flex justify-between items-center gap-2">
-            <span class="flex gap-2 flex-wrap">
-              <span class="text-sm font-bold">#{{ item.code }}</span>
-              <span class="text-sm">{{ item.description }}</span>
-            </span>
-            <span class="text-sm text-end">{{ item.price | currency : "BRL" }}</span>
+      <hr class="my-3 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
+      <div>
+        <h4 class="text-lg font-semibold text-primary dark:text-white">Serviços</h4>
+        <div class="container flex flex-col gap-1 p-1">
+          <div
+            *ngFor="let item of services"
+            class="p-2 rounded border border-gray-200 bg-very-clean dark:bg-primary dark:text-palette-50 dark:border-0 transition duration-150 ease-in-out transform"
+          >
+            <div class="flex justify-between items-center gap-2">
+              <span class="flex gap-2 flex-wrap">
+                <span class="text-sm font-bold">#{{ item.code }}</span>
+                <span class="text-sm">{{ item.description }}</span>
+              </span>
+              <span class="text-sm text-end">{{ item.price | currency : "BRL" }}</span>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </ng-container>
   </div>
 </ng-template>

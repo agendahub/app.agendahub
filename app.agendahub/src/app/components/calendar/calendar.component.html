@@ -1,9 +1,7 @@
-<div
-  class="w-full sm:w-75 md:w-50 lg:w-25 transition-all ease-linear duration-200"
->
+<div class="w-full sm:w-75 md:w-50 lg:w-25 transition-all ease-linear duration-200">
   <div class="w-full">
     <div
-      class="sm:h-16 border-b border-gray-300 flex justify-between items-center sm:px-2 px-1 sm:py-2 py-0.5 bg-white translate-x-0 open:translate-x-1 text-optimized"
+      class="sm:h-16 border-b border-gray-200 dark:border-white/10 flex justify-between items-center sm:px-2 px-1 sm:py-2 py-0.5 bg-white dark:bg-secondary translate-x-0 open:translate-x-1 text-optimized"
       [ngClass]="{ 'rounded-t-lg': !header }"
     >
       <div class="flex sm:flex-row flex-col gap-x-1">
@@ -16,16 +14,12 @@
             stroke="currentColor"
             class="sm:w-7 w-8 sm:h-7 h-8 cursor-pointer"
             [ngClass]="{
-              'text-primary': nav.nextEnable,
+              'text-primary dark:text-white': nav.nextEnable,
               'opacity-60': !nav.nextEnable
             }"
             (click)="nav.nextEnable && nav.previous()"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
+            <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 9-3 3m0 0 3 3m-3-3h7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </svg>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -35,27 +29,20 @@
             stroke="currentColor"
             class="sm:w-7 w-8 sm:h-7 h-8 cursor-pointer"
             [ngClass]="{
-              'text-primary': nav.previousEnable,
+              'text-primary dark:text-white': nav.previousEnable,
               'opacity-60': !nav.previousEnable
             }"
             (click)="nav.previousEnable && nav.next()"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
-            />
+            <path stroke-linecap="round" stroke-linejoin="round" d="m12.75 15 3-3m0 0-3-3m3 3h-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
           </svg>
         </div>
-        <div
-          class="text-base sm:text-xl text-primary font-bold tracking-tight"
-          style="z-index: 2"
-        >
+        <div class="text-base sm:text-xl text-primary dark:text-white font-bold tracking-tight" style="z-index: 2">
           {{ datePreview }}
         </div>
       </div>
 
-      <div class="flex gap-4 items-center justify-between">
+      <div class="flex gap-4 items-center justify-between text-primary dark:text-white">
         <svg
           *ngIf="options"
           (click)="OnOptionsClick.emit()"
@@ -73,9 +60,7 @@
           />
         </svg>
 
-        <div
-          class="bg-gray-300 flex w-full h-full justify-between rounded-md p-[3px] select-none font-extralight gap-1"
-        >
+        <div class="bg-gray-300 flex w-full h-full justify-between rounded-md p-[3px] select-none font-extralight gap-1">
           <div
             *ngFor="let item of viewTranslate"
             role="button"
@@ -86,20 +71,16 @@
             }"
             class="py-0.5 px-3 flex h-full w-full justify-center rounded font-normal transition-colors duration-200 shadow-sm"
           >
-            {{ item }}
+            <span class="sm:block hidden">{{ item }}</span>
+            <span class="block sm:hidden">{{ item[0] }}</span>
           </div>
         </div>
       </div>
     </div>
-    <full-calendar
-      id="calendar"
-      #calendar
-      [options]="calendarOptions"
-      [style]="{ width: '100%' }"
-    >
+    <full-calendar id="calendar" #calendar [options]="calendarOptions" [style]="{ width: '100%' }">
       <ng-template #dayHeaderContent let-day>
         <div
-          class="text-warmGray-950 px-1 flex flex-col justify-center items-center inter uppercase -tracking-wide"
+          class="text-warmGray-950 dark:text-palette-50 px-1 flex flex-col justify-center items-center inter uppercase -tracking-wide"
           [ngClass]="{ 'cursor-pointer': view != 'Mês' }"
           (click)="clickDay(day)"
         >
@@ -107,17 +88,15 @@
             *ngIf="view != 'Mês'"
             class="flex justify-center items-center"
             [ngClass]="{
-              'p-1 w-6 h-6 rounded-full bg-primary text-clean': isToday(day)
+              'p-1 w-6 h-6 rounded-full bg-primary text-clean dark:bg-clean dark:text-primary': isToday(day)
             }"
           >
             <small>{{ formatHeaderDay(day, "ddd").dayNumber }}</small>
           </span>
-          <span class="leading-5">{{
-            formatHeaderDay(day, view === "Dia" ? "dddd" : "ddd").dayName
-          }}</span>
+          <span class="leading-5">{{ formatHeaderDay(day, view === "Dia" ? "dddd" : "ddd").dayName }}</span>
           <span
             [ngClass]="{
-              'border-[2px] w-full border-primary rounded-lg': isToday(day)
+              'border-[2px] w-full border-primary dark:border-palette-50 rounded-lg': isToday(day)
             }"
           ></span>
         </div>

@@ -26,8 +26,8 @@ module.exports = {
       subaction: "#2e2d63",
 
       "palette-50": "#e9e8ff",
-      "palette-100": "##d9d6ff",
-      "palette-200": "##bbb4ff",
+      "palette-100": "#d9d6ff",
+      "palette-200": "#bbb4ff",
       "palette-300": "#9888ff",
       "palette-400": "#8059ff",
       "palette-500": "#7433ff",
