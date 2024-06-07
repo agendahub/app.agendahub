@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { FormBuilder, FormGroup } from "@angular/forms";
 import { MessageService } from "primeng/api";
 import { defer } from "../../decorators/defer";
 import { User } from "../../models/core/entities";
@@ -15,7 +16,7 @@ import { EventService } from "./../../models/services/event.service";
 })
 export class UserProfileComponent {
   events: any[] = [];
-  isEditing: boolean = false;
+  form!: FormGroup;
 
   items = [] as any[];
   user: User = {} as User;
@@ -30,10 +31,17 @@ export class UserProfileComponent {
     private authService: AuthService,
     private eventService: EventService,
     private messageService: MessageService,
+    private fb: FormBuilder,
     public helper: ScreenHelperService,
   ) {}
 
   ngOnInit(): void {
+    this.form = this.fb.group({
+      email: [""],
+      phone: [""],
+      dateBirth: [""],
+    });
+
     const hasPhoto = this.authService.getUserData().imageUrl;
     this.getEvents();
     this.getInfoUser();
@@ -84,18 +92,28 @@ export class UserProfileComponent {
   }
 
   toggleEdit() {
-    this.isEditing = !this.isEditing;
+    this.form.patchValue({
+      ...this.user,
+      dateBirth: this.user.dateBirth ? new Date(this.user.dateBirth) : undefined,
+    });
+  }
+
+  reset() {
+    this.form.reset({});
+    this.form.markAsPristine();
+    this.form.markAsUntouched();
   }
 
   saveUserInfo() {
+    this.user = { ...this.user, ...this.form.value };
     this.apiService.sendToApi("user/EditUserProfile", this.user).subscribe((x) => {
       this.messageService.add({
         severity: "success",
         summary: "Sucesso",
         detail: "Dados salvos com sucesso!",
       });
-      this.isEditing = false;
       this.authService.tryRefreshToken();
+      this.reset();
     });
   }
 
