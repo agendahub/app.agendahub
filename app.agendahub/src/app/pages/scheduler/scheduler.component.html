@@ -50,7 +50,7 @@
   (visibleChange)="sidebarChange($event)"
 >
   <ng-template pTemplate="header">
-    <div class="relative flex justify-between items-center gap-3 w-full">
+    <div class="relative flex justify-between items-center gap-3 w-full text-primary dark:text-white">
       <h2 class="font-semibold text-2xl tracking-normal leading-relaxed">{{ header }}</h2>
       <div (click)="visible = false" role="button">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
@@ -60,10 +60,9 @@
     </div>
   </ng-template>
   <ng-template pTemplate="content">
-    <div *ngIf="oldScheduleDisabled" class="p-2 flex justify-center">
-      <span class="text-center text-base leading-tight bg-blue-400 text-neutral-100 rounded-lg p-2"> Datas/Agendamentos anteriores não podem ser alteradas </span>
-    </div>
-    <form [formGroup]="form">
+    <div class="p-2 flex justify-center"></div>
+    <alert *ngIf="oldScheduleDisabled" [message]="'Datas/Agendamentos anteriores não podem ser alteradas'" [type]="'info'"> </alert>
+    <form [formGroup]="form" class="text-primary dark:text-white">
       <div class="grid grid-cols-12 gap-x-6 gap-y-4">
         <div class="col-span-12" [hidden]="!rawOne">
           <label for="day">Dia</label>

@@ -9,7 +9,9 @@ import { getTheme } from "../../utils/util";
   template: `
     <div class="flex justify-between items-center py-2 sm:hidden" *ngIf="!open">
       <div class="flex justify-center items-center sm:px-0 px-2">
-        <img class="w-auto" [ngClass]="{ 'h-8': open, 'h-12': !open }" [src]="iconMobile" alt="logotipo AgendaHub" />
+        <a routerLink="/">
+          <img class="w-auto" routerLink="/" [ngClass]="{ 'h-8': open, 'h-12': !open }" [src]="iconMobile" alt="logotipo AgendaHub" />
+        </a>
       </div>
       <div class="flex justify-end items-center gap-1">
         <span class="sm:mt-1 m-0">
@@ -73,7 +75,9 @@ import { getTheme } from "../../utils/util";
       >
         <div class="flex flex-col gap-3">
           <div class="flex justify-between items-center w-full sm:px-0">
-            <img class="w-auto, h-16 object-contain" [ngClass]="{ 'p-2': !open }" [src]="icon" alt="logotipo AgendaHub" />
+            <a routerLink="/">
+              <img class="w-auto, h-16 object-contain" [ngClass]="{ 'p-2': !open }" [src]="icon" alt="logotipo AgendaHub" />
+            </a>
             <div class="sm:hidden cursor-pointer p-2 dark:text-very-clean text-secondary" (click)="open = false">
               <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
                 <path

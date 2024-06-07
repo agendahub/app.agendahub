@@ -197,6 +197,7 @@ thead tr th .fc-scroller-harness .fc-scroller {
 }
 
 .p-sidebar-right.scheduler {
+  @apply bg-very-clean dark:bg-primary;
   top: 64px !important;
   height: calc(100% - 64px) !important;
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
@@ -206,7 +207,7 @@ thead tr th .fc-scroller-harness .fc-scroller {
   .p-sidebar-footer,
   .p-sidebar-header,
   .p-sidebar-content {
-    padding: 1rem !important;
+    @apply p-4 border-l border-clean dark:border-secondary bg-very-clean dark:bg-primary;
   }
 }
 
@@ -222,6 +223,7 @@ thead tr th .fc-scroller-harness .fc-scroller {
     .p-sidebar-header,
     .p-sidebar-content {
       padding: 0.7rem 1rem !important;
+      border: none !important;
     }
   }
 
@@ -243,26 +245,6 @@ thead tr th .fc-scroller-harness .fc-scroller {
       display: none !important;
     }
   }
-}
-
-.successful {
-  background-color: #4caf50 !important;
-  color: white !important;
-}
-
-.info {
-  background-color: #2196f3 !important;
-  color: white !important;
-}
-
-.warning {
-  background-color: #ff9800 !important;
-  color: white !important;
-}
-
-.error {
-  background-color: #f44336 !important;
-  color: white !important;
 }
 
 .p-tabview {
