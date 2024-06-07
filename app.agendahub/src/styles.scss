@@ -350,3 +350,7 @@ thead tr th .fc-scroller-harness .fc-scroller {
 //     @apply bg-gray-300 dark:bg-gray-800 dark:border-gray-600;
 //   }
 // }
+
+.p-datepicker table td {
+  padding: 0 !important;
+}

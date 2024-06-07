@@ -1,7 +1,7 @@
 <div class="px-4 pt-4 pb-2 w-full">
-  <div class="grid sm:grid-cols-3 grid-cols-1 gap-4 w-full text-white">
-    <div class="col-span-1 rounded-lg shadow-md bg-secondary flex flex-col gap-12">
-      <div class="head bg-gradient-to-r from-secondary via-primary to-secondary px-8 rounded-t-lg relative w-full">
+  <div class="grid sm:grid-cols-3 grid-cols-1 gap-4 w-full text-primary dark:text-white relative">
+    <div class="col-span-1 sm:sticky sm:top-16 rounded-lg h-max shadow-xl bg-white dark:bg-secondary flex flex-col gap-12">
+      <div class="head px-8 rounded-t-lg relative w-full bg-gradient-to-r dark:from-secondary dark:via-primary dark:to-secondary from-primary-light/10 to-primary-light/50">
         <div class="flex justify-center w-full relative -bottom-10">
           <div class="absolute w-32 h-32 flex justify-end items-end z-30">
             <div class="rounded-full p-3 bg-neutral-900 text-white flex justify-center items-center">
@@ -14,7 +14,7 @@
             loading="eager"
             alt="profile image"
             [src]="user && user.imageUrl ? user.imageUrl : 'assets/images/default_avatar.png'"
-            class="w-32 h-32 object-cover rounded-full transition duration-300 ease-in-out transform flex items-center justify-center cursor-pointer relative"
+            class="w-32 h-32 object-cover border border-gray-300 bg-white dark:bg-secondary rounded-full transition duration-300 ease-in-out transform flex items-center justify-center cursor-pointer relative"
             [ngClass]="{
               'animate-pulse bg-gray-200 dark:bg-gray-700': !imageReady
             }"
@@ -29,46 +29,65 @@
           </h1>
 
           <div>
-            <i *ngIf="!isEditing" class="fas fa-user-edit text-2xl cursor-pointer hover:text-3xl smooth-hover" (click)="toggleEdit()"></i>
-            <i *ngIf="isEditing" class="fas fa-save text-2xl cursor-pointer" (click)="saveUserInfo()"> </i>
+            <i role="button" *ngIf="!form.get('email')?.value" class="fas fa-user-edit text-2xl hover:text-3xl smooth-hover" (click)="toggleEdit()"></i>
+            <i
+              role="button"
+              *ngIf="form.get('email')?.value"
+              class="fas text-2xl"
+              [ngClass]="{ 'fa-save': form.touched, 'fa-times': form.untouched }"
+              (click)="form.touched ? saveUserInfo() : reset()"
+            >
+            </i>
           </div>
         </div>
-        <div class="mb-4 mt-2">
-          <div class="mb-2 flex items-center">
-            <i class="fas fa-envelope mr-2"></i>
-            <span class="font-medium">E-mail</span>
+        <form [formGroup]="form">
+          <div class="mb-4 mt-2">
+            <div class="mb-2 flex items-center">
+              <i class="fas fa-envelope mr-2"></i>
+              <span class="font-medium">E-mail</span>
+            </div>
+            <div class="rounded-lg p-2">
+              <div class="animate-pulse h-4 bg-gray-200 rounded dark:bg-gray-700 max-w-[330px] mb-2.5" [ngClass]="{ hidden: user != undefined }"></div>
+              <p *ngIf="!form.get('email')?.value">{{ user.email }}</p>
+              <input *ngIf="form.get('email')?.value" type="email" id="email" formControlName="email" pInputText placeholder="agendahub@agenda.com" [style]="{ width: '100%' }" />
+            </div>
           </div>
-          <div class="rounded-lg p-2">
-            <div class="animate-pulse h-4 bg-gray-200 rounded dark:bg-gray-700 max-w-[330px] mb-2.5" [ngClass]="{ hidden: user != undefined }"></div>
-            <p *ngIf="!isEditing">{{ user.email }}</p>
-            <input *ngIf="isEditing" [(ngModel)]="user.email" class="input w-full" autocomplete="current-password" />
+          <div class="mb-4">
+            <div class="mb-2 flex items-center">
+              <i class="fas fa-birthday-cake mr-2"></i>
+              <span class="font-medium">Data de Nascimento</span>
+            </div>
+            <div class="rounded-lg p-2">
+              <div class="animate-pulse h-4 bg-gray-200 rounded dark:bg-gray-700 max-w-[330px] mb-2.5" [ngClass]="{ hidden: user != undefined }"></div>
+              <p *ngIf="!form.get('email')?.value">{{ user.dateBirth | date : "dd/MM/yyyy" }}</p>
+              <p-calendar
+                *ngIf="form.get('email')?.value"
+                formControlName="dateBirth"
+                appendTo="body"
+                placeholder="Aniversário"
+                inputId="dateBirth"
+                [readonlyInput]="false"
+                [style]="{ width: '100%' }"
+                [showOnFocus]="true"
+                dateFormat="dd/mm/yy"
+              ></p-calendar>
+            </div>
           </div>
-        </div>
-        <div class="mb-4">
-          <div class="mb-2 flex items-center">
-            <i class="fas fa-birthday-cake mr-2"></i>
-            <span class="font-medium">Data de Nascimento</span>
+          <div class="mb-4">
+            <div class="mb-2 flex items-center">
+              <i class="fas fa-phone mr-2"></i>
+              <span class="font-medium">Telefone</span>
+            </div>
+            <div class="rounded-lg p-2">
+              <div class="animate-pulse h-4 bg-gray-200 rounded dark:bg-gray-700 max-w-[330px] mb-2.5" [ngClass]="{ hidden: user != undefined }"></div>
+              <p *ngIf="!form.get('email')?.value">{{ user.phone }}</p>
+              <input *ngIf="form.get('email')?.value" id="phone" formControlName="phone" pInputText placeholder="agendahub@agenda.com" [style]="{ width: '100%' }" />
+            </div>
           </div>
-          <div class="rounded-lg p-2">
-            <div class="animate-pulse h-4 bg-gray-200 rounded dark:bg-gray-700 max-w-[330px] mb-2.5" [ngClass]="{ hidden: user != undefined }"></div>
-            <p *ngIf="!isEditing">{{ user.dateBirth | date : "dd/MM/yyyy" }}</p>
-            <input *ngIf="isEditing" [(ngModel)]="user.dateBirth" class="input w-full" autocomplete="current-password" />
-          </div>
-        </div>
-        <div class="mb-4">
-          <div class="mb-2 flex items-center">
-            <i class="fas fa-phone mr-2"></i>
-            <span class="font-medium">Telefone</span>
-          </div>
-          <div class="rounded-lg p-2">
-            <div class="animate-pulse h-4 bg-gray-200 rounded dark:bg-gray-700 max-w-[330px] mb-2.5" [ngClass]="{ hidden: user != undefined }"></div>
-            <p *ngIf="!isEditing">{{ user.phone }}</p>
-            <input *ngIf="isEditing" [(ngModel)]="user.phone" class="input w-full" autocomplete="current-password" />
-          </div>
-        </div>
+        </form>
       </div>
     </div>
-    <div class="sm:col-span-2 col-span-1 p-8 rounded-lg shadow-md bg-secondary">
+    <div class="sm:col-span-2 col-span-1 p-8 rounded-lg shadow-xl border border-gray-100 dark:border-secondary/50 bg-white dark:bg-secondary">
       <div>
         <h2 class="text-3xl text-center mb-8 mt-8">Histórico de Compromissos</h2>
         <ng-container *ngIf="events && events.length; else loading">
