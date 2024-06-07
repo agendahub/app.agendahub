@@ -325,3 +325,30 @@ thead tr th .fc-scroller-harness .fc-scroller {
 .p-inputtext:enabled:focus {
   box-shadow: none !important;
 }
+
+// .p-inputtext,
+// .p-multiselect {
+//   & {
+//     @apply bg-gray-300 dark:bg-gray-800 dark:border-gray-600;
+//   }
+
+//   &:hover {
+//     @apply bg-gray-300 dark:bg-gray-800 dark:border-gray-600;
+//   }
+
+//   &:focus {
+//     @apply bg-gray-300 dark:bg-gray-800 dark:border-gray-600;
+//   }
+
+//   &.p-disabled {
+//     @apply bg-gray-300 dark:bg-gray-800 dark:border-gray-600;
+//   }
+
+//   &.p-invalid {
+//     @apply bg-gray-300 dark:bg-gray-800 dark:border-gray-600;
+//   }
+// }
+
+.p-datepicker table td {
+  padding: 0 !important;
+}
