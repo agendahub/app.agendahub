@@ -216,7 +216,7 @@
           <div
             *ngFor="let item of filter.schedules"
             (click)="openFormEdit(item)"
-            class="p-2 shadow-md rounded border border-gray-200 bg-very-clean dark:bg-primary dark:text-palette-50 dark:border-0 transition duration-200 ease-in-out transform hover:scale-[1.01] hover:border-palette-300 select-none cursor-pointer"
+            class="p-2 shadow-md rounded border border-gray-200 bg-very-clean dark:bg-secondary dark:text-palette-50 dark:border-0 transition duration-200 ease-in-out transform hover:scale-[1.01] hover:border-palette-300 select-none cursor-pointer"
           >
             <div class="flex justify-between items-center gap-2">
               <span class="text-sm">{{ item.schedule.startDateTime | date : "dd/MM/yyyy HH:mm" }}</span>
