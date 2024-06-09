@@ -40,7 +40,7 @@ import { getTheme } from "../../utils/util";
     <div aria-hidden="true" class="fixed inset-0 w-full h-full bg-black/50" *ngIf="blockScroll"></div>
 
     <div
-      class="absolute sm:block hidden z-[9999] top-6 ease-in-out duration-300"
+      class="absolute sm:block hidden z-[1001] top-6 ease-in-out duration-300"
       [ngClass]="{
         'left-[17.15rem] translate-x-1': open,
         'left-[3.5rem] translate-x-0': !open
@@ -59,7 +59,7 @@ import { getTheme } from "../../utils/util";
     </div>
 
     <aside
-      class="z-[2000] w-screen h-screen ease-in-out duration-300 select-none"
+      class="z-[1000] w-screen h-screen ease-in-out duration-300 select-none"
       aria-label="Sidebar"
       id="default-sidebar"
       [ngClass]="{

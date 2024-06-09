@@ -15,16 +15,10 @@
       <ng-template pTemplate="caption">
         <div class="flex md:flex-row sm:align-items-center justify-between flex-col gap-2">
           <div class="flex justify-start gap-2 items-center">
-            <button pButton (click)="visible = true" [style]="{ width: '100%', padding: '0.5rem' }" class="flex justify-center items-center gap-2">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6">
-                <path
-                  fill-rule="evenodd"
-                  d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <span class="tracking-tight text-white text-ellipsis">Novo</span>
-            </button>
+            <div role="button" class="flex items-center gap-2 rounded bg-gradient-to-br from-palette-400 to-palette-600 text-white px-3 py-2 shadow" (click)="visible = true">
+              <i class="fa-solid fa-plus"></i>
+              <span>NOVO</span>
+            </div>
           </div>
           <div class="flex flex-row justify-end sm:w-auto w-full">
             <span class="p-input-icon-left ml-auto sm:w-auto w-full shadow-sm">
@@ -157,14 +151,17 @@
   </form>
 
   <ng-template pTemplate="footer">
-    <div class="flex gap-2">
-      <button pButton [style]="{ width: '100%' }" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()">
-        <span class="tracking-tight text-white text-ellipsis">Excluir</span>
-        <i class="fa-regular fa-circle-xmark cursor-pointer" (click)="tryDelete()"></i>
+    <div class="flex items-end justify-end gap-2 w-full">
+      <button [style]="{ width: '100%' }" class="rounded bg-red-100 text-red-600 p-2 shadow disabled:opacity-50" *ngIf="edit" (click)="tryDelete()">
+        <span class="tracking-tight">Excluir</span>
       </button>
-      <button pButton (click)="confirm()" [style]="{ width: '100%' }" class="flex justify-center items-center gap-2" [disabled]="form.invalid">
-        <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-        <i class="fa-regular fa-circle-check"></i>
+      <button
+        [style]="{ width: '100%' }"
+        class="rounded bg-gradient-to-r from-palette-400 to-palette-600 text-palette-50 p-2 shadow disabled:opacity-50"
+        (click)="confirm()"
+        [disabled]="form.invalid"
+      >
+        <span class="tracking-tight">Salvar</span>
       </button>
     </div>
   </ng-template>

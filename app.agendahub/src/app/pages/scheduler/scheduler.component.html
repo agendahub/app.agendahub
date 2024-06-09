@@ -1,6 +1,6 @@
 <p-toast position="bottom-center" key="bc" [breakpoints]="{ '920px': { width: '85%', right: '5', left: '5' } }"></p-toast>
 <div class="relative overflow-hidden h-[calc(100vh-64px)]" [ngClass]="{ 'opacity-95': visible }">
-  <div class="flex justify-between h-full border-t relative border-gray-200 dark:border-white/10" #scheduler>
+  <div class="flex justify-between h-full" #scheduler>
     <div class="w-1/4 bg-very-clean dark:bg-primary sm:block hidden">
       <ng-template [ngTemplateOutlet]="options"></ng-template>
     </div>
@@ -188,7 +188,7 @@
 
 <ng-template #options>
   <div class="h-16 border-b relative border-gray-200 dark:border-white/10 flex px-2 justify-center items-center gap-3">
-    <span class="text-2xl font-semibold text-primary dark:text-white">Agendamentos</span>
+    <span class="text-2xl font-semibold text-primary dark:text-white">Agenda</span>
     <div role="button" class="flex items-center gap-2 rounded bg-gradient-to-br from-palette-400 to-palette-600 text-xs text-white px-2 py-1 shadow" (click)="addNewOne()">
       <i class="fa-solid fa-plus"></i>
       <span>NOVO</span>
