@@ -8,3 +8,9 @@ export const futureIf = <T>(condition: boolean, callback: () => T, ticks = 100):
     }, ticks);
   });
 };
+
+export function defer(cb: () => void, delay = 0) {
+  setTimeout(() => {
+    cb && cb();
+  }, delay);
+}

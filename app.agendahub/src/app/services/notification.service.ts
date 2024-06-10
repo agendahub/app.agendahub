@@ -6,7 +6,7 @@ import { BehaviorSubject, map, of } from "rxjs";
 import { environment } from "../../environments/environment.development";
 import { AuthService } from "../auth/auth-service.service";
 import { Notification, NotificationStatus } from "../models/core/notification";
-import { defer } from "../types/typing";
+import { defer } from "../utils/async";
 import { PushNotificationService } from "./push-notification.service";
 type BrowserNotification = Notification;
 

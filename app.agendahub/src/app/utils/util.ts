@@ -1,7 +1,7 @@
 import { EventInput } from "@fullcalendar/core";
 import { SortEvent } from "primeng/api";
 import { UserSchedule } from "../models/core/entities";
-import { defer } from "../types/typing";
+import { defer } from "./async";
 
 const images = [
   "https://storage.agendahub.app/wwwroot/backgrounds/abstract.png",

@@ -19,13 +19,14 @@ import { AlertComponent } from "./alert/alert.component";
 import { BreadcrumbComponent } from "./breadcrumb/breadcrumb.component";
 import { CalendarPreviewComponent } from "./calendar-preview/calendar-preview.component";
 import { CalendarComponent } from "./calendar/calendar.component";
+import { DebounceClickDirective } from "./directives/debounce-click.directive";
 import { FileUploadComponent } from "./inputs/file-upload/file-upload.component";
 import { LoaderComponent } from "./loader/loader.component";
 import { NavComponent } from "./nav/nav.component";
 import { NotificationComponent } from "./notification/notification.component";
 import { ReadMoreComponent } from "./read-more/read-more.component";
 import { SidebarComponent } from "./sidebar/sidebar.component";
-import { UserNavComponent } from './user-nav/user-nav.component';
+import { UserNavComponent } from "./user-nav/user-nav.component";
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { UserNavComponent } from './user-nav/user-nav.component';
     UserNavComponent,
     CalendarPreviewComponent,
     FileUploadComponent,
+    DebounceClickDirective,
   ],
   exports: [
     NavComponent,
@@ -49,6 +51,7 @@ import { UserNavComponent } from './user-nav/user-nav.component';
     CalendarComponent,
     FileUploadComponent,
     NotificationComponent,
+    DebounceClickDirective,
     CalendarPreviewComponent,
   ],
   imports: [
