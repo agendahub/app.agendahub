@@ -17,7 +17,7 @@ import { SettingsService } from "../../modules/settings/services/settings.servic
 import { ApiService } from "../../services/api-service.service";
 import { LoaderService } from "../../services/loader.service";
 import { ScreenHelperService } from "../../services/screen-helper.service";
-import { defer } from "../../types/typing";
+import { defer } from "../../utils/async";
 import { mapScheduleToEvent } from "../../utils/util";
 import { CustomValidators, ValidatorsHelper } from "../../utils/validators";
 
