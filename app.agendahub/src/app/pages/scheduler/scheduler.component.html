@@ -47,6 +47,7 @@
   styleClass="scheduler"
   [showCloseIcon]="false"
   [style]="{ 'min-width': '30vw' }"
+  (onHide)="onHide()"
   (visibleChange)="sidebarChange($event)"
 >
   <ng-template pTemplate="header">
@@ -62,6 +63,7 @@
   <ng-template pTemplate="content">
     <div class="p-2 flex justify-center"></div>
     <alert *ngIf="oldScheduleDisabled" [message]="'Datas/Agendamentos anteriores não podem ser alteradas'" [type]="'info'"> </alert>
+    <alert *ngIf="birthMessage != ''" [message]="birthMessage" [type]="'success'"> </alert>
     <form [formGroup]="form" class="text-primary dark:text-white">
       <div class="grid grid-cols-12 gap-x-6 gap-y-4">
         <div class="col-span-12" [hidden]="!rawOne">
@@ -96,6 +98,7 @@
           <label for="service">Serviço</label>
           <p-dropdown
             dataKey="id"
+            [filter]="true"
             placeholder="Selecione o serviço"
             [options]="services"
             formControlName="service"
@@ -128,10 +131,11 @@
         </div>
 
         <div class="sm:col-span-6 col-span-12">
-          <label for="employee">Funcionária</label>
+          <label for="employee">Funcionário(a)</label>
           <p-dropdown
             dataKey="id"
-            placeholder="Selecione a funcionária"
+            [filter]="true"
+            placeholder="Selecione a funcionário(a)"
             [options]="employees"
             formControlName="employee"
             [showClear]="true"
@@ -146,7 +150,7 @@
           <label for="customer">Cliente</label>
           <p-dropdown
             dataKey="id"
-            placeholder="Selecione a cliente"
+            placeholder="Selecione o(a) cliente"
             [options]="customers"
             formControlName="customer"
             [showClear]="true"
@@ -189,7 +193,12 @@
 <ng-template #options>
   <div class="h-16 border-b relative border-gray-200 dark:border-white/10 flex px-2 justify-center items-center gap-3">
     <span class="text-2xl font-semibold text-primary dark:text-white">Agenda</span>
-    <div role="button" class="flex items-center gap-2 rounded bg-gradient-to-br from-palette-400 to-palette-600 text-xs text-white px-2 py-1 shadow" (click)="addNewOne()">
+    <div
+      *ngIf="isEditEnable"
+      role="button"
+      class="flex items-center gap-2 rounded bg-gradient-to-br from-palette-400 to-palette-600 text-xs text-white px-2 py-1 shadow"
+      (click)="addNewOne()"
+    >
       <i class="fa-solid fa-plus"></i>
       <span>NOVO</span>
     </div>

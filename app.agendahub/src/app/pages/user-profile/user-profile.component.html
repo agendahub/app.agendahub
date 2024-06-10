@@ -4,8 +4,8 @@
       <div class="head px-8 rounded-t-lg relative w-full bg-gradient-to-r dark:from-secondary dark:via-primary dark:to-secondary from-primary-light/10 to-primary-light/50">
         <div class="flex justify-center w-full relative -bottom-10">
           <div class="absolute w-32 h-32 flex justify-end items-end z-30">
-            <div class="rounded-full p-3 bg-neutral-900 text-white flex justify-center items-center">
-              <i role="button" class="fas fa-bars" (click)="menu.toggle($event)"></i>
+            <div role="button" class="rounded-full p-3 bg-neutral-900 text-white flex justify-center items-center" (click)="menu.toggle($event)">
+              <i class="fas fa-bars"></i>
             </div>
             <p-tieredMenu #menu [popup]="true" [model]="items" appendTo="body"></p-tieredMenu>
           </div>

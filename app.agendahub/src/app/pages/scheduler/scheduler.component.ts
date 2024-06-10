@@ -59,6 +59,7 @@ export class SchedulerComponent implements OnInit {
 
   helper = inject(ScreenHelperService);
   settings!: SettingsApp;
+  birthMessage = "";
 
   filter = {
     value: "",
@@ -123,6 +124,8 @@ export class SchedulerComponent implements OnInit {
       id: [null],
       day: [],
     });
+
+    this.form.valueChanges.subscribe((x) => this.dateIsCloseCustomerBirthDay(x));
 
     this.checkFormValidation();
   }
@@ -269,6 +272,20 @@ export class SchedulerComponent implements OnInit {
     }
   }
 
+  dateIsCloseCustomerBirthDay(form: any) {
+    let date = form.startDateTime as Date;
+    let customer = form.customer;
+
+    if (date && customer && customer.dateBirth) {
+      let dateBirth = moment(customer.dateBirth);
+      dateBirth.set("year", date.getFullYear());
+      let diff = dateBirth.diff(date, "day");
+      this.birthMessage = diff != 0 ? (diff <= 7 && diff > 0 ? `Faltam ${diff} dias para o aniversário de ${customer.name}` : "") : `Hoje é o aniversário de ${customer.name}`;
+    } else {
+      this.birthMessage = "";
+    }
+  }
+
   employeeSelected(employee: any) {
     if (employee) {
       employee["selected"] = !employee["selected"];
@@ -306,6 +323,7 @@ export class SchedulerComponent implements OnInit {
   }
 
   openFormEdit(schedule: UserSchedule) {
+    this.onHide();
     this.header = `Editar horário - ${moment(schedule.schedule.startDateTime).format("DD/MM/yy")}`;
     this.form.get("id")?.setValue(schedule.id);
     this.form.get("day")?.setValue(new Date(schedule.schedule.startDateTime).getDate());
@@ -322,6 +340,11 @@ export class SchedulerComponent implements OnInit {
     this.edit = true;
 
     this.checkFormValidation();
+  }
+
+  onHide() {
+    this.dateIsCloseCustomerBirthDay({});
+    this.form.reset({ note: "", id: 0 });
   }
 
   //#endregion

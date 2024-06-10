@@ -3,10 +3,17 @@ import { SortEvent } from "primeng/api";
 import { UserSchedule } from "../models/core/entities";
 import { defer } from "../types/typing";
 
+const images = [
+  "https://storage.agendahub.app/wwwroot/backgrounds/abstract.png",
+  "https://storage.agendahub.app/wwwroot/backgrounds/orangy.png",
+  "https://storage.agendahub.app/wwwroot/backgrounds/bluew.png",
+  "https://storage.agendahub.app/wwwroot/backgrounds/city.png",
+  "https://storage.agendahub.app/wwwroot/backgrounds/tun.png",
+];
+
 export function getRandomImage(el: string = "#login_page") {
-  const thisPage = document.querySelector(el) as HTMLElement;
-  const [width, height] = [thisPage.clientWidth - 200, thisPage.clientHeight];
-  const url = `https://source.unsplash.com/random/${height}x${width}/?landscape?grayscale`;
+  const mixed = images[Math.floor(Math.random() * images.length)];
+  const url = mixed;
 
   defer(async () => {
     if (await caches.has(url)) {
@@ -14,9 +21,7 @@ export function getRandomImage(el: string = "#login_page") {
     }
 
     caches.open("auth").then((cache) => {
-      cache.add(url).then(() => {
-        console.log("Image cached " + url);
-      });
+      images.forEach((x) => cache.add(x));
     });
   });
 

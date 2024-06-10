@@ -49,6 +49,7 @@ export class NotificationService implements OnDestroy {
     return this.http.get<Notification[]>(environment.apiUrl + "Notification/GetPreview").pipe(
       map((notifications) => {
         this.unread.set(notifications.filter((n) => n.status === NotificationStatus.Unread).length);
+        this.setAppBadge();
         return notifications;
       }),
     );
@@ -143,7 +144,7 @@ export class NotificationService implements OnDestroy {
     let notification: Notification[];
 
     if (Array.isArray(data)) {
-      notification = data;
+      notification = data.filter((x) => x);
     } else {
       notification = [data];
     }
@@ -154,6 +155,10 @@ export class NotificationService implements OnDestroy {
   }
 
   private setAppBadge() {
+    const title = this.unread() > 0 ? `(${this.unread()}) ` : "";
+    const old = this.title.getTitle();
+    this.title.setTitle(title + old.replace(/\(\d+\) /g, ""));
+
     if ("setAppBadge" in navigator) {
       navigator.setAppBadge(this.unread());
     }

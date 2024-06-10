@@ -66,6 +66,8 @@ export class NotificationComponent extends Forgetable implements OnInit, OnDestr
       this.set(this.tab);
     });
     this.subscription = this.notify.upcoming.subscribe((notifications) => {
+      const ids = this.messages.map((m) => m.id);
+      notifications = notifications.filter((m) => !ids.includes(m.id));
       this.messages = Array.from(new Set([...notifications, ...this.messages]).values());
       this.set(this.tab);
     });
