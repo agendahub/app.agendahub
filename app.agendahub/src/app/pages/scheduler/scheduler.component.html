@@ -150,6 +150,7 @@
           <label for="customer">Cliente</label>
           <p-dropdown
             dataKey="id"
+            [filter]="true"
             placeholder="Selecione o(a) cliente"
             [options]="customers"
             formControlName="customer"
