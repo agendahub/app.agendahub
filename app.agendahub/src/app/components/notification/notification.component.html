@@ -97,7 +97,7 @@
         <div class="sm:max-h-80 h-[82vh] overflow-y-auto overflow-x-hidden pr-1 scroll-smooth">
           <ng-container *ngTemplateOutlet="tabs"></ng-container>
         </div>
-        <hr class="w-full h-0.5 border-t-0 my-2 bg-gray-400 dark:bg-white/10" />
+        <hr class="my-2 h-px border-t-0 bg-gray-200 dark:bg-white/10" />
         <div class="flex justify-between items-center">
           <span role="button" [routerLink]="'/general/notifications'" class="flex items-center text-sm">
             <small>Visualizar todas</small>
@@ -135,7 +135,7 @@
         </div>
         <div *ngFor="let item of temporal.value; let $index = index">
           <ng-container *ngTemplateOutlet="message; context: { item: item, temporal: temporal.key }"></ng-container>
-          <hr *ngIf="temporal.value.length > $index + 1" class="w-full h-0.5 border-t-0 my-1 bg-gray-400 dark:bg-white/10" />
+          <hr *ngIf="temporal.value.length > $index + 1" class="my-1 h-px border-t-0 bg-gray-200 dark:bg-white/10" />
         </div>
       </ng-container>
     </div>
