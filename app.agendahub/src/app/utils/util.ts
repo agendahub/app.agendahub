@@ -4,11 +4,11 @@ import { UserSchedule } from "../models/core/entities";
 import { defer } from "./async";
 
 const images = [
-  "https://storage.agendahub.app/wwwroot/backgrounds/abstract.png",
-  "https://storage.agendahub.app/wwwroot/backgrounds/orangy.png",
-  "https://storage.agendahub.app/wwwroot/backgrounds/bluew.png",
-  "https://storage.agendahub.app/wwwroot/backgrounds/city.png",
-  "https://storage.agendahub.app/wwwroot/backgrounds/tun.png",
+  "https://storage-production.up.railway.app/wwwroot/backgrounds/abstract.png",
+  "https://storage-production.up.railway.app/wwwroot/backgrounds/orangy.png",
+  "https://storage-production.up.railway.app/wwwroot/backgrounds/bluew.png",
+  "https://storage-production.up.railway.app/wwwroot/backgrounds/city.png",
+  "https://storage-production.up.railway.app/wwwroot/backgrounds/tun.png",
 ];
 
 export function getRandomImage(el: string = "#login_page") {
@@ -28,20 +28,19 @@ export function getRandomImage(el: string = "#login_page") {
   return url;
 }
 
-export function mapScheduleToEvent(schedules: UserSchedule[], filter: (x: UserSchedule) => boolean = () => true) {
+export function mapScheduleToEvent(schedules: UserSchedule[], employeer = true) {
   var self = window.globalThis as any;
   let events: EventInput[] = [];
 
   schedules.forEach((x) => {
-    filter.bind(self).call(self, x) &&
-      events.push({
-        id: x.id?.toString(),
-        title: `${x.employee.name.toUpperCapital()} - ${x.customer?.name.toUpperCapital() ?? "-"}`,
-        start: x.schedule.startDateTime,
-        end: x.schedule.finishDateTime,
-        color: x.employee.color ? hexToRgbA(x.employee.color!, 1) : x.employee.color,
-        extendedProps: { ...x },
-      });
+    events.push({
+      id: x.id?.toString(),
+      title: employeer ? `${x.employee.name.toUpperCapital()} - ${x.customer?.name.toUpperCapital() ?? "-"}` : `${x.customer?.name.toUpperCapital() ?? "-"}`,
+      start: x.schedule.startDateTime,
+      end: x.schedule.finishDateTime,
+      color: x.employee.color ? hexToRgbA(x.employee.color!, 1) : x.employee.color,
+      extendedProps: { ...x },
+    });
   });
 
   return events;
