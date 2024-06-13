@@ -134,19 +134,7 @@
             </svg>
           </div>
           <p class="text-2xl lg:text-3xl xl:text-4xl font-bold text-primary dark:text-clean">{{ analytics.amount | currency : "BRL" }}</p>
-          <div
-            class="flex items-center gap-1 font-bold py-1 px-2 text-xs xl:text-sm rounded-md"
-            [ngClass]="{
-              'bg-green-200 text-green-800': analytics.amountIncrease > 1,
-              'bg-red-200 text-red-800': analytics.amountIncrease < 1,
-              'bg-gray-200 text-gray-800': analytics.amountIncrease == 1
-            }"
-          >
-            <p>{{ analytics.percentAmount }}</p>
-            <ng-container *ngIf="analytics.amountIncrease; else decrease">
-              <ng-template [ngTemplateOutlet]="increase"></ng-template>
-            </ng-container>
-          </div>
+          <ng-container *ngTemplateOutlet="indicator; context: { value: analytics.amountIncrease, text: analytics.percentAmount }"></ng-container>
         </div>
 
         <div class="w-6/12 h-full dark:bg-secondary bg-very-clean rounded-xl flex flex-col justify-between items-start py-4 px-4 lg:py-6 lg:px-8">
@@ -161,19 +149,7 @@
             </svg>
           </div>
           <p class="text-2xl lg:text-3xl xl:text-4xl font-bold text-primary dark:text-clean">{{ analytics.totalTime }}</p>
-          <div
-            class="flex items-center gap-1 font-bold py-1 px-2 text-xs xl:text-sm rounded-md"
-            [ngClass]="{
-              'bg-green-200 text-green-800': analytics.timeIncrease > 1,
-              'bg-red-200 text-red-800': analytics.timeIncrease < 1,
-              'bg-gray-200 text-gray-800': analytics.timeIncrease == 1
-            }"
-          >
-            <p>{{ analytics.percentTime }}</p>
-            <ng-container *ngIf="analytics.timeIncrease; else decrease">
-              <ng-template [ngTemplateOutlet]="increase"></ng-template>
-            </ng-container>
-          </div>
+          <ng-container *ngTemplateOutlet="indicator; context: { value: analytics.timeIncrease, text: analytics.percentTime }"></ng-container>
         </div>
       </div>
       <div class="w-full h-1/2 flex gap-2 md:gap-4">
@@ -189,19 +165,7 @@
             </svg>
           </div>
           <p class="text-2xl lg:text-3xl xl:text-4xl font-bold text-primary dark:text-clean">{{ analytics.totalSchedules }}</p>
-          <div
-            class="flex items-center gap-1 font-bold py-1 px-2 text-xs xl:text-sm rounded-md"
-            [ngClass]="{
-              'bg-green-200 text-green-800': analytics.schedulesIncrease > 1,
-              'bg-red-200 text-red-800': analytics.schedulesIncrease < 1,
-              'bg-gray-200 text-gray-800': analytics.schedulesIncrease == 1
-            }"
-          >
-            <p>{{ analytics.percentSchedules }}</p>
-            <ng-container *ngIf="analytics.schedulesIncrease; else decrease">
-              <ng-template [ngTemplateOutlet]="increase"></ng-template>
-            </ng-container>
-          </div>
+          <ng-container *ngTemplateOutlet="indicator; context: { value: analytics.schedulesIncrease, text: analytics.percentSchedules }"></ng-container>
         </div>
 
         <div class="w-6/12 h-full dark:bg-secondary bg-very-clean rounded-xl flex flex-col justify-between items-start py-4 px-4 lg:py-6 lg:px-8">
@@ -216,33 +180,37 @@
             </svg>
           </div>
           <p class="text-2xl lg:text-3xl xl:text-4xl font-bold text-primary dark:text-clean">{{ analytics.services }}</p>
-          <div
-            class="flex items-center gap-1 font-bold py-1 px-2 text-xs xl:text-sm rounded-md"
-            [ngClass]="{
-              'bg-green-200 text-green-800': analytics.servicesIncrease > 1,
-              'bg-red-200 text-red-800': analytics.servicesIncrease < 1,
-              'bg-gray-200 text-gray-800': analytics.servicesIncrease == 1
-            }"
-          >
-            <p>{{ analytics.percentServices }}</p>
-            <ng-container *ngIf="analytics.servicesIncrease; else decrease">
-              <ng-template [ngTemplateOutlet]="increase"></ng-template>
-            </ng-container>
-          </div>
+          <ng-container *ngTemplateOutlet="indicator; context: { value: analytics.servicesIncrease, text: analytics.percentServices }"></ng-container>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<ng-template #increase>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
-  </svg>
-</ng-template>
-
-<ng-template #decrease>
-  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
-    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6 9 12.75l4.286-4.286a11.948 11.948 0 0 1 4.306 6.43l.776 2.898m0 0 3.182-5.511m-3.182 5.51-5.511-3.181" />
-  </svg>
+<ng-template #indicator let-value="value" let-text="text">
+  <div
+    class="flex items-center gap-1 font-bold py-1 px-2 text-xs xl:text-sm rounded-md"
+    [ngClass]="{
+      'bg-green-200 text-green-800': value > 1,
+      'bg-red-200 text-red-800': value < 1,
+      'bg-gray-200 text-gray-800': value == 1
+    }"
+  >
+    <p>{{ text }}</p>
+    <div *ngIf="value > 1">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+      </svg>
+    </div>
+    <div *ngIf="value < 1">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6 9 12.75l4.286-4.286a11.948 11.948 0 0 1 4.306 6.43l.776 2.898m0 0 3.182-5.511m-3.182 5.51-5.511-3.181" />
+      </svg>
+    </div>
+    <div *ngIf="value == 1">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+      </svg>
+    </div>
+  </div>
 </ng-template>
