@@ -128,6 +128,7 @@ export class UserProfileComponent {
     const cc = async () => {
       var inp = document.createElement("input");
 
+      inp.accept = "image/*";
       inp.type = "file";
       inp.click();
 
