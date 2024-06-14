@@ -7,7 +7,7 @@
       <p class="text-sm sm:text-xl font-bold text-clean dark:text-[#F0ECE5] ml-3">
         {{ getMonthHeader() }}
       </p>
-      <a class="border border-very-clean mr-1 sm:mr-3 px-2 py-1 rounded-lg text-xs text-very-clean" routerLink="/general/scheduling">Ver tudo</a>
+      <a class="border border-very-clean mr-1 sm:mr-3 px-2 py-1 rounded-lg text-xs text-very-clean" routerLink="/scheduler">Ver tudo</a>
     </div>
     <full-calendar id="calendar" #calendar [options]="calendarOptions" [style]="{ width: '100%' }">
       <ng-template #dayHeaderContent let-day>

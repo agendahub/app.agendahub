@@ -130,13 +130,7 @@ import { loadTypes } from "./types/typing";
     ComponentsModule,
     ManagerModule,
   ],
-  providers: [
-    HttpClient,
-    ApiService,
-    AuthService,
-    MessageService,
-    AuthGuardService,
-  ],
+  providers: [HttpClient, ApiService, AuthService, MessageService, AuthGuardService],
   bootstrap: [AppComponent],
 })
 export class AppModule {
