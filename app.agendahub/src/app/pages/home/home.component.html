@@ -1,17 +1,8 @@
-<div
-  class="w-full dark:text-white text-primary flex flex-col items-center gap-2 md:gap-4 justify-center px-2 py-2 sm:px-4 sm:py-4 bg-clean dark:bg-primary"
->
-  <div
-    class="w-full h-auto lg:h-[500px] dark:bg-secondary bg-very-clean rounded-xl p-8"
-  >
+<div class="w-full dark:text-white text-primary flex flex-col items-center gap-2 md:gap-4 justify-center px-2 py-2 sm:px-4 sm:py-4 bg-clean dark:bg-primary">
+  <div class="w-full h-auto lg:h-[500px] dark:bg-secondary bg-very-clean rounded-xl p-8">
     <p class="font-bold mb-8">Próximos agendamentos</p>
-    <div
-      class="flex flex-col w-full lg:flex-row items-start lg:justify-between gap-8 lg:gap-4"
-    >
-      <div
-        class="flex flex-col gap-6 items-start w-full lg:w-3/12"
-        *ngIf="events.length; else noEvents"
-      >
+    <div class="flex flex-col w-full lg:flex-row items-start lg:justify-between gap-8 lg:gap-4">
+      <div class="flex flex-col gap-6 items-start w-full lg:w-3/12" *ngIf="events.length; else noEvents">
         <div
           *ngFor="let event of events; let i = index"
           class="flex gap-6 2xl:gap-10 dark:hover:bg-primary hover:bg-clean w-full rounded-xl dark:hover:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] hover:shadow-[6px_6px_0px_0px_rgba(207,207,207,1)] cursor-pointer duration-200 group"
@@ -28,11 +19,7 @@
             class="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] lg:w-[80px] lg:h-[80px] 2xl:w-[100px] 2xl:h-[100px] dark:group-hover:bg-primary group-hover:bg-clean group-hover:shadow-none hover:bg-primary rounded-xl flex flex-col items-center justify-center font-bold"
           >
             <p class="mb-[-1rem]">
-              {{
-                getDayName(event.schedule.startDateTime)
-                  | slice : 0 : 3
-                  | lowercase
-              }}
+              {{ getDayName(event.schedule.startDateTime) | slice : 0 : 3 | lowercase }}
             </p>
             <p class="text-[2.5rem] 2xl:text-[3rem]">
               {{ event.schedule.startDateTime | date : "dd" }}
@@ -43,14 +30,10 @@
             <p class="dark:text-clean text-primary font-bold mt-2">
               {{ event.customer.name | titlecase }}
             </p>
-            <p
-              class="text-sm 2xl:text-base leading-4 dark:text-clean text-[#251144]"
-            >
+            <p class="text-sm 2xl:text-base leading-4 dark:text-clean text-[#251144]">
               {{ event.schedule.service.description }}
             </p>
-            <p
-              class="mt-2 2xl:mt-4 text-xs dark:bg-clean bg-primary dark:text-primary text-very-clean rounded-3xl 2xl:text-sm px-1 2xl:px-2 font-bold"
-            >
+            <p class="mt-2 2xl:mt-4 text-xs dark:bg-clean bg-primary dark:text-primary text-very-clean rounded-3xl 2xl:text-sm px-1 2xl:px-2 font-bold">
               {{ event.schedule.startDateTime | date : "HH:mm" }}
             </p>
           </div>
@@ -62,60 +45,32 @@
           <div
             class="flex items-center justify-center h-[330px] sm:h-[360px] gap-6 2xl:gap-10 dark:bg-primary bg-clean w-full rounded-xl dark:shadow-[6px_6px_0px_0px_rgba(38,17,69,1)] shadow-[6px_6px_0px_0px_rgba(207,207,207,1)]"
           >
-            <p class="font-semibold text-sm sm:text-base">
-              Nenhum evento para hoje
-            </p>
+            <p class="font-semibold text-sm sm:text-base">Nenhum evento para hoje</p>
           </div>
         </div>
       </ng-template>
 
-      <div
-        class="flex flex-col-reverse md:flex-row justify-end w-full lg:w-9/12 gap-2 sm:gap-4"
-      >
-        <div
-          class="w-full md:w-8/12 lg:w-9/12 h-[330px] sm:h-[360px] rounded-xl dark:bg-transparent bg-clean overflow-hidden mt-4 sm:mt-0 shadow-md"
-        >
-          <app-calendar-preview
-            #calendar
-            [editable]="enableEdit"
-            [addEvent]="addEvent"
-            [options]="true"
-            (OnViewChange)="onViewChange($event)"
-          >
-          </app-calendar-preview>
+      <div class="flex flex-col-reverse md:flex-row justify-end w-full lg:w-9/12 gap-2 sm:gap-4">
+        <div class="w-full md:w-8/12 lg:w-9/12 h-[330px] sm:h-[360px] rounded-xl dark:bg-transparent bg-clean overflow-hidden mt-4 sm:mt-0 shadow-md">
+          <app-calendar-preview [isEditable]="false" [addEvent]="addEvent" [options]="true"> </app-calendar-preview>
         </div>
-        <div
-          class="w-full h-auto md:w-4/12 lg:w-3/12 flex flex-col sm:flex-row md:flex-col gap-2 sm:gap-4"
-        >
+        <div class="w-full h-auto md:w-4/12 lg:w-3/12 flex flex-col sm:flex-row md:flex-col gap-2 sm:gap-4">
           <a class="w-full sm:w-6/12 md:w-full" routerLink="/scheduler">
             <button
               class="h-[80px] md:h-auto text-primary dark:text-clean dark:bg-primary bg-clean py-5 w-full rounded-xl flex items-center justify-center font-bold duration-200 hover:bg-primary hover:text-very-clean dark:hover:bg-very-clean dark:hover:text-primary"
             >
-              <i class="fa-solid fa-circle-plus mr-3 text-xl 2xl:text-2xl"></i
-              >Novo
+              <i class="fa-solid fa-circle-plus mr-3 text-xl 2xl:text-2xl"></i>Novo
             </button>
           </a>
-          <div
-            class="flex flex-col gap-6 w-full sm:w-6/12 md:w-full dark:bg-primary bg-clean rounded-xl py-4 px-6 sm:py-2 sm:px-4 md:pb-8 dark:text-clean text-primary"
-          >
-            <p class="font-bold text-sm 2xl:text-base sm:hidden md:flex">
-              Agendamentos do dia
-            </p>
+          <div class="flex flex-col gap-6 w-full sm:w-6/12 md:w-full dark:bg-primary bg-clean rounded-xl py-4 px-6 sm:py-2 sm:px-4 md:pb-8 dark:text-clean text-primary">
+            <p class="font-bold text-sm 2xl:text-base sm:hidden md:flex">Agendamentos do dia</p>
             <div class="flex flex-row md:flex-col xl:flex-row gap-8">
               <div>
-                <p
-                  class="font-bold text-[0.8rem] sm:text-[0.6rem] 2xl:text-xs dark:text-[#CFCFCF] text-[#23224A]"
-                >
-                  Em andamento
-                </p>
+                <p class="font-bold text-[0.8rem] sm:text-[0.6rem] 2xl:text-xs dark:text-[#CFCFCF] text-[#23224A]">Em andamento</p>
                 <p class="font-bold text-4xl">{{ inProgress }}</p>
               </div>
               <div>
-                <p
-                  class="font-bold text-[0.8rem] sm:text-[0.6rem] 2xl:text-xs dark:text-[#CFCFCF] text-[#23224A]"
-                >
-                  Concluídas
-                </p>
+                <p class="font-bold text-[0.8rem] sm:text-[0.6rem] 2xl:text-xs dark:text-[#CFCFCF] text-[#23224A]">Concluídas</p>
                 <p class="font-bold text-4xl">{{ concluded }}</p>
               </div>
             </div>
@@ -125,200 +80,139 @@
     </div>
   </div>
 
-  <div
-    class="w-full h-auto md:h-[330px] flex flex-col md:flex-row gap-2 md:gap-4"
-  >
-    <div
-      class="w-full md:w-8/12 h-auto dark:bg-secondary bg-very-clean rounded-xl overflow-hidden"
-    >
-      <div
-        class="relative overflow-x-auto overflow-y-auto sm:rounded-lg h-[300px] md:h-full p-4"
-      >
-        <table
-          class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400"
-        >
-          <thead
-            class="text-xs text-primary uppercase bg-very-clean dark:bg-secondary dark:text-very-clean"
-          >
-            <tr>
-              <th scope="col" class="px-6 py-3">
-                <a routerLink="/general/scheduling">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 24 24"
-                    fill="currentColor"
-                    class="w-6 h-6 dark:hover:text-primary hover:text-secondary"
-                  >
-                    <path
-                      d="M19.5 21a3 3 0 0 0 3-3v-4.5a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3V18a3 3 0 0 0 3 3h15ZM1.5 10.146V6a3 3 0 0 1 3-3h5.379a2.25 2.25 0 0 1 1.59.659l2.122 2.121c.14.141.331.22.53.22H19.5a3 3 0 0 1 3 3v1.146A4.483 4.483 0 0 0 19.5 9h-15a4.483 4.483 0 0 0-3 1.146Z"
-                    />
-                  </svg>
-                </a>
-              </th>
-              <th scope="col" class="px-6 py-3">Nome</th>
-              <th scope="col" class="px-6 py-3">Primeiro Atendimento</th>
-              <th scope="col" class="px-6 py-3">Últimos atendimentos</th>
-              <th scope="col" class="px-6 py-3">Número de atendimentos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              *ngFor="let item of schedulingList"
-              class="bg-very-clean dark:bg-secondary hover:bg-primary dark:hover:bg-clean group"
-            >
-              <td></td>
-              <td
-                scope="row"
-                class="flex items-center px-6 py-4 text-primary whitespace-nowrap dark:text-very-clean group-hover:text-very-clean dark:group-hover:text-primary"
-              >
-                <div>
-                  <div class="text-base font-semibold">
-                    {{ item.customerName }}
+  <div class="w-full h-auto md:h-[330px] flex flex-col md:flex-row gap-2 md:gap-4">
+    <div class="w-full md:w-7/12 h-auto dark:bg-secondary bg-very-clean rounded-xl overflow-hidden">
+      <div class="relative overflow-x-auto overflow-y-auto sm:rounded-lg h-[300px] md:h-full py-6 px-8">
+        <div class="flex mb-4 items-center justify-between">
+          <p class="font-bold">Atendimentos</p>
+          <a class="border dark:border-very-clean border-primary px-2 py-1 rounded-lg text-xs text-primary dark:text-very-clean" routerLink="/general/scheduling">Ver tudo</a>
+        </div>
+        <div class="relative overflow-x-auto shadow-md rounded-xl">
+          <table class="w-full text-sm text-left rtl:text-right text-secondary dark:text-very-clean">
+            <thead class="text-xs dark:text-gray-400 text-gray-600 uppercase bg-clean dark:bg-primary">
+              <tr class="">
+                <th scope="col" class="px-6 py-6 rounded-tl-xl font-bold">Nome</th>
+                <th scope="col" class="px-6 py-6 font-semibold">Primeiro Atendimento</th>
+                <th scope="col" class="px-6 py-6 font-semibold">Últimos atendimentos</th>
+                <th scope="col" class="px-6 py-6 rounded-tr-xl font-semibold">Número de atendimentos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of schedulingList" class="bg-very-clean even:bg-[#F7F5F2] dark:bg-secondary dark:even:bg-primary">
+                <td scope="row" class="flex items-center px-6 py-6 text-primary whitespace-nowrap dark:text-very-clean">
+                  <div>
+                    <div class="text-sm font-semibold text-secondary dark:text-very-clean">
+                      {{ item.customerName }}
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td
-                class="px-6 py-4 group-hover:text-clean dark:group-hover:text-secondary"
-              >
-                {{ item.endDate | date : "dd/MM/yyyy" }}
-              </td>
-              <td
-                class="px-6 py-4 group-hover:text-clean dark:group-hover:text-secondary"
-              >
-                {{ item.startDate | date : "dd/MM/yyyy" }}
-              </td>
-              <td
-                class="px-6 py-4 group-hover:text-clean dark:group-hover:text-secondary"
-              >
-                {{ item.total }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td class="px-4 py-4 group-hover:text-clean dark:group-hover:text-secondary">
+                  {{ item.endDate | date : "dd/MM/yyyy" }}
+                </td>
+                <td class="px-4 py-4 group-hover:text-clean dark:group-hover:text-secondary">
+                  {{ item.startDate | date : "dd/MM/yyyy" }}
+                </td>
+                <td class="px-4 py-4 group-hover:text-clean dark:group-hover:text-secondary">
+                  {{ item.total }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
-    <div
-      class="w-full h-[300px] md:w-4/12 md:h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
-    ></div>
-  </div>
+    <div class="w-full h-[300px] md:w-5/12 md:h-full flex flex-col gap-2 md:gap-4">
+      <div class="w-full h-1/2 flex gap-2 md:gap-4">
+        <div class="w-6/12 h-full dark:bg-secondary bg-very-clean rounded-xl flex flex-col justify-between items-start py-4 px-4 lg:py-6 lg:px-8">
+          <div class="flex items-center gap-1 text-gray-500 dark:text-gray-400" [pTooltip]="'Valores de referência com base no mes anterior'">
+            <p class="text-xs xl:text-base">Rendimento mensal</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+              />
+            </svg>
+          </div>
+          <p class="text-2xl lg:text-3xl xl:text-4xl font-bold text-primary dark:text-clean">{{ (analytics.amount / 1000).toString().replace(".", "k") }}</p>
+          <ng-container *ngTemplateOutlet="indicator; context: { value: analytics.amountIncrease, text: analytics.percentAmount }"></ng-container>
+        </div>
 
-  <!-- <div class="w-full 2xl:w-11/12 h-[200px] flex gap-4">
-    <div
-      class="w-3/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
-    ></div>
-    <div
-      class="w-3/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
-    ></div>
-    <div
-      class="w-3/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
-    ></div>
-    <div
-      class="w-3/12 h-full dark:bg-secondary bg-very-clean rounded-xl p-8"
-    ></div>
-  </div> -->
+        <div class="w-6/12 h-full dark:bg-secondary bg-very-clean rounded-xl flex flex-col justify-between items-start py-4 px-4 lg:py-6 lg:px-8">
+          <div class="flex items-center gap-1 text-gray-500 dark:text-gray-400" [pTooltip]="'Valores de referência com base no mes anterior'">
+            <p class="text-xs xl:text-base">Tempo trabalhado</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+              />
+            </svg>
+          </div>
+          <p class="text-2xl lg:text-3xl xl:text-4xl font-bold text-primary dark:text-clean">{{ analytics.totalTime }}</p>
+          <ng-container *ngTemplateOutlet="indicator; context: { value: analytics.timeIncrease, text: analytics.percentTime }"></ng-container>
+        </div>
+      </div>
+      <div class="w-full h-1/2 flex gap-2 md:gap-4">
+        <div class="w-6/12 h-full dark:bg-secondary bg-very-clean rounded-xl flex flex-col justify-between items-start py-4 px-4 lg:py-6 lg:px-8">
+          <div class="flex items-center gap-1 text-gray-500 dark:text-gray-400" [pTooltip]="'Valores de referência com base no mes anterior'">
+            <p class="text-xs xl:text-base">Total de atendimentos</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+              />
+            </svg>
+          </div>
+          <p class="text-2xl lg:text-3xl xl:text-4xl font-bold text-primary dark:text-clean">{{ analytics.totalSchedules }}</p>
+          <ng-container *ngTemplateOutlet="indicator; context: { value: analytics.schedulesIncrease, text: analytics.percentSchedules }"></ng-container>
+        </div>
+
+        <div class="w-6/12 h-full dark:bg-secondary bg-very-clean rounded-xl flex flex-col justify-between items-start py-4 px-4 lg:py-6 lg:px-8">
+          <div class="flex items-center gap-1 text-gray-500 dark:text-gray-400" [pTooltip]="'Valores de referência com base no mes anterior'">
+            <p class="text-xs xl:text-base">Serviços prestados</p>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="size-5">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z"
+              />
+            </svg>
+          </div>
+          <p class="text-2xl lg:text-3xl xl:text-4xl font-bold text-primary dark:text-clean">{{ analytics.services }}</p>
+          <ng-container *ngTemplateOutlet="indicator; context: { value: analytics.servicesIncrease, text: analytics.percentServices }"></ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- <div
-  class="bg-blend-hue dark:text-white text-gray-800 mx-auto max-w-6xl sm:px-8 lg:px-12 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none h-full flex flex-col justify-between"
->
-  <div class="flex flex-col w-full gap-4 p-2">
-    <div class="flex items-center justify-between">
-      <h3
-        class="text-2xl dark:text-slate-200 text-slate-800 font-bold ml-3 md:w-max w-8"
-      >
-        Próximos agendamentos
-      </h3>
-      <p-dropdown
-        placeholder="Tempo"
-        [options]="dateRanges"
-        [formControl]="dateRange"
-        (onChange)="onChangeDateRange($event)"
-      ></p-dropdown>
+<ng-template #indicator let-value="value" let-text="text">
+  <div
+    class="flex items-center gap-1 font-bold py-1 px-2 text-xs xl:text-sm rounded-md"
+    [ngClass]="{
+      'bg-green-200 text-green-800': value > 1,
+      'bg-red-200 text-red-800': value < 1,
+      'bg-gray-200 text-gray-800': value == 1
+    }"
+  >
+    <p>{{ text }}</p>
+    <div *ngIf="value > 1">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941" />
+      </svg>
     </div>
-    <ol *ngIf="events.length; else noneEvent">
-      <li
-        [class]="'border-l-2 border-purple-600 ml-4 '"
-        *ngFor="let event of events"
-        [style]="{ 'border-color': event.employee.color ?? 'rgb(147 51 234)' }"
-      >
-        <div class="md:flex flex-start">
-          <div
-            [class]="
-              'bg-purple-600 w-6 h-6 flex items-center text-white justify-center rounded-full -ml-3.5 p-0.5 shadow-base-medium shadow-md'
-            "
-            [style]="{ background: event.employee.color ?? 'rgb(147 51 234)' }"
-          >
-            <fa-icon [icon]="faCalendar"></fa-icon>
-          </div>
-          <div class="block rounded-lg bg-gray-100 w-90% ml-6 mb-0.5">
-            <div
-              class="md:p-4 p-2 rounded-t-lg shadow-lg md:w-full leading-3 sm:leading-4 -tracking-wide sm:tracking-wide"
-            >
-              <div class="flex justify-between mb-2">
-                <p>
-                  <span class="font-semibold text-xl text-slate-900">
-                    {{ event.customer.name }} </span
-                  ><br />
-                  <span class="font-light text-lg text-slate-700">{{
-                    event.schedule.service.description
-                  }}</span>
-                </p>
-                <p>
-                  <span
-                    class="font-medium md:text-xl text-base text-slate-900"
-                    >{{
-                      event.schedule.startDateTime | date : "dd/MM/yy HH:mm"
-                    }}</span
-                  ><br />
-                  <span
-                    class="font-light md:text-base text-sm text-slate-700 float-right"
-                  >
-                    {{ getDayName(event.schedule.startDateTime) }}</span
-                  >
-                </p>
-              </div>
-              <div
-                class="rounded-md indent-2 bg-gray-200"
-                *ngIf="event.schedule.note || event.schedule.service.note"
-              >
-                <small class="py-1 text-left text-gray-600">Observação:</small>
-                <p class="py-2 text-gray-700">{{ event.schedule.note }}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </li>
-    </ol>
-
-    <p-overlayPanel
-      [showCloseIcon]="true"
-      #op
-      (onHide)="calendarOpen = false"
-      [style]="{ width: getWidth() }"
-      styleClass="responsive-overlay"
-    >
-      <div class="w-full sm:w-75 md:w-50 lg:w-25" *ngIf="calendarOpen">
-        <app-calendar
-          [header]="false"
-          [events]="eventsCalendar"
-          [isEditable]="false"
-        ></app-calendar>
-      </div>
-    </p-overlayPanel>
-
-    <ng-template #noneEvent>
-      <div class="text-center font-semibold text-lg">
-        Nenhum agendamento para esse período
-      </div>
-    </ng-template>
+    <div *ngIf="value < 1">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-4">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6 9 12.75l4.286-4.286a11.948 11.948 0 0 1 4.306 6.43l.776 2.898m0 0 3.182-5.511m-3.182 5.51-5.511-3.181" />
+      </svg>
+    </div>
+    <div *ngIf="value == 1">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
+      </svg>
+    </div>
   </div>
-  <p class="text-base leading-1 font-medium text-center px-4">
-    Deseja visualizar agendamentos passados ou mais distantes? Veja direto na
-    <a
-      class="text-purple-400 cursor-pointer no-underline appearance-none select-none"
-      routerLink="/scheduler"
-      >Agenda</a
-    >
-  </p>
-</div> -->
+</ng-template>

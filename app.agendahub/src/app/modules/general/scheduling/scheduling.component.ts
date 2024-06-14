@@ -15,10 +15,7 @@ export class SchedulingComponent implements OnInit {
   schedulingList: GetTableSchedulingListDto[] = [];
   filteredSchedulingList: GetTableSchedulingListDto[] = [];
 
-  constructor(
-    private apiService: ApiService,
-    private messageService: MessageService
-  ) {}
+  constructor(private apiService: ApiService, private messageService: MessageService) {}
 
   ngOnInit() {
     this.setDefaultDateRange();

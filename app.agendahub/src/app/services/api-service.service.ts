@@ -60,7 +60,6 @@ export class ApiService {
             params: params ? params : undefined,
           }
         : undefined;
-    console.log(config);
 
     return this.httpClient
       .get<T>(apiUrl, config)
