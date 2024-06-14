@@ -87,36 +87,38 @@
           <p class="font-bold">Atendimentos</p>
           <a class="border dark:border-very-clean border-primary px-2 py-1 rounded-lg text-xs text-primary dark:text-very-clean" routerLink="/general/scheduling">Ver tudo</a>
         </div>
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <thead class="text-xs dark:text-primary text-very-clean uppercase bg-primary dark:bg-clean">
-            <tr class="rounded-lg">
-              <th scope="col" class="px-4 py-3 rounded-l-lg font-bold">Nome</th>
-              <th scope="col" class="px-4 py-3 font-semibold">Primeiro Atendimento</th>
-              <th scope="col" class="px-4 py-3 font-semibold">Últimos atendimentos</th>
-              <th scope="col" class="px-4 py-3 rounded-r-lg font-semibold">Número de atendimentos</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let item of schedulingList" class="bg-very-clean dark:bg-secondary">
-              <td scope="row" class="flex items-center px-4 py-4 text-primary whitespace-nowrap dark:text-very-clean">
-                <div>
-                  <div class="text-sm font-semibold">
-                    {{ item.customerName }}
+        <div class="relative overflow-x-auto shadow-md rounded-xl">
+          <table class="w-full text-sm text-left rtl:text-right text-secondary dark:text-very-clean">
+            <thead class="text-xs dark:text-gray-400 text-gray-600 uppercase bg-clean dark:bg-primary">
+              <tr class="">
+                <th scope="col" class="px-6 py-6 rounded-tl-xl font-bold">Nome</th>
+                <th scope="col" class="px-6 py-6 font-semibold">Primeiro Atendimento</th>
+                <th scope="col" class="px-6 py-6 font-semibold">Últimos atendimentos</th>
+                <th scope="col" class="px-6 py-6 rounded-tr-xl font-semibold">Número de atendimentos</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of schedulingList" class="bg-very-clean even:bg-[#F7F5F2] dark:bg-secondary dark:even:bg-primary">
+                <td scope="row" class="flex items-center px-6 py-6 text-primary whitespace-nowrap dark:text-very-clean">
+                  <div>
+                    <div class="text-sm font-semibold text-secondary dark:text-very-clean">
+                      {{ item.customerName }}
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td class="px-4 py-4 group-hover:text-clean dark:group-hover:text-secondary">
-                {{ item.endDate | date : "dd/MM/yyyy" }}
-              </td>
-              <td class="px-4 py-4 group-hover:text-clean dark:group-hover:text-secondary">
-                {{ item.startDate | date : "dd/MM/yyyy" }}
-              </td>
-              <td class="px-4 py-4 group-hover:text-clean dark:group-hover:text-secondary">
-                {{ item.total }}
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                </td>
+                <td class="px-4 py-4 group-hover:text-clean dark:group-hover:text-secondary">
+                  {{ item.endDate | date : "dd/MM/yyyy" }}
+                </td>
+                <td class="px-4 py-4 group-hover:text-clean dark:group-hover:text-secondary">
+                  {{ item.startDate | date : "dd/MM/yyyy" }}
+                </td>
+                <td class="px-4 py-4 group-hover:text-clean dark:group-hover:text-secondary">
+                  {{ item.total }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
 
