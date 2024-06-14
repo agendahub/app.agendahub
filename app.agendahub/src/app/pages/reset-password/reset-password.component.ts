@@ -26,7 +26,14 @@ export class ResetPasswordComponent implements OnInit {
   ngOnInit(): void {
     this.buildForm();
     this.getToken();
-    this.image = getRandomImage("#reset_page");
+    this.image = getRandomImage();
+    this.changeBackground();
+  }
+
+  changeBackground() {
+    setInterval(() => {
+      this.image = getRandomImage();
+    }, 1_000 * 30);
   }
 
   getToken() {

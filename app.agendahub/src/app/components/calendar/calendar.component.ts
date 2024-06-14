@@ -275,21 +275,13 @@ export class CalendarComponent implements OnInit, AfterViewInit, AfterContentIni
           },
         });
 
-        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter(
-          (x) => !this.settings.days.includes(x)
-        );
+        const hiddenDays = [0, 1, 2, 3, 4, 5, 6].filter((x) => !this.settings.days.includes(x));
         this.Calendar.setOption("hiddenDays", hiddenDays);
         this.Calendar.setOption("duration", {
           days: this.settings.days.length,
         });
-        this.Calendar.setOption(
-          "slotMinTime",
-          moment(this.settings.openTime).format("HH:mm:ss")
-        );
-        this.Calendar.setOption(
-          "slotMaxTime",
-          moment(this.settings.closeTime).format("HH:mm:ss")
-        );
+        this.Calendar.setOption("slotMinTime", moment(this.settings.openTime).format("HH:mm:ss"));
+        this.Calendar.setOption("slotMaxTime", moment(this.settings.closeTime).format("HH:mm:ss"));
       }
     }, 100);
   }

@@ -3,7 +3,7 @@ import { Router } from "@angular/router";
 import { MenuItem } from "primeng/api";
 import { Access } from "../../../auth/acess";
 import { AuthService } from "../../../auth/auth-service.service";
-import { defer } from "../../../types/typing";
+import { defer } from "../../../utils/async";
 import { SettingsService } from "../services/settings.service";
 
 @Component({

@@ -16,6 +16,7 @@ import { ComponentsModule } from "./components/components.module";
 /**PrimeNG */
 import { JwtModule } from "@auth0/angular-jwt";
 import { AutoCompleteModule } from "primeng/autocomplete";
+import { AvatarModule } from "primeng/avatar";
 import { ButtonModule } from "primeng/button";
 import { CalendarModule } from "primeng/calendar";
 import { CardModule } from "primeng/card";
@@ -52,9 +53,7 @@ import { ManagerModule } from "./modules/manager/manager.module";
 import { HomeComponent } from "./pages/home/home.component";
 import { LinksComponent } from "./pages/links/links.component";
 import { LoginComponent } from "./pages/login/login.component";
-
 import { ResetPasswordComponent } from "./pages/reset-password/reset-password.component";
-
 import { ScheduleLinkViewComponent } from "./pages/schedule-link-view/schedule-link-view.component";
 import { SchedulerComponent } from "./pages/scheduler/scheduler.component";
 import { UserProfileComponent } from "./pages/user-profile/user-profile.component";
@@ -112,6 +111,7 @@ import { loadTypes } from "./types/typing";
     SidebarModule,
     TimelineModule,
     FullCalendarModule,
+    AvatarModule,
     ServiceWorkerModule.register("ngsw-worker.js", {
       enabled: !isDevMode(),
       // Register the ServiceWorker as soon as the application is stable

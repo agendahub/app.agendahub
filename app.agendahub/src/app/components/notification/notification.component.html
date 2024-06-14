@@ -47,7 +47,7 @@
 
 <ng-template #ref>
   <div
-    class="fixed sm:right-16 right-0 sm:top-12 top-0 sm:w-96 w-screen sm:h-max h-screen transition-all duration-300 shadow-2xl dark:bg-secondary bg-clean sm:rounded-lg rounded-none"
+    class="fixed sm:right-16 right-0 sm:top-12 top-0 sm:w-96 w-screen sm:h-max h-screen transition-all duration-300 shadow-2xl dark:bg-primary bg-white border border-gray-200 dark:border-secondary sm:rounded-lg rounded-none"
     [ngClass]="{
       'opacity-1 sm:translate-y-1': opened,
       'opacity-0 -translate-y-1 invisible': !opened
@@ -97,7 +97,7 @@
         <div class="sm:max-h-80 h-[82vh] overflow-y-auto overflow-x-hidden pr-1 scroll-smooth">
           <ng-container *ngTemplateOutlet="tabs"></ng-container>
         </div>
-        <hr class="w-full h-0.5 border-t-0 my-2 bg-gray-400 dark:bg-white/10" />
+        <hr class="my-2 h-px border-t-0 bg-gray-200 dark:bg-white/10" />
         <div class="flex justify-between items-center">
           <span role="button" [routerLink]="'/general/notifications'" class="flex items-center text-sm">
             <small>Visualizar todas</small>
@@ -135,7 +135,7 @@
         </div>
         <div *ngFor="let item of temporal.value; let $index = index">
           <ng-container *ngTemplateOutlet="message; context: { item: item, temporal: temporal.key }"></ng-container>
-          <hr *ngIf="temporal.value.length > $index + 1" class="w-full h-0.5 border-t-0 my-1 bg-gray-400 dark:bg-white/10" />
+          <hr *ngIf="temporal.value.length > $index + 1" class="my-1 h-px border-t-0 bg-gray-200 dark:bg-white/10" />
         </div>
       </ng-container>
     </div>

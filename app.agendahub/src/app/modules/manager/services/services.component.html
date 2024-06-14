@@ -1,179 +1,196 @@
 <div class="bg-blend-hue bg-opacity-50 mx-auto max-w-7xl sm:px-6 lg:px-8 sm:py-2 lg:py-4 lg:rounded-lg md:rounded-md rounded-none min-h-[calc(80vh)] h-full overflow-h-scroll">
-    <div class="w-50 sm:p-2 p-0 sm:text-left text-center">
-        <span class="dark:text-white text-primary text-4xl font-bold tracking-tight sm:text-6xl indent-4">
-            Serviços
-        </span>
-    </div>
-    <div class="w-full sm:w-75 md:w-50 lg:w-25 my-2 p-3">
-        <p-table #dt [value]="services"   [paginator]="true" [rows]="10"
-        (sortFunction)="customSort($event)" [customSort]="true" [globalFilterFields]="['code', 'description', 'serviceType.description','price']"
-        >
+  <div class="w-50 sm:p-2 p-0 sm:text-left text-center">
+    <span class="dark:text-white text-primary text-4xl font-bold tracking-tight sm:text-6xl indent-4"> Serviços </span>
+  </div>
+  <div class="w-full sm:w-75 md:w-50 lg:w-25 my-2 p-3">
+    <p-table
+      #dt
+      [value]="services"
+      [paginator]="true"
+      [rows]="10"
+      (sortFunction)="customSort($event)"
+      [customSort]="true"
+      [globalFilterFields]="['code', 'description', 'serviceType.description', 'price']"
+    >
+      <ng-template pTemplate="caption">
+        <div class="flex md:flex-row sm:align-items-center justify-between flex-col gap-2 mb-3">
+          <div class="flex justify-start gap-2 items-center">
+            <div role="button" class="flex items-center gap-2 rounded bg-gradient-to-br from-palette-400 to-palette-600 text-white px-3 py-2 shadow" (click)="visible = true">
+              <i class="fa-solid fa-plus"></i>
+              <span>NOVO</span>
+            </div>
+            <div role="button" class="flex items-center gap-2 rounded bg-gradient-to-br from-palette-400 to-palette-600 text-white px-3 py-2 shadow" (click)="tp.show($event)">
+              <div #typeTarget></div>
+              <i class="fa-solid fa-list-ul"></i>
+              <span class="tracking-tight text-white text-ellipsis">Tipos</span>
+            </div>
+          </div>
+          <div class="flex flex-row justify-end sm:w-auto w-full">
+            <span class="p-input-icon-left ml-auto sm:w-auto w-full shadow-sm">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input pInputText type="text" (input)="applyFilter(dt, $event, 'contains')" placeholder="Buscar..." class="p-inputtext-sm sm:w-auto w-full" />
+            </span>
+          </div>
+        </div>
+
+        <p-overlayPanel [showCloseIcon]="true" #op [dismissable]="true">
+          <span class="text-2xl font-bold tracking-tight sm:text-3xl"> Novo tipo </span>
+          <form [formGroup]="formType" class="flex flex-col gap-2">
+            <div>
+              <input type="text" id="code" formControlName="code" pInputText placeholder="Código" [style]="{ width: '100%' }" />
+            </div>
+
+            <div>
+              <input type="text" id="description" formControlName="description" pInputText placeholder="Descrição" [style]="{ width: '100%' }" />
+            </div>
+
+            <div>
+              <button
+                (click)="confirmType(); tp.show($event, typeTarget)"
+                [style]="{ width: '100%' }"
+                [disabled]="formType.invalid"
+                class="rounded bg-gradient-to-r from-palette-400 to-palette-600 text-palette-50 p-2 shadow disabled:opacity-50"
+              >
+                <span class="tracking-tight text-white text-ellipsis">Salvar</span>
+              </button>
+            </div>
+          </form>
+        </p-overlayPanel>
+        <p-overlayPanel [showCloseIcon]="true" #tp>
+          <span class="text-2xl font-bold tracking-tight sm:text-3xl"> Tipos de serviço </span>
+          <p-table [value]="serviceTypes" [paginator]="true" [rows]="5">
             <ng-template pTemplate="caption">
-                <div class="flex md:flex-row sm:align-items-center justify-between flex-col gap-2 mb-3">
-                    <div class="flex justify-start gap-2 items-center">
-                        <button pButton (click)="visible = true" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
-                            <i class="fa-solid fa-circle-plus"></i>                            <span class="tracking-tight text-white text-ellipsis">Novo</span>
-                        </button>
-                        <button pButton  [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2" (click)="tp.show($event)">
-                            <div #typeTarget></div>
-                            <i class="fa-solid fa-list-ul"></i>
-                            <span class="tracking-tight text-white text-ellipsis">Tipos</span>   
-                        </button>
-                    </div>
-                    <div class="flex flex-row justify-end sm:w-auto w-full">
-                        <span class="p-input-icon-left ml-auto sm:w-auto w-full shadow-sm">
-                            <i style="margin-top: -0.69rem;">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" class="w-6 h-6 cursor-pointer">
-                                    <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-                                </svg>
-                            </i>                                                        
-                            <input pInputText type="text" (input)="applyFilter(dt, $event, 'contains')" placeholder="Buscar..." class="p-inputtext-sm sm:w-auto w-full" />
-                        </span>
-                    </div>
-                </div>
-
-                <p-overlayPanel [showCloseIcon]="true" #op [dismissable]="true">
-                    <span class="text-2xl font-bold tracking-tight sm:text-3xl">
-                        Novo tipo
-                    </span>
-                    <form [formGroup]="formType" class="flex flex-col gap-2">
-                        <div>
-                            <input type="text" id="code" formControlName="code" pInputText placeholder="Código" [style]="{width:'100%'}"/>
-                        </div>
-            
-                        <div>
-                            <input type="text" id="description" formControlName="description" pInputText placeholder="Descrição" [style]="{width:'100%'}"/>
-                        </div>
-        
-                        <div>
-                            <button pButton (click)="confirmType();tp.show($event, typeTarget)" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="formType.invalid">
-                                <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                                </svg>
-                            </button>
-                        </div>
-        
-                    </form>
-                </p-overlayPanel>
-                <p-overlayPanel [showCloseIcon]="true" #tp>
-                    <span class="text-2xl font-bold tracking-tight sm:text-3xl">
-                        Tipos de serviço
-                    </span>
-                    <p-table [value]="serviceTypes"   [paginator]="true" [rows]="5">
-                        
-                        <ng-template pTemplate="caption">
-                            <button pButton (click)="op.show($event)" [style]="{width:'100%', padding: '0.5rem'}" class="flex justify-center items-center gap-2">
-                                <i class="fa-solid fa-circle-plus"></i>
-                                <span class="tracking-tight text-white text-ellipsis">Novo</span>
-                            </button>
-                        </ng-template>
-                        <ng-template pTemplate="header">
-                            <tr>
-                                <th>Código</th>
-                                <th>Descrição</th>
-                                <th></th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-serviceType>
-                            <tr>
-                                <td>{{serviceType.code}}</td>
-                                <td>{{serviceType.description}}</td>
-                                <th> 
-                                    <span class="rounded-md bg-red-600 cursor-pointer text-white p-2" (click)="deleteType(serviceType.id)">
-                                        <i class="fa-regular fa-circle-xmark"></i>
-                                    </span>                                    
-                                </th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="emptymessage">
-                            <tr>
-                                <td colspan="3" class="text-center">Nenhum tipo de serviço encontrado.</td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
-                    
-                </p-overlayPanel>
-
+              <div
+                role="button"
+                class="flex justify-center items-center gap-2 rounded bg-gradient-to-br from-palette-400 to-palette-600 text-white px-3 py-2 shadow"
+                (click)="op.show($event)"
+              >
+                <i class="fa-solid fa-plus"></i>
+                <span>NOVO</span>
+              </div>
             </ng-template>
-            <ng-template pTemplate="header" let-columns>
-                <tr>
-                    <th pSortableColumn="code">Código  </th>
-                    <th pSortableColumn="description">Descrição </th>
-                    <th pSortableColumn="price">Preço </th>
-                    <th pSortableColumn="serviceType.description" colspan="2">Tipo</th>
-                </tr>
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Código</th>
+                <th>Descrição</th>
+                <th></th>
+              </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-service>
-                <tr>
-                    <td>{{service.code}}</td>
-                    <td>{{service.description}}</td>
-                    <td>{{service.price | currency: "BRL"}}</td>
-                    <td>{{service.serviceType.description}}</td>
-                    <td><i class="fa-solid fa-gear cursor-pointer" (click)="change(service)"></i></td>
-                </tr>
+            <ng-template pTemplate="body" let-serviceType>
+              <tr>
+                <td>{{ serviceType.code }}</td>
+                <td>{{ serviceType.description }}</td>
+                <th>
+                  <span class="rounded-md bg-red-600 cursor-pointer text-white p-2" (click)="deleteType(serviceType.id)">
+                    <i class="fa-regular fa-circle-xmark"></i>
+                  </span>
+                </th>
+              </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
-                <tr>
-                    <td colspan="7" class="text-center">Nenhum serviço encontrado.</td>
-                </tr>
+              <tr>
+                <td colspan="3" class="text-center">Nenhum tipo de serviço encontrado.</td>
+              </tr>
             </ng-template>
-        </p-table>
-    </div>
+          </p-table>
+        </p-overlayPanel>
+      </ng-template>
+      <ng-template pTemplate="header" let-columns>
+        <tr>
+          <th pSortableColumn="code">Código</th>
+          <th pSortableColumn="description">Descrição</th>
+          <th pSortableColumn="price">Preço</th>
+          <th pSortableColumn="serviceType.description" colspan="2">Tipo</th>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-service>
+        <tr>
+          <td>{{ service.code }}</td>
+          <td>{{ service.description }}</td>
+          <td>{{ service.price | currency : "BRL" }}</td>
+          <td>{{ service.serviceType.description }}</td>
+          <td><i class="fa-solid fa-gear cursor-pointer" (click)="change(service)"></i></td>
+        </tr>
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="7" class="text-center">Nenhum serviço encontrado.</td>
+        </tr>
+      </ng-template>
+    </p-table>
+  </div>
 </div>
 
+<p-dialog
+  [header]="'Serviço'"
+  (onHide)="formUtils.reset()"
+  position="top"
+  [(visible)]="visible"
+  [breakpoints]="{ '960px': '75vw', '600px': '85vw' }"
+  [style]="{ width: '50vw' }"
+  [draggable]="false"
+  [resizable]="false"
+  [modal]="true"
+>
+  <form [formGroup]="form" id="form">
+    <div class="grid grid-cols-12 gap-x-6 gap-y-4">
+      <div class="sm:col-span-6 col-span-12">
+        <label for="code">Código</label>
+        <input type="text" id="code" formControlName="code" pInputText placeholder="Informe o código" [style]="{ width: '100%' }" />
+      </div>
 
-<p-dialog [header]="'Serviço'" (onHide)="formUtils.reset()" position="top" [(visible)]="visible" [breakpoints]="{ '960px': '75vw', '600px': '85vw' }" [style]="{ width: '50vw' }" [draggable]="false" [resizable]="false" [modal]="true">
-    <form [formGroup]="form" id="form">
-        <div class="grid grid-cols-12 gap-x-6 gap-y-4">
-            
-            <div class="sm:col-span-6 col-span-12">
-                <label for="code">Código</label>
-                <input type="text" id="code" formControlName="code" pInputText placeholder="Informe o código" [style]="{width:'100%'}"/>
-            </div>
+      <div class="sm:col-span-6 col-span-12">
+        <label for="description">Descrição</label>
+        <input type="text" id="description" formControlName="description" pInputText placeholder="Informe a descrição" [style]="{ width: '100%' }" />
+      </div>
 
-            <div class="sm:col-span-6 col-span-12">
-                <label for="description">Descrição</label>
-                <input type="text" id="description" formControlName="description" pInputText placeholder="Informe a descrição" [style]="{width:'100%'}"/>
-            </div>
+      <div class="sm:col-span-6 col-span-12">
+        <label for="serviceType">Tipo de serviço</label>
+        <p-dropdown
+          dataKey="id"
+          placeholder="Selecione o tipo de serviço"
+          [options]="serviceTypes"
+          [showClear]="true"
+          [autoDisplayFirst]="false"
+          optionLabel="description"
+          inputId="serviceType"
+          formControlName="serviceType"
+          [style]="{ width: '100%' }"
+        ></p-dropdown>
+      </div>
 
-            <div class="sm:col-span-6 col-span-12">
-                <label for="serviceType">Tipo de serviço</label>
-                <p-dropdown dataKey="id" placeholder="Selecione o tipo de serviço" [options]="serviceTypes" [showClear]="true" [autoDisplayFirst]="false" optionLabel="description" inputId="serviceType" formControlName="serviceType" [style]="{width:'100%'}"></p-dropdown>
-            </div>
+      <div class="sm:col-span-6 col-span-12">
+        <label for="price">Preço</label>
+        <input type="number" id="price" formControlName="price" pInputText placeholder="R$ 100,00" [style]="{ width: '100%' }" />
+      </div>
 
-            <div class="sm:col-span-6 col-span-12">
-                <label for="price">Preço</label>
-                <input type="number" id="price" formControlName="price" pInputText placeholder="R$ 100,00" [style]="{width:'100%'}"/>
-            </div>
-
-            <div class="sm:col-span-6 col-span-12">
-                <label for="timespan">Tempo padrão <em class="italic text-gray-500">(minutos)</em></label>
-                <div class="w-100">
-                    <p-inputNumber inputId="timespan" formControlName="timespan" [step]="1" [min]="0" [showButtons]="true" placeholder="1" [style]="{width:'100%'}"></p-inputNumber>
-                </div>
-            </div>
-
-            <div class="col-span-12">
-                <label for="note">Anotação</label>
-                <textarea id="note" formControlName="note" cols="10" [style]="{width: '100%'}" placeholder="Informações importantes..." pInputTextarea></textarea>
-            </div>
-
+      <div class="sm:col-span-6 col-span-12">
+        <label for="timespan">Tempo padrão <em class="italic text-gray-500">(minutos)</em></label>
+        <div class="w-100">
+          <p-inputNumber inputId="timespan" formControlName="timespan" [step]="1" [min]="0" [showButtons]="true" placeholder="1" [style]="{ width: '100%' }"></p-inputNumber>
         </div>
-    </form>
+      </div>
 
-    <ng-template pTemplate="footer">
-        <div class="flex gap-2">
-            <button pButton [style]="{width:'100%'}" class="p-button-danger flex justify-center items-center gap-2" *ngIf="edit" (click)="tryDelete()">
-                <span class="tracking-tight text-white text-ellipsis">Excluir</span>
-                <i class="fa-regular fa-circle-xmark"></i>
-            </button>            
-            <button pButton (click)="confirm()" form="form" [style]="{width:'100%'}" class="flex justify-center items-center gap-2" [disabled]="form.invalid">
-                <span class="tracking-tight text-white text-ellipsis">Confirmar</span>
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                </svg>
-            </button>            
-        </div>
-    </ng-template>
+      <div class="col-span-12">
+        <label for="note">Anotação</label>
+        <textarea id="note" formControlName="note" cols="10" [style]="{ width: '100%' }" placeholder="Informações importantes..." pInputTextarea></textarea>
+      </div>
+    </div>
+  </form>
+
+  <ng-template pTemplate="footer">
+    <div class="flex items-end justify-end gap-2 w-full">
+      <button [style]="{ width: '100%' }" class="rounded bg-red-100 text-red-600 p-2 shadow disabled:opacity-50" *ngIf="edit" (click)="tryDelete()">
+        <span class="tracking-tight">Excluir</span>
+      </button>
+      <button
+        [style]="{ width: '100%' }"
+        class="rounded bg-gradient-to-r from-palette-400 to-palette-600 text-palette-50 p-2 shadow disabled:opacity-50"
+        (click)="confirm()"
+        [disabled]="form.invalid"
+      >
+        <span class="tracking-tight">Salvar</span>
+      </button>
+    </div>
+  </ng-template>
 </p-dialog>

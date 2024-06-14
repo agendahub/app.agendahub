@@ -1,12 +1,19 @@
 import { EventInput } from "@fullcalendar/core";
 import { SortEvent } from "primeng/api";
 import { UserSchedule } from "../models/core/entities";
-import { defer } from "../types/typing";
+import { defer } from "./async";
+
+const images = [
+  "https://storage-production.up.railway.app/wwwroot/backgrounds/abstract.png",
+  "https://storage-production.up.railway.app/wwwroot/backgrounds/orangy.png",
+  "https://storage-production.up.railway.app/wwwroot/backgrounds/bluew.png",
+  "https://storage-production.up.railway.app/wwwroot/backgrounds/city.png",
+  "https://storage-production.up.railway.app/wwwroot/backgrounds/tun.png",
+];
 
 export function getRandomImage(el: string = "#login_page") {
-  const thisPage = document.querySelector(el) as HTMLElement;
-  const [width, height] = [thisPage.clientWidth - 200, thisPage.clientHeight];
-  const url = `https://source.unsplash.com/random/${height}x${width}/?landscape?grayscale`;
+  const mixed = images[Math.floor(Math.random() * images.length)];
+  const url = mixed;
 
   defer(async () => {
     if (await caches.has(url)) {
@@ -14,29 +21,26 @@ export function getRandomImage(el: string = "#login_page") {
     }
 
     caches.open("auth").then((cache) => {
-      cache.add(url).then(() => {
-        console.log("Image cached " + url);
-      });
+      images.forEach((x) => cache.add(x));
     });
   });
 
   return url;
 }
 
-export function mapScheduleToEvent(schedules: UserSchedule[], filter: (x: UserSchedule) => boolean = () => true) {
+export function mapScheduleToEvent(schedules: UserSchedule[], employeer = true) {
   var self = window.globalThis as any;
   let events: EventInput[] = [];
 
   schedules.forEach((x) => {
-    filter.bind(self).call(self, x) &&
-      events.push({
-        id: x.id?.toString(),
-        title: `${x.employee.name} - ${x.customer?.name ?? "-"}`,
-        start: x.schedule.startDateTime,
-        end: x.schedule.finishDateTime,
-        color: x.employee.color ? hexToRgbA(x.employee.color!, 1) : x.employee.color,
-        extendedProps: { ...x },
-      });
+    events.push({
+      id: x.id?.toString(),
+      title: employeer ? `${x.employee.name.toUpperCapital()} - ${x.customer?.name.toUpperCapital() ?? "-"}` : `${x.customer?.name.toUpperCapital() ?? "-"}`,
+      start: x.schedule.startDateTime,
+      end: x.schedule.finishDateTime,
+      color: x.employee.color ? hexToRgbA(x.employee.color!, 1) : x.employee.color,
+      extendedProps: { ...x },
+    });
   });
 
   return events;

@@ -8,20 +8,47 @@
 @tailwind utilities;
 
 :root {
-  --base-pink-light: #a61c76;
-  --base-pink-extralight: #bf048d;
-  --base-dark: #2c2f40;
-  --base-medium: #5a758c;
-  --base-light: #a4b0bf;
-  // overrides fullcalendar
-  --fc-now-indicator-color: @apply border-primary;
-  --fc-today-bg-color: rgba(240, 236, 229, 0.5);
+  --clean: #f0ece5;
+  --tertiary: #71798a;
+  --very-clean: #ffffff;
   --primary-color: #14052a;
   --secondary-color: #23224a;
-  --tertiary: #71798a;
-  --clean: #f0ece5;
-  --very-clean: #ffffff;
   --font-family: "Outfit", sans-serif;
+
+  // overrides fullcalendar
+
+  --fc-border-color: #000000;
+  --fc-page-bg-color: #1b1245;
+  --fc-small-font-size: 0.85em;
+  --fc-neutral-text-color: #808080;
+  --fc-neutral-bg-color: rgba(208, 208, 208, 0.3);
+
+  --fc-button-text-color: #fff;
+  --fc-button-bg-color: #2c3e50;
+  --fc-button-border-color: #2c3e50;
+  --fc-button-hover-bg-color: #1e2b37;
+  --fc-button-hover-border-color: #1a252f;
+  --fc-button-active-bg-color: #1a252f;
+  --fc-button-active-border-color: #151e27;
+
+  --fc-event-bg-color: #3788d8;
+  --fc-event-border-color: #3788d8;
+  --fc-event-text-color: #fff;
+  --fc-event-selected-overlay-color: rgba(0, 0, 0, 0.25);
+
+  --fc-more-link-bg-color: #d0d0d0;
+  --fc-more-link-text-color: inherit;
+
+  --fc-event-resizer-thickness: 8px;
+  --fc-event-resizer-dot-total-width: 8px;
+  --fc-event-resizer-dot-border-width: 1px;
+
+  --fc-non-business-color: @apply bg-palette-950;
+  --fc-bg-event-color: rgb(143, 223, 130);
+  --fc-bg-event-opacity: 0.3;
+  --fc-highlight-color: rgba(188, 232, 241, 0.3);
+  --fc-now-indicator-color: @apply border-palette-800;
+  --fc-today-bg-color: rgb(217 214 255);
 }
 
 * {
@@ -125,6 +152,7 @@
 
 .fc-event {
   @apply border-none rounded-md mix-blend-darken p-1;
+  box-shadow: inset 0px 0px 400px 110px rgb(0 0 0 / 20%) !important;
 }
 
 .fc-event:hover {
@@ -148,18 +176,6 @@
   border: none !important;
 }
 
-.fc.fc-theme-standard .fc-view-harness td {
-  @apply border-[1px] rounded-md;
-}
-
-.fc .fc-timegrid-now-indicator-line {
-  @apply border-primary h-[1px] bg-primary rounded border-l-4;
-}
-
-.fc-direction-ltr .fc-timegrid-now-indicator-arrow {
-  @apply rounded-md p-[1px];
-}
-
 .fc-v-event .fc-event-time {
   @apply text-xs leading-3 -tracking-wider font-extralight;
 }
@@ -181,6 +197,7 @@ thead tr th .fc-scroller-harness .fc-scroller {
 }
 
 .p-sidebar-right.scheduler {
+  @apply bg-very-clean dark:bg-primary;
   top: 64px !important;
   height: calc(100% - 64px) !important;
   box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
@@ -190,7 +207,7 @@ thead tr th .fc-scroller-harness .fc-scroller {
   .p-sidebar-footer,
   .p-sidebar-header,
   .p-sidebar-content {
-    padding: 1rem !important;
+    @apply p-4 border-l border-clean dark:border-secondary bg-very-clean dark:bg-primary;
   }
 }
 
@@ -206,6 +223,7 @@ thead tr th .fc-scroller-harness .fc-scroller {
     .p-sidebar-header,
     .p-sidebar-content {
       padding: 0.7rem 1rem !important;
+      border: none !important;
     }
   }
 
@@ -227,26 +245,6 @@ thead tr th .fc-scroller-harness .fc-scroller {
       display: none !important;
     }
   }
-}
-
-.successful {
-  background-color: #4caf50 !important;
-  color: white !important;
-}
-
-.info {
-  background-color: #2196f3 !important;
-  color: white !important;
-}
-
-.warning {
-  background-color: #ff9800 !important;
-  color: white !important;
-}
-
-.error {
-  background-color: #f44336 !important;
-  color: white !important;
 }
 
 .p-tabview {

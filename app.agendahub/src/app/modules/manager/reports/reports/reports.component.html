@@ -58,59 +58,78 @@
           </div>
         </div>
       </div>
-      <hr class="my-2 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
-      <div class="flex flex-col gap-2 py-2">
-        <div class="flex gap-2 items-center">
-          <h2 class="text-2xl font-normal leading-7 -tracking-wide">Essa semana</h2>
+      <hr class="my-2 h-px border-t-0 bg-gray-200 dark:bg-white/10" />
+      <h2 class="text-2xl font-normal leading-7 -tracking-wide">Essa semana</h2>
+      <ng-container *ngIf="preview?.data?.length; else empty">
+        <div class="py-2">
+          <div class="h-full relative mb-12 sm:m-0" *ngIf="chartData?.length">
+            <ngx-charts-bar-vertical-stacked
+              [legendPosition]="legendPos"
+              [legendTitle]="'Legenda'"
+              [showGridLines]="false"
+              [results]="chartData"
+              [legend]="legend"
+              [xAxis]="true"
+              [yAxis]="true"
+            >
+            </ngx-charts-bar-vertical-stacked>
+          </div>
         </div>
-        <div class="h-full relative mb-12 sm:m-0" *ngIf="chartData?.length">
-          <ngx-charts-bar-vertical-stacked
-            [legendPosition]="legendPos"
-            [legendTitle]="'Legenda'"
-            [showGridLines]="false"
-            [results]="chartData"
-            [legend]="legend"
-            [xAxis]="true"
-            [yAxis]="true"
-          >
-          </ngx-charts-bar-vertical-stacked>
-        </div>
-      </div>
-      <hr class="my-2 h-0.5 border-t-0 bg-gray-200 dark:bg-white/10" />
-      <div class="grid sm:grid-cols-3 grid-cols-1 gap-2">
-        <div class="sm:col-span-2 col-span-1">
-          <p-table *ngIf="preview?.data" [paginator]="true" [rows]="5" [value]="preview.data" tableStyleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }">
-            <ng-template pTemplate="header">
-              <tr>
-                <th>Funcionário</th>
-                <th>Cliente</th>
-                <th>Valor</th>
-                <th>Serviço</th>
-                <th>Dia</th>
-                <th>Duração</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-data>
-              <tr>
-                <td>{{ data.employee }}</td>
-                <td>{{ data.customer }}</td>
-                <td>{{ data.price | currency : "BRL" }}</td>
-                <td>{{ data.description }}</td>
-                <td>{{ data.dayOfWeek }}</td>
-                <td>{{ data.timeWorked }}</td>
-              </tr>
-            </ng-template>
-          </p-table>
-        </div>
-        <div class="col-span-1 overflow-hidden">
-          <div class="p-2 border border-gray-200 dark:border-white/10 rounded-md">
-            <h2 class="text-lg leading-7 -tracking-wide">Clientes</h2>
-            <div class="flex justify-center">
-              <ngx-charts-pie-chart [results]="preview?.customerSeries" [gradient]="true" [labels]="true" [view]="[400, 350]"></ngx-charts-pie-chart>
+        <hr class="my-2 h-px border-t-0 bg-gray-200 dark:bg-white/10" />
+        <div class="grid sm:grid-cols-3 grid-cols-1 gap-2">
+          <div class="sm:col-span-2 col-span-1">
+            <p-table *ngIf="preview?.data" [paginator]="true" [rows]="5" [value]="preview.data" tableStyleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }">
+              <ng-template pTemplate="caption">
+                <div class="flex justify-between items-center">
+                  <span class="text-lg leading-7 -tracking-wide">Relatório semanal</span>
+                  <span class="text-sm font-light">Total: {{ preview?.data?.length }}</span>
+                </div>
+              </ng-template>
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Funcionário</th>
+                  <th>Cliente</th>
+                  <th>Valor</th>
+                  <th>Serviço</th>
+                  <th>Dia</th>
+                  <th>Duração</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-data>
+                <tr>
+                  <td>{{ data.employee }}</td>
+                  <td>{{ data.customer }}</td>
+                  <td>{{ data.price | currency : "BRL" }}</td>
+                  <td>{{ data.description }}</td>
+                  <td>{{ data.dayOfWeek }}</td>
+                  <td>{{ data.timeWorked }} minutos</td>
+                </tr>
+              </ng-template>
+            </p-table>
+          </div>
+          <div class="col-span-1 overflow-hidden">
+            <div class="p-2 border border-gray-200 dark:border-white/10 rounded-md">
+              <h2 class="text-lg leading-7 -tracking-wide">Clientes</h2>
+              <div class="flex justify-center">
+                <ngx-charts-pie-chart [results]="preview?.customerSeries" [gradient]="true" [labels]="true" [view]="[400, 350]"></ngx-charts-pie-chart>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      </ng-container>
+      <ng-template #empty>
+        <div class="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-500 mt-4">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0 0 20.25 18V6A2.25 2.25 0 0 0 18 3.75H6A2.25 2.25 0 0 0 3.75 6v12A2.25 2.25 0 0 0 6 20.25Z"
+            />
+          </svg>
+
+          <span class="text-xl font-light">Nenhum dado disponível</span>
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>

@@ -1,7 +1,6 @@
 import { DOCUMENT } from "@angular/common";
 import { Component, HostListener, Inject, Input, OnInit } from "@angular/core";
 import { NavigationEnd, Router } from "@angular/router";
-import { faArrowCircleDown } from "@fortawesome/free-solid-svg-icons";
 import { AuthService } from "../../auth/auth-service.service";
 import { getTheme } from "../../utils/util";
 
@@ -10,7 +9,9 @@ import { getTheme } from "../../utils/util";
   template: `
     <div class="flex justify-between items-center py-2 sm:hidden" *ngIf="!open">
       <div class="flex justify-center items-center sm:px-0 px-2">
-        <img class="w-auto" [ngClass]="{ 'h-8': open, 'h-12': !open }" [src]="iconMobile" alt="logotipo AgendaHub" />
+        <a routerLink="/">
+          <img class="w-auto" routerLink="/" [ngClass]="{ 'h-8': open, 'h-12': !open }" [src]="iconMobile" alt="logotipo AgendaHub" />
+        </a>
       </div>
       <div class="flex justify-end items-center gap-1">
         <span class="sm:mt-1 m-0">
@@ -39,7 +40,7 @@ import { getTheme } from "../../utils/util";
     <div aria-hidden="true" class="fixed inset-0 w-full h-full bg-black/50" *ngIf="blockScroll"></div>
 
     <div
-      class="absolute sm:block hidden z-[9999] top-6 ease-in-out duration-300"
+      class="absolute sm:block hidden z-[1001] top-6 ease-in-out duration-300"
       [ngClass]="{
         'left-[17.15rem] translate-x-1': open,
         'left-[3.5rem] translate-x-0': !open
@@ -58,7 +59,7 @@ import { getTheme } from "../../utils/util";
     </div>
 
     <aside
-      class="z-[2000] w-screen h-screen ease-in-out duration-300 select-none"
+      class="z-[1000] w-screen h-screen ease-in-out duration-300 select-none"
       aria-label="Sidebar"
       id="default-sidebar"
       [ngClass]="{
@@ -74,7 +75,9 @@ import { getTheme } from "../../utils/util";
       >
         <div class="flex flex-col gap-3">
           <div class="flex justify-between items-center w-full sm:px-0">
-            <img class="w-auto, h-16 object-contain" [ngClass]="{ 'p-2': !open }" [src]="icon" alt="logotipo AgendaHub" />
+            <a routerLink="/">
+              <img class="w-auto, h-16 object-contain" [ngClass]="{ 'p-2': !open }" [src]="icon" alt="logotipo AgendaHub" />
+            </a>
             <div class="sm:hidden cursor-pointer p-2 dark:text-very-clean text-secondary" (click)="open = false">
               <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40">
                 <path
@@ -284,10 +287,11 @@ export class SidebarComponent implements OnInit {
   public open = false || this.fixedSidebar;
   private sidebar!: HTMLElement;
   public fixed = false;
+  showCrudLink = false;
+  showUserOptions = false;
 
   constructor(@Inject(DOCUMENT) private document: Document, private router: Router, private authService: AuthService) {
     router.events.subscribe((x) => {
-      this.sidebarOpen = false;
       this.showCrudLink = false;
       this.showUserOptions = false;
     });
@@ -309,7 +313,7 @@ export class SidebarComponent implements OnInit {
     this.toggleHandler();
     this.sidebar = this.document.getElementById("default-sidebar")!;
 
-    if (this.ANDROID || this.IOS) {
+    if (this.mobile) {
       this.open = false;
       this.setFixed(false);
     }
@@ -317,10 +321,6 @@ export class SidebarComponent implements OnInit {
     if (this.fixedSidebar) {
       this.setFixed(true);
     }
-  }
-
-  isCurrent(path: string) {
-    return location.pathname.includes(path);
   }
 
   clickHandler(event: Event) {
@@ -344,7 +344,7 @@ export class SidebarComponent implements OnInit {
   }
 
   get blockScroll() {
-    const block = this.open && (this.ANDROID || this.IOS);
+    const block = this.open && this.mobile;
     const container = this.document.querySelector("#app-container")! as HTMLElement;
     container.style.overflow = block ? "hidden" : "auto";
     return block;
@@ -356,10 +356,6 @@ export class SidebarComponent implements OnInit {
 
   get theme() {
     return getTheme();
-  }
-
-  get largeImage() {
-    return getTheme().light ? "assets/logo/logo_texto_imagem_dark_mode.png" : "assets/logo/logo_texto_imagem.png";
   }
 
   get icon() {
@@ -376,23 +372,14 @@ export class SidebarComponent implements OnInit {
     return getTheme().light ? "assets/logo/logo_imagem_dark_mode.png" : "assets/icons/icon-144x144.png";
   }
 
-  get IOS() {
-    return /iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window);
-  }
-
-  get ANDROID() {
-    return /android/i.test(navigator.userAgent);
-  }
-
   get mobile() {
-    return this.ANDROID || this.IOS;
+    return /android/i.test(navigator.userAgent) || (/iPad|iPhone|iPod/.test(navigator.userAgent) && !("MSStream" in window));
   }
 
   toggleHandler() {
     var themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon")!;
     var themeToggleLightIcon = document.getElementById("theme-toggle-light-icon")!;
 
-    // Change the icons inside the button based on previous settings
     if (localStorage.getItem("color-theme") === "dark" || (!("color-theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
       themeToggleLightIcon.classList.remove("hidden");
     } else {
@@ -402,13 +389,9 @@ export class SidebarComponent implements OnInit {
     var themeToggleBtn = document.getElementById("theme-toggle")!;
 
     themeToggleBtn.addEventListener("click", function () {
-      console.log(this);
-
-      // toggle icons inside button
       themeToggleDarkIcon.classList.toggle("hidden");
       themeToggleLightIcon.classList.toggle("hidden");
 
-      // if set via local storage previously
       if (localStorage.getItem("color-theme")) {
         if (localStorage.getItem("color-theme") === "light") {
           document.documentElement.classList.add("dark");
@@ -417,8 +400,6 @@ export class SidebarComponent implements OnInit {
           document.documentElement.classList.remove("dark");
           localStorage.setItem("color-theme", "light");
         }
-
-        // if NOT set via local storage previously
       } else {
         if (document.documentElement.classList.contains("dark")) {
           document.documentElement.classList.remove("dark");
@@ -430,12 +411,6 @@ export class SidebarComponent implements OnInit {
       }
     });
   }
-
-  sidebarOpen = false;
-  faArrowDown = faArrowCircleDown;
-
-  showCrudLink = false;
-  showUserOptions = false;
 
   get userRole() {
     return this.authService.TokenData?.role;

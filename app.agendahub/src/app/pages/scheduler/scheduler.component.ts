@@ -1,11 +1,13 @@
-import { Component, OnInit, ViewChild, inject } from "@angular/core";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { Component, OnInit, ViewChild, inject, signal } from "@angular/core";
 import { EventChangeArg, EventClickArg, EventInput } from "@fullcalendar/core";
 import { DateClickArg } from "@fullcalendar/interaction";
 import * as moment from "moment/moment";
 
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { ActivatedRoute } from "@angular/router";
+import { MessageService } from "primeng/api";
 import { Subject } from "rxjs";
+import { Access } from "../../auth/acess";
 import { AuthService } from "../../auth/auth-service.service";
 import { CalendarComponent } from "../../components/calendar/calendar.component";
 import { Schedule, Service, User, UserSchedule } from "../../models/core/entities";
@@ -15,6 +17,7 @@ import { SettingsService } from "../../modules/settings/services/settings.servic
 import { ApiService } from "../../services/api-service.service";
 import { LoaderService } from "../../services/loader.service";
 import { ScreenHelperService } from "../../services/screen-helper.service";
+import { defer } from "../../utils/async";
 import { mapScheduleToEvent } from "../../utils/util";
 import { CustomValidators, ValidatorsHelper } from "../../utils/validators";
 
@@ -29,7 +32,7 @@ export class SchedulerComponent implements OnInit {
   edit = false;
   visible = false;
   enableEdit = new Subject<boolean>();
-  isEditEnable = this.authService.TokenData?.role != "employee";
+  isEditEnable = this.authService.canAccess(Access.Admin);
 
   form!: FormGroup;
 
@@ -56,13 +59,41 @@ export class SchedulerComponent implements OnInit {
 
   helper = inject(ScreenHelperService);
   settings!: SettingsApp;
+  birthMessage = "";
+
+  filter = {
+    value: "",
+    search: () => {
+      if (this.filter.value.length > 3) {
+        const lower = this.filter.value.toLowerCase();
+        const fields = ["customer.name", "employee.name", "schedule.startDateTime", "schedule.service.description"];
+        this.filter.schedules = this.schedules.filter((x: any) =>
+          fields.some((y) => {
+            let { value, path } = { value: x, path: y.split(".") };
+
+            for (let p of path) {
+              value = value[p];
+            }
+
+            return value.toLowerCase().includes(lower);
+          }),
+        );
+      }
+
+      if (this.filter.value.length === 0) {
+        this.filter.schedules = this.schedules;
+      }
+    },
+    schedules: this.schedules,
+  };
 
   constructor(
     private api: ApiService,
+    private loader: LoaderService,
+    private message: MessageService,
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private loader: LoaderService,
-    private snackBar: MatSnackBar,
+    private activated: ActivatedRoute,
     private settingsService: SettingsService,
   ) {
     this.createForm();
@@ -71,6 +102,7 @@ export class SchedulerComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getUrlParams();
     this.settingsService.state("Appointments", true).then((x) => (this.settings = x));
   }
 
@@ -92,6 +124,8 @@ export class SchedulerComponent implements OnInit {
       id: [null],
       day: [],
     });
+
+    this.form.valueChanges.subscribe((x) => this.dateIsCloseCustomerBirthDay(x));
 
     this.checkFormValidation();
   }
@@ -238,6 +272,28 @@ export class SchedulerComponent implements OnInit {
     }
   }
 
+  dateIsCloseCustomerBirthDay(form: any) {
+    let date = form.startDateTime as Date;
+    let customer = form.customer;
+
+    if (date && customer && customer.dateBirth) {
+      let dateBirth = moment(customer.dateBirth);
+      dateBirth.set("year", date.getFullYear());
+      let diff = dateBirth.diff(date, "day");
+      this.birthMessage = diff != 0 ? (diff <= 7 && diff > 0 ? `Faltam ${diff} dias para o aniversário de ${customer.name}` : "") : `Hoje é o aniversário de ${customer.name}`;
+    } else {
+      this.birthMessage = "";
+    }
+  }
+
+  employeeSelected(employee: any) {
+    if (employee) {
+      employee["selected"] = !employee["selected"];
+      // this.form.reset({ note: "", id: 0, employee: employee });
+      // this.addNewOne();
+    }
+  }
+
   onViewChange(arg: { event: any; offset: { start: Date; end: Date } } | undefined) {
     if (arg) {
       this.currentDateRange = arg.offset;
@@ -261,11 +317,13 @@ export class SchedulerComponent implements OnInit {
     this.header = "Novo agendamento";
     this.disableFormByOldDate();
     this.checkFormValidation();
+    this.edit = false;
     this.rawOne = true;
     this.visible = true;
   }
 
   openFormEdit(schedule: UserSchedule) {
+    this.onHide();
     this.header = `Editar horário - ${moment(schedule.schedule.startDateTime).format("DD/MM/yy")}`;
     this.form.get("id")?.setValue(schedule.id);
     this.form.get("day")?.setValue(new Date(schedule.schedule.startDateTime).getDate());
@@ -284,11 +342,12 @@ export class SchedulerComponent implements OnInit {
     this.checkFormValidation();
   }
 
-  //#endregion
-
-  showSnack(message: string) {
-    this.snackBar.open(message, undefined, { duration: 2000, panelClass: "successful" });
+  onHide() {
+    this.dateIsCloseCustomerBirthDay({});
+    this.form.reset({ note: "", id: 0 });
   }
+
+  //#endregion
 
   confirm() {
     this.trySave();
@@ -341,8 +400,11 @@ export class SchedulerComponent implements OnInit {
     const id = this.form.value.id;
     const schedule = this.schedules.find((x) => (x.id = id));
 
+    defer(() => this.onTa$k.set(true));
+
     schedule &&
       this.isEditEnable &&
+      !this.onTa$k() &&
       this.api.sendToApi("Schedule/Cancel", schedule, false)?.subscribe({
         next: (x) => {
           if (x) {
@@ -351,8 +413,18 @@ export class SchedulerComponent implements OnInit {
 
           this.visible = false;
           this.form.reset({ note: "", id: 0 });
+          this.onTa$k.set(false);
+          this.message.add({ key: "bc", severity: "success", summary: "Agendamento cancelado com sucesso!" });
         },
-        complete: () => this.loader.hideBackground(),
+        error: (x) => {
+          this.message.add({ key: "bc", severity: "error", summary: "Erro ao cancelar agendamento!", detail: x.error.error });
+          this.loader.hideBackground();
+          this.onTa$k.set(false);
+        },
+        complete: () => {
+          this.loader.hideBackground();
+          this.onTa$k.set(false);
+        },
       });
   }
 
@@ -374,9 +446,9 @@ export class SchedulerComponent implements OnInit {
       : undefined;
 
     this.api.requestFromApi<UserSchedule[]>(endpoint, params)?.subscribe((x) => {
-      console.log(x);
-
       this.schedules.push(...x);
+      this.filter.schedules = this.schedules;
+      this.filter.search();
       this.events = mapScheduleToEvent(x);
       this.addEvent.next(this.events);
     });
@@ -386,34 +458,44 @@ export class SchedulerComponent implements OnInit {
     this.loader.showBackground();
 
     if (this.isEditEnable) {
+      this.onTa$k.set(true);
       this.calendar.setEditable(false);
       this.api.sendToApi("Schedule/Setup", body, false)?.subscribe({
         next: (x) => {
           if (x) {
             if (this.schedules.some((y) => y.id == x)) {
               this.removeOrReplaceEvent(x, body);
-              this.showSnack("Agendamento atualizado com sucesso!");
             } else {
               let schedule = { ...body, id: x };
               this.schedules.push(schedule);
               this.addEvent.next(mapScheduleToEvent([schedule]));
-              this.showSnack("Agendamento criado com sucesso!");
             }
           }
+
+          this.message.add({ key: "bc", severity: "success", summary: "Agendamento salvo com sucesso!" });
 
           this.form.reset({ note: "", id: 0 });
           this.calendar.setEditable(true);
         },
         error: (x) => {
+          this.message.add({ key: "bc", severity: "error", summary: "Erro ao salvar agendamento!", detail: x.error.error });
+          this.onTa$k.set(false);
           arg ? arg.revert() : void 0;
           this.loader.hideBackground();
           this.calendar.setEditable(true);
-          this.showSnack(`Erro ao salvar agendamento!`);
         },
         complete: () => {
+          this.onTa$k.set(false);
           this.loader.hideBackground();
         },
       });
     }
   }
+
+  private getUrlParams() {
+    const params = this.activated.snapshot.queryParams;
+    console.log(params);
+  }
+
+  onTa$k = signal(false);
 }
