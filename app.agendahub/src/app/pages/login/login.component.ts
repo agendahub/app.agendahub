@@ -48,8 +48,9 @@ export class LoginComponent implements OnInit {
     this.changeBackground();
   }
 
+  changeInterval: any;
   changeBackground() {
-    setInterval(() => {
+    this.changeInterval = setInterval(() => {
       this.image = getRandomImage();
     }, 1_000 * 30);
   }
@@ -74,6 +75,7 @@ export class LoginComponent implements OnInit {
             timeout: 333,
             target: "home",
             beforeNavigate: () => this.messageService.add({ severity: "success", summary: "Logado com sucesso!", detail: result.message }),
+            afterNavigate: () => clearInterval(this.changeInterval),
           });
         } else {
           this.messageService.add({ severity: "error", summary: "Erro ao logar!", detail: result.message });

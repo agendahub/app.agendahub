@@ -30,8 +30,9 @@ export class ResetPasswordComponent implements OnInit {
     this.changeBackground();
   }
 
+  changeInterval: any;
   changeBackground() {
-    setInterval(() => {
+    this.changeInterval = setInterval(() => {
       this.image = getRandomImage();
     }, 1_000 * 30);
   }
@@ -62,6 +63,7 @@ export class ResetPasswordComponent implements OnInit {
       timeout: 333,
       target: "login",
       beforeNavigate: () => this.alert.add({ severity: "success", summary: "Senha resetada com sucesso!", detail: "Redirecionando para login..." }),
+      afterNavigate: () => clearInterval(this.changeInterval),
     });
   }
 }
